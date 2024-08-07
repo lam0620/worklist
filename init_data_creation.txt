@@ -1,0 +1,27 @@
+Init data creation
+\apps\shared\data\integration_app.json
+
+1. User
+- Root: b2ab7ae6-99f2-4101-9d16-02dd38934e7f
+- Integration: 65838386-c439-44b4-8ee6-68f134eb5bc2
+
+2. Role
+- Integration: d0f76603-adad-468f-a46c-1fbd00628f81
+
+3. UserRole
+- Integration user => Integration role: def5bdcf-1f73-4a4b-b05a-549b7fbd56ea
+
+4. RolePermission
+- Integration role - View report: def5bdcf-1f73-4a4b-b05a-549b7fbd56ea
+- Integration role - Delete report: b8d8d8c6-9173-4b1c-a866-ab757f2e63ff
+- Integration role - Add order: c950c6ef-4eb4-462b-9860-82b680894859
+- Integration role - View image: cdd8ceab-6fdb-4ba1-8f81-29c3ca423e5e
+
+5. Permission
+Integration role => permission
+-View report: e322a624-2b45-4fd9-9037-e6cae8a90557
+-Delete report: 7787f3f0-32a4-4bef-86f6-3dd1cef2db25
+-Add order: 8f2d6a3a-4af0-4653-b723-076c5808518a
+-View image: 3b2a05ad-9faf-4ffe-bd84-4a312bb9c334
+
+- User permission
