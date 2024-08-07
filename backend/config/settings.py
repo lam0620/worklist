@@ -167,6 +167,10 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'his_integration.log',
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
     },
     # A logger for WARNING which has a handler called 'file'. A logger can have multiple handler
     'loggers': {
@@ -176,6 +180,10 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': True,
         },
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        }        
     },
 }
 SWAGGER_SETTINGS = {

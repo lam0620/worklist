@@ -24,7 +24,8 @@ EDIT_REPORT = 'edit_report'
 DELETE_REPORT = 'delete_report'
 
 # Order
-ADD_ORDER = 'add_report'
+VIEW_ORDER = 'view_order'
+ADD_ORDER = 'add_order'
 
 # Image
 VIEW_IMAGE = 'view_image'

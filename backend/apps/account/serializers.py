@@ -5,8 +5,7 @@ from rest_framework import serializers
 from apps.account.models import User, Role, Permission
 from library.constant import error_codes as ec
 
-from apps.account.utils import is_valid_gender,is_valid_modality_type,is_valid
-
+from apps.account.utils import is_valid_gender,is_valid_modality_type,is_valid,convert_str_to_datetime
 EMAIL_REGEX = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 
 
@@ -167,7 +166,8 @@ class CreateOrderSerializers(serializers.Serializer):
     referring_phys_name = serializers.CharField(required=True)
     clinical_diagnosis = serializers.CharField(required=True)
     patient_class = serializers.CharField(required=True)
-    order_time = serializers.DateTimeField(required=True)
+    # order_time = serializers.DateTimeField(required=True)
+    order_time = serializers.CharField(required=True)
     modality_type = serializers.CharField(required=True)
     order_no = serializers.CharField(required=False)
     
@@ -177,6 +177,16 @@ class CreateOrderSerializers(serializers.Serializer):
     procedures = serializers.ListField(child=CreateProcedureTypeSerializers(), required=True)
     patient = CreatePatientSerializers(required=False)
 
+
+    def validate_order_time(self, value): # noqa
+        try:
+            new_value = convert_str_to_datetime(value)
+        except:    
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'order_time',
+                                               'detail':"'"+ value+"' is invalid"})            
+        return new_value
+    
     def validate_patient_class(self, value): # noqa
         if not is_valid(value, ['I','O']):
             raise serializers.ValidationError({'code': ec.INVALID, 

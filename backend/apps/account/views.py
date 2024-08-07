@@ -917,7 +917,7 @@ class OrderView(CustomAPIView):
 
         has_permission = CheckPermission(per_code.ADD_ORDER, user.id).check()
         if not has_permission and not user.is_superuser:
-            return self.cus_response_403()   
+            return self.cus_response_403(per_code.ADD_ORDER)   
 
         serializer = ser.CreateOrderSerializers(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -967,7 +967,7 @@ class OrderView(CustomAPIView):
                     req_dept_name=data['req_dept_name'],
                     clinical_diagnosis=data['clinical_diagnosis'],
                     patient_class=data['patient_class'],
-                    order_time=convert_str_to_datetime(data['order_time']),
+                    order_time=data['order_time'],
                     modality_type=data['modality_type'],
                     order_no=data['order_no'],
                     # insurance_no = data['insurance_no'],
@@ -1219,7 +1219,7 @@ class ReportByACNProcedure(CustomAPIView):
 
         has_permission = CheckPermission(per_code.VIEW_REPORT, user.id).check()
         if not has_permission and not user.is_superuser:
-            return self.cus_response_403()   
+            return self.cus_response_403(per_code.VIEW_REPORT)   
 
         accession_no=kwargs['accession_no']
         procedure_code=kwargs['procedure_code']
@@ -1350,6 +1350,7 @@ class ReportById(CustomAPIView):
                     setattr(report, key, value)
 
                 # instance.updated_by = user.id
+                report.updated_by = timezone.now
                 report.save()
                 
                 return self.cus_response_updated()
@@ -1390,7 +1391,7 @@ class ReportById(CustomAPIView):
 
         has_permission = CheckPermission(per_code.DELETE_REPORT, user.id).check()
         if not has_permission and not user.is_superuser:
-            return self.cus_response_403()            
+            return self.cus_response_403(per_code.DELETE_REPORT)            
 
         try:
             instance = Report.objects.filter(**kwargs).first()
@@ -1402,6 +1403,7 @@ class ReportById(CustomAPIView):
             instance.status = 'X'
             # this uid is created first in \shared\data\integration_app.json
             instance.updated_by = "65838386-c439-44b4-8ee6-68f134eb5bc2"
+            instance.updated_at=timezone.now
 
             instance.save()
         except Exception as e:
@@ -1487,7 +1489,7 @@ class ImageLinkByACNProcedure(CustomAPIView):
 
         has_permission = CheckPermission(per_code.VIEW_IMAGE, user.id).check()
         if not has_permission and not user.is_superuser:
-            return self.cus_response_403()   
+            return self.cus_response_403(per_code.VIEW_IMAGE)   
 
         accession_no=kwargs['accession_no']
         # procedure_code=kwargs['procedure_code']

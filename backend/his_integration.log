@@ -1371,3 +1371,6 @@ Traceback (most recent call last):
     start_new_thread(increase_tracing_count, ())
 RuntimeError: can't create new thread at interpreter shutdown
 Forbidden: /api/accounts/65838386-c439-44b4-8ee6-68f134eb5bc2
+Not Found: /
+Not Found: /
+Forbidden: /api/accounts
