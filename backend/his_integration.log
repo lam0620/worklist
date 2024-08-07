@@ -1,0 +1,1373 @@
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 907, in post
+    self.check_integration_token('123')
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 431, in check_integration_token
+    app = IntegrationApp.objects.get(token=token, is_active=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.IntegrationApp.DoesNotExist: IntegrationApp matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 63, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+The app token is not exist
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 432, in check_integration_token
+    app = IntegrationApp.objects.get(token=token, is_active=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.IntegrationApp.DoesNotExist: IntegrationApp matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 907, in post
+    self.check_integration_token('123')
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 436, in check_integration_token
+    raise exceptions.AuthenticationFailed({
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'asyncio.exceptions' has no attribute 'AuthenticationFailed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 63, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+The app token is not exist
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 432, in check_integration_token
+    app = IntegrationApp.objects.get(token=token, is_active=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.IntegrationApp.DoesNotExist: IntegrationApp matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 907, in post
+    self.check_integration_token('123')
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 436, in check_integration_token
+    raise exceptions.AuthenticationFailed({
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'asyncio.exceptions' has no attribute 'AuthenticationFailed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 63, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Forbidden: /api/accounts
+Forbidden: /api/accounts
+Forbidden: /api/accounts
+The app token is not exist
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 432, in check_integration_token
+    app = IntegrationApp.objects.get(token=token, is_active=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.IntegrationApp.DoesNotExist: IntegrationApp matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 907, in post
+    self.check_integration_token('123')
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 436, in check_integration_token
+    raise exceptions.AuthenticationFailed({
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'asyncio.exceptions' has no attribute 'AuthenticationFailed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 63, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+The app token is not exist
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 432, in check_integration_token
+    app = IntegrationApp.objects.get(token=token, is_active=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.IntegrationApp.DoesNotExist: IntegrationApp matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 907, in post
+    self.check_integration_token('123')
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 436, in check_integration_token
+    raise exceptions.AuthenticationFailed({
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'asyncio.exceptions' has no attribute 'AuthenticationFailed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 63, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Forbidden: /api/accounts
+The app token is not exist
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 432, in check_integration_token
+    app = IntegrationApp.objects.get(token=token, is_active=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.IntegrationApp.DoesNotExist: IntegrationApp matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 907, in post
+    self.check_integration_token('123')
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 436, in check_integration_token
+    raise exceptions.AuthenticationFailed({
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'asyncio.exceptions' has no attribute 'AuthenticationFailed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 63, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+The app token is not exist
+Forbidden: /api/orders
+The app token is not exist
+Forbidden: /api/orders
+Forbidden: /api/accounts
+The app token is not exist
+Forbidden: /api/orders
+The app token is not exist
+Forbidden: /api/orders
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'get'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 913, in post
+    self.check_integration_token(request.get('x-auth-key'))
+                                 ^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'get'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'get'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 913, in post
+    self.check_integration_token(request.META.get('x-auth-key'))
+                                 ^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'get'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+The app token is not exist
+Forbidden: /api/orders
+The app token is not exist
+Forbidden: /api/orders
+The app token is not exist
+Forbidden: /api/orders
+The app token is not exist
+Forbidden: /api/orders
+The app token is not exist
+Forbidden: /api/orders
+The app token is not exist
+Forbidden: /api/orders
+value too long for type character varying(1)
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 581, in get_or_create
+    return self.get(**kwargs), False
+           ^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Patient.DoesNotExist: Patient matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.StringDataRightTruncation: value too long for type character varying(1)
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 936, in post
+    patient, _ = Patient.objects.get_or_create(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 588, in get_or_create
+    return self.create(**params), True
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 453, in create
+    obj.save(force_insert=True, using=self.db)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\base.py", line 726, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\base.py", line 763, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\base.py", line 868, in _save_table
+    results = self._do_insert(cls._base_manager, using, fields, returning_fields, raw)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\base.py", line 906, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 1270, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1416, in execute_sql
+    cursor.execute(sql, params)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\backends\utils.py", line 98, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\backends\utils.py", line 66, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\backends\utils.py", line 75, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in _execute
+    with self.db.wrap_database_errors:
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\utils.py", line 90, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.DataError: value too long for type character varying(1)
+
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 916, in post
+    serializer.is_valid(raise_exception=True)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 227, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 426, in run_validation
+    value = self.to_internal_value(data)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 485, in to_internal_value
+    validated_value = validate_method(validated_value)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\serializers.py", line 180, in validate_patient_class
+    if not is_valid_patient_class():
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: is_valid_patient_class() missing 1 required positional argument: 'value'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 916, in post
+    serializer.is_valid(raise_exception=True)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 227, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 426, in run_validation
+    value = self.to_internal_value(data)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 485, in to_internal_value
+    validated_value = validate_method(validated_value)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\serializers.py", line 180, in validate_patient_class
+    if not is_valid_patient_class():
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: is_valid_patient_class() missing 1 required positional argument: 'value'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 916, in post
+    serializer.is_valid(raise_exception=True)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
+    raise ValidationError(self.errors)
+rest_framework.exceptions.ValidationError: {'is_insurance_applied': [ErrorDetail(string='Must be a valid boolean.', code='invalid')]}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 466, in handle_exception
+    response = exception_handler(exc, context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\exception.py", line 210, in customize_exception_handler
+    else:
+          
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\exception.py", line 31, in handler_validation_error
+    'result': data,
+              ^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_trace_dispatch_regular.py", line 203, in trace_dispatch
+    py_db.enable_tracing(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd.py", line 1107, in enable_tracing
+    pydevd_tracing.SetTrace(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 87, in SetTrace
+    if set_trace_to_threads(tracing_func, thread_idents=[thread.get_ident()], create_dummy_thread=False) == 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 354, in set_trace_to_threads
+    start_new_thread(increase_tracing_count, ())
+RuntimeError: can't create new thread at interpreter shutdown
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 916, in post
+    serializer.is_valid(raise_exception=True)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
+    raise ValidationError(self.errors)
+rest_framework.exceptions.ValidationError: {'is_insurance_applied': [ErrorDetail(string='Must be a valid boolean.', code='invalid')]}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 466, in handle_exception
+    response = exception_handler(exc, context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\exception.py", line 211, in customize_exception_handler
+    response = func_gateway(exc, context)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\exception.py", line 29, in handler_validation_error
+    data = convert_error_validation(response.data, "NG")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\exception.py", line 61, in convert_error_validation
+    data['code'] = value[1]
+                   ~~~~~^^^
+IndexError: list index out of range
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 916, in post
+    serializer.is_valid(raise_exception=True)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\serializers.py", line 235, in is_valid
+    raise ValidationError(self.errors)
+rest_framework.exceptions.ValidationError: {'is_insurance_applied': [ErrorDetail(string='Must be a valid boolean.', code='invalid')]}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_trace_dispatch_regular.py", line 203, in trace_dispatch
+    py_db.enable_tracing(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd.py", line 1107, in enable_tracing
+    pydevd_tracing.SetTrace(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 87, in SetTrace
+    if set_trace_to_threads(tracing_func, thread_idents=[thread.get_ident()], create_dummy_thread=False) == 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 354, in set_trace_to_threads
+    start_new_thread(increase_tracing_count, ())
+RuntimeError: can't create new thread at interpreter shutdown
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+Internal Server Error: /api/orders
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_trace_dispatch_regular.py", line 203, in trace_dispatch
+    py_db.enable_tracing(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd.py", line 1107, in enable_tracing
+    pydevd_tracing.SetTrace(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 87, in SetTrace
+    if set_trace_to_threads(tracing_func, thread_idents=[thread.get_ident()], create_dummy_thread=False) == 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 354, in set_trace_to_threads
+    start_new_thread(increase_tracing_count, ())
+RuntimeError: can't create new thread at interpreter shutdown
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+The app token is not exist
+Forbidden: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+Bad Request: /api/orders
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+time data 'string' does not match format '%Y%m%d%H%M%S'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 963, in post
+    order_time=convert_str_to_datetime(data['order_time']),
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\utils.py", line 72, in convert_str_to_datetime
+    return datetime.datetime.strptime(date_str, format_str)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 555, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\_strptime.py", line 333, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data 'string' does not match format '%Y%m%d%H%M%S'
+Bad Request: /api/orders
+Bad Request: /api/orders
+The app token is not exist
+Forbidden: /api/reports/65838386-c439-44b4-8ee6-68f134eb5bc2
+The app token is not exist
+Forbidden: /api/reports/6f78bf2f-c0e0-421f-92b4-fecb2e87c6f8
+The app token is not exist
+Forbidden: /api/reports/6f78bf2f-c0e0-421f-92b4-fecb2e87c6f6
+The app token is not exist
+Forbidden: /api/reports/6f78bf2f-c0e0-421f-92b4-fecb2e87c6f8
+The app is not activated yet
+Forbidden: /api/reports/6f78bf2f-c0e0-421f-92b4-fecb2e87c6f8
+The integration app is not activated yet
+Forbidden: /api/reports/6f78bf2f-c0e0-421f-92b4-fecb2e87c6f8
+The integration app is not activated yet
+Forbidden: /api/reports/6f78bf2f-c0e0-421f-92b4-fecb2e87c6f8
+The integration app is not activated yet
+Forbidden: /api/reports/6f78bf2f-c0e0-421f-92b4-fecb2e87c6f8
+Not Found: /
+User matching query does not exist.
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\authentication.py", line 98, in check_token
+    user = User.objects.get(id=token_decode['user_id'], is_active=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.User.DoesNotExist: User matching query does not exist.
+Forbidden: /api/me
+User matching query does not exist.
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\authentication.py", line 98, in check_token
+    user = User.objects.get(id=token_decode['user_id'], is_active=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.User.DoesNotExist: User matching query does not exist.
+User matching query does not exist.
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\authentication.py", line 98, in check_token
+    user = User.objects.get(id=token_decode['user_id'], is_active=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.User.DoesNotExist: User matching query does not exist.
+User matching query does not exist.
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\authentication.py", line 98, in check_token
+    user = User.objects.get(id=token_decode['user_id'], is_active=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.User.DoesNotExist: User matching query does not exist.
+Forbidden: /api/me
+Forbidden: /api/me
+Forbidden: /api/me
+Internal Server Error: /api/accounts/65838386-c439-44b4-8ee6-68f134eb5bc2
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 333, in get
+    return self.response_success(data=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 155, in response_success
+    return self._response(data, status_code, count=count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 90, in _response
+    return Response(json.loads(json.dumps(res, cls=DjangoOverRideJSONEncoder)), status=status_code)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 42, in default
+    if isinstance(o, datetime.datetime):
+                     ^^^^^^^^
+NameError: name 'datetime' is not defined. Did you forget to import 'datetime'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/accounts/65838386-c439-44b4-8ee6-68f134eb5bc2
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 333, in get
+    return self.response_success(data=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 155, in response_success
+    return self._response(data, status_code, count=count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 90, in _response
+    return Response(json.loads(json.dumps(res, cls=DjangoOverRideJSONEncoder)), status=status_code)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 42, in default
+    if isinstance(o, datetime.datetime):
+                     ^^^^^^^^
+NameError: name 'datetime' is not defined. Did you forget to import 'datetime'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Forbidden: /api/accounts/65838386-c439-44b4-8ee6-68f134eb5bc2
+Internal Server Error: /api/accounts/65838386-c439-44b4-8ee6-68f134eb5bc2
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 333, in get
+    return self.response_success(data=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 155, in response_success
+    return self._response(data, status_code, count=count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 90, in _response
+    return Response(json.loads(json.dumps(res, cls=DjangoOverRideJSONEncoder)), status=status_code)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 42, in default
+    if isinstance(o, datetime.datetime):
+                     ^^^^^^^^
+NameError: name 'datetime' is not defined. Did you forget to import 'datetime'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Forbidden: /api/accounts/65838386-c439-44b4-8ee6-68f134eb5bc2
+Internal Server Error: /api/accounts/65838386-c439-44b4-8ee6-68f134eb5bc2
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\apps\account\views.py", line 333, in get
+    return self.response_success(data=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 155, in response_success
+    data = ser.data
+       ^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 90, in _response
+    })
+       
+  File "C:\Python312\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\json\encoder.py", line 258, in iterencode
+    return _iterencode(o, 0)
+           ^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 42, in default
+    # See "Date Time String Format" in the ECMA-262 specification.
+                     ^^^^^^^^
+NameError: name 'datetime' is not defined. Did you forget to import 'datetime'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\dwh-navitas\backend\third_parties\contribution\api_view.py", line 64, in dispatch
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\dwh-navitas\backend\env\Lib\site-packages\rest_framework\views.py", line 468, in handle_exception
+    if response is None:
+       ^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_trace_dispatch_regular.py", line 203, in trace_dispatch
+    py_db.enable_tracing(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd.py", line 1107, in enable_tracing
+    pydevd_tracing.SetTrace(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 87, in SetTrace
+    if set_trace_to_threads(tracing_func, thread_idents=[thread.get_ident()], create_dummy_thread=False) == 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.8.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 354, in set_trace_to_threads
+    start_new_thread(increase_tracing_count, ())
+RuntimeError: can't create new thread at interpreter shutdown
+Forbidden: /api/accounts/65838386-c439-44b4-8ee6-68f134eb5bc2

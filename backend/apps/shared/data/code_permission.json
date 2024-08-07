@@ -1,0 +1,180 @@
+[
+    {
+        "model": "account.permission",
+        "pk": "087765f8-edea-4e3b-a0be-ab489469b6da",
+        "fields": {
+            "code": "view_account",
+            "name": "View account"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "087765f8-edea-4e3b-a0be-ab489469b6db",
+        "fields": {
+            "code": "add_account",
+            "name": "Add account"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "087765f8-edea-4e3b-a0be-ab489469b6dc",
+        "fields": {
+            "code": "edit_account",
+            "name": "Edit account"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "087765f8-edea-4e3b-a0be-ab489469b6dd",
+        "fields": {
+            "code": "delete_account",
+            "name": "Delete account"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "40eaf014-1ce4-42ac-a634-c0b289477ce5",
+        "fields": {
+            "code": "view_roles",
+            "name": "View roles"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "83ceae05-2a89-4b60-bfe5-5b374158e61d",
+        "fields": {
+            "code": "add_roles",
+            "name": "Add roles"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "a8e1af5e-dc59-437b-97bf-c44d24ad2f1c",
+        "fields": {
+            "code": "edit_roles",
+            "name": "Edit roles"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "42037ea9-71bc-41c4-b50e-986373679d05",
+        "fields": {
+            "code": "delete_roles",
+            "name": "Delete roles"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "4c0c3459-ead2-4826-af8a-a44c1d55a5fa",
+        "fields": {
+            "code": "view_core_permission",
+            "name": "View permission"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "806a0aab-5219-4be5-83b8-c2dbd67606fb",
+        "fields": {
+            "code": "add_core_permission",
+            "name": "Add permission"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "88f7f62a-741d-4f32-b767-ac6ff8381786",
+        "fields": {
+            "code": "edit_core_permission",
+            "name": "Edit permission"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "8f5511e0-675f-42aa-9821-d09c87e11a5b",
+        "fields": {
+            "code": "delete_core_permission",
+            "name": "Delete permission"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "4c0c3459-ead2-4826-af8a-a44c1d55a5fa",
+        "fields": {
+            "code": "view_core_permission",
+            "name": "View permission"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "806a0aab-5219-4be5-83b8-c2dbd67606fb",
+        "fields": {
+            "code": "add_core_permission",
+            "name": "Add permission"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "88f7f62a-741d-4f32-b767-ac6ff8381786",
+        "fields": {
+            "code": "edit_core_permission",
+            "name": "Edit permission"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "8f5511e0-675f-42aa-9821-d09c87e11a5b",
+        "fields": {
+            "code": "delete_core_permission",
+            "name": "Delete permission"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "e322a624-2b45-4fd9-9037-e6cae8a90557",
+        "fields": {
+            "code": "view_report",
+            "name": "View Report"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "a5a0af42-e849-4f5d-a622-75ea31e818c3",
+        "fields": {
+            "code": "add_report",
+            "name": "Add report"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "6ba35a26-ac88-4e37-b025-91279153b83d",
+        "fields": {
+            "code": "edit_report",
+            "name": "Edit report"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "7787f3f0-32a4-4bef-86f6-3dd1cef2db25",
+        "fields": {
+            "code": "delete_report",
+            "name": "Delete report"
+        }
+    },
+
+    {
+        "model": "account.permission",
+        "pk": "8f2d6a3a-4af0-4653-b723-076c5808518a",
+        "fields": {
+            "code": "add_order",
+            "name": "Add order"
+        }
+    },
+
+    {
+        "model": "account.permission",
+        "pk": "3b2a05ad-9faf-4ffe-bd84-4a312bb9c334",
+        "fields": {
+            "code": "view_image",
+            "name": "View image"
+        }
+    }
+]
