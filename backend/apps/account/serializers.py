@@ -142,13 +142,17 @@ HIS PACS integration serializers
 class CreatePatientSerializers(serializers.Serializer):
     pid = serializers.CharField(required=True)
     fullname = serializers.CharField(required=True)
-    gender = serializers.CharField(required=True)
     dob = serializers.CharField(required=True)
 
+    gender = serializers.CharField(required=False)
     address = serializers.CharField(required=False)
     insurance_no = serializers.CharField(required=False)
 
     def validate_gender(self, value): # noqa
+        # If empty, set =U
+        if not value:
+            value = 'U' # Unknown
+
         if not is_valid_gender(value):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'gender',
@@ -169,8 +173,8 @@ class CreateOrderSerializers(serializers.Serializer):
     # order_time = serializers.DateTimeField(required=True)
     order_time = serializers.CharField(required=True)
     modality_type = serializers.CharField(required=True)
-    order_no = serializers.CharField(required=False)
-    
+
+    order_no = serializers.CharField(required=False)    
     is_insurance_applied = serializers.BooleanField(required=False)
     is_urgent = serializers.BooleanField(required=False)
     
@@ -213,6 +217,7 @@ class CreateReportSerializers(serializers.Serializer):
     status = serializers.CharField(required=True)
     
     radiologist_id = serializers.CharField(required=True)
+    # Report by studyInstanceUid case/no mwl => no procedure need
     procedure_id = serializers.CharField(required=False)
 
     def validate_status(self, value): # noqa
@@ -255,8 +260,11 @@ class UpdateReportSerializers(serializers.Serializer):
 class CreateDoctorSerializers(serializers.Serializer):
     doctor_no = serializers.CharField(required=True)
     fullname = serializers.CharField(required=True)
-    gender = serializers.CharField(required=True)
     type = serializers.CharField(required=True)
+
+    gender = serializers.CharField(required=False)
+    title = serializers.CharField(required=False)
+    sign = serializers.CharField(required=False)
 
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
@@ -266,6 +274,10 @@ class CreateDoctorSerializers(serializers.Serializer):
         return value
 
     def validate_gender(self, value): # noqa
+        # if empty, set = U
+        if not value:
+            value = 'U'
+
         if not is_valid_gender(value):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'gender',

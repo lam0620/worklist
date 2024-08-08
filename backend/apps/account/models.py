@@ -7,6 +7,13 @@ from django.utils import timezone
 from third_parties.contribution.managers import AccountManager, ObjectManager
 from apps.shared.models import BaseModels
 
+"""
+ Add new model/table, run:  python manage.py migrate
+ Modify fieds in model/table, run:  python manage.py makemigrations
+ Then run: python manage.py migrate account <first number retured at makemigrations command>
+
+ Create initial data, run: python manage.py init_data
+"""
 
 class User(AbstractBaseUser, BaseModels):
     username_validator = UnicodeUsernameValidator()
@@ -145,6 +152,9 @@ class Doctor(BaseModels):
     gender = models.CharField(verbose_name='gender', max_length=1, blank=True, null=True, default='U')
     # Type value. P: referring physiscian, R: radiologist
     type = models.CharField(verbose_name='type', max_length=1, null=True, blank=True)
+    title = models.CharField(verbose_name='title', max_length=10, null=True, blank=True)
+    # Signature
+    sign = models.CharField(verbose_name='sign', max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=True, verbose_name='active')
 
     objects = ObjectManager()

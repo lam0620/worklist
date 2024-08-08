@@ -1444,7 +1444,9 @@ class DoctorListView(CustomAPIView):
             doctors = Doctor.objects.filter(type=type)
             data = [{'id': item.id,
                      'doctor_no':item.doctor_no,
-                     'fullname':item.fullname} for item in doctors]
+                     'fullname':item.fullname,
+                     'title':item.title,
+                     'sign':item.sign} for item in doctors]
             
         except Doctor.DoesNotExist:
             return self.cus_response_empty_data(ec.REPORT)
