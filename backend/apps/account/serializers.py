@@ -252,3 +252,21 @@ class UpdateReportSerializers(serializers.Serializer):
                                                'detail':"'findings' or 'conclusion' is empty"})
         return data
 
+class CreateDoctorSerializers(serializers.Serializer):
+    doctor_no = serializers.CharField(required=True)
+    fullname = serializers.CharField(required=True)
+    gender = serializers.CharField(required=True)
+    type = serializers.CharField(required=True)
+
+    def validate_type(self, value): # noqa
+        if not is_valid(value, ['P','R']):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'type',
+                                               'detail':"'"+ value+"' is invalid"})
+        return value
+
+    def validate_gender(self, value): # noqa
+        if not is_valid_gender(value):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'gender',
+                                               'detail':"'"+ value+"' is invalid"})

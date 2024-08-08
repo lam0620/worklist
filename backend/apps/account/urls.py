@@ -6,7 +6,7 @@ from apps.account.views import (
     ChangePassword, CodePermissionDetail, CodePermissionView, 
     StatusCheck,
     ReportView, ReportById, ReportByStudyUID,ReportByACNProcedure,
-    OrderView,OrderByACN,DoctorView,ImageLinkByACNProcedure
+    OrderView,OrderByACN,DoctorView,DoctorListView,ImageLinkByACNProcedure
 )
 
 urlpatterns = [
@@ -46,5 +46,6 @@ urlpatterns = [
     path('images/<accession_no>', ImageLinkByACNProcedure.as_view(), name='Image link'),
 
     #Radiologist
-    path('doctors/<type>', DoctorView.as_view(), name='Doctor'),
+    path('doctors/<type>', DoctorListView.as_view(), name='Doctor List'),
+    path('doctors', DoctorView.as_view(), name='Doctor'),
 ]

@@ -1050,7 +1050,8 @@ class OrderByACN(CustomAPIView):
                 'address':order.patient.address,
                 'insurance_no':order.patient.insurance_no
             },
-            'procedures': [{'code': proc.procedure_type.code, 
+            'procedures': [{'proc_id': proc.id,
+                            'code': proc.procedure_type.code, 
                             'name': proc.procedure_type.name,
                             'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
         }
@@ -1414,9 +1415,9 @@ class ReportById(CustomAPIView):
     
 
 """
-Doctor view class
+Doctor list view class
 """   
-class DoctorView(CustomAPIView):
+class DoctorListView(CustomAPIView):
     queryset = User.objects.all()
     authentication_classes = ()
 
@@ -1453,7 +1454,57 @@ class DoctorView(CustomAPIView):
             return self.response_NG(ec.SYSTEM_ERR, str(e))
         
         return self.response_success(data=data)
+
+
+"""
+Doctor view class
+"""   
+class DoctorView(CustomAPIView):
+    queryset = User.objects.all()
+    authentication_classes = ()
+
+    """
+    Create new a doctor
+    """
+    @swagger_auto_schema(
+        operation_summary='Create new a doctor',
+        operation_description='Create new a doctor',
+        request_body=ser.CreateDoctorSerializers,
+        tags=[swagger_tags.REPORT],
+    )
+    def post(self, request):
+        # user = request.user
+        # is_per = CheckPermission(per_code.ADD_REPORT, user.id).check()
+        # if not is_per and not user.is_superuser:
+        #     return self.cus_response_403()
+
+        serializer = ser.CreateDoctorSerializers(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Data after validation
+        data = serializer.validated_data
+
+        try:
+            with transaction.atomic():
+               
+                doctor_new = Doctor.objects.create(
+                    doctor_no=data['doctor_no'],
+                    fullname=data['fullname'],
+                    type=data['type'],
+                    gender=data['gender'],
+                    # created_by = ''
+                )
+
+                # Persist db
+                doctor_new.save()
+
+                return self.cus_response_created()
+
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))       
         
+
 """
 Image Link detail view class - For HIS(4)
 """   
