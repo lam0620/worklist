@@ -1793,3 +1793,241 @@ Traceback (most recent call last):
   File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
     raise self.model.DoesNotExist(
 apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Internal Server Error: /api/orders/acn/202312221151111
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 173, in __get__
+    rel_obj = self.field.get_cached_value(instance)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\mixins.py", line 15, in get_cached_value
+    return instance._state.fields_cache[cache_name]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'referring_phys'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column c_doctor.title does not exist
+LINE 1: ...ctor_no", "c_doctor"."gender", "c_doctor"."type", "c_doctor"...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1039, in get
+    'req_phys_code': order.referring_phys.doctor_no,
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 187, in __get__
+    rel_obj = self.get_object(instance)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 154, in get_object
+    return qs.get(self.field.get_reverse_related_filter(instance))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 431, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 262, in __len__
+    self._fetch_all()
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 1324, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 51, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1175, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 98, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 66, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 75, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in _execute
+    with self.db.wrap_database_errors:
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\utils.py", line 90, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: column c_doctor.title does not exist
+LINE 1: ...ctor_no", "c_doctor"."gender", "c_doctor"."type", "c_doctor"...
+                                                             ^
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151111
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 173, in __get__
+    rel_obj = self.field.get_cached_value(instance)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\mixins.py", line 15, in get_cached_value
+    return instance._state.fields_cache[cache_name]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'referring_phys'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UndefinedColumn: column c_doctor.title does not exist
+LINE 1: ...ctor_no", "c_doctor"."gender", "c_doctor"."type", "c_doctor"...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1039, in get
+    'req_phys_code': order.referring_phys.doctor_no,
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 187, in __get__
+    rel_obj = self.get_object(instance)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 154, in get_object
+    return qs.get(self.field.get_reverse_related_filter(instance))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 431, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 262, in __len__
+    self._fetch_all()
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 1324, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 51, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1175, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 98, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 66, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 75, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in _execute
+    with self.db.wrap_database_errors:
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\utils.py", line 90, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: column c_doctor.title does not exist
+LINE 1: ...ctor_no", "c_doctor"."gender", "c_doctor"."type", "c_doctor"...
+                                                             ^
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.

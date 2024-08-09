@@ -1106,10 +1106,10 @@ class ReportView(CustomAPIView):
 
         try:
             with transaction.atomic():
-                proc_val = None
+                procedure = None
                 # Check if 'procedure_id' is not exist
                 if 'procedure_id' in data and data['procedure_id']:
-                    proc_val = Procedure.objects.get(pk=data['procedure_id'])
+                    procedure = Procedure.objects.get(pk=data['procedure_id'])
                 
                 report_new = Report.objects.create(
                     accession_no=data['accession_no'],
@@ -1119,13 +1119,18 @@ class ReportView(CustomAPIView):
                     status=data['status'],
                    
                     radiologist = Doctor.objects.get(pk=data['radiologist_id']),
-                    procedure = proc_val,
+                    procedure = procedure,
 
                     created_by = data['radiologist_id']
                 )
 
                 # Persist db
                 report_new.save()
+
+                # Update study_iuid to procedure
+                procedure.study_iuid = data['study_iuid']
+                procedure.updated_at = timezone.now
+                procedure.save()
 
                 return self.cus_response_created()
 

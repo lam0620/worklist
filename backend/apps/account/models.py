@@ -226,6 +226,9 @@ class Procedure(BaseModels):
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
     procedure_type = models.ForeignKey(ProcedureType, on_delete=models.DO_NOTHING)
 
+    # Procedure of which study_iuid
+    study_iuid = models.CharField(verbose_name='study instance uid', max_length=100, blank=True, null=True)
+
     objects = ObjectManager()
 
     def __str__(self):
