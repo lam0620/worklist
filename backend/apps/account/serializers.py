@@ -146,13 +146,10 @@ class CreatePatientSerializers(serializers.Serializer):
 
     gender = serializers.CharField(required=False)
     address = serializers.CharField(required=False)
+    tel = serializers.CharField(required=False)
     insurance_no = serializers.CharField(required=False)
 
     def validate_gender(self, value): # noqa
-        # If empty, set =U
-        if not value:
-            value = 'U' # Unknown
-
         if not is_valid_gender(value):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'gender',
@@ -264,7 +261,7 @@ class CreateDoctorSerializers(serializers.Serializer):
 
     gender = serializers.CharField(required=False)
     title = serializers.CharField(required=False)
-    sign = serializers.CharField(required=False)
+    sign_url = serializers.CharField(required=False)
 
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
@@ -274,10 +271,6 @@ class CreateDoctorSerializers(serializers.Serializer):
         return value
 
     def validate_gender(self, value): # noqa
-        # if empty, set = U
-        if not value:
-            value = 'U'
-
         if not is_valid_gender(value):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'gender',

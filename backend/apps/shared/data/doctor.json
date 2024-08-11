@@ -8,7 +8,7 @@
             "title":"Ths. Bs",
             "gender":"F",
             "type":"R",
-            "sign":"../../assets/signs/100.jpg"
+            "sign":"../../assets/images/100.jpg"
         }
     },
     {
@@ -20,7 +20,7 @@
             "title":"Bs",
             "gender":"F",
             "type":"R",
-            "sign":"../../assets/signs/101.jpg"
+            "sign":"../../assets/images/101.jpg"
         }
     },    
     {
@@ -32,7 +32,7 @@
             "title":"Bs",
             "gender":"F",
             "type":"R",
-            "sign":"../../assets/signs/102.jpg"
+            "sign":"../../assets/images/102.jpg"
         }
     }
 ]

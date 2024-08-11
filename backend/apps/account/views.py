@@ -9,6 +9,7 @@ from django.contrib.auth.hashers import check_password
 from django.db import transaction,connections
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
+from apps.account.get_report_view import GetReportView
 from third_parties.contribution.api_view import CustomAPIView
 from django.db.models import F, Prefetch
 from drf_yasg import openapi
@@ -840,7 +841,7 @@ class CodePermissionDetail(CustomAPIView):
 HIS PACS integration class
 """
 
-class OrderView(CustomAPIView):
+class OrderView(GetReportView):
     queryset = User.objects.all()
     # Call overwrite here to skip authenticate or don't call request.user
     authentication_classes = ()
@@ -879,10 +880,14 @@ class OrderView(CustomAPIView):
                     'fullname':order.patient.fullname,
                     'gender':order.patient.gender,
                     'dob':order.patient.dob,
+                    'tel':order.patient.tel,
                     'address':order.patient.address,
                     'insurance_no':order.patient.insurance_no
                 },
-                'procedures': [{'code': proc.procedure_type.code, 'name': proc.procedure_type.name} for proc in order.procedure_list]
+                'procedures': [{'proc_id': proc.id,
+                                'study_iuid':proc.study_iuid,
+                                'code': proc.procedure_type.code, 
+                                'name': proc.procedure_type.name} for proc in order.procedure_list]
             }
             orders_data.append(order_data)
 
@@ -946,6 +951,7 @@ class OrderView(CustomAPIView):
                         'fullname' : patient_data['fullname'],
                         'gender' : patient_data['gender'],
                         'dob' : patient_data['dob'],
+                        'tel':patient_data['tel'],
                         'address' : patient_data['address'],
                         'insurance_no' : patient_data['insurance_no']
                     }
@@ -1000,7 +1006,7 @@ class OrderView(CustomAPIView):
     
 
     
-class OrderByACN(CustomAPIView):
+class OrderByACN(GetReportView):
     queryset = User.objects.all()
     authentication_classes = ()
 
@@ -1047,10 +1053,12 @@ class OrderByACN(CustomAPIView):
                 'fullname':order.patient.fullname,
                 'gender':order.patient.gender,
                 'dob':order.patient.dob,
+                'tel':order.patient.tel,
                 'address':order.patient.address,
                 'insurance_no':order.patient.insurance_no
             },
             'procedures': [{'proc_id': proc.id,
+                            'study_iuid':proc.study_iuid,
                             'code': proc.procedure_type.code, 
                             'name': proc.procedure_type.name,
                             'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
@@ -1058,27 +1066,30 @@ class OrderByACN(CustomAPIView):
         return self.response_success(data=order_data)
     
     def _get_report_json(self, proc_id):
-        report = {}
-        try:
-            report=Report.objects.get(procedure_id=proc_id)
-            if report is not None:
-                report = {
-                    'id': report.id,
-                    'accession_no': report.accession_no,
-                    'study_iuid': report.study_iuid,
-                    'findings': report.findings,
-                    'conclusion': report.conclusion,
-                    'status': report.status,
-                    'radiologist': {
-                        'doctor_no':report.radiologist.doctor_no,
-                        'fullname':report.radiologist.fullname
-                    }                
-                }
-        except Report.DoesNotExist:
-            logger.warn("Report not exist", exc_info=True)
-        return report
+        data = {}
 
-class ReportView(CustomAPIView):
+        report = self.get_report_by_proc_id(proc_id)
+        if report is not None:
+            data = {
+                'id': report.id,
+                'accession_no': report.accession_no,
+                'study_iuid': report.study_iuid,
+                'findings': report.findings,
+                'conclusion': report.conclusion,
+                'status': report.status,
+                'radiologist': {
+                    "id":report.radiologist.id,
+                    'doctor_no':report.radiologist.doctor_no,
+                    'fullname':report.radiologist.fullname,
+                    'sign':report.radiologist.sign,
+                    'title':report.radiologist.title,
+                }                
+            }
+
+        return data
+
+# =============== Report class ==================
+class ReportView(GetReportView):
     queryset = User.objects.all()
     authentication_classes = ()
 
@@ -1098,6 +1109,7 @@ class ReportView(CustomAPIView):
         # if not is_per and not user.is_superuser:
         #     return self.cus_response_403()
 
+        logger.info('Creating report.....');
         serializer = ser.CreateReportSerializers(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -1129,10 +1141,14 @@ class ReportView(CustomAPIView):
 
                 # Update study_iuid to procedure
                 procedure.study_iuid = data['study_iuid']
-                procedure.updated_at = timezone.now
+                procedure.updated_at = timezone.now()
                 procedure.save()
 
-                return self.cus_response_created()
+                #return self.cus_response_created()
+                # Get latest report
+                return self.get_report_by_id(request, report_new.id)
+                # return self.response_success(data=new_data)
+            
 
         except Exception as e:
             logger.error(e, exc_info=True)
@@ -1142,7 +1158,7 @@ class ReportView(CustomAPIView):
 """
 Report detail view class
 """   
-class ReportByStudyUID(CustomAPIView):
+class ReportByStudyUID(GetReportView):
     queryset = User.objects.all()
     authentication_classes = ()
 
@@ -1166,34 +1182,13 @@ class ReportByStudyUID(CustomAPIView):
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))
         
-        procedure= {}
-        # Make sure report.procedure exist
-        if report.procedure:
-            procedure = {
-                'code':report.procedure.procedure_type.code,
-                'name':report.procedure.procedure_type.name
-            }
-
-
-        data = {
-            'id': report.id,
-            'accession_no': report.accession_no,
-            'study_iuid': report.study_iuid,
-            'findings': report.findings,
-            'conclusion': report.conclusion,
-            'status': report.status,
-            'radiologist': {
-                'doctor_no':report.radiologist.doctor_no,
-                'fullname':report.radiologist.fullname
-            },
-            'procedure': procedure,
-        }
-        return self.response_success(data=data)
+        # Get latest report
+        return self.get_report_json(request, report)
     
 """
 Report detail view class - For HIS(2)
 """   
-class ReportByACNProcedure(CustomAPIView):
+class ReportByACNProcedure(GetReportView):
     queryset = User.objects.all()
     authentication_classes = ()
 
@@ -1251,42 +1246,30 @@ class ReportByACNProcedure(CustomAPIView):
         
         # One record only
         proc = order.procedure_list[0]
-        procedure= {'code': proc.procedure_type.code, 
+        procedure= {'proc_id':proc.id,
+                    'code': proc.procedure_type.code, 
                     'name': proc.procedure_type.name} 
 
         # Get report
         data = {}
-        report = self._get_report(proc.id)
+        report = self.get_report_by_proc_id(proc.id)
         if report is None:
             return self.cus_response_empty_data(ec.REPORT)
-        else:
-            data = {
-                'id': report.id,
-                'accession_no': report.accession_no,
-                'study_iuid': report.study_iuid,
-                'findings': report.findings,
-                'conclusion': report.conclusion,
-                'status': report.status,
-                'radiologist': {
-                    'doctor_no':report.radiologist.doctor_no,
-                    'fullname':report.radiologist.fullname
-                },
-                'procedure': procedure,
-                'image_link': get_image_link(request, report.study_iuid)
-            }
+        
+        # Get latest report
+        return self.get_report_json(request, report)
 
-            return self.response_success(data=data)
     
-    def _get_report(self, proc_id):
-        report = None
-        try:
-            report=Report.objects.get(procedure_id=proc_id)
-        except Report.DoesNotExist:
-            logger.warn("Report not exist", exc_info=True)
-        return report    
+    # def _get_report(self, proc_id):
+    #     report = None
+    #     try:
+    #         report=Report.objects.get(procedure_id=proc_id)
+    #     except Report.DoesNotExist:
+    #         logger.warn("Report not exist", exc_info=True)
+    #     return report    
     
 
-class ReportById(CustomAPIView):
+class ReportById(GetReportView):
     queryset = User.objects.all()
     authentication_classes = ()
 
@@ -1300,39 +1283,9 @@ class ReportById(CustomAPIView):
         tags=[swagger_tags.REPORT],
     )
     def get(self, request, *args, **kwargs):
-        try:
-            # id=kwargs['id']
-            # Get report by id and status != 'X' (deleted)
-            report = Report.objects.filter(**kwargs).exclude(status='X').first()
-            if report is None:
-                return self.cus_response_empty_data(ec.REPORT)
-        except Exception as e:
-            logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+        # Get latest report
         
-        procedure= {}
-        # Make sure report.procedure exist
-        if report.procedure:
-            procedure = {
-                'code':report.procedure.procedure_type.code,
-                'name':report.procedure.procedure_type.name
-            }
-
-
-        data = {
-            'id': report.id,
-            'accession_no': report.accession_no,
-            'study_iuid': report.study_iuid,
-            'findings': report.findings,
-            'conclusion': report.conclusion,
-            'status': report.status,
-            'radiologist': {
-                'doctor_no':report.radiologist.doctor_no,
-                'fullname':report.radiologist.fullname
-            },
-            'procedure': procedure,
-        }
-        return self.response_success(data=data)
+        return self.get_report_by_id(request, kwargs['pk'])
 
     @swagger_auto_schema(
         operation_summary='Update the report by id',
@@ -1343,7 +1296,7 @@ class ReportById(CustomAPIView):
     def put(self, request, *args, **kwargs):
         # user = request.user
         try:
-            report = Report.objects.filter(**kwargs).first()
+            report = Report.objects.get(**kwargs)
             if not report:
                 return self.cus_response_empty_data(ec.REPORT)
 
@@ -1356,10 +1309,12 @@ class ReportById(CustomAPIView):
                     setattr(report, key, value)
 
                 # instance.updated_by = user.id
-                report.updated_by = timezone.now
+                report.updated_at = timezone.now()
                 report.save()
                 
-                return self.cus_response_updated()
+                #return self.cus_response_updated()
+            # Get latest report
+            return self.get_report_by_id(request, report.id)
 
         except Exception as e:
             logger.error(e, exc_info=True)
@@ -1409,7 +1364,7 @@ class ReportById(CustomAPIView):
             instance.status = 'X'
             # this uid is created first in \shared\data\integration_app.json
             instance.updated_by = "65838386-c439-44b4-8ee6-68f134eb5bc2"
-            instance.updated_at=timezone.now
+            instance.updated_at=timezone.now()
 
             instance.save()
         except Exception as e:
@@ -1451,7 +1406,7 @@ class DoctorListView(CustomAPIView):
                      'doctor_no':item.doctor_no,
                      'fullname':item.fullname,
                      'title':item.title,
-                     'sign':item.sign} for item in doctors]
+                     'sign_url':item.sign} for item in doctors]
             
         except Doctor.DoesNotExist:
             return self.cus_response_empty_data(ec.REPORT)
@@ -1499,6 +1454,8 @@ class DoctorView(CustomAPIView):
                     fullname=data['fullname'],
                     type=data['type'],
                     gender=data['gender'],
+                    title=data['title'],
+                    sign=data['sign_url']
                     # created_by = ''
                 )
 

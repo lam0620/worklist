@@ -131,6 +131,7 @@ class Patient(BaseModels):
     # dob = models.DateField(verbose_name='dob', blank=True, null=True)
     dob = models.CharField(verbose_name='dob', max_length=8, blank=True, null=True)
     address = models.EmailField(verbose_name='address', null=True, blank=True)
+    tel = models.CharField(verbose_name='Tel', max_length=20, blank=True, null=True)
     insurance_no = models.CharField( verbose_name='insurance number', max_length=50, blank=True, null=True)
 
 
@@ -260,6 +261,8 @@ class Report(BaseModels):
     class Meta:
         db_table = 'c_report'
         verbose_name = 'Report'
+        # couple unique
+        unique_together = ('accession_no', 'procedure', 'delete_flag',)
         default_permissions = ()
         permissions = ()
 

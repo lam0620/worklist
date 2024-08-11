@@ -2031,3 +2031,1784 @@ Traceback (most recent call last):
   File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
     raise self.model.DoesNotExist(
 apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Forbidden: /api/reports/530546/80ff63bd-e203-42c8-94de-412f4945d2a2
+Bad Request: /api/reports
+Bad Request: /api/reports
+Bad Request: /api/reports
+Bad Request: /api/reports
+Bad Request: /api/reports
+Bad Request: /api/reports
+Bad Request: /api/reports
+Bad Request: /api/reports
+expected string or bytes-like object, got 'function'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1143, in post
+    procedure.save()
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 726, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 763, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 845, in _save_table
+    updated = self._do_update(base_qs, using, pk_val, values, update_fields,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 899, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 802, in _update
+    return query.get_compiler(self.db).execute_sql(CURSOR)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1559, in execute_sql
+    cursor = super().execute_sql(result_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1162, in execute_sql
+    sql, params = self.as_sql()
+                  ^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1525, in as_sql
+    val = field.get_db_prep_save(val, connection=self.connection)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 842, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1427, in get_db_prep_value
+    value = self.get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1406, in get_prep_value
+    value = super().get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1266, in get_prep_value
+    return self.to_python(value)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1367, in to_python
+    parsed = parse_datetime(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\utils\dateparse.py", line 107, in parse_datetime
+    match = datetime_re.match(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected string or bytes-like object, got 'function'
+expected string or bytes-like object, got 'function'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1143, in post
+    procedure.save()
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 726, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 763, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 845, in _save_table
+    updated = self._do_update(base_qs, using, pk_val, values, update_fields,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 899, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 802, in _update
+    return query.get_compiler(self.db).execute_sql(CURSOR)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1559, in execute_sql
+    cursor = super().execute_sql(result_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1162, in execute_sql
+    sql, params = self.as_sql()
+                  ^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1525, in as_sql
+    val = field.get_db_prep_save(val, connection=self.connection)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 842, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1427, in get_db_prep_value
+    value = self.get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1406, in get_prep_value
+    value = super().get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1266, in get_prep_value
+    return self.to_python(value)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1367, in to_python
+    parsed = parse_datetime(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\utils\dateparse.py", line 107, in parse_datetime
+    match = datetime_re.match(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected string or bytes-like object, got 'function'
+Bad Request: /api/reports
+Bad Request: /api/reports
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1063, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 439, in get
+    raise self.model.MultipleObjectsReturned(
+apps.account.models.Report.MultipleObjectsReturned: get() returned more than one Report -- it returned 2!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+duplicate key value violates unique constraint "c_report_accession_no_procedure_id_delete_flag_23ee6fe3_uniq"
+DETAIL:  Key (accession_no, procedure_id, delete_flag)=(202312221151913, 849b5844-6230-402e-a60d-d1dc714f6eba, f) already exists.
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "c_report_accession_no_procedure_id_delete_flag_23ee6fe3_uniq"
+DETAIL:  Key (accession_no, procedure_id, delete_flag)=(202312221151913, 849b5844-6230-402e-a60d-d1dc714f6eba, f) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1125, in post
+    report_new = Report.objects.create(
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 453, in create
+    obj.save(force_insert=True, using=self.db)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 726, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 763, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 868, in _save_table
+    results = self._do_insert(cls._base_manager, using, fields, returning_fields, raw)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 906, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 1270, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1416, in execute_sql
+    cursor.execute(sql, params)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 98, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 66, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 75, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in _execute
+    with self.db.wrap_database_errors:
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\utils.py", line 90, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: duplicate key value violates unique constraint "c_report_accession_no_procedure_id_delete_flag_23ee6fe3_uniq"
+DETAIL:  Key (accession_no, procedure_id, delete_flag)=(202312221151913, 849b5844-6230-402e-a60d-d1dc714f6eba, f) already exists.
+
+'str' object cannot be interpreted as an integer
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1384, in put
+    report.save()
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 726, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 763, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 845, in _save_table
+    updated = self._do_update(base_qs, using, pk_val, values, update_fields,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 899, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 802, in _update
+    return query.get_compiler(self.db).execute_sql(CURSOR)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1559, in execute_sql
+    cursor = super().execute_sql(result_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1162, in execute_sql
+    sql, params = self.as_sql()
+                  ^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1525, in as_sql
+    val = field.get_db_prep_save(val, connection=self.connection)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 842, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2424, in get_db_prep_value
+    value = self.to_python(value)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2434, in to_python
+    return uuid.UUID(**{input_form: value})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\uuid.py", line 175, in __init__
+    hex = hex.replace('urn:', '').replace('uuid:', '')
+          ^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'str' object cannot be interpreted as an integer
+'str' object cannot be interpreted as an integer
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1384, in put
+    report.save()
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 726, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 763, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 845, in _save_table
+    updated = self._do_update(base_qs, using, pk_val, values, update_fields,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 899, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 802, in _update
+    return query.get_compiler(self.db).execute_sql(CURSOR)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1559, in execute_sql
+    cursor = super().execute_sql(result_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1162, in execute_sql
+    sql, params = self.as_sql()
+                  ^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1525, in as_sql
+    val = field.get_db_prep_save(val, connection=self.connection)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 842, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2424, in get_db_prep_value
+    value = self.to_python(value)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2434, in to_python
+    return uuid.UUID(**{input_form: value})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\uuid.py", line 175, in __init__
+    hex = hex.replace('urn:', '').replace('uuid:', '')
+          ^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'str' object cannot be interpreted as an integer
+Bad Request: /api/reports
+Bad Request: /api/reports
+Bad Request: /api/reports
+Bad Request: /api/reports
+'tel'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 953, in post
+    'tel':patient_data['tel'],
+          ~~~~~~~~~~~~^^^^^^^
+KeyError: 'tel'
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Bad Request: /api/reports
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1070, in _get_report_json
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+'ReportView' object has no attribute 'get'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1148, in post
+    return self.get(request, None, id=report_new.id)
+           ^^^^^^^^
+AttributeError: 'ReportView' object has no attribute 'get'
+'Request' object has no attribute 'response_success'
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'response_success'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1148, in post
+    return ReportById.get(request, None, id=report_new.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1361, in get
+    return self.response_success(data=data)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'response_success'
+'Request' object has no attribute 'response_success'
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'response_success'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1148, in post
+    return ReportById.get(request, None, id=report_new.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1361, in get
+    return self.response_success(data=data)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'response_success'
+'ReportById' object has no attribute 'request'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1150, in post
+    return reportById.get(request, None, id=report_new.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1363, in get
+    return self.response_success(data=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 142, in response_success
+    if self.request.query_params.get('page'):
+       ^^^^^^^^^^^^
+AttributeError: 'ReportById' object has no attribute 'request'
+'ReportById' object has no attribute 'request'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1150, in post
+    return reportById.get(request, None, id=report_new.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1363, in get
+    return self.response_success(data=data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 142, in response_success
+    if self.request.query_params.get('page'):
+       ^^^^^^^^^^^^
+AttributeError: 'ReportById' object has no attribute 'request'
+["“{'pk': UUID('3755b4d9-da91-4186-b345-b0e70a71c311')}” is not a valid UUID."]
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2434, in to_python
+    return uuid.UUID(**{input_form: value})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\uuid.py", line 175, in __init__
+    hex = hex.replace('urn:', '').replace('uuid:', '')
+          ^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'replace'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 14, in get_report_by_id
+    report = Report.objects.filter(pk=pk).exclude(status='X').first()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 941, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 961, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 968, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\query.py", line 1391, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\query.py", line 1410, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\query.py", line 1345, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\query.py", line 1191, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\lookups.py", line 25, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\lookups.py", line 77, in get_prep_lookup
+    return self.lhs.output_field.get_prep_value(self.rhs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2418, in get_prep_value
+    return self.to_python(value)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2436, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ["“{'pk': UUID('3755b4d9-da91-4186-b345-b0e70a71c311')}” is not a valid UUID."]
+["“{'pk': UUID('3755b4d9-da91-4186-b345-b0e70a71c311')}” is not a valid UUID."]
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2434, in to_python
+    return uuid.UUID(**{input_form: value})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python312\Lib\uuid.py", line 175, in __init__
+    hex = hex.replace('urn:', '').replace('uuid:', '')
+          ^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'replace'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 14, in get_report_by_id
+    report = Report.objects.filter(pk=pk).exclude(status='X').first()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 941, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 961, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 968, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\query.py", line 1391, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\query.py", line 1410, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\query.py", line 1345, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\query.py", line 1191, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\lookups.py", line 25, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\lookups.py", line 77, in get_prep_lookup
+    return self.lhs.output_field.get_prep_value(self.rhs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2418, in get_prep_value
+    return self.to_python(value)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 2436, in to_python
+    raise exceptions.ValidationError(
+django.core.exceptions.ValidationError: ["“{'pk': UUID('3755b4d9-da91-4186-b345-b0e70a71c311')}” is not a valid UUID."]
+Internal Server Error: /api/reports/study/1.3.6.1.4.1.25403.345050719074.3824.20170125095438.5
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1186, in get
+    return self.get_report_data(request, report)
+           ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ReportByStudyUID' object has no attribute 'get_report_data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/reports/202312221151913/31
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1260, in get
+    return self.get_report_data(request, report)
+           ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ReportByACNProcedure' object has no attribute 'get_report_data'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/reports/study/1.3.6.1.4.1.25403.345050719074.3824.20170125095438.5
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.10.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_trace_dispatch_regular.py", line 203, in trace_dispatch
+    py_db.enable_tracing(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.10.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd.py", line 1107, in enable_tracing
+    pydevd_tracing.SetTrace(thread_trace_func)
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.10.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 87, in SetTrace
+    if set_trace_to_threads(tracing_func, thread_idents=[thread.get_ident()], create_dummy_thread=False) == 0:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Admin\.vscode\extensions\ms-python.debugpy-2024.10.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\pydevd_tracing.py", line 354, in set_trace_to_threads
+    start_new_thread(increase_tracing_count, ())
+RuntimeError: can't create new thread at interpreter shutdown
+GetReportView.get_report_by_id() missing 1 required positional argument: 'pk'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1337, in put
+    new_data = self.get_report_by_id(report.id)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: GetReportView.get_report_by_id() missing 1 required positional argument: 'pk'
+Internal Server Error: /api/reports/3755b4d9-da91-4186-b345-b0e70a71c311
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+Internal Server Error: /api/reports/3755b4d9-da91-4186-b345-b0e70a71c311
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+Internal Server Error: /api/reports/3755b4d9-da91-4186-b345-b0e70a71c311
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+Internal Server Error: /api/reports/3755b4d9-da91-4186-b345-b0e70a71c311
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+Internal Server Error: /api/reports/3755b4d9-da91-4186-b345-b0e70a71c311
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+Internal Server Error: /api/reports/3755b4d9-da91-4186-b345-b0e70a71c311
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 511, in dispatch
+    self.response = self.finalize_response(request, response, *args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 423, in finalize_response
+    assert isinstance(response, HttpResponseBase), (
+AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1064, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1071, in _get_report_json
+    report = self.get_report_by_proc_id(procedure_id=proc_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'OrderByACN' object has no attribute 'get_report_by_proc_id'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1064, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1071, in _get_report_json
+    report = self.get_report_by_proc_id(procedure_id=proc_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'OrderByACN' object has no attribute 'get_report_by_proc_id'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1064, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1071, in _get_report_json
+    report = self.get_report_by_proc_id(procedure_id=proc_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'OrderByACN' object has no attribute 'get_report_by_proc_id'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1064, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1071, in _get_report_json
+    report = self.get_report_by_proc_id(procedure_id=proc_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: GetReportView.get_report_by_proc_id() got an unexpected keyword argument 'procedure_id'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1064, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1071, in _get_report_json
+    report = self.get_report_by_proc_id(procedure_id=proc_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: GetReportView.get_report_by_proc_id() got an unexpected keyword argument 'procedure_id'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+Internal Server Error: /api/orders/acn/202312221151913
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1064, in get
+    'report':self._get_report_json(proc.id)} for proc in order.procedure_list]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1071, in _get_report_json
+    report = self.get_report_by_proc_id(proc_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: GetReportView.get_report_by_proc_id() got an unexpected keyword argument 'procedure_id'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\views\generic\base.py", line 70, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\third_parties\contribution\api_view.py", line 65, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\rest_framework\request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+expected string or bytes-like object, got 'function'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1369, in delete
+    instance.save()
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 726, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 763, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 845, in _save_table
+    updated = self._do_update(base_qs, using, pk_val, values, update_fields,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 899, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 802, in _update
+    return query.get_compiler(self.db).execute_sql(CURSOR)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1559, in execute_sql
+    cursor = super().execute_sql(result_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1162, in execute_sql
+    sql, params = self.as_sql()
+                  ^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1525, in as_sql
+    val = field.get_db_prep_save(val, connection=self.connection)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 842, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1427, in get_db_prep_value
+    value = self.get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1406, in get_prep_value
+    value = super().get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1266, in get_prep_value
+    return self.to_python(value)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1367, in to_python
+    parsed = parse_datetime(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\utils\dateparse.py", line 107, in parse_datetime
+    match = datetime_re.match(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected string or bytes-like object, got 'function'
+expected string or bytes-like object, got 'function'
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1369, in delete
+    instance.save()
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 726, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 763, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 845, in _save_table
+    updated = self._do_update(base_qs, using, pk_val, values, update_fields,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\base.py", line 899, in _do_update
+    return filtered._update(values) > 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 802, in _update
+    return query.get_compiler(self.db).execute_sql(CURSOR)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1559, in execute_sql
+    cursor = super().execute_sql(result_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1162, in execute_sql
+    sql, params = self.as_sql()
+                  ^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1525, in as_sql
+    val = field.get_db_prep_save(val, connection=self.connection)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 842, in get_db_prep_save
+    return self.get_db_prep_value(value, connection=connection, prepared=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1427, in get_db_prep_value
+    value = self.get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1406, in get_prep_value
+    value = super().get_prep_value(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1266, in get_prep_value
+    return self.to_python(value)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\fields\__init__.py", line 1367, in to_python
+    parsed = parse_datetime(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\utils\dateparse.py", line 107, in parse_datetime
+    match = datetime_re.match(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected string or bytes-like object, got 'function'
