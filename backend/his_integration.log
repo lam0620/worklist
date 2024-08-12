@@ -3812,3 +3812,244 @@ Traceback (most recent call last):
     match = datetime_re.match(value)
             ^^^^^^^^^^^^^^^^^^^^^^^^
 TypeError: expected string or bytes-like object, got 'function'
+Report matching query does not exist.
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\views.py", line 1299, in put
+    report = Report.objects.get(**kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "d:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Report not exist
+Traceback (most recent call last):
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\apps\account\get_report_view.py", line 57, in get_report_by_proc_id
+    report=Report.objects.get(procedure_id=proc_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\i-stech\workspace\his-pacs-integration-api\backend\env\Lib\site-packages\django\db\models\query.py", line 435, in get
+    raise self.model.DoesNotExist(
+apps.account.models.Report.DoesNotExist: Report matching query does not exist.
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/
+Not Found: /api/orders/acn/

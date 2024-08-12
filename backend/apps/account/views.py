@@ -1406,7 +1406,7 @@ class DoctorListView(CustomAPIView):
                      'doctor_no':item.doctor_no,
                      'fullname':item.fullname,
                      'title':item.title,
-                     'sign_url':item.sign} for item in doctors]
+                     'sign':item.sign} for item in doctors]
             
         except Doctor.DoesNotExist:
             return self.cus_response_empty_data(ec.REPORT)
@@ -1455,7 +1455,7 @@ class DoctorView(CustomAPIView):
                     type=data['type'],
                     gender=data['gender'],
                     title=data['title'],
-                    sign=data['sign_url']
+                    sign=data['sign']
                     # created_by = ''
                 )
 

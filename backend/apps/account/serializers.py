@@ -261,7 +261,7 @@ class CreateDoctorSerializers(serializers.Serializer):
 
     gender = serializers.CharField(required=False)
     title = serializers.CharField(required=False)
-    sign_url = serializers.CharField(required=False)
+    sign = serializers.CharField(required=False)
 
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
