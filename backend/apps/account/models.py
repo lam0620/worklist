@@ -148,7 +148,9 @@ class Patient(BaseModels):
 
 class Doctor(BaseModels):
     fullname = models.CharField(verbose_name='fullname', max_length=100, blank=False, null=False)
-    doctor_no = models.CharField(verbose_name='doctor no', max_length=100, blank=False, null=False)
+    # doctor_no is unique
+    doctor_no = models.CharField(verbose_name='doctor no', max_length=100, unique=True, blank=False, null=False)
+   
     # gender value. M: Male, F: Female, O : Other: U: Unknown
     gender = models.CharField(verbose_name='gender', max_length=1, blank=True, null=True, default='U')
     # Type value. P: referring physiscian, R: radiologist
@@ -182,14 +184,13 @@ class Order(BaseModels):
     order_time = models.DateTimeField(verbose_name='order time', blank=False, null=False)
     #order_time = models.CharField(verbose_name='order time', max_length=14, blank=False, null=False)
     accession_no = models.CharField(verbose_name='accession no', max_length=100, blank=False, null=False)
-    req_dept_code = models.CharField(verbose_name='requested dept code', max_length=100, null=True, blank=True)
-    req_dept_name = models.CharField(verbose_name='requested dept code', max_length=100, null=True, blank=True)
-    clinical_diagnosis = models.CharField( verbose_name='clinical diagnosis', max_length=255, blank=True, null=True)
-    # Patient class value. I: inpatient, O: outpatient
-    patient_class = models.CharField(verbose_name='patient class', max_length=1, blank=True, null=True)
-
+    clinical_diagnosis = models.CharField( verbose_name='clinical diagnosis', max_length=255, blank=False, null=False)    # Patient class value. I: inpatient, O: outpatient
     # modality type value. CT, MR, DR,...
     modality_type = models.CharField(verbose_name='modality type', max_length=5, blank=False, null=False)
+
+    patient_class = models.CharField(verbose_name='patient class', max_length=1, blank=True, null=True)
+    req_dept_code = models.CharField(verbose_name='requested dept code', max_length=100, null=True, blank=True)
+    req_dept_name = models.CharField(verbose_name='requested dept code', max_length=100, null=True, blank=True)
     is_insurance_applied = models.BooleanField(verbose_name='is insurance', default=False)
     is_urgent = models.BooleanField(verbose_name='is urgent', default=False)
 
@@ -209,7 +210,7 @@ class Order(BaseModels):
         permissions = ()
 
 class ProcedureType(BaseModels):
-    code= models.CharField(verbose_name='code', max_length=100, blank=False, null=False)
+    code= models.CharField(verbose_name='code', max_length=100, unique=True, blank=False, null=False)
     name = models.CharField(verbose_name='name', max_length=100, blank=False, null=False)
 
     objects = ObjectManager()
@@ -247,11 +248,11 @@ class Report(BaseModels):
 
     accession_no = models.CharField(verbose_name='accession no', max_length=100, blank=False, null=False)
     study_iuid = models.CharField(verbose_name='study instance uid', max_length=100, blank=False, null=False)
-    findings = models.TextField(verbose_name='findings', blank=True, null=True)
-    conclusion = models.TextField( verbose_name='conclusion', blank=True, null=True)
     # Status value. D: Draft, F: Final, C: Corrected, X: Delete
     status = models.CharField(verbose_name='status', max_length=1, blank=False, null=False)
 
+    findings = models.TextField(verbose_name='findings', blank=True, null=True)
+    conclusion = models.TextField( verbose_name='conclusion', blank=True, null=True)
 
     objects = ObjectManager()
 

@@ -997,8 +997,8 @@ class OrderView(GetReportView):
                     ))
                 Procedure.objects.bulk_create(proce_list)
 
-
-                return self.cus_response_created()
+                data = {'id': order_new.id}
+                return self.cus_response_created(data)
 
         except Exception as e:
             logger.error(e, exc_info=True)
@@ -1398,7 +1398,7 @@ class DoctorListView(CustomAPIView):
 
         # P: referring physician, R: radilogist    
         type=kwargs['type']
-        # procedure_code=kwargs['procedure_code']
+
         data= {}
         try:
             doctors = Doctor.objects.filter(type=type)
@@ -1462,17 +1462,77 @@ class DoctorView(CustomAPIView):
                 # Persist db
                 doctor_new.save()
 
-                return self.cus_response_created()
+                data = {'id': doctor_new.id}
+                return self.cus_response_created(data)
 
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))       
         
-
+   
 """
 Image Link detail view class - For HIS(4)
 """   
 class ImageLinkByACNProcedure(CustomAPIView):
+    queryset = User.objects.all()
+    authentication_classes = ()
+
+    """
+    Get a image link
+    kwargs = accession_no
+    """
+    @swagger_auto_schema(
+        operation_summary='Get Image link By ACN and Procedure',
+        operation_description='Get Image link By ACN and Procedure',
+        tags=[swagger_tags.REPORT],
+        manual_parameters=[
+            openapi.Parameter('x-auth-key', openapi.IN_HEADER, 
+                              description="Custom Header",
+                              type=openapi.TYPE_STRING),
+        ],
+    )
+    def get(self, request, *args, **kwargs):
+        # user = request.user
+        # is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
+        # if not is_per and not user.is_superuser:
+        #     return self.cus_response_403()
+
+        # Get and check external app. Headers: x-auth-key
+        if request.META.get('HTTP_X_AUTH_KEY'):
+            user = self.check_integration_token(request.META.get('HTTP_X_AUTH_KEY'))
+        else:
+            user = request.user
+
+        has_permission = CheckPermission(per_code.VIEW_IMAGE, user.id).check()
+        if not has_permission and not user.is_superuser:
+            return self.cus_response_403(per_code.VIEW_IMAGE)   
+
+        accession_no=kwargs['accession_no']
+        procedure_code=kwargs['procedure_code']
+
+        try:
+            queryset = Procedure.objects.all() \
+                .select_related('procedure_type').filter(procedure_type__code=procedure_code) \
+                .select_related('order').filter(order__accession_no=accession_no, order__delete_flag=False)
+
+            if len(queryset) <= 0:
+                return self.cus_response_empty_data(ec.REPORT)
+            
+            return self.response_success(data={'image_link':get_image_link(request, queryset[0].study_iuid)}  )
+   
+        except Procedure.DoesNotExist:
+            return self.cus_response_empty_data(ec.REPORT)
+        
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))        
+
+        
+        
+"""
+Image Link detail view class - For HIS(4)
+"""   
+class ImageLinkByACN(CustomAPIView):
     queryset = User.objects.all()
     authentication_classes = ()
 
@@ -1521,8 +1581,8 @@ class ImageLinkByACNProcedure(CustomAPIView):
                         'accession_no':accession_no,
                         'image_link':get_image_link(request, result[0])
                     }
-        except Order.DoesNotExist:
-            return self.cus_response_empty_data(ec.REPORT)
+        # except Order.DoesNotExist:
+        #     return self.cus_response_empty_data(ec.REPORT)
         
         except Exception as e:
             logger.error(e, exc_info=True)

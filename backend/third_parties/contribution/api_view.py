@@ -194,7 +194,7 @@ class CustomAPIView(generics.GenericAPIView):
 
     def cus_response_created(self, data={}):
         return self.cus_response(convert_return_data_format(
-            code=ec.CREATE_SUCCESS, error=False, data=data), status=status.HTTP_201_CREATED
+            code=ec.CREATE_SUCCESS, error=False, data=data, msg='Created successfully'), status=status.HTTP_201_CREATED
         )
 
     def cus_response_deleted(self):

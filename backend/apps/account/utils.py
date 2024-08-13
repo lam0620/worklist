@@ -1,5 +1,6 @@
 import logging
 import datetime
+import urllib
 
 from typing import Dict, Union, List
 
@@ -72,7 +73,10 @@ def convert_str_to_datetime(date_str:str, format_str = '%Y%m%d%H%M%S'):
     return datetime.datetime.strptime(date_str, format_str)
 
 def get_image_link(request, studyInstanceUID):
-    return request.scheme +"://" + request.get_host() + "/viewer?StudyInstanceUIDs="+studyInstanceUID
+    # return request.scheme +"://" + request.get_host() + "/viewer?StudyInstanceUIDs="+studyInstanceUID
+    # Parse url, get hostname only
+    host_port = urllib.parse.urlparse(request.scheme +"://" + request.get_host());
+    return request.scheme +"://" + host_port.hostname + "/viewer?StudyInstanceUIDs="+studyInstanceUID
 
 def is_valid(value, list):
     if value in list:

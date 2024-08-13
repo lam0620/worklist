@@ -43,7 +43,7 @@ urlpatterns = [
     path('reports/<uuid:pk>', ReportById.as_view(), name='Report Detail by Id'),
 
     #Image
-    path('images/<accession_no>', ImageLinkByACNProcedure.as_view(), name='Image link'),
+    path('images/<accession_no>/<procedure_code>', ImageLinkByACNProcedure.as_view(), name='Image link'),
 
     #Radiologist
     path('doctors/<type>', DoctorListView.as_view(), name='Doctor List'),
