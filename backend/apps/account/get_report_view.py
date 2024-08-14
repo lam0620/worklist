@@ -54,7 +54,7 @@ class GetReportView(CustomAPIView):
     def get_report_by_proc_id(self, proc_id):
         report = None
         try:
-            report=Report.objects.get(procedure_id=proc_id)
+            report=Report.objects.get(procedure_id=proc_id, delete_flag = False)
         except Report.DoesNotExist:
             logger.warn("Report not exist", exc_info=True)
         return report     

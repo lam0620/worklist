@@ -36,3 +36,4 @@ venv.bak/
 
 .node_modules
 .next
+*.log

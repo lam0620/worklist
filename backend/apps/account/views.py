@@ -1032,7 +1032,7 @@ class OrderByACN(GetReportView):
         )
 
         try:
-            order = Order.objects.prefetch_related(procedure_prefetch).get(**kwargs)
+            order = Order.objects.prefetch_related(procedure_prefetch).get(**kwargs, delete_flag=False)
         except Order.DoesNotExist:
             return self.cus_response_empty_data(ec.REPORT)
         
@@ -1296,7 +1296,7 @@ class ReportById(GetReportView):
     def put(self, request, *args, **kwargs):
         # user = request.user
         try:
-            report = Report.objects.get(**kwargs)
+            report = Report.objects.get(**kwargs, delete_flag = False)
             if not report:
                 return self.cus_response_empty_data(ec.REPORT)
 
@@ -1355,7 +1355,7 @@ class ReportById(GetReportView):
             return self.cus_response_403(per_code.DELETE_REPORT)            
 
         try:
-            instance = Report.objects.filter(**kwargs).first()
+            instance = Report.objects.filter(**kwargs, delete_flag=False).first()
             if not instance:
                 return self.cus_response_empty_data(type=ec.REPORT)
 
@@ -1401,7 +1401,7 @@ class DoctorListView(CustomAPIView):
 
         data= {}
         try:
-            doctors = Doctor.objects.filter(type=type)
+            doctors = Doctor.objects.filter(type=type, is_active = True)
             data = [{'id': item.id,
                      'doctor_no':item.doctor_no,
                      'fullname':item.fullname,
