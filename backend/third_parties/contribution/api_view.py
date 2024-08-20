@@ -199,12 +199,12 @@ class CustomAPIView(generics.GenericAPIView):
 
     def cus_response_deleted(self):
         return self.cus_response(convert_return_data_format(
-            code=ec.DELETE_SUCCESS, error=False, data={}), status=status.HTTP_200_OK
+            code=ec.DELETE_SUCCESS, error=False, data={}, msg='Deleted successfully'), status=status.HTTP_200_OK
         )
 
     def cus_response_updated(self):
         return self.cus_response(convert_return_data_format(
-            code=ec.UPDATE_SUCCESS, error=False, data={}), status=status.HTTP_200_OK
+            code=ec.UPDATE_SUCCESS, error=False, data={}, msg='Updated successfully'), status=status.HTTP_200_OK
         )
 
     def cus_response_404(self, type=None):
