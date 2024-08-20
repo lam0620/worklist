@@ -1,6 +1,6 @@
 [
     {
-        "model": "account.IntegrationApp",
+        "model": "report.IntegrationApp",
         "pk": "81873da1-8f40-4e40-ae88-b8e1a7369b56",
         "fields": {
             "name": "HIS",

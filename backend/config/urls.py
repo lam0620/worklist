@@ -46,6 +46,7 @@ urlpatterns = \
     [
         path('admin/', admin.site.urls),
         path('api/', include('apps.account.urls')),
+        path('api/', include('apps.report.urls')),
     ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.SHOW_API_DOC:

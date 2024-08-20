@@ -1,7 +1,7 @@
 import logging
 
-from apps.account.models import Report
-from apps.account.utils import  get_image_link
+from apps.report.models import Report
+from apps.report.utils import  get_image_link
 from third_parties.contribution.api_view import CustomAPIView
 
 logger = logging.getLogger(__name__)

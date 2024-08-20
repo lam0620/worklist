@@ -5,7 +5,7 @@ import datetime
 from copy import deepcopy
 from typing import Union
 
-from apps.account.models import IntegrationApp
+from apps.report.models import IntegrationApp
 from rest_framework.exceptions import AuthenticationFailed
 from config.settings import DATETIME_INPUT_OUTPUT_FORMAT
 from django.core.serializers.json import DjangoJSONEncoder
