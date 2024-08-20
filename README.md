@@ -22,6 +22,7 @@ pip install -r requirements.txt
 
 - step 5: Migrate
 ```
+python manage.py makemigrations
 python manage.py migrate
 ```
 
@@ -37,7 +38,7 @@ python manage.py create_super_user admin 12345678@X admin@vn.sprite.jp Admin Adm
 
 - step 7: Apply Permission
 ```
-python manage.py init_code_permission
+python manage.py init_data
 ```
 
 - step 8: Run server
