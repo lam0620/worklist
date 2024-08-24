@@ -31,3 +31,8 @@ def is_valid_modality_type(value):
     if value in ('MR', 'CT', 'DX', 'CR', 'DR', 'XA', 'US'):
         return True
     return False
+
+def is_valid_report_template_type(value):
+    if value in ('system', 'custom'):
+        return True
+    return False

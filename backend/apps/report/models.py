@@ -171,4 +171,25 @@ class IntegrationApp(BaseModels):
         default_permissions = ()
         permissions = ()
 
+class ReportTemplate(BaseModels):
+    name = models.CharField(verbose_name='name', max_length=200, blank=False, null=False)
+    findings = models.TextField(verbose_name='findings', blank=False, null=False)
+    conclusion = models.TextField( verbose_name='conclusion', blank=False, null=False)
+
+    # system, custom
+    type = models.CharField(verbose_name='type', max_length=6, blank=False, null=False, default='custom')
+    modality = models.CharField(verbose_name='modality', max_length=5, blank=False, null=False)
+
+    objects = ObjectManager()
+
+    def __str__(self):
+        return self.id
+
+    class Meta:
+        db_table = 'c_report_template'
+        verbose_name = 'Report Template'
+        default_permissions = ()
+        ordering = ('-name',)
+        permissions = ()
+
 

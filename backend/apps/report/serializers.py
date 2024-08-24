@@ -2,7 +2,8 @@ from rest_framework import serializers
 
 from library.constant import error_codes as ec
 
-from apps.report.utils import is_valid_gender,is_valid_modality_type,is_valid,convert_str_to_datetime
+from apps.report.utils import is_valid_gender,is_valid_modality_type, \
+                is_valid_report_template_type, is_valid,convert_str_to_datetime
 
 
 """
@@ -74,7 +75,9 @@ class CreateOrderSerializers(serializers.Serializer):
  
     # def validate(self, data): # noqa
     #     if data['dob']:
-            
+class GetReportSerializers(serializers.Serializer):
+    study_iuid = serializers.CharField(required=True)
+
 class CreateReportSerializers(serializers.Serializer):
     accession_no = serializers.CharField(required=True)
     study_iuid = serializers.CharField(required=True)
@@ -144,3 +147,33 @@ class CreateDoctorSerializers(serializers.Serializer):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
+
+class GetReportTemplateSerializers(serializers.Serializer):
+    modality = serializers.CharField(required=True)
+
+
+class CreateReportTemplateSerializers(serializers.Serializer):
+    name = serializers.CharField(required=True)
+    findings = serializers.CharField(required=True)
+    conclusion = serializers.CharField(required=True)
+
+    type = serializers.CharField(required=True)
+    modality = serializers.CharField(required=True)
+
+    def validate_modality(self, value): # noqa
+        if not is_valid_modality_type(value):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'modality',
+                                               'detail':"'"+ value+"' is invalid"})
+        return value
+    
+    def validate_type(self, value): # noqa
+        if not is_valid_report_template_type(value):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'type',
+                                               'detail':"'"+ value+"' is invalid"})
+        return value
+    
+class UpdateReportTemplateSerializers(serializers.Serializer):
+    findings = serializers.CharField(required=True)
+    conclusion = serializers.CharField(required=True)
