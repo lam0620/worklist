@@ -698,12 +698,11 @@ class ImageLinkView(CustomAPIView):
             # Get pacsdb.study by accession_no
             with connections["pacs_db"].cursor() as cursor:
                 cursor.execute("select study_iuid from study where accession_no=%s",[accession])
-
                 results = cursor.fetchall()
 
                 if results is not None:
                     data= [{
-                        'image_link':get_image_link(request, item)
+                        'image_link':get_image_link(request, item[0])
                     } for item in results]
         
         except Exception as e:
