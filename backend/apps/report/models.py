@@ -72,10 +72,10 @@ class Order(BaseModels):
     clinical_diagnosis = models.CharField( verbose_name='clinical diagnosis', max_length=255, blank=False, null=False)    # Patient class value. I: inpatient, O: outpatient
     # modality type value. CT, MR, DR,...
     modality_type = models.CharField(verbose_name='modality type', max_length=5, blank=False, null=False)
+    req_dept_code = models.CharField(verbose_name='requested dept code', max_length=100, null=False, blank=False)
+    req_dept_name = models.CharField(verbose_name='requested dept name', max_length=100, null=False, blank=False)
 
-    patient_class = models.CharField(verbose_name='patient class', max_length=1, blank=True, null=True)
-    req_dept_code = models.CharField(verbose_name='requested dept code', max_length=100, null=True, blank=True)
-    req_dept_name = models.CharField(verbose_name='requested dept code', max_length=100, null=True, blank=True)
+    patient_class = models.CharField(verbose_name='patient class', default='U', max_length=1, blank=True, null=True)
     is_insurance_applied = models.BooleanField(verbose_name='is insurance', default=False)
     is_urgent = models.BooleanField(verbose_name='is urgent', default=False)
 

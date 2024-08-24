@@ -14,10 +14,12 @@ class CreatePatientSerializers(serializers.Serializer):
     fullname = serializers.CharField(required=True)
     dob = serializers.CharField(required=True)
 
-    gender = serializers.CharField(required=False)
-    address = serializers.CharField(required=False)
-    tel = serializers.CharField(required=False)
-    insurance_no = serializers.CharField(required=False)
+    gender = serializers.CharField(required=True)
+
+    # allow_blank=Trueto prevent error "is required"
+    address = serializers.CharField(required=False, allow_blank=True)
+    tel = serializers.CharField(required=False, allow_blank=True)
+    insurance_no = serializers.CharField(required=False, allow_blank=True)
 
     def validate_gender(self, value): # noqa
         if not is_valid_gender(value):
@@ -40,10 +42,10 @@ class CreateOrderSerializers(serializers.Serializer):
     # order_time = serializers.DateTimeField(required=True)
     order_time = serializers.CharField(required=True)
     modality_type = serializers.CharField(required=True)
+    order_no = serializers.CharField(required=True)    
 
-    order_no = serializers.CharField(required=False)    
-    is_insurance_applied = serializers.BooleanField(required=False)
-    is_urgent = serializers.BooleanField(required=False)
+    is_insurance_applied = serializers.BooleanField(required=True)
+    is_urgent = serializers.BooleanField(required=True)
     
     procedures = serializers.ListField(child=CreateProcedureTypeSerializers(), required=True)
     patient = CreatePatientSerializers(required=False)
@@ -59,7 +61,7 @@ class CreateOrderSerializers(serializers.Serializer):
         return new_value
     
     def validate_patient_class(self, value): # noqa
-        if not is_valid(value, ['I','O']):
+        if not is_valid(value, ['I','O', 'U']):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'patient_class',
                                                'detail':"'"+ value+"' is invalid"})

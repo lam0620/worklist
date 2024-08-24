@@ -65,9 +65,10 @@ def convert_error_validation(dict_error, status_code=None):
         elif isinstance(value, dict):
             tmp = {}
             convert_dict_errors(value, tmp)
+            key = list(tmp.keys())[0]
             data['code'] = tmp.get('code')
-            data['item'] = tmp.get('item')
-            data['msg'] = tmp.get('detail')
+            data['item'] = key #tmp.get('item')
+            data['msg'] = tmp[key] #tmp.get('detail')
         else:
             data['code'] = value.get('code')
             data['item'] = value.get('item')
