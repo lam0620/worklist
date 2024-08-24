@@ -150,6 +150,9 @@ class CreateDoctorSerializers(serializers.Serializer):
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
 
+class GetImageLinkSerializers(serializers.Serializer):
+    accession = serializers.CharField(required=True)
+
 class GetReportTemplateSerializers(serializers.Serializer):
     modality = serializers.CharField(required=True)
 

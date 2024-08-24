@@ -657,16 +657,71 @@ class DoctorView(CustomAPIView):
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))       
         
+"""
+Image Link detail view class - For HIS(4.1)
+"""   
+class ImageLinkView(CustomAPIView):
+    queryset = User.objects.all()
+    authentication_classes = ()
+
+    """
+    Get a images link that has been reported or not yet
+    ?accession=xxx
+    """
+    @swagger_auto_schema(
+        operation_summary='Get Image link',
+        operation_description='Get Image link',
+        tags=[swagger_tags.REPORT],
+        query_serializer= ser.GetImageLinkSerializers,
+        manual_parameters=[
+            openapi.Parameter('x-auth-key', openapi.IN_HEADER, 
+                              description="Custom Header",
+                              type=openapi.TYPE_STRING),
+        ],
+    )
+    def get(self, request, *args, **kwargs):
+        # Get and check external app. Headers: x-auth-key
+        if request.META.get('HTTP_X_AUTH_KEY'):
+            user = self.check_integration_token(request.META.get('HTTP_X_AUTH_KEY'))
+        else:
+            user = request.user
+
+        has_permission = CheckPermission(per_code.VIEW_IMAGE, user.id).check()
+        if not has_permission and not user.is_superuser:
+            return self.cus_response_403(per_code.VIEW_IMAGE)   
+
+        # Get accession_no from query params: /?accession=XX   
+        accession=request.query_params.get('accession')
+
+        data= {}
+        try:
+            # Get pacsdb.study by accession_no
+            with connections["pacs_db"].cursor() as cursor:
+                cursor.execute("select study_iuid from study where accession_no=%s",[accession])
+
+                results = cursor.fetchall()
+
+                if results is not None:
+                    data= [{
+                        'image_link':get_image_link(request, item)
+                    } for item in results]
+        
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+        return self.response_success(data=data)     
+
 
 """
-Image Link detail view class - For HIS(4)
+Image Link detail view class - For HIS(4.2)
 """   
 class ImageLinkByACNProcedure(CustomAPIView):
     queryset = User.objects.all()
     authentication_classes = ()
 
     """
-    Get a image link
+    Get a image link that has been reported
     kwargs = accession_no
     """
     @swagger_auto_schema(
@@ -714,113 +769,6 @@ class ImageLinkByACNProcedure(CustomAPIView):
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))        
-
-        
-        
-"""
-Image Link detail view class - For HIS(4)
-"""   
-class ImageLinkByACN(CustomAPIView):
-    queryset = User.objects.all()
-    authentication_classes = ()
-
-    """
-    Get a image link
-    kwargs = accession_no
-    """
-    @swagger_auto_schema(
-        operation_summary='Get Image link By ACN',
-        operation_description='Get Image link By ACN ',
-        tags=[swagger_tags.REPORT],
-        manual_parameters=[
-            openapi.Parameter('x-auth-key', openapi.IN_HEADER, 
-                              description="Custom Header",
-                              type=openapi.TYPE_STRING),
-        ],
-    )
-    def get(self, request, *args, **kwargs):
-        # user = request.user
-        # is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
-        # if not is_per and not user.is_superuser:
-        #     return self.cus_response_403()
-
-        # Get and check external app. Headers: x-auth-key
-        if request.META.get('HTTP_X_AUTH_KEY'):
-            user = self.check_integration_token(request.META.get('HTTP_X_AUTH_KEY'))
-        else:
-            user = request.user
-
-        has_permission = CheckPermission(per_code.VIEW_IMAGE, user.id).check()
-        if not has_permission and not user.is_superuser:
-            return self.cus_response_403(per_code.VIEW_IMAGE)   
-
-        accession_no=kwargs['accession_no']
-        # procedure_code=kwargs['procedure_code']
-        data= {}
-        try:
-            # Get pacsdb.study by accession_no
-            with connections["pacs_db"].cursor() as cursor:
-                cursor.execute("select study_iuid from study where accession_no=%s",[accession_no])
-
-                result = cursor.fetchone()
-
-                if result is not None:
-                    data= {
-                        'accession_no':accession_no,
-                        'image_link':get_image_link(request, result[0])
-                    }
-        # except Order.DoesNotExist:
-        #     return self.cus_response_empty_data(ec.REPORT)
-        
-        except Exception as e:
-            logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
-        
-        return self.response_success(data=data)
-    
-
-"""
-Report tempalte list view class
-"""   
-# class ReportTemplateListView(CustomAPIView):
-#     queryset = User.objects.all()
-#     authentication_classes = ()
-
-#     """
-#     Get a doctor
-#     kwargs = accession_no and procedure_code
-#     """
-#     @swagger_auto_schema(
-#         operation_summary='Get report templates',
-#         operation_description='Get report templates',
-#         tags=[swagger_tags.REPORT_TEMPLATE],
-#     )
-#     def get(self, request, *args, **kwargs):
-#         # user = request.user
-#         # is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
-#         # if not is_per and not user.is_superuser:
-#         #     return self.cus_response_403()
-
-#         # P: referring physician, R: radilogist    
-#         modality=kwargs['modality']
-
-#         data= {}
-#         try:
-#             tempaltes = ReportTemplate.objects.filter(modality=modality.upper(), delete_flag = False)
-#             data = [{'id': item.id,
-#                      'name':item.name,
-#                      'type':item.type,
-#                      'findings':item.findings,
-#                      'conclusion':item.conclusion} for item in tempaltes]
-            
-#         except ReportTemplate.DoesNotExist:
-#             return self.cus_response_empty_data(ec.REPORT)
-        
-#         except Exception as e:
-#             logger.error(e, exc_info=True)
-#             return self.response_NG(ec.SYSTEM_ERR, str(e))
-        
-#         return self.response_success(data=data)
 
 
 """

@@ -1,7 +1,7 @@
 from django.urls import path
 
 from apps.report.views import (
-    ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById, ReportByACNProcedure,
+    ImageLinkView, ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById, ReportByACNProcedure,
     OrderView,OrderByACN,DoctorView,DoctorListView,ImageLinkByACNProcedure
 )
 
@@ -22,9 +22,13 @@ urlpatterns = [
     path('reports', ReportView.as_view(), name='Report'),
     path('reports/<uuid:pk>', ReportById.as_view(), name='Report Detail by Id'),
     path('reports/<accession_no>/<procedure_code>', ReportByACNProcedure.as_view(), name='Report Detail by AccessionNumber and procedure code'),
-    # reports?study_iuid=XXX also existing. pattern /reports
+    # reports?study_iuid=xxx also existing. pattern /reports
 
     #Image
+    # images?accession=xxx 
+    # images that has been reported or not yet
+    path('images', ImageLinkView.as_view(), name='Image link'),
+    # images that has been reported
     path('images/<accession_no>/<procedure_code>', ImageLinkByACNProcedure.as_view(), name='Image link'),
 
     #Radiologist
@@ -34,5 +38,5 @@ urlpatterns = [
     #Report template
     path('report-templates', ReportTemplateView.as_view(), name='ReportTemplate'),
     path('report-templates/<uuid:pk>', ReportTemplateDetailView.as_view(), name='ReportTemplate Detail'),
-    # report-templates?modality=<modality> aslo existing in the pattern /report-templates
+    # report-templates?modality=xx aslo existing in the pattern /report-templates
 ]
