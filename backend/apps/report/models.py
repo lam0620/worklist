@@ -69,7 +69,7 @@ class Order(BaseModels):
     order_time = models.DateTimeField(verbose_name='order time', blank=False, null=False)
     #order_time = models.CharField(verbose_name='order time', max_length=14, blank=False, null=False)
     accession_no = models.CharField(verbose_name='accession no', max_length=100, blank=False, null=False)
-    clinical_diagnosis = models.CharField( verbose_name='clinical diagnosis', max_length=255, blank=False, null=False)    # Patient class value. I: inpatient, O: outpatient
+    clinical_diagnosis = models.CharField( verbose_name='clinical diagnosis', max_length=2000, blank=False, null=False)    # Patient class value. I: inpatient, O: outpatient
     # modality type value. CT, MR, DR,...
     modality_type = models.CharField(verbose_name='modality type', max_length=5, blank=False, null=False)
     req_dept_code = models.CharField(verbose_name='requested dept code', max_length=100, null=False, blank=False)
