@@ -101,7 +101,19 @@ class CustomAPIView(generics.GenericAPIView):
         }
         # return Response(res, status=status, content_type="application/json")
         return Response(json.loads(json.dumps(res, cls=DjangoOverRideJSONEncoder)), status=200)
-
+    
+    def response_item_NG(status_code=200, code="", item="", msg=""):
+        res = {
+            'result':{
+                'status': "NG",
+                'code': code,
+                'item': item,
+                "msg": msg
+            }
+        }
+        # return Response(res, status=status, content_type="application/json")
+        return Response(json.loads(json.dumps(res, cls=DjangoOverRideJSONEncoder)), status=200)
+    
     def paginate_list(self, data):
         return self.paginator.paginate_list(data, self.request)
 

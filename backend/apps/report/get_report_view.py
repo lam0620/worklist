@@ -21,6 +21,10 @@ class GetReportView(CustomAPIView):
         return self.get_report_json(request, report)
     
     def get_report_json(self, request, report):
+        """
+        Get report data in json for report item
+        """
+                
         procedure= {}
         # Make sure report.procedure exist
         if report.procedure:
@@ -51,10 +55,38 @@ class GetReportView(CustomAPIView):
         #return data
         return self.response_success(data=data)       
 
+    def get_order_report_json(self, proc_id):
+        """
+        Get report data in json for order item
+        """
+        data = {}
+
+        report = self.get_report_by_proc_id(proc_id)
+        if report is not None:
+            created_time = report.created_at.strftime('%d/%m/%Y %H:%M')
+            data = {
+                'id': report.id,
+                'accession_no': report.accession_no,
+                'study_iuid': report.study_iuid,
+                'findings': report.findings,
+                'conclusion': report.conclusion,
+                'status': report.status,
+                'created_time':created_time,
+                'radiologist': {
+                    "id":report.radiologist.id,
+                    'doctor_no':report.radiologist.doctor_no,
+                    'fullname':report.radiologist.fullname,
+                    'sign':report.radiologist.sign,
+                    'title':report.radiologist.title,
+                }                
+            }
+
+        return data    
+
     def get_report_by_proc_id(self, proc_id):
         report = None
         try:
             report=Report.objects.get(procedure_id=proc_id, delete_flag = False)
         except Report.DoesNotExist:
             logger.warn("Report not exist", exc_info=True)
-        return report     
+        return report    

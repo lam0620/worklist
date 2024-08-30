@@ -189,7 +189,7 @@ class ReportTemplate(BaseModels):
         db_table = 'c_report_template'
         verbose_name = 'Report Template'
         default_permissions = ()
-        ordering = ('-name',)
+        ordering = ('name',)
         permissions = ()
 
 

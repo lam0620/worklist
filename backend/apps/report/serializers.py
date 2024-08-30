@@ -31,6 +31,10 @@ class CreateProcedureTypeSerializers(serializers.Serializer):
     code = serializers.CharField(required=True)
     name = serializers.CharField(required=True)
 
+class GetOrderSerializers(serializers.Serializer):
+    accession = serializers.CharField(required=False)
+
+    
 class CreateOrderSerializers(serializers.Serializer):
     accession_no = serializers.CharField(required=True)
     req_dept_code = serializers.CharField(required=True)

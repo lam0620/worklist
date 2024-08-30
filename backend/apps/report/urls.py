@@ -1,8 +1,12 @@
 from django.urls import path
 
 from apps.report.views import (
-    ImageLinkView, ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById, ReportByACNProcedure,
-    OrderView,OrderByACN,DoctorView,DoctorListView,ImageLinkByACNProcedure
+    ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById,
+    OrderView,DoctorView,DoctorListView
+)
+from apps.report.views import (
+    External_ReportById, External_ReportByACNProcedure,
+    External_OrderView,External_ImageLinkView,External_ImageLinkByACNProcedure
 )
 
 urlpatterns = [
@@ -13,23 +17,25 @@ urlpatterns = [
     # 2. Get report by acn + procedure code. /reports/<accession_no>/<procedure_code>
     # 3. Delete report. /reports/<uuid:pk>
     # 4. Get image link. /images/<accession_no>/<procedure_code>
+    path('ext/orders', External_OrderView.as_view(), name='Order for external'),
+    path('ext/reports/<accession_no>/<procedure_code>', External_ReportByACNProcedure.as_view(), name='Report Detail by AccessionNumber and procedure code'),
+    path('ext/reports/<uuid:pk>', External_ReportById.as_view(), name='Report Detail by Id'),
+
+    # images?accession=xxx. images that has been reported or not yet
+    path('ext/images', External_ImageLinkView.as_view(), name='Image link'),
+    # images that has been reported
+    path('ext/images/<accession_no>/<procedure_code>', External_ImageLinkByACNProcedure.as_view(), name='Image link'),
+    ############# END API FOR HIS ###################
 
     # Order
     path('orders', OrderView.as_view(), name='Order'),
-    path('orders/acn/<accession_no>', OrderByACN.as_view(), name='Order Detail by AccessionNumber'),
+    # orders?accession=xxx also existing. pattern /orders
 
     # Report
     path('reports', ReportView.as_view(), name='Report'),
     path('reports/<uuid:pk>', ReportById.as_view(), name='Report Detail by Id'),
-    path('reports/<accession_no>/<procedure_code>', ReportByACNProcedure.as_view(), name='Report Detail by AccessionNumber and procedure code'),
+    # path('reports/<accession_no>/<procedure_code>', ReportByACNProcedure.as_view(), name='Report Detail by AccessionNumber and procedure code'),
     # reports?study_iuid=xxx also existing. pattern /reports
-
-    #Image
-    # images?accession=xxx 
-    # images that has been reported or not yet
-    path('images', ImageLinkView.as_view(), name='Image link'),
-    # images that has been reported
-    path('images/<accession_no>/<procedure_code>', ImageLinkByACNProcedure.as_view(), name='Image link'),
 
     #Radiologist
     path('doctors/<type>', DoctorListView.as_view(), name='Doctor List'),
