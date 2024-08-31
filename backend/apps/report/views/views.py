@@ -111,6 +111,65 @@ class OrderView(GetReportView):
             return self.get_paginated_response(page)
    
 
+class OrderByACNView(GetReportView):
+    queryset = User.objects.all()
+    authentication_classes = ()
+
+    """
+    Get list of order
+    """
+    @swagger_auto_schema(
+        operation_summary='Order Detail by AccessionNumber',
+        operation_description='Order Detail by AccessionNumber',
+        tags=[swagger_tags.REPORT_ORDER],
+    )
+    def get(self, request, *args, **kwargs):
+        # user = request.user
+        # is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
+        # if not is_per and not user.is_superuser:
+        #     return self.cus_response_403()
+
+        # procedure and procedure_type queries
+        procedure_prefetch = Prefetch(
+            'procedure_set',
+            queryset=Procedure.objects.select_related('procedure_type'),
+            to_attr='procedure_list'
+        )
+
+        try:
+            order = Order.objects.prefetch_related(procedure_prefetch).get(**kwargs, delete_flag=False)
+        except Order.DoesNotExist:
+            return self.cus_response_empty_data(ec.REPORT)
+        
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+        order_data = {
+            'accession_no': order.accession_no,
+            'req_phys_code': order.referring_phys.doctor_no,
+            'req_phys_name': order.referring_phys.fullname,
+            'clinical_diagnosis': order.clinical_diagnosis,
+            'order_time': order.order_time,
+            'modality_type': order.modality_type,
+            'is_insurance_applied': order.is_insurance_applied,
+            'patient': {
+                'pid':order.patient.pid,
+                'fullname':order.patient.fullname,
+                'gender':order.patient.gender,
+                'dob':order.patient.dob,
+                'tel':order.patient.tel,
+                'address':order.patient.address,
+                'insurance_no':order.patient.insurance_no
+            },
+            'procedures': [{'proc_id': proc.id,
+                            'study_iuid':proc.study_iuid,
+                            'code': proc.procedure_type.code, 
+                            'name': proc.procedure_type.name,
+                            'report':self.get_order_report_json(proc.id)} for proc in order.procedure_list]
+        }
+        return self.response_success(data=order_data)
+    
 # =============== Report class ==================
 class ReportView(GetReportView):
     queryset = User.objects.all()
