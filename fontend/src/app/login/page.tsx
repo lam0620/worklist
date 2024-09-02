@@ -8,6 +8,8 @@ import Head from "next/head";
 import { useUser } from "@/context/UserContext";
 import { Login } from "@/services/apiService";
 
+import backgroundImage from "../../../public/images/login_bg.jpg";
+
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,10 +19,12 @@ const LoginPage = () => {
   const router = useRouter();
   const { login, logout } = useUser();
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
+      console.log('Login...');
       const response = await Login({ username, password });
       if (response.status === 200) {
         const { access_token, refresh_token } = response.data?.data;
@@ -29,14 +33,17 @@ const LoginPage = () => {
 
         // router.push("/home");
         // Redirect to study list
-        const currentUrl = new URL(`${process.env.DICOM_VIEWER_URL}/preworklist`);
+        //const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}/preworklist`);
+        // Transfer to viewer. At viewer, can get access_token,...from Cookie
+        const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}`);
         const urlParams = new URLSearchParams(currentUrl.search);
 
         const formattedDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000))
                                .toISOString().slice(0, 10).replace(/-/g, "");
         urlParams.set('startDate', formattedDate);
-        urlParams.set('key', access_token);
-        currentUrl.search = urlParams.toString();
+        // urlParams.set('key', access_token);
+        // currentUrl.search = urlParams.toString();
+        console.log('currentUrl.search:',currentUrl.search);
         
         router.push(currentUrl.toString());
       }
@@ -57,34 +64,44 @@ const LoginPage = () => {
       <Head>
         <title>Login</title>
       </Head>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
-        <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
+      <div style= {{
+                    backgroundImage: `url(${backgroundImage.src})`,
+                    backgroundSize: 'cover',
+                    opacity: 1
+                }}
+      className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
+        <div className="p-8 rounded shadow-md w-full max-w-md" style={{backgroundColor: '#323237',color:'#d0d0d0' }}>
+          <h1 className="text-3xl font-bold mb-6 text-center"></h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col">
-              <label className="mb-2 font-medium">Username</label>
+              {/* <label className="mb-2 font-medium">Username</label> */}
               <input
                 type="text"
+                placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="border rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300"
+                className="rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300"
+                style={{backgroundColor: '#27272b'}}
               />
             </div>
             <div className="flex flex-col">
-              <label className="mb-2 font-medium">Password</label>
+              {/* <label className="mb-2 font-medium">Password</label> */}
               <input
                 type="password"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="border rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300"
+                className="rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300"
+                style={{backgroundColor: '#27272b'}}
               />
             </div>
             <button
               type="submit"
-              className="bg-blue-500 text-white rounded p-3 w-full flex items-center justify-center"
+              className="bg-blue-500 font-bold rounded p-3 w-full flex items-center justify-center"
               disabled={isLoading}
+              style={{backgroundColor: '#fe615a'}}
             >
-              {isLoading ? <ClipLoader color="white" size={24} /> : "Login"}
+              {isLoading ? <ClipLoader color="white" size={24} /> : "LOGIN"}
             </button>
           </form>
         </div>
