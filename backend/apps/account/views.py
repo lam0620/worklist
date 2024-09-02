@@ -120,8 +120,8 @@ class AuthLogin(APIView):
 
         access_token = AccessToken.for_user(user)
         access_token.set_exp(lifetime= access_token_lifetime)
-        # Add custom field to token
-        # access_token["display_name"] = user.first_name +" "+ user.last_name
+        # Add custom field to token. display_name = last_name(ten) + first_name(ho)
+        access_token["display_name"] = user.last_name + " " + user.first_name
 
         refresh_token = RefreshToken.for_user(user)
         refresh_token.set_exp(lifetime= refresh_token_lifetime)

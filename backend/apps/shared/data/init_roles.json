@@ -1,0 +1,29 @@
+[
+    {
+        "model": "account.Role",
+        "pk": "d0f76603-adad-468f-a46c-1fbd00628f81",
+        "fields": {
+            "name": "Integration",
+            "description": "HIS Integration role",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.Role",
+        "pk": "7491bdca-234f-4ee7-b601-b2b8dd75147f",
+        "fields": {
+            "name": "Radiologist",
+            "description": "Radiologist role",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.Role",
+        "pk": "3a3151b3-6824-4094-90a0-b8e5c40c8d03",
+        "fields": {
+            "name": "Referring Physician",
+            "description": "Referring Physician role",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    }
+]

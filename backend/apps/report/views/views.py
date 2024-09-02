@@ -34,7 +34,8 @@ Order class
 class OrderView(GetReportView):
     queryset = User.objects.all()
     # Call overwrite here to skip authenticate or don't call request.user
-    authentication_classes = ()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
 
     """
     Get list of order
@@ -46,11 +47,12 @@ class OrderView(GetReportView):
         tags=[swagger_tags.REPORT_ORDER],
     )
     def get(self, request, *args, **kwargs):
-
-        # user = request.user
-        # is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
-        # if not is_per and not user.is_superuser:
-        #     return self.cus_response_403()
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_ORDER)
 
         # Get modality from query params: /?accession=XX   
         accession=request.query_params.get('accession')
@@ -113,7 +115,8 @@ class OrderView(GetReportView):
 
 class OrderByACNView(GetReportView):
     queryset = User.objects.all()
-    authentication_classes = ()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
 
     """
     Get list of order
@@ -124,10 +127,12 @@ class OrderByACNView(GetReportView):
         tags=[swagger_tags.REPORT_ORDER],
     )
     def get(self, request, *args, **kwargs):
-        # user = request.user
-        # is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
-        # if not is_per and not user.is_superuser:
-        #     return self.cus_response_403()
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_ORDER)
 
         # procedure and procedure_type queries
         procedure_prefetch = Prefetch(
@@ -173,7 +178,8 @@ class OrderByACNView(GetReportView):
 # =============== Report class ==================
 class ReportView(GetReportView):
     queryset = User.objects.all()
-    authentication_classes = ()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
 
     """
     Get a report
@@ -186,6 +192,13 @@ class ReportView(GetReportView):
         tags=[swagger_tags.REPORT],
     )
     def get(self, request, *args, **kwargs):
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_REPORT)
+                    
         try:
             study_iuid=request.query_params.get('study_iuid')
             # Get report by study_iuid and status != 'X' (deleted)
@@ -209,10 +222,12 @@ class ReportView(GetReportView):
         tags=[swagger_tags.REPORT],
     )
     def post(self, request):
-        # user = request.user
-        # is_per = CheckPermission(per_code.ADD_REPORT, user.id).check()
-        # if not is_per and not user.is_superuser:
-        #     return self.cus_response_403()
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.ADD_REPORT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.ADD_REPORT)
 
         logger.info('Creating report.....');
         serializer = ser.CreateReportSerializers(data=request.data)
@@ -262,7 +277,8 @@ class ReportView(GetReportView):
 
 class ReportById(GetReportView):
     queryset = User.objects.all()
-    authentication_classes = ()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
 
     """
     Get a report
@@ -274,8 +290,14 @@ class ReportById(GetReportView):
         tags=[swagger_tags.REPORT],
     )
     def get(self, request, *args, **kwargs):
-        # Get latest report
-        
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_REPORT)
+                    
+        # Get latest report        
         return self.get_report_by_id(request, kwargs['pk'])
 
     @swagger_auto_schema(
@@ -285,7 +307,13 @@ class ReportById(GetReportView):
         tags=[swagger_tags.REPORT],
     )
     def put(self, request, *args, **kwargs):
-        # user = request.user
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.EDIT_REPORT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.EDIT_REPORT)
+                    
         try:
             report = Report.objects.get(**kwargs, delete_flag = False)
             if not report:
@@ -313,55 +341,12 @@ class ReportById(GetReportView):
        
 
 """
-Doctor list view class
-"""   
-class DoctorListView(CustomAPIView):
-    queryset = User.objects.all()
-    authentication_classes = ()
-
-    """
-    Get a doctor
-    kwargs = accession_no and procedure_code
-    """
-    @swagger_auto_schema(
-        operation_summary='Get doctors',
-        operation_description='Get doctors',
-        tags=[swagger_tags.REPORT_DOCTOR],
-    )
-    def get(self, request, *args, **kwargs):
-        # user = request.user
-        # is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
-        # if not is_per and not user.is_superuser:
-        #     return self.cus_response_403()
-
-        # P: referring physician, R: radilogist    
-        type=kwargs['type']
-
-        data= {}
-        try:
-            doctors = Doctor.objects.filter(type=type, is_active = True)
-            data = [{'id': item.id,
-                     'doctor_no':item.doctor_no,
-                     'fullname':item.fullname,
-                     'title':item.title,
-                     'sign':item.sign} for item in doctors]
-            
-        except Doctor.DoesNotExist:
-            return self.cus_response_empty_data(ec.REPORT)
-        
-        except Exception as e:
-            logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
-        
-        return self.response_success(data=data)
-
-
-"""
 Doctor view class
 """   
 class DoctorView(CustomAPIView):
     queryset = User.objects.all()
-    authentication_classes = ()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
 
     """
     Create new a doctor
@@ -373,10 +358,12 @@ class DoctorView(CustomAPIView):
         tags=[swagger_tags.REPORT_DOCTOR],
     )
     def post(self, request):
-        # user = request.user
-        # is_per = CheckPermission(per_code.ADD_REPORT, user.id).check()
-        # if not is_per and not user.is_superuser:
-        #     return self.cus_response_403()
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.ADD_DOCTOR, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.ADD_DOCTOR)
 
         serializer = ser.CreateDoctorSerializers(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -388,6 +375,7 @@ class DoctorView(CustomAPIView):
             with transaction.atomic():
                
                 doctor_new = Doctor.objects.create(
+                    user_id=data['user_id'],
                     doctor_no=data['doctor_no'],
                     fullname=data['fullname'],
                     type=data['type'],
@@ -407,13 +395,110 @@ class DoctorView(CustomAPIView):
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))       
 
+    """
+    Get a doctor
+    kwargs = accession_no and procedure_code
+    """
+    @swagger_auto_schema(
+        operation_summary='Get doctors',
+        operation_description='Get doctors',
+        query_serializer= ser.GetDoctorSerializers,
+        tags=[swagger_tags.REPORT_DOCTOR],
+    )
+    def get(self, request, *args, **kwargs):
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_DOCTOR, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_DOCTOR)
+
+        # type = P: referring physician, R: radilogist    
+        # Get type from query params: /?type=XX   
+        user_id=request.query_params.get('user_id')
+        type=request.query_params.get('type')
+
+        data= {}
+        try:
+            if type and user_id:
+                doctors = Doctor.objects.filter(user_id=user_id,type=type, is_active = True)
+            elif type:
+                doctors = Doctor.objects.filter(type=type, is_active = True)    
+            elif user_id:
+                doctors = Doctor.objects.filter(user_id=user_id, is_active = True)
+            else:
+                doctors = Doctor.objects.filter(is_active = True)
+
+            data = [{'id': item.id,
+                     'user_id':item.user_id,
+                     'doctor_no':item.doctor_no,
+                     'type':item.type,
+                     'fullname':item.fullname,
+                     'title':item.title,
+                     'sign':item.sign} for item in doctors]
+            
+        except Doctor.DoesNotExist:
+            return self.cus_response_empty_data(ec.REPORT)
+        
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+        # return self.response_success(data=data)
+        page = self.paginate_queryset(data)
+        return self.get_paginated_response(page)        
+
+class DoctorDetailView(CustomAPIView):
+    queryset = User.objects.all()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
+
+    """
+    Get a report
+    kwargs = pk
+    """
+    @swagger_auto_schema(
+        operation_summary='Get Detail Doctor by Id',
+        operation_description='Get Detail Doctor by Id',
+        tags=[swagger_tags.REPORT_DOCTOR],
+    )
+    def get(self, request, *args, **kwargs):
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_DOCTOR, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_DOCTOR)
+                    
+        # Get latest Doctor
+        try:
+            item = Doctor.objects.get(**kwargs)
+            if item is None:
+                return self.cus_response_empty_data()
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG('SYSTEM_ERR', str(e))
+        
+        data = {'id': item.id,
+                     'user_id':item.user_id,
+                     'doctor_no':item.doctor_no,
+                     'type':item.type,
+                     'fullname':item.fullname,
+                     'title':item.title,
+                     'sign':item.sign
+                }
+        
+        return self.response_success(data=data) 
+
+
 
 """
 Report Template view class
 """   
 class ReportTemplateView(CustomAPIView):
     queryset = User.objects.all()
-    authentication_classes = ()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
 
     """
     Get a doctor
@@ -426,10 +511,12 @@ class ReportTemplateView(CustomAPIView):
         tags=[swagger_tags.REPORT_TEMPLATE],
     )
     def get(self, request, *args, **kwargs):
-        # user = request.user
-        # is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
-        # if not is_per and not user.is_superuser:
-        #     return self.cus_response_403()
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_REPORT_TEMPLATE, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_REPORT_TEMPLATE)
 
         # Get modality from query params: /?modality=XX   
         modality=request.query_params.get('modality')
@@ -462,10 +549,12 @@ class ReportTemplateView(CustomAPIView):
         tags=[swagger_tags.REPORT_TEMPLATE],
     )
     def post(self, request):
-        # user = request.user
-        # is_per = CheckPermission(per_code.ADD_REPORT, user.id).check()
-        # if not is_per and not user.is_superuser:
-        #     return self.cus_response_403()
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.ADD_REPORT_TEMPLATE, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.ADD_REPORT_TEMPLATE)
 
         serializer = ser.CreateReportTemplateSerializers(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -498,7 +587,8 @@ class ReportTemplateView(CustomAPIView):
 
 class ReportTemplateDetailView(CustomAPIView):
     queryset = User.objects.all()
-    authentication_classes = ()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
 
     """
     Get a report
@@ -510,8 +600,14 @@ class ReportTemplateDetailView(CustomAPIView):
         tags=[swagger_tags.REPORT_TEMPLATE],
     )
     def get(self, request, *args, **kwargs):
-        # Get latest report
-        
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_REPORT_TEMPLATE, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_REPORT_TEMPLATE)
+                    
+        # Get latest report        
         return self._get_report_template_by_id(kwargs['pk'])
 
     @swagger_auto_schema(
@@ -521,7 +617,13 @@ class ReportTemplateDetailView(CustomAPIView):
         tags=[swagger_tags.REPORT_TEMPLATE],
     )
     def put(self, request, *args, **kwargs):
-        # user = request.user
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.EDIT_REPORT_TEMPLATE, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.EDIT_REPORT_TEMPLATE)
+            
         try:
             report = ReportTemplate.objects.get(**kwargs, delete_flag = False)
             if not report:

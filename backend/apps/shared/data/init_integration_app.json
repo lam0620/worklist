@@ -1,0 +1,13 @@
+[
+    {
+        "model": "report.IntegrationApp",
+        "pk": "81873da1-8f40-4e40-ae88-b8e1a7369b56",
+        "fields": {
+            "name": "HIS",
+            "token": "81873da18f404e40ae88b8e1a7369b56",
+            "expired_date":"2099-12-01",
+            "is_active":true,
+            "representer_id":"65838386-c439-44b4-8ee6-68f134eb5bc2"
+        }
+    }
+]

@@ -16,7 +16,7 @@ class CreatePatientSerializers(serializers.Serializer):
 
     gender = serializers.CharField(required=True)
 
-    # allow_blank=Trueto prevent error "is required"
+    # allow_blank=True to prevent error "is required"
     address = serializers.CharField(required=False, allow_blank=True)
     tel = serializers.CharField(required=False, allow_blank=True)
     insurance_no = serializers.CharField(required=False, allow_blank=True)
@@ -133,13 +133,14 @@ class UpdateReportSerializers(serializers.Serializer):
         return data
 
 class CreateDoctorSerializers(serializers.Serializer):
-    doctor_no = serializers.CharField(required=True)
     fullname = serializers.CharField(required=True)
     type = serializers.CharField(required=True)
 
+    user_id = serializers.CharField(required=False)
+    doctor_no = serializers.CharField(required=False, allow_blank=True)
     gender = serializers.CharField(required=False)
-    title = serializers.CharField(required=False)
-    sign = serializers.CharField(required=False)
+    title = serializers.CharField(required=False, allow_blank=True)
+    sign = serializers.CharField(required=False, allow_blank=True)
 
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
@@ -153,6 +154,10 @@ class CreateDoctorSerializers(serializers.Serializer):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
+
+class GetDoctorSerializers(serializers.Serializer):
+    user_id = serializers.CharField(required=False)
+    type = serializers.CharField(required=False)
 
 class GetImageLinkSerializers(serializers.Serializer):
     accession = serializers.CharField(required=True)

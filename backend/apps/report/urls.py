@@ -2,7 +2,7 @@ from django.urls import path
 
 from apps.report.views import (
     ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById,
-    OrderView,DoctorView,DoctorListView
+    OrderView,DoctorView,DoctorDetailView
 )
 from apps.report.views import (
     External_ReportById, External_ReportByACNProcedure,
@@ -28,6 +28,7 @@ urlpatterns = [
     path('ext/images/<accession_no>/<procedure_code>', External_ImageLinkByACNProcedure.as_view(), name='Image link'),
     ############# END API FOR HIS ###################
 
+    ############# API FOR REPORT ###################
     # Order
     path('orders', OrderView.as_view(), name='Order'),
     # orders?accession=xxx also existing. pattern /orders
@@ -40,9 +41,12 @@ urlpatterns = [
     # path('reports/<accession_no>/<procedure_code>', ReportByACNProcedure.as_view(), name='Report Detail by AccessionNumber and procedure code'),
     # reports?study_iuid=xxx also existing. pattern /reports
 
-    #Radiologist
-    path('doctors/<type>', DoctorListView.as_view(), name='Doctor List'),
+    #Radiologist/Doctor
+    # path('doctors/<type>', DoctorListView.as_view(), name='Doctor List'),
     path('doctors', DoctorView.as_view(), name='Doctor'),
+    # doctors?type=R|P also existing. pattern /doctors
+    # doctors?user_id=xxxx also existing. pattern /doctors
+    # path('doctors/<uuid:pk>', DoctorDetailView.as_view(), name='Doctor by Id'),
 
     #Report template
     path('report-templates', ReportTemplateView.as_view(), name='ReportTemplate'),

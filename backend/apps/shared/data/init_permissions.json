@@ -113,7 +113,7 @@
         "pk": "e322a624-2b45-4fd9-9037-e6cae8a90557",
         "fields": {
             "code": "view_report",
-            "name": "View Report",
+            "name": "View report",
             "tag": "report"
         }
     },
@@ -154,7 +154,33 @@
             "tag": "order"
         }
     },
-
+    {
+        "model": "account.permission",
+        "pk": "fa62e5fb-390a-4969-98ff-3c79cd3c5eef",
+        "fields": {
+            "code": "view_order",
+            "name": "View order",
+            "tag": "order"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "39bb3e4d-c591-492c-aa73-b32d33da1758",
+        "fields": {
+            "code": "edit_order",
+            "name": "Edit order",
+            "tag": "order"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "55381067-14e1-4a5c-bb11-9a451e2673e8",
+        "fields": {
+            "code": "delete_order",
+            "name": "Delete order",
+            "tag": "order"
+        }
+    },
     {
         "model": "account.permission",
         "pk": "3b2a05ad-9faf-4ffe-bd84-4a312bb9c334",
@@ -163,5 +189,79 @@
             "name": "View image",
             "tag": "image"
         }
-    }
+    },
+
+    {
+        "model": "account.permission",
+        "pk": "ce094f21-e624-4e3a-b80d-fbeee7fc4380",
+        "fields": {
+            "code": "view_report_template",
+            "name": "View template",
+            "tag": "report_template"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "9935c603-e415-45c6-989e-66a729815b06",
+        "fields": {
+            "code": "add_report_template",
+            "name": "Add template",
+            "tag": "report_template"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "e418fea4-b8a9-4700-8c56-fe4af92f7f20",
+        "fields": {
+            "code": "edit_report_template",
+            "name": "Edit template",
+            "tag": "report_template"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "763f1357-3626-41e7-8fb5-2ba3b4d9c0bc",
+        "fields": {
+            "code": "delete_report_template",
+            "name": "Delete template",
+            "tag": "report_template"
+        }
+    },
+ 
+    {
+        "model": "account.permission",
+        "pk": "12648dd2-4fe9-4dca-83c4-c64bc9d8ad65",
+        "fields": {
+            "code": "view_doctor",
+            "name": "View doctor",
+            "tag": "doctor"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "dbac9672-5284-4ed3-85dd-87511ec0df17",
+        "fields": {
+            "code": "add_doctor",
+            "name": "Add doctor",
+            "tag": "doctor"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "d7b67637-4fb7-47ba-beed-83b0a4e1039d",
+        "fields": {
+            "code": "edit_doctor",
+            "name": "Edit doctor",
+            "tag": "doctor"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "f48c0740-6f3b-4e8d-a90d-b7cc9eea4579",
+        "fields": {
+            "code": "delete_doctor",
+            "name": "Delete doctor",
+            "tag": "doctor"
+        }
+    }   
 ]

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 
+from corsheaders.defaults import default_headers
+
 from django.conf import settings
 
 from dotenv import load_dotenv
@@ -68,6 +70,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+CORS_ALLOW_HEADERS = [
+    *default_headers,
+    "x-api-version",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -164,7 +170,7 @@ LOGGING = {
     # A handler for WARNING. It is basically writing the WARNING messages into a file called WARNING.log
     'handlers': {
         'file': {
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'his_integration.log',
         },

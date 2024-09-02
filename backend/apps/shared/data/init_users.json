@@ -1,0 +1,94 @@
+[
+    {
+        "model": "account.User",
+        "pk": "b2ab7ae6-99f2-4101-9d16-02dd38934e7f",
+        "fields": {
+            "username": "root",
+            "password": "pbkdf2_sha256$260000$kA3GNsfJd1HlkgVeh8wzQM$XFsM6NR3ApPggC1lK/V9Xg0txpCwXFaBNEXkGlQWXIY=",
+            "first_name":"User",
+            "last_name":"Super",
+            "is_superuser":true,
+            "is_staff":true,
+            "is_active":true
+        }
+    },    
+    {
+        "model": "account.User",
+        "pk": "65838386-c439-44b4-8ee6-68f134eb5bc2",
+        "fields": {
+            "username": "integ_user",
+            "password": "pbkdf2_sha256$260000$kA3GNsfJd1HlkgVeh8wzQM$XFsM6NR3ApPggC1lK/V9Xg0txpCwXFaBNEXkGlQWXIY=",
+            "first_name":"User",
+            "last_name":"Integration",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    },    
+    {
+        "model": "account.User",
+        "pk": "834284c6-0987-4a9d-aa71-3b6b74214d72",
+        "fields": {
+            "username": "bscd001",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"001",
+            "last_name":"BSCD",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    },    
+    {
+        "model": "account.User",
+        "pk": "f18a521e-aa99-4645-957c-69ccc3971159",
+        "fields": {
+            "username": "bsdt001",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"001",
+            "last_name":"BSDT",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    },
+
+    {
+        "model": "account.User",
+        "pk": "14c4fdfa-6146-4b8f-993a-4847680dd933",
+        "fields": {
+            "username": "bschauha",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"Hà",
+            "last_name":"Phan Châu",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "81b3a401-0c68-4670-b380-03f8c586e012",
+        "fields": {
+            "username": "bshonglinh",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"Linh",
+            "last_name":"Nguyễn Thị Hồng",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    },
+    {
+        "model": "account.User",
+        "pk": "c36b6b92-6757-45f1-b127-660a16c12962",
+        "fields": {
+            "username": "bsphuonghai",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"Hải",
+            "last_name":"Huỳnh Phượng",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    }
+]

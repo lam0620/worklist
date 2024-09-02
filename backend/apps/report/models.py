@@ -32,14 +32,20 @@ class Patient(BaseModels):
         permissions = ()
 
 class Doctor(BaseModels):
+    # username is unique and should be equal in the user model. = null if doctor is not a user
+    #username = models.CharField(verbose_name='username',max_length=150,unique=True, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+
+    # user.last_name(ho) + first_name(ten)
     fullname = models.CharField(verbose_name='fullname', max_length=100, blank=False, null=False)
     # doctor_no is unique
-    doctor_no = models.CharField(verbose_name='doctor no', max_length=100, unique=True, blank=False, null=False)
+    doctor_no = models.CharField(verbose_name='doctor no', max_length=100, unique=True, null=True, blank=True)
    
     # gender value. M: Male, F: Female, O : Other: U: Unknown
     gender = models.CharField(verbose_name='gender', max_length=1, blank=True, null=True, default='U')
     # Type value. P: referring physiscian, R: radiologist
     type = models.CharField(verbose_name='type', max_length=1, null=True, blank=True)
+    # Bs., Ths.,....
     title = models.CharField(verbose_name='title', max_length=10, null=True, blank=True)
     # Signature
     sign = models.CharField(verbose_name='sign', max_length=100, null=True, blank=True)
@@ -153,24 +159,6 @@ class Report(BaseModels):
         permissions = ()
 
 
-class IntegrationApp(BaseModels):
-    name = models.CharField(verbose_name='name', max_length=100, blank=False, null=False)
-    token= models.CharField(verbose_name='token', max_length=255, blank=False, null=False)
-    expired_date = models.DateField(verbose_name='expired date', blank=False, null=False)
-    is_active = models.BooleanField(default=True, verbose_name='active')
-    representer = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True)
-
-    objects = ObjectManager()
-
-    def __str__(self):
-        return self.id
-
-    class Meta:
-        db_table = 'c_integration_app'
-        verbose_name = 'Integration App'
-        default_permissions = ()
-        permissions = ()
-
 class ReportTemplate(BaseModels):
     name = models.CharField(verbose_name='name', max_length=200, blank=False, null=False)
     findings = models.TextField(verbose_name='findings', blank=False, null=False)
@@ -193,3 +181,20 @@ class ReportTemplate(BaseModels):
         permissions = ()
 
 
+class IntegrationApp(BaseModels):
+    name = models.CharField(verbose_name='name', max_length=100, blank=False, null=False)
+    token= models.CharField(verbose_name='token', max_length=255, blank=False, null=False)
+    expired_date = models.DateField(verbose_name='expired date', blank=False, null=False)
+    is_active = models.BooleanField(default=True, verbose_name='active')
+    representer = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True)
+
+    objects = ObjectManager()
+
+    def __str__(self):
+        return self.id
+
+    class Meta:
+        db_table = 'c_integration_app'
+        verbose_name = 'Integration App'
+        default_permissions = ()
+        permissions = ()

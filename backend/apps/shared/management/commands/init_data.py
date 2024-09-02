@@ -11,9 +11,14 @@ class Command(BaseCommand):
 
         # Add initial data file here
         list_data = [
-            "code_permission.json",
-            "integration_app.json",
-            "doctor.json",
+            "init_permissions.json",
+            "init_roles.json",
+            "init_users.json",
+            "init_user_role_permission_his.json",
+            "init_user_role_permission_bscd.json",
+            "init_user_role_permission_bsdt.json",
+            "init_doctors.json",
+            "init_integration_app.json"
         ]
         for data in list_data:
             call_command("loaddata", main_url + data)
