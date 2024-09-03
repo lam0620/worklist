@@ -37,5 +37,4 @@ venv.bak/
 .node_modules
 .next
 *.log
-init_doctor*
-init_user*
+

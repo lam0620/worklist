@@ -1,0 +1,102 @@
+[
+    {
+        "model": "account.RolePermission",
+        "pk": "0dc43bde-d173-4e35-9eff-9a60588504b6",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "fa62e5fb-390a-4969-98ff-3c79cd3c5eef",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.RolePermission",
+        "pk": "3da6f1a3-b1d8-4274-9817-0ae27a90c6f2",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "e322a624-2b45-4fd9-9037-e6cae8a90557",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.RolePermission",
+        "pk": "c25ba0fc-426d-4c26-9456-de44e790a22c",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "a5a0af42-e849-4f5d-a622-75ea31e818c3",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.RolePermission",
+        "pk": "cea9351e-48ec-41fe-8b79-9b5dc8e9c7bc",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "6ba35a26-ac88-4e37-b025-91279153b83d",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },  
+    {
+        "model": "account.RolePermission",
+        "pk": "cee03b0c-f48d-401c-a3be-80b82b1149fd",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "7787f3f0-32a4-4bef-86f6-3dd1cef2db25",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },        
+    {
+        "model": "account.RolePermission",
+        "pk": "230ca592-8691-4ed5-84a2-f6ffd27d8bbd",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "ce094f21-e624-4e3a-b80d-fbeee7fc4380",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.RolePermission",
+        "pk": "452955f1-ba5f-469f-b840-add08561586a",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "9935c603-e415-45c6-989e-66a729815b06",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.RolePermission",
+        "pk": "7bb90186-e3cd-42c8-950a-03f3bce3c8df",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "e418fea4-b8a9-4700-8c56-fe4af92f7f20",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.RolePermission",
+        "pk": "d9e25e8b-83b5-496e-916a-7be670afac3b",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "763f1357-3626-41e7-8fb5-2ba3b4d9c0bc",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },    
+    {
+        "model": "account.RolePermission",
+        "pk": "d5b631a1-db29-4cbe-8f86-0269dc8eea73",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "12648dd2-4fe9-4dca-83c4-c64bc9d8ad65",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+
+    {
+        "model": "account.RolePermission",
+        "pk": "53f80b0f-739b-475e-a3fa-85f4a8bc504f",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "3b2a05ad-9faf-4ffe-bd84-4a312bb9c334",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    }
+]

@@ -1,0 +1,42 @@
+[
+    {
+        "model": "account.User",
+        "pk": "b2ab7ae6-99f2-4101-9d16-02dd38934e7f",
+        "fields": {
+            "username": "root",
+            "password": "pbkdf2_sha256$260000$kA3GNsfJd1HlkgVeh8wzQM$XFsM6NR3ApPggC1lK/V9Xg0txpCwXFaBNEXkGlQWXIY=",
+            "first_name":"User",
+            "last_name":"Super",
+            "is_superuser":true,
+            "is_staff":true,
+            "is_active":true
+        }
+    }, 
+    {
+        "model": "account.User",
+        "pk": "08b58a95-398c-46e8-8fdd-977f49b6a561",
+        "fields": {
+            "username": "admin",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"User",
+            "last_name":"Administrator",
+            "is_superuser":true,
+            "is_staff":true,
+            "is_active":true
+        }
+    },         
+    {
+        "model": "account.User",
+        "pk": "65838386-c439-44b4-8ee6-68f134eb5bc2",
+        "fields": {
+            "username": "integ_user",
+            "password": "pbkdf2_sha256$260000$kA3GNsfJd1HlkgVeh8wzQM$XFsM6NR3ApPggC1lK/V9Xg0txpCwXFaBNEXkGlQWXIY=",
+            "first_name":"User",
+            "last_name":"Integration",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    }   
+
+]

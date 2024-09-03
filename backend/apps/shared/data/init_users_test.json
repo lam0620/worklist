@@ -1,0 +1,41 @@
+[
+    {
+        "model": "account.User",
+        "pk": "1abe8d80-8297-4f5f-9fe3-599aa89aa16f",
+        "fields": {
+            "username": "bscd_admin",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"Manager",
+            "last_name":"Test BSCD",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    },  
+    {
+        "model": "account.User",
+        "pk": "834284c6-0987-4a9d-aa71-3b6b74214d72",
+        "fields": {
+            "username": "bscd001",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"001",
+            "last_name":"Test BSCD",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    },       
+    {
+        "model": "account.User",
+        "pk": "f18a521e-aa99-4645-957c-69ccc3971159",
+        "fields": {
+            "username": "bsdt001",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"001",
+            "last_name":"Test BSDT",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    }
+]
