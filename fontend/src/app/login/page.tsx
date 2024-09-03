@@ -32,20 +32,25 @@ const LoginPage = () => {
         login(access_token, refresh_token);
 
         // router.push("/home");
-        // Redirect to study list
-        //const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}/preworklist`);
-        // Transfer to viewer. At viewer, can get access_token,...from Cookie
-        const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}`);
-        const urlParams = new URLSearchParams(currentUrl.search);
 
-        const formattedDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000))
-                               .toISOString().slice(0, 10).replace(/-/g, "");
-        urlParams.set('startDate', formattedDate);
-        // urlParams.set('key', access_token);
-        // currentUrl.search = urlParams.toString();
-        console.log('currentUrl.search:',currentUrl.search);
-        
-        router.push(currentUrl.toString());
+        if (username === 'root' || username === 'admin') {
+          router.push("/home");
+        } else {
+          // Redirect to study list
+          //const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}/preworklist`);
+          // Transfer to viewer. At viewer, can get access_token,...from Cookie
+          const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}`);
+          const urlParams = new URLSearchParams(currentUrl.search);
+
+          const formattedDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000))
+                                .toISOString().slice(0, 10).replace(/-/g, "");
+          urlParams.set('startDate', formattedDate);
+          // urlParams.set('key', access_token);
+          // currentUrl.search = urlParams.toString();
+          console.log('currentUrl.search:',currentUrl.search);
+          
+          router.push(currentUrl.toString());
+        }
       }
     } catch (error: any) {
       if (error.response && error.response.status === 400) {

@@ -1,6 +1,24 @@
 [
     {
         "model": "account.Role",
+        "pk": "3e3d4643-afc8-4926-98d5-fbef871ff887",
+        "fields": {
+            "name": "Administrator",
+            "description": "Administrator role",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.Role",
+        "pk": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+        "fields": {
+            "name": "Radiologist Manager",
+            "description": "Radiologist Manager role",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },    
+    {
+        "model": "account.Role",
         "pk": "d0f76603-adad-468f-a46c-1fbd00628f81",
         "fields": {
             "name": "Integration",

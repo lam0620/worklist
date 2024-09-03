@@ -22,11 +22,11 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
   };
 
   const handleChangePassword = () => {
-    router.push("/change-password");
+    router.push("/profile/change-password");
   };
 
   const handleEditProfile = () => {
-    router.push("/edit-profile");
+    router.push("/profile/edit");
   };
 
   const handleUserManagement = () => {

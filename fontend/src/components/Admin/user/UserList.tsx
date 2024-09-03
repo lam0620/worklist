@@ -81,7 +81,7 @@ const UserList = ({
               </Avatar.Root>
               <div className="ml-4">
                 <div className="">
-                  {user.first_name} {user.last_name}
+                  {user.last_name} {user.first_name}
                 </div>
               </div>
             </div>

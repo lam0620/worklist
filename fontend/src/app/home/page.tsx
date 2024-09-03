@@ -8,15 +8,12 @@ const HomePage = () => {
   const router = useRouter();
 
   return (
-    <AppLayout name="Home">
+    <AppLayout name="">
       <div>
         {
-          <div className="py-4 text-2xl">
-            <h2
-              className="hover: cursor-pointer"
-              onClick={() => router.push("/chart")}
-            >
-              Chart
+          <div className="py-4 text-2xl text-center">
+            <h2>
+              Welcome Home!
             </h2>
           </div>
         }
