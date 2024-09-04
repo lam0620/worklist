@@ -222,12 +222,14 @@ class ReportView(GetReportView):
         tags=[swagger_tags.REPORT],
     )
     def post(self, request):
+        updatedBy = None
         # Get and check version to secure or not
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
             is_per = CheckPermission(per_code.ADD_REPORT, user.id).check()
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.ADD_REPORT)
+            updatedBy = user.id
 
         logger.info('Creating report.....');
         serializer = ser.CreateReportSerializers(data=request.data)
@@ -243,6 +245,9 @@ class ReportView(GetReportView):
                 if 'procedure_id' in data and data['procedure_id']:
                     procedure = Procedure.objects.get(pk=data['procedure_id'])
                 
+                if not updatedBy:
+                    updatedBy = data['radiologist_id']
+
                 report_new = Report.objects.create(
                     accession_no=data['accession_no'],
                     study_iuid=data['study_iuid'],
@@ -253,7 +258,7 @@ class ReportView(GetReportView):
                     radiologist = Doctor.objects.get(pk=data['radiologist_id']),
                     procedure = procedure,
 
-                    created_by = data['radiologist_id']
+                    created_by = updatedBy 
                 )
 
                 # Persist db
@@ -262,6 +267,7 @@ class ReportView(GetReportView):
                 # Update study_iuid to procedure
                 procedure.study_iuid = data['study_iuid']
                 procedure.updated_at = timezone.now()
+                procedure.updated_by = updatedBy
                 procedure.save()
 
                 #return self.cus_response_created()
@@ -307,18 +313,22 @@ class ReportById(GetReportView):
         tags=[swagger_tags.REPORT],
     )
     def put(self, request, *args, **kwargs):
+        updatedBy = None
         # Get and check version to secure or not
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
             is_per = CheckPermission(per_code.EDIT_REPORT, user.id).check()
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.EDIT_REPORT)
+            
+            updatedBy = user.id
                     
         try:
             report = Report.objects.get(**kwargs, delete_flag = False)
             if not report:
                 return self.cus_response_empty_data(ec.REPORT)
 
+            updatedBy = report.radiologist.id
             serializer = ser.UpdateReportSerializers(data=request.data, instance=report)
             serializer.is_valid(raise_exception=True)
             data = serializer.validated_data
@@ -327,7 +337,7 @@ class ReportById(GetReportView):
                 for key, value in data.items():
                     setattr(report, key, value)
 
-                # instance.updated_by = user.id
+                report.updated_by = updatedBy
                 report.updated_at = timezone.now()
                 report.save()
                 
@@ -339,7 +349,43 @@ class ReportById(GetReportView):
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))
        
+    def delete(self, request, *args, **kwargs):
+        """
+        Delete the report.
+        If deleting from UI, updated_by is login user
+        If deleting from integration app, updated_by is HIS user.
+        """
+        updatedBy = None
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.DELETE_REPORT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.DELETE_REPORT) 
+            updatedBy = user.id     
 
+        try:
+            instance = Report.objects.get(**kwargs, delete_flag=False)
+            if not instance:
+                return self.cus_response_empty_data(type=ec.REPORT)
+
+            if not updatedBy:
+                updatedBy = instance.radiologist.id
+
+            # Delete status, flag
+            instance.delete_flag = True
+            instance.status = 'X'
+            # this uid is created first in \shared\data\integration_app.json
+            instance.updated_by = updatedBy
+            instance.updated_at=timezone.now()
+
+            instance.save()
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+        return self.cus_response_deleted()
+    
 """
 Doctor view class
 """   
@@ -358,12 +404,14 @@ class DoctorView(CustomAPIView):
         tags=[swagger_tags.REPORT_DOCTOR],
     )
     def post(self, request):
+        updatedBy = None
         # Get and check version to secure or not
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
             is_per = CheckPermission(per_code.ADD_DOCTOR, user.id).check()
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.ADD_DOCTOR)
+            updatedBy = user.id
 
         serializer = ser.CreateDoctorSerializers(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -381,8 +429,8 @@ class DoctorView(CustomAPIView):
                     type=data['type'],
                     gender=data['gender'],
                     title=data['title'],
-                    sign=data['sign']
-                    # created_by = ''
+                    sign=data['sign'],
+                    created_by = updatedBy
                 )
 
                 # Persist db
@@ -549,12 +597,14 @@ class ReportTemplateView(CustomAPIView):
         tags=[swagger_tags.REPORT_TEMPLATE],
     )
     def post(self, request):
-        # Get and check version to secure or not
+        updatedBy = None
+        # Get and check version to secure or not        
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
             is_per = CheckPermission(per_code.ADD_REPORT_TEMPLATE, user.id).check()
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.ADD_REPORT_TEMPLATE)
+            updatedBy = user.id
 
         serializer = ser.CreateReportTemplateSerializers(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -570,8 +620,8 @@ class ReportTemplateView(CustomAPIView):
                     type=data['type'],
                     findings=data['findings'],
                     conclusion=data['conclusion'],
-                    modality=data['modality']
-                    # created_by = ''
+                    modality=data['modality'],
+                    created_by = updatedBy
                 )
 
                 # Persist db
@@ -617,12 +667,14 @@ class ReportTemplateDetailView(CustomAPIView):
         tags=[swagger_tags.REPORT_TEMPLATE],
     )
     def put(self, request, *args, **kwargs):
-        # Get and check version to secure or not
-        if request.META.get('HTTP_X_API_VERSION') != "X":  
-            user = request.user
+        updatedBy = None
+        # Get and check version to secure or not        
+        if request.META.get('HTTP_X_API_VERSION') != "X":          
+            user = request.user   
             is_per = CheckPermission(per_code.EDIT_REPORT_TEMPLATE, user.id).check()
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.EDIT_REPORT_TEMPLATE)
+            updatedBy = user.id
             
         try:
             report = ReportTemplate.objects.get(**kwargs, delete_flag = False)
@@ -637,7 +689,7 @@ class ReportTemplateDetailView(CustomAPIView):
                 for key, value in data.items():
                     setattr(report, key, value)
 
-                # instance.updated_by = user.id
+                report.updated_by = updatedBy
                 report.updated_at = timezone.now()
                 report.save()
                 
