@@ -29,6 +29,24 @@
     },
     {
         "model": "account.RolePermission",
+        "pk": "c30ee2c1-8481-4610-bdd5-2c224c81dcf5",
+        "fields": {
+            "role_id": "3a3151b3-6824-4094-90a0-b8e5c40c8d03",
+            "permission_id": "ce094f21-e624-4e3a-b80d-fbeee7fc4380",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },    
+    {
+        "model": "account.RolePermission",
+        "pk": "0363303d-8116-42f9-9d66-6f65ce657f7c",
+        "fields": {
+            "role_id": "3a3151b3-6824-4094-90a0-b8e5c40c8d03",
+            "permission_id": "12648dd2-4fe9-4dca-83c4-c64bc9d8ad65",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },    
+    {
+        "model": "account.RolePermission",
         "pk": "25647e68-eee6-46b6-9bd9-e4e8e877d723",
         "fields": {
             "role_id": "3a3151b3-6824-4094-90a0-b8e5c40c8d03",

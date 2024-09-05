@@ -34,7 +34,7 @@ class GetReportView(CustomAPIView):
                 'name':report.procedure.procedure_type.name
             }
 
-
+        created_time = report.created_at.strftime('%d/%m/%Y %H:%M')
         data = {
             'id': report.id,
             'accession_no': report.accession_no,
@@ -42,6 +42,7 @@ class GetReportView(CustomAPIView):
             'findings': report.findings,
             'conclusion': report.conclusion,
             'status': report.status,
+            'created_time':created_time,
             'radiologist': {
                 "id":report.radiologist.id,
                 'doctor_no':report.radiologist.doctor_no,

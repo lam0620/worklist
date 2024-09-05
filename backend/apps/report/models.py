@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.db import models
+from django.db.models import Q
 from apps.account.models import User
 from third_parties.contribution.managers import ObjectManager
 from apps.shared.models import BaseModels
@@ -154,7 +155,14 @@ class Report(BaseModels):
         db_table = 'c_report'
         verbose_name = 'Report'
         # couple unique
-        unique_together = ('accession_no', 'procedure', 'delete_flag',)
+        # unique_together = ('accession_no', 'procedure', 'delete_flag',)
+        constraints = [
+            models.UniqueConstraint(
+            fields=["accession_no", "procedure"], 
+            condition=Q(delete_flag=False),
+            name="unique_report_procedure"
+            )
+        ]
         default_permissions = ()
         permissions = ()
 
