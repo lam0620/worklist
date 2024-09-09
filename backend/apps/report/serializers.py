@@ -136,11 +136,13 @@ class CreateDoctorSerializers(serializers.Serializer):
     fullname = serializers.CharField(required=True)
     type = serializers.CharField(required=True)
 
-    user_id = serializers.CharField(required=False)
+    user_id = serializers.CharField(required=False, allow_blank=True)
     doctor_no = serializers.CharField(required=False, allow_blank=True)
     gender = serializers.CharField(required=False)
     title = serializers.CharField(required=False, allow_blank=True)
+    # sign = image's file name
     sign = serializers.CharField(required=False, allow_blank=True)
+    is_active = serializers.BooleanField(required=True)
 
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
@@ -155,6 +157,29 @@ class CreateDoctorSerializers(serializers.Serializer):
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
 
+class UpdateDoctorSerializers(serializers.Serializer):
+    fullname = serializers.CharField(required=True)
+    type = serializers.CharField(required=True)
+    doctor_no = serializers.CharField(required=False, allow_blank=True)
+    title = serializers.CharField(required=False, allow_blank=True)
+    gender = serializers.CharField(required=False)
+    user_id = serializers.CharField(required=False, allow_blank=True)
+    sign = serializers.CharField(required=False, allow_blank=True)
+    is_active = serializers.BooleanField(required=True)
+
+    def validate_type(self, value): # noqa
+        if not is_valid(value, ['P','R']):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'type',
+                                               'detail':"'"+ value+"' is invalid"})
+        return value
+
+    def validate_gender(self, value): # noqa
+        if not is_valid_gender(value):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'gender',
+                                               'detail':"'"+ value+"' is invalid"})
+        
 class GetDoctorSerializers(serializers.Serializer):
     user_id = serializers.CharField(required=False)
     type = serializers.CharField(required=False)
