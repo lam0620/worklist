@@ -430,6 +430,7 @@ class DoctorView(CustomAPIView):
                     gender=data['gender'],
                     title=data['title'],
                     sign=data['sign'],
+                    is_active=data['is_active'],
                     created_by = updatedBy
                 )
 
@@ -483,6 +484,7 @@ class DoctorView(CustomAPIView):
                      'type':item.type,
                      'fullname':item.fullname,
                      'title':item.title,
+                     'is_active':item.is_active,
                      'sign':item.sign} for item in doctors]
             
         except Doctor.DoesNotExist:
@@ -519,13 +521,100 @@ class DoctorDetailView(CustomAPIView):
                 return self.cus_response_403(per_code.VIEW_DOCTOR)
                     
         # Get latest Doctor
+        return self._get_doctor_by_id(kwargs['pk'])
+
+    @swagger_auto_schema(
+        operation_summary='Update the doctor by id',
+        operation_description='Update the doctor by id',
+        request_body=ser.UpdateDoctorSerializers,
+        tags=[swagger_tags.REPORT_DOCTOR],
+    )
+    def put(self, request, *args, **kwargs):
+        updatedBy = None
+        # Get and check version to secure or not        
+        if request.META.get('HTTP_X_API_VERSION') != "X":          
+            user = request.user   
+            is_per = CheckPermission(per_code.EDIT_DOCTOR, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.EDIT_DOCTOR)
+            updatedBy = user.id
+            
         try:
-            item = Doctor.objects.get(**kwargs)
+            doctor = Doctor.objects.get(**kwargs)
+            if not doctor:
+                return self.cus_response_empty_data()
+
+            serializer = ser.UpdateDoctorSerializers(data=request.data, instance=doctor)
+            serializer.is_valid(raise_exception=True)
+            data = serializer.validated_data
+
+            with transaction.atomic():
+                for key, value in data.items():
+                    setattr(doctor, key, value)
+
+                doctor.updated_by = updatedBy
+                doctor.updated_at = timezone.now()
+                doctor.save()
+                
+                #return self.cus_response_updated()
+            # Get latest doctor
+            return self._get_doctor_by_id(doctor.id)
+
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+
+    @swagger_auto_schema(
+        operation_summary='Activate/Deactivate the doctor',
+        operation_description='Activate/Deactivate the doctor',
+        request_body=ser.UpdateDoctorSerializers,
+        tags=[swagger_tags.REPORT_DOCTOR],
+    )
+    def patch(self, request, *args, **kwargs):
+        updatedBy = None
+        # Get and check version to secure or not        
+        if request.META.get('HTTP_X_API_VERSION') != "X":          
+            user = request.user   
+            is_per = CheckPermission(per_code.EDIT_DOCTOR, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.EDIT_DOCTOR)
+            updatedBy = user.id
+            
+        try:
+            doctor = Doctor.objects.get(**kwargs)
+            if not doctor:
+                return self.cus_response_empty_data()
+
+            # partial=True for patch method
+            serializer = ser.UpdateDoctorSerializers(data=request.data, instance=doctor, partial=True)
+            serializer.is_valid(raise_exception=True)
+            data = serializer.validated_data
+
+            with transaction.atomic():
+                for key, value in data.items():
+                    setattr(doctor, key, value)
+
+                doctor.updated_by = updatedBy
+                doctor.updated_at = timezone.now()
+                doctor.save()
+                
+                #return self.cus_response_updated()
+            # Get latest doctor
+            return self._get_doctor_by_id(doctor.id)
+
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+    def _get_doctor_by_id(self, pk):
+        try:
+            item = Doctor.objects.get(pk=pk)
             if item is None:
                 return self.cus_response_empty_data()
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG('SYSTEM_ERR', str(e))
+        
         
         data = {'id': item.id,
                      'user_id':item.user_id,
@@ -533,13 +622,11 @@ class DoctorDetailView(CustomAPIView):
                      'type':item.type,
                      'fullname':item.fullname,
                      'title':item.title,
-                     'sign':item.sign
+                     'sign':item.sign,
+                     'is_active':item.is_active
                 }
-        
         return self.response_success(data=data) 
-
-
-
+    
 """
 Report Template view class
 """   

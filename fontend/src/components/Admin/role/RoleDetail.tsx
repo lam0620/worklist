@@ -11,19 +11,19 @@ const RoleDetail = ({ role }: Props) => {
     <div className="flex flex-col items-center justify-center min-h-8 px-4">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <form className="space-y-6">
-          <div className="flex flex-col">
-            <label className="mb-2 font-medium">Role Name</label>
+          <div className="flex items-center">
+            <label className="w-1/3 font-medium">Role Name</label>
             <div className="border rounded p-3 bg-gray-50">{role?.name}</div>
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 font-medium">Description</label>
+          <div className="flex items-center">
+            <label className="w-1/3 font-medium">Description</label>
             <div className="border rounded p-3 bg-gray-50">
               {role?.description}
             </div>
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 font-medium">Permissions</label>
-            <div className="flex flex-wrap gap-2">
+          <div className="flex items-center">
+            <label className="w-1/3 font-medium">Permissions</label>
+            <div className="flex flex-wrap gap-2 justify-center w-2/3">
               {Array.isArray(role?.permissions) &&
                 role.permissions.map((permission) => (
                   <span
@@ -35,9 +35,9 @@ const RoleDetail = ({ role }: Props) => {
                 ))}
             </div>
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 font-medium">Users</label>
-            <div className="flex flex-wrap gap-2">
+          <div className="flex items-center">
+            <label className="w-1/3 font-medium">Users</label>
+            <div className="flex flex-wrap gap-2 justify-center">
               {Array.isArray(role?.users) &&
                 role.users.map((user) => (
                   <div

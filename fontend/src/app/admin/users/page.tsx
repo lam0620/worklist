@@ -94,19 +94,13 @@ const UserListPage = () => {
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
         <div className="w-full max-w-7xl p-4">
           <div className="flex justify-between items-center mb-4">
-            <button
-              className="bg-gray-400 rounded px-4 py-2 text-white absolute top-22 left-4"
-              onClick={() => router.push("/home")}
-            >
-              Home
-            </button>
-            <input
-              type="text"
-              placeholder="Search users..."
-              onChange={handleSearchChange}
-              className="mb-4 p-2 border rounded"
-            />
-            <div className="flex gap-2">
+            <div className="flex gap-2 relative">
+              <button
+                className="bg-gray-400 rounded px-4 py-2 text-white"
+                onClick={() => router.push("/home")}
+              >
+                Home
+              </button>
               {hasDeleteUserPermission && (
                 <DeleteUserButton
                   isMany={true}
@@ -130,6 +124,12 @@ const UserListPage = () => {
               {hasAddRolePermission && <CreateRoleButton onCreate={() => {}} />}
             </div>
           </div>
+          <input
+              type="text"
+              placeholder="Search users..."
+              onChange={handleSearchChange}
+              className="mb-4 p-2 border rounded"
+            />
           <UserList
             users={users}
             onSelectUser={handleUserSelect}

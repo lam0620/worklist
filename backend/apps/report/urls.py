@@ -46,7 +46,7 @@ urlpatterns = [
     path('doctors', DoctorView.as_view(), name='Doctor'),
     # doctors?type=R|P also existing. pattern /doctors
     # doctors?user_id=xxxx also existing. pattern /doctors
-    # path('doctors/<uuid:pk>', DoctorDetailView.as_view(), name='Doctor by Id'),
+    path('doctors/<uuid:pk>', DoctorDetailView.as_view(), name='Doctor by Id'),
 
     #Report template
     path('report-templates', ReportTemplateView.as_view(), name='ReportTemplate'),
