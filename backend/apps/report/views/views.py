@@ -397,7 +397,7 @@ class DoctorView(CustomAPIView):
     # for search box (?search=xxx). which you want to search. 
     search_fields = ['fullname', 'doctor_no']
     # for query string (?type=xxx)
-    filter_fields = ['type', 'user_id']
+    filter_fields = ['type', 'user_id', 'is_active']
 
     """
     Get a doctor
