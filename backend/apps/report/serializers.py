@@ -180,9 +180,9 @@ class UpdateDoctorSerializers(serializers.Serializer):
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
         
-class GetDoctorSerializers(serializers.Serializer):
-    user_id = serializers.CharField(required=False)
-    type = serializers.CharField(required=False)
+# class GetDoctorSerializers(serializers.Serializer):
+#     user_id = serializers.CharField(required=False)
+#     type = serializers.CharField(required=False)
 
 class GetImageLinkSerializers(serializers.Serializer):
     accession = serializers.CharField(required=True)
