@@ -430,6 +430,7 @@ class DoctorView(CustomAPIView):
                      'doctor_no':item.doctor_no,
                      'type':item.type,
                      'fullname':item.fullname,
+                     'gender':item.gender,
                      'title':item.title,
                      'is_active':item.is_active,
                      'sign':get_image_field_str(item.sign)} for item in doctors]
