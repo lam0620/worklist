@@ -9,6 +9,9 @@ from third_parties.contribution.api_view import CustomAPIView
 from django.db.models import F, Prefetch
 from drf_yasg import openapi
 
+from rest_framework.parsers import MultiPartParser,JSONParser
+from rest_framework.decorators import parser_classes
+
 from library.constant import error_codes as ec
 from library.constant import module_code as module_code
 from library.constant import permission_code as per_code
@@ -20,7 +23,7 @@ from apps.report.models import (
     Order,Patient,Procedure,ProcedureType
 )
 from apps.account.permission import CheckPermission
-from apps.report.utils import  get_image_link
+from apps.report.utils import  get_image_field_str
 
 
 logger = logging.getLogger(__name__)
@@ -399,6 +402,8 @@ class DoctorView(CustomAPIView):
     # for query string (?type=xxx)
     filter_fields = ['type', 'user_id', 'is_active']
 
+    parser_classes = [MultiPartParser, JSONParser]
+
     """
     Get a doctor
     kwargs = accession_no and procedure_code
@@ -427,7 +432,7 @@ class DoctorView(CustomAPIView):
                      'fullname':item.fullname,
                      'title':item.title,
                      'is_active':item.is_active,
-                     'sign':item.sign} for item in doctors]
+                     'sign':get_image_field_str(item.sign)} for item in doctors]
             
         except Doctor.DoesNotExist:
             return self.cus_response_empty_data(ec.REPORT)
@@ -447,8 +452,16 @@ class DoctorView(CustomAPIView):
         operation_summary='Create new a doctor',
         operation_description='Create new a doctor',
         request_body=ser.CreateDoctorSerializers,
-        tags=[swagger_tags.REPORT_DOCTOR],
+        # manual_parameters=[openapi.Parameter(
+        #             name="sign",
+        #             in_=openapi.IN_FORM,
+        #             type=openapi.TYPE_FILE,
+        #             required=False,
+        #             description="Sign"
+        #             )],
+        tags=[swagger_tags.REPORT_DOCTOR]
     )
+    # @parser_classes((MultiPartParser,))
     def post(self, request):
         updatedBy = None
         # Get and check version to secure or not
@@ -489,66 +502,13 @@ class DoctorView(CustomAPIView):
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))       
-
-    # """
-    # Get a doctor
-    # kwargs = accession_no and procedure_code
-    # """
-    # @swagger_auto_schema(
-    #     operation_summary='Get doctors',
-    #     operation_description='Get doctors',
-    #     query_serializer= ser.GetDoctorSerializers,
-    #     tags=[swagger_tags.REPORT_DOCTOR],
-    # )
- 
-    # def get(self, request, *args, **kwargs):
-    #     # Get and check version to secure or not
-    #     if request.META.get('HTTP_X_API_VERSION') != "X":  
-    #         user = request.user
-    #         is_per = CheckPermission(per_code.VIEW_DOCTOR, user.id).check()
-    #         if not is_per and not user.is_superuser:
-    #             return self.cus_response_403(per_code.VIEW_DOCTOR)
-
-    #     # type = P: referring physician, R: radilogist    
-    #     # Get type from query params: /?type=XX   
-    #     user_id=request.query_params.get('user_id')
-    #     type=request.query_params.get('type')
-
-    #     data= {}
-    #     try:
-    #         if type and user_id:
-    #             doctors = Doctor.objects.filter(user_id=user_id,type=type, is_active = True)
-    #         elif type:
-    #             doctors = Doctor.objects.filter(type=type, is_active = True)    
-    #         elif user_id:
-    #             doctors = Doctor.objects.filter(user_id=user_id, is_active = True)
-    #         else:
-    #             doctors = Doctor.objects.filter(is_active = True)
-
-    #         data = [{'id': item.id,
-    #                  'user_id':item.user_id,
-    #                  'doctor_no':item.doctor_no,
-    #                  'type':item.type,
-    #                  'fullname':item.fullname,
-    #                  'title':item.title,
-    #                  'is_active':item.is_active,
-    #                  'sign':item.sign} for item in doctors]
-            
-    #     except Doctor.DoesNotExist:
-    #         return self.cus_response_empty_data(ec.REPORT)
-        
-    #     except Exception as e:
-    #         logger.error(e, exc_info=True)
-    #         return self.response_NG(ec.SYSTEM_ERR, str(e))
-        
-    #     # return self.response_success(data=data)
-    #     page = self.paginate_queryset(data)
-    #     return self.get_paginated_response(page)        
+  
 
 class DoctorDetailView(CustomAPIView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
+    parser_classes = [MultiPartParser, JSONParser]
 
     """
     Get a report
@@ -663,15 +623,18 @@ class DoctorDetailView(CustomAPIView):
             return self.response_NG('SYSTEM_ERR', str(e))
         
         
-        data = {'id': item.id,
-                     'user_id':item.user_id,
-                     'doctor_no':item.doctor_no,
-                     'type':item.type,
-                     'fullname':item.fullname,
-                     'title':item.title,
-                     'sign':item.sign,
-                     'is_active':item.is_active
-                }
+        # data = {'id': item.id,
+        #              'user_id':item.user_id,
+        #              'doctor_no':item.doctor_no,
+        #              'type':item.type,
+        #              'fullname':item.fullname,
+        #              'title':item.title,
+        #              'sign':item.sign,
+        #              'is_active':item.is_active
+        #         }
+        serializer = ser.CreateDoctorSerializers(item)
+        data = serializer.data
+        data['id'] = item.id
         return self.response_success(data=data) 
     
 """

@@ -21,6 +21,12 @@ class CreatePatientSerializers(serializers.Serializer):
     tel = serializers.CharField(required=False, allow_blank=True)
     insurance_no = serializers.CharField(required=False, allow_blank=True)
 
+    def validate(self, data):
+        if 'gender' not in data:
+            data['gender'] = 'U'
+            
+        return data
+        
     def validate_gender(self, value): # noqa
         if not is_valid_gender(value):
             raise serializers.ValidationError({'code': ec.INVALID, 
@@ -141,9 +147,24 @@ class CreateDoctorSerializers(serializers.Serializer):
     gender = serializers.CharField(required=False)
     title = serializers.CharField(required=False, allow_blank=True)
     # sign = image's file name
-    sign = serializers.CharField(required=False, allow_blank=True)
+    sign = serializers.ImageField(required=False, use_url=True)
     is_active = serializers.BooleanField(required=True)
 
+    def validate(self, data):
+        if 'gender' not in data:
+            data['gender'] = 'U'
+        
+        if 'user_id' not in data:
+            data['user_id'] = None
+
+        if 'title' not in data:
+            data['title'] = None
+
+        if 'sign' not in data:
+            data['sign'] = None
+
+        return data
+    
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
             raise serializers.ValidationError({'code': ec.INVALID, 
@@ -156,6 +177,7 @@ class CreateDoctorSerializers(serializers.Serializer):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
+        return value
 
 class UpdateDoctorSerializers(serializers.Serializer):
     fullname = serializers.CharField(required=True)
@@ -164,9 +186,26 @@ class UpdateDoctorSerializers(serializers.Serializer):
     title = serializers.CharField(required=False, allow_blank=True)
     gender = serializers.CharField(required=False)
     user_id = serializers.CharField(required=False, allow_blank=True)
-    sign = serializers.CharField(required=False, allow_blank=True)
+    # sign = serializers.CharField(required=False, allow_blank=True)
+    sign = serializers.ImageField(required=False, use_url=True)
+
     is_active = serializers.BooleanField(required=True)
 
+    def validate(self, data):
+        if 'gender' not in data:
+            data['gender'] = 'U'
+        
+        if 'user_id' not in data:
+            data['user_id'] = None
+
+        if 'title' not in data:
+            data['title'] = None
+            
+        if 'sign' not in data:
+            data['sign'] = None
+
+        return data
+    
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
             raise serializers.ValidationError({'code': ec.INVALID, 
@@ -179,10 +218,8 @@ class UpdateDoctorSerializers(serializers.Serializer):
             raise serializers.ValidationError({'code': ec.INVALID, 
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
+        return value
         
-# class GetDoctorSerializers(serializers.Serializer):
-#     user_id = serializers.CharField(required=False)
-#     type = serializers.CharField(required=False)
 
 class GetImageLinkSerializers(serializers.Serializer):
     accession = serializers.CharField(required=True)

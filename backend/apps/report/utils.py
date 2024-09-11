@@ -36,3 +36,9 @@ def is_valid_report_template_type(value):
     if value in ('system', 'custom'):
         return True
     return False
+
+def get_image_field_str(image_field):
+    new_value = ''
+    if image_field:
+        new_value = image_field.url
+    return new_value    

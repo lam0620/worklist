@@ -32,6 +32,10 @@ class Patient(BaseModels):
         default_permissions = ()
         permissions = ()
 
+def rename_sign(instance, filename):
+    filebase, extension = filename.split('.')
+    return 'signs/%s.%s' % (instance.doctor_no, extension)
+
 class Doctor(BaseModels):
     # username is unique and should be equal in the user model. = null if doctor is not a user
     #username = models.CharField(verbose_name='username',max_length=150,unique=True, null=True, blank=True)
@@ -49,7 +53,9 @@ class Doctor(BaseModels):
     # Bs., Ths.,....
     title = models.CharField(verbose_name='title', max_length=10, null=True, blank=True)
     # Signature
-    sign = models.CharField(verbose_name='sign', max_length=100, null=True, blank=True)
+    #sign = models.CharField(verbose_name='sign', max_length=100, null=True, blank=True)
+    sign = models.ImageField(upload_to=rename_sign, verbose_name='sign', null=True, blank=True)
+
     is_active = models.BooleanField(default=True, verbose_name='active')
 
     objects = ObjectManager()

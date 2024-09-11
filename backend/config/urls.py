@@ -54,3 +54,5 @@ if settings.SHOW_API_DOC:
         path('docs/', schema_view.with_ui('swagger', cache_timeout=0)),
         path('redocs/', schema_view.with_ui('redoc', cache_timeout=0))
     ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
