@@ -504,6 +504,30 @@ class DoctorView(CustomAPIView):
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))       
   
+    @swagger_auto_schema(
+        operation_summary="Activate/Deactivate doctors",
+        operation_description='Activate/Deactivate doctors',
+        request_body=ser.ADectivateDoctorListSerializer,
+        tags=[swagger_tags.REPORT_DOCTOR],
+    )
+    def patch(self, request):
+        user = request.user
+        is_per = CheckPermission(per_code.EDIT_DOCTOR, user.id).check()
+        if not is_per and not user.is_superuser:
+            return self.cus_response_403()
+
+        serializers = ser.ADectivateDoctorListSerializer(data=request.data)
+        serializers.is_valid(raise_exception=True)
+        data = serializers.validated_data
+
+        try:
+            with transaction.atomic():
+                Doctor.objects.filter(id__in=data['ids_doctor']).update(is_active=data['is_active'], updated_by=user.id)
+            return self.cus_response_updated('Activate/Deactivate successfully')
+        except Exception as e:
+            logger.error(e, exc_info=True)
+        return self.cus_response_500()
+    
 
 class DoctorDetailView(CustomAPIView):
     queryset = User.objects.all()

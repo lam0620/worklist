@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.report.models import Doctor
 from library.constant import error_codes as ec
 
 from apps.report.utils import is_valid_gender,is_valid_modality_type, \
@@ -220,7 +221,15 @@ class UpdateDoctorSerializers(serializers.Serializer):
                                                'detail':"'"+ value+"' is invalid"})
         return value
         
+class ADectivateDoctorListSerializer(serializers.Serializer):
+    is_active = serializers.BooleanField(required=True)
+    ids_doctor = serializers.ListField(child=serializers.UUIDField(required=True), required=True)
 
+    def validate_ids_doctor(self, value):
+        if not Doctor.objects.filter(id__in=value).exists():
+            raise serializers.ValidationError({'detail': 'Id:'+value+' not found', 'item': 'Doctor'})
+        return value
+    
 class GetImageLinkSerializers(serializers.Serializer):
     accession = serializers.CharField(required=True)
 
