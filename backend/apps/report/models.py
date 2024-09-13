@@ -58,6 +58,9 @@ class Doctor(BaseModels):
 
     is_active = models.BooleanField(default=True, verbose_name='active')
 
+    # tel = models.CharField(verbose_name='tel', max_length=15, null=True, blank=True)
+    # address = models.CharField(verbose_name='address', max_length=255, null=True, blank=True)
+
     objects = ObjectManager()
 
     def __str__(self):
@@ -161,14 +164,26 @@ class Report(BaseModels):
         db_table = 'c_report'
         verbose_name = 'Report'
         # couple unique
-        # unique_together = ('accession_no', 'procedure', 'delete_flag',)
+        # unique_together = ('accession_no', 'procedure', 'delete_flag=false',)
         constraints = [
+            # models.UniqueConstraint(
+            #     fields=["accession_no", "procedure"], 
+            #     condition=Q(delete_flag=False),
+            #     name="unique_report_procedure"
+            # ),
+            # A report has one and just one procedure and delete_flag = false
             models.UniqueConstraint(
-            fields=["accession_no", "procedure"], 
-            condition=Q(delete_flag=False),
-            name="unique_report_procedure"
+                fields=["procedure"], 
+                condition=Q(delete_flag=False),
+                name="unique_procedure_deleteflag(false)"
             )
+            # models.UniqueConstraint(
+            #     fields=["study_iuid"], 
+            #     condition=Q(delete_flag=False),
+            #     name="unique_study_iuid_deleteflag(false)"
+            # )
         ]
+      
         default_permissions = ()
         permissions = ()
 

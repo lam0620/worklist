@@ -147,9 +147,24 @@ class CreateDoctorSerializers(serializers.Serializer):
     doctor_no = serializers.CharField(required=False, allow_blank=True)
     gender = serializers.CharField(required=False)
     title = serializers.CharField(required=False, allow_blank=True)
+
+    # tel = serializers.CharField(required=False, allow_blank=True)
+    # address = serializers.CharField(required=False, allow_blank=True)
+
     # sign = image's file name
     sign = serializers.ImageField(required=False, use_url=True)
     is_active = serializers.BooleanField(required=True)
+
+    # Convert json null to empty. Overwrite to_representation()
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for key, value in data.items():
+            try:
+                if not value:
+                    data[key] = ""
+            except KeyError:
+                pass
+        return data
 
     def validate(self, data):
         if 'gender' not in data:

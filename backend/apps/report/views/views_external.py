@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from django.db import transaction,connections
 from drf_yasg.utils import swagger_auto_schema
-from apps.report.get_report_view import GetReportView
+from apps.report.report_base_view import ReportBaseView
 from third_parties.contribution.api_view import CustomAPIView
 from django.db.models import F, Prefetch
 from drf_yasg import openapi
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 HIS PACS integration class
 """
 
-class External_OrderView(GetReportView):
+class External_OrderView(ReportBaseView):
     queryset = User.objects.all()
     authentication_classes = ()
  
@@ -141,7 +141,7 @@ class External_OrderView(GetReportView):
 """
 Report detail view class - For HIS(2)
 """   
-class External_ReportByACNProcedure(GetReportView):
+class External_ReportByACNProcedure(ReportBaseView):
     queryset = User.objects.all()
     authentication_classes = ()
 
@@ -208,7 +208,7 @@ class External_ReportByACNProcedure(GetReportView):
         return self.get_report_json(request, report)
     
 
-class External_ReportById(GetReportView):
+class External_ReportById(ReportBaseView):
     """
      - For HIS(3) : delete report
     """

@@ -1,12 +1,12 @@
 import logging
 
 from apps.report.models import Report
-from apps.report.utils import  get_image_link
+from apps.report.utils import  get_image_link,get_image_field_str
 from third_parties.contribution.api_view import CustomAPIView
 
 logger = logging.getLogger(__name__)
 
-class GetReportView(CustomAPIView):    
+class ReportBaseView(CustomAPIView):    
     def get_report_by_id(self, request, pk):
         try:
             # id=kwargs['id']
@@ -47,7 +47,7 @@ class GetReportView(CustomAPIView):
                 "id":report.radiologist.id,
                 'doctor_no':report.radiologist.doctor_no,
                 'fullname':report.radiologist.fullname,
-                'sign':report.radiologist.sign,
+                'sign':get_image_field_str(report.radiologist.sign),
                 'title':report.radiologist.title,
             },
             'procedure': procedure,
@@ -77,7 +77,7 @@ class GetReportView(CustomAPIView):
                     "id":report.radiologist.id,
                     'doctor_no':report.radiologist.doctor_no,
                     'fullname':report.radiologist.fullname,
-                    'sign':report.radiologist.sign,
+                    'sign':get_image_field_str(report.radiologist.sign),
                     'title':report.radiologist.title,
                 }                
             }
@@ -90,4 +90,8 @@ class GetReportView(CustomAPIView):
             report=Report.objects.get(procedure_id=proc_id, delete_flag = False)
         except Report.DoesNotExist:
             logger.warn("Report not exist", exc_info=True)
+
+        except Exception as e:
+            logger.error(e)
+            
         return report    

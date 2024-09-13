@@ -4,7 +4,8 @@ from django.utils import timezone
 
 from django.db import transaction,connections
 from drf_yasg.utils import swagger_auto_schema
-from apps.report.get_report_view import GetReportView
+from apps.report.doctor_base_view import DoctorBaseView
+from apps.report.report_base_view import ReportBaseView
 from third_parties.contribution.api_view import CustomAPIView
 from django.db.models import F, Prefetch
 from drf_yasg import openapi
@@ -34,7 +35,7 @@ logger = logging.getLogger(__name__)
 Order class
 """
 
-class OrderView(GetReportView):
+class OrderView(ReportBaseView):
     queryset = User.objects.all()
     # Call overwrite here to skip authenticate or don't call request.user
     # uncomment if no need to check permission 
@@ -116,7 +117,7 @@ class OrderView(GetReportView):
             return self.get_paginated_response(page)
    
 
-class OrderByACNView(GetReportView):
+class OrderByACNView(ReportBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -179,7 +180,7 @@ class OrderByACNView(GetReportView):
         return self.response_success(data=order_data)
     
 # =============== Report class ==================
-class ReportView(GetReportView):
+class ReportView(ReportBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -284,7 +285,7 @@ class ReportView(GetReportView):
             return self.response_NG(ec.SYSTEM_ERR, str(e))
     
 
-class ReportById(GetReportView):
+class ReportById(ReportBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -392,7 +393,7 @@ class ReportById(GetReportView):
 """
 Doctor view class
 """   
-class DoctorView(CustomAPIView):
+class DoctorView(DoctorBaseView):
     queryset = Doctor.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -434,7 +435,8 @@ class DoctorView(CustomAPIView):
                      'title':item.title,
                      'is_active':item.is_active,
                      'sign':get_image_field_str(item.sign)} for item in doctors]
-            
+
+                        
         except Doctor.DoesNotExist:
             return self.cus_response_empty_data(ec.REPORT)
         
@@ -453,13 +455,6 @@ class DoctorView(CustomAPIView):
         operation_summary='Create new a doctor',
         operation_description='Create new a doctor',
         request_body=ser.CreateDoctorSerializers,
-        # manual_parameters=[openapi.Parameter(
-        #             name="sign",
-        #             in_=openapi.IN_FORM,
-        #             type=openapi.TYPE_FILE,
-        #             required=False,
-        #             description="Sign"
-        #             )],
         tags=[swagger_tags.REPORT_DOCTOR]
     )
     # @parser_classes((MultiPartParser,))
@@ -489,6 +484,8 @@ class DoctorView(CustomAPIView):
                     type=data['type'],
                     gender=data['gender'],
                     title=data['title'],
+                    # tel=data['tel'],
+                    # address=data['address'],
                     sign=data['sign'],
                     is_active=data['is_active'],
                     created_by = updatedBy
@@ -529,7 +526,7 @@ class DoctorView(CustomAPIView):
         return self.cus_response_500()
     
 
-class DoctorDetailView(CustomAPIView):
+class DoctorDetailView(DoctorBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -553,7 +550,7 @@ class DoctorDetailView(CustomAPIView):
                 return self.cus_response_403(per_code.VIEW_DOCTOR)
                     
         # Get latest Doctor
-        return self._get_doctor_by_id(kwargs['pk'])
+        return self.get_doctor_by_id(kwargs['pk'])
 
     @swagger_auto_schema(
         operation_summary='Update the doctor by id',
@@ -590,7 +587,7 @@ class DoctorDetailView(CustomAPIView):
                 
                 #return self.cus_response_updated()
             # Get latest doctor
-            return self._get_doctor_by_id(doctor.id)
+            return self.get_doctor_by_id(doctor.id)
 
         except Exception as e:
             logger.error(e, exc_info=True)
@@ -632,35 +629,12 @@ class DoctorDetailView(CustomAPIView):
                 
                 #return self.cus_response_updated()
             # Get latest doctor
-            return self._get_doctor_by_id(doctor.id)
+            return self.get_doctor_by_id(doctor.id)
 
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))
         
-    def _get_doctor_by_id(self, pk):
-        try:
-            item = Doctor.objects.get(pk=pk)
-            if item is None:
-                return self.cus_response_empty_data()
-        except Exception as e:
-            logger.error(e, exc_info=True)
-            return self.response_NG('SYSTEM_ERR', str(e))
-        
-        
-        # data = {'id': item.id,
-        #              'user_id':item.user_id,
-        #              'doctor_no':item.doctor_no,
-        #              'type':item.type,
-        #              'fullname':item.fullname,
-        #              'title':item.title,
-        #              'sign':item.sign,
-        #              'is_active':item.is_active
-        #         }
-        serializer = ser.CreateDoctorSerializers(item)
-        data = serializer.data
-        data['id'] = item.id
-        return self.response_success(data=data) 
     
 """
 Report Template view class
