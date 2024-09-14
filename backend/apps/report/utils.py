@@ -42,3 +42,8 @@ def get_image_field_str(image_field):
     if image_field:
         new_value = image_field.url
     return new_value    
+
+def get_username(user):
+    if user:
+        return user.username
+    return ""

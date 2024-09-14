@@ -24,7 +24,7 @@ from apps.report.models import (
     Order,Patient,Procedure,ProcedureType
 )
 from apps.account.permission import CheckPermission
-from apps.report.utils import  get_image_field_str
+from apps.report.utils import  get_image_field_str,get_username
 
 
 logger = logging.getLogger(__name__)
@@ -434,6 +434,7 @@ class DoctorView(DoctorBaseView):
                      'gender':item.gender,
                      'title':item.title,
                      'is_active':item.is_active,
+                     'username':get_username(item.user),
                      'sign':get_image_field_str(item.sign)} for item in doctors]
 
                         
@@ -579,7 +580,9 @@ class DoctorDetailView(DoctorBaseView):
 
             with transaction.atomic():
                 for key, value in data.items():
-                    setattr(doctor, key, value)
+                    # No update "sign" if it isnot passed in data
+                    if key != 'sign' or 'sign' in request.data:
+                        setattr(doctor, key, value)
 
                 doctor.updated_by = updatedBy
                 doctor.updated_at = timezone.now()

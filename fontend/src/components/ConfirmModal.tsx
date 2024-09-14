@@ -8,7 +8,10 @@ interface ConfirmModalProps {
 
 const ConfirmModal = ({ message, onConfirm, onCancel }: ConfirmModalProps) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center "
+      style={{ zIndex: 1000 }}
+    >
       <div className="bg-white p-4 rounded-md">
         <p>{message}</p>
         <div className="flex justify-end mt-4">

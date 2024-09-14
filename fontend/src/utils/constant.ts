@@ -12,6 +12,11 @@ export const PERMISSIONS = {
     VIEW_CORE_PERMISSION : "view_core_permission",
     ADD_CORE_PERMISSION : "add_core_permission",
     EDIT_CORE_PERMISSION : "edit_core_permission",
-    DELETE_CORE_PERMISSION : "delete_core_permission"
+    DELETE_CORE_PERMISSION : "delete_core_permission",
+    VIEW_DOCTOR : "view_doctor",
+    ADD_DOCTOR : "add_doctor",
+    EDIT_DOCTOR : "edit_doctor",
+    DELETE_DOCTOR : "delete_doctor",
+    ACTIVE_DOCTOR : "active_doctor"
 };
 

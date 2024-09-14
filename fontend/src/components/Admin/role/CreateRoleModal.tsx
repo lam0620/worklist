@@ -30,6 +30,7 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [permissions, setPermissions] = useState<string[]>([]);
+  const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [availablePermissions, setAvailablePermissions] = useState<
     Permission[]
   >([]);
@@ -87,10 +88,24 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
     return Object.keys(errors).length === 0;
   };
 
+  const handleCancel = () => {
+    setShowUnsavedChangesPopup(true);
+  };
+
+  const confirmDiscardChanges = () => {
+    setShowUnsavedChangesPopup(false);
+    onClose();
+  };
+
+  const closeDiscardPopup = () => {
+    setShowUnsavedChangesPopup(false);
+  };
+
   return (
-    <Dialog.Root open onOpenChange={onClose}>
+    <>
+      <Dialog.Root open onOpenChange={onClose}>
       <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-      <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
+      <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
         <Dialog.Title className="text-xl font-bold mb-4">
           Create Role
         </Dialog.Title>
@@ -133,7 +148,7 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
             <button
               type="button"
               className="px-4 py-2 bg-gray-200 rounded-md"
-              onClick={onClose}
+              onClick={handleCancel}
             >
               Cancel
             </button>
@@ -145,9 +160,35 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
               Create
             </button>
           </div>
+          <Dialog.Root open={showUnsavedChangesPopup}>
+            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+            <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
+              <Dialog.Title className="text-xl font-bold mb-4">
+                Unsaved Changes
+              </Dialog.Title>
+              <p>Are you sure you want to discard your changes?</p>
+              <div className="flex justify-end space-x-2 mt-4">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-gray-200 rounded-md"
+                  onClick={closeDiscardPopup}
+                >
+                  No
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-600 text-white rounded-md"
+                  onClick={confirmDiscardChanges}
+                >
+                  Yes
+                </button>
+              </div>
+            </Dialog.Content>
+          </Dialog.Root>
         </form>
       </Dialog.Content>
     </Dialog.Root>
+    </>
   );
 };
 

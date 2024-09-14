@@ -38,8 +38,8 @@ def rename_sign(instance, filename):
 
 class Doctor(BaseModels):
     # username is unique and should be equal in the user model. = null if doctor is not a user
-    #username = models.CharField(verbose_name='username',max_length=150,unique=True, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    # user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, null=True)
 
     # user.last_name(ho) + first_name(ten)
     fullname = models.CharField(verbose_name='fullname', max_length=100, blank=False, null=False)

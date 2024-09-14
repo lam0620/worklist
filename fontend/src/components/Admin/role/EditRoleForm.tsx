@@ -82,15 +82,14 @@ const EditRoleForm = ({ role, onEdit, onClose }: EditRoleFormProps) => {
   const closeDiscardPopup = () => {
     setShowUnsavedChangesPopup(false);
   };
-
   return (
     <>
       <Dialog.Root open onOpenChange={onClose}>
-        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-        <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
-          <Dialog.Title className="text-xl font-bold mb-4">
-            Edit Role
-          </Dialog.Title>
+      <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+      <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl text-justify">
+        <Dialog.Title className="text-xl font-bold mb-4 ml-0">
+            Edit Role 
+        </Dialog.Title>
           <form>
             <div className="mb-4">
               <label className="block text-gray-700">Name</label>

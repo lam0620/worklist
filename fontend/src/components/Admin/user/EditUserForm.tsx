@@ -108,65 +108,65 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
             Edit User
           </Dialog.Title>
           <form>
-            <div className="mb-4">
-              <label className="block text-gray-700">First Name</label>
+            <div className="mb-4 flex items-center">
+              <label className="block text-gray-700 w-1/4">First Name</label>
               <input
                 type="text"
-                className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
+                className={`w-3/4 px-3 py-2 border border-gray-300 rounded-md ${
                   errors.firstName ? "border-red-500" : ""
                 }`}
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm">{errors.firstName}</p>
-              )}
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Last Name</label>
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName}</p>
+            )}
+
+            <div className="mb-4 flex items-center">
+              <label className="block text-gray-700 w-1/4">Last Name</label>
               <input
                 type="text"
-                className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
+                className={`w-3/4 px-3 py-2 border border-gray-300 rounded-md ${
                   errors.lastName ? "border-red-500" : ""
                 }`}
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
-              {errors.lastName && (
-                <p className="text-red-500 text-sm">{errors.lastName}</p>
-              )}
             </div>
+            {errors.lastName && (
+              <p className="text-red-500 text-sm">{errors.lastName}</p>
+            )}
 
-            <div className="mb-4">
-              <label className="block text-gray-700">Email</label>
+            <div className="mb-4 flex items-center">
+              <label className="block text-gray-700 w-1/4">Email</label>
               <input
                 type="email"
-                className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
+                className={`w-3/4 px-3 py-2 border border-gray-300 rounded-md ${
                   errors.email ? "border-red-500" : ""
                 }`}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
-              )}
             </div>
-            <div
-              className={`mb-4 ${
-                errors.roles ? "border-red-500" : "border-gray-300"
-              }`}
-            >
-              <label className="block text-gray-700">Roles</label>
-              <MultiSelect
-                options={fullRoles}
-                selectedOptions={userRoles}
-                onChange={setUserRoles}
-                placeholder="Select roles"
-              />
-              {errors.roles && (
-                <p className="text-red-500 text-sm">{errors.roles}</p>
-              )}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
+
+            <div className={`mb-4 flex items-center ${errors.roles ? "border-red-500" : "border-gray-300"}`}>
+              <label className="block text-gray-700 w-1/4">Roles</label>
+              <div className="w-3/4">
+                <MultiSelect
+                  options={fullRoles}
+                  selectedOptions={userRoles}
+                  onChange={setUserRoles}
+                  placeholder="Select roles"
+                />
+              </div>
             </div>
+            {errors.roles && (
+              <p className="text-red-500 text-sm">{errors.roles}</p>
+            )}
             <div className="flex justify-end space-x-2">
               <button
                 type="button"
@@ -184,14 +184,6 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
               </button>
             </div>
           </form>
-          <Dialog.Close asChild>
-            <button
-              className="absolute top-3 right-3 text-gray-500"
-              onClick={handleCancel}
-            >
-              ×
-            </button>
-          </Dialog.Close>
         </Dialog.Content>
       </Dialog.Root>
       <Dialog.Root open={showUnsavedChangesPopup}>

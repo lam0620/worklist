@@ -8,6 +8,9 @@ const Sidebar = () => {
         <li>
           <a href="#">Roles</a>
         </li>
+        <li>
+          <a href="#">Doctor</a>
+        </li>
       </ul>
     </div>
   );
