@@ -7,7 +7,7 @@ import Link from "next/link";
 import { DeleteImageDoctor } from "@/services/apiService";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import ConfirmModal from "../../ConfirmModal";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
@@ -28,8 +28,7 @@ const DoctorDetail = ({ doctor }: Props) => {
   console.log(urlImage);
 
   const [sign, setSign] = useState(doctor?.sign);
-  const [showDeleteSignPopup, setShowDeleteSignPopup] = useState(false);
-
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const onDeleteSign = async () => {
     const config = {
       headers: {
@@ -47,16 +46,17 @@ const DoctorDetail = ({ doctor }: Props) => {
     }
   };
 
-  const handleDelete = () => {
-    setShowDeleteSignPopup(true);
-  };
-  const confirmPopup = () => {
-    setShowDeleteSignPopup(false);
-    onDeleteSign();
+  const openConfirmModal = () => {
+    setIsConfirmOpen(true);
   };
 
-  const closePopup = () => {
-    setShowDeleteSignPopup(false);
+  const closeConfirmModal = () => {
+    setIsConfirmOpen(false);
+  };
+
+  const confirmDelete = async () => {
+    closeConfirmModal();
+    await onDeleteSign();
   };
 
   return (
@@ -84,7 +84,11 @@ const DoctorDetail = ({ doctor }: Props) => {
                     style={{ height: "40px" }}
                     className="mr-4"
                   />
-                  <Link href={""} onClick={handleDelete} title="Delete sign">
+                  <Link
+                    href={""}
+                    onClick={openConfirmModal}
+                    title="Delete sign"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       style={{ fill: "none", cursor: "pointer" }}
@@ -127,31 +131,13 @@ const DoctorDetail = ({ doctor }: Props) => {
               </div>
             </div>
           ))}
-          <Dialog.Root open={showDeleteSignPopup}>
-            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-            <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
-              <Dialog.Title className="text-xl font-bold mb-4">
-                Delete Sign
-              </Dialog.Title>
-              <p>Are you sure to delete this doctor's sign ?</p>
-              <div className="flex justify-end space-x-2 mt-4">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-200 rounded-md"
-                  onClick={closePopup}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-red-600 text-white rounded-md"
-                  onClick={confirmPopup}
-                >
-                  OK
-                </button>
-              </div>
-            </Dialog.Content>
-          </Dialog.Root>
+          {isConfirmOpen && (
+            <ConfirmModal
+              message="Are you sure you want to delete this doctor's sign ?"
+              onConfirm={confirmDelete}
+              onCancel={closeConfirmModal}
+            />
+          )}
         </form>
       </div>
     </div>
