@@ -3,6 +3,7 @@ import axios from "axios";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 
+
 //login
 export const Login = async (data: { [key: string]: string }) => {
   return axios.post(`${API_BASE_URL}/auth/login`, data);
@@ -169,3 +170,9 @@ export const ChangeActiveDoctors = async (active?: string, ids?: string[]) => {
     ids_doctor: ids
   });
 };
+
+export const DeleteImageDoctor = async (id : string | undefined, config: Object) => {
+  return axios.patch(`${API_BASE_URL}/doctors/${id}`,{
+    sign : "",
+  }, config )
+}

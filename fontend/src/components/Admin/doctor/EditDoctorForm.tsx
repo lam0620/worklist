@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
 import { UpdateDoctor } from "@/services/apiService";
 import { toast } from "react-toastify";
@@ -34,7 +34,7 @@ const EditDoctorForm = ({
   const [image, setImage] = useState<File | undefined>(undefined);
   const [disabledSign, setDisabledSign] = useState(true);
 
-  const urlImage = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL+doctor?.sign
+  const urlImage = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL + doctor?.sign;
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,23 +60,18 @@ const EditDoctorForm = ({
 
     // Remove sign if disabled
     if (disabledSign) {
-      delete data['sign'];
+      delete data["sign"];
     }
 
     try {
-      const response = await UpdateDoctor(
-        doctor.id,
-        data,
-        config
-      );
+      const response = await UpdateDoctor(doctor.id, data, config);
 
-      if (response?.data.result.status === 'NG') {
+      if (response?.data.result.status === "NG") {
         const code = response?.data?.result?.code;
         const item = response?.data?.result?.item;
         const msg = response?.data?.result?.msg;
         const message = showErrorMessage(code, item, msg);
-        toast.error(message);     
-          
+        toast.error(message);
       } else {
         // if sign has image
         // if (image) {
@@ -96,7 +91,7 @@ const EditDoctorForm = ({
         });
         toast.success("Doctor updated successfully");
         // onClose();
-        window.location.href = '/admin/doctors'
+        window.location.href = "/admin/doctors";
       }
     } catch (error: any) {
       console.error(error);
@@ -116,7 +111,6 @@ const EditDoctorForm = ({
     if (!doctorNo) {
       errors.doctorNo = "Doctor's code is required";
     }
-
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -147,8 +141,8 @@ const EditDoctorForm = ({
   };
 
   const onEditSign = () => {
-    setDisabledSign(!disabledSign)
-  }
+    setDisabledSign(!disabledSign);
+  };
 
   const doctorNumbers: string[] = doctors.map((doctor) => doctor.doctor_no);
 
@@ -196,7 +190,7 @@ const EditDoctorForm = ({
             )}
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
-              Doctor's code
+                Doctor's code
               </label>
               <input
                 type="text"
@@ -206,7 +200,7 @@ const EditDoctorForm = ({
                 value={doctorNo}
                 onChange={handleDoctorNoChange}
               />
-            </div>            
+            </div>
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
                 Full name
@@ -250,19 +244,29 @@ const EditDoctorForm = ({
                 Sign
               </label>
               <div className="flex flex-row text-blue-600">
-                <label className="ml-2">{doctor?.sign ? <img src={urlImage} style={{height:'40px'}} />:""}</label>
-                <Link onClick={onEditSign} href={''} className="ml-4">{disabledSign?'Edit':'Cancel Edit'}</Link>
+                <label className="ml-2">
+                  {doctor?.sign ? (
+                    <img src={urlImage} style={{ height: "40px" }} />
+                  ) : (
+                    ""
+                  )}
+                </label>
+                <Link onClick={onEditSign} href={""} className="ml-4">
+                  {disabledSign ? "Edit" : "Cancel Edit"}
+                </Link>
               </div>
             </div>
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5"></label>
-              {!disabledSign && (<input
-                className="w-3/4 px-3 py-2 border border-gray-300 rounded-md"
-                type="file"
-                name="image"
-                onChange={onFileChange}
-                // required
-              />)}
+              {!disabledSign && (
+                <input
+                  className="w-3/4 px-3 py-2 border border-gray-300 rounded-md"
+                  type="file"
+                  name="image"
+                  onChange={onFileChange}
+                  // required
+                />
+              )}
             </div>
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">

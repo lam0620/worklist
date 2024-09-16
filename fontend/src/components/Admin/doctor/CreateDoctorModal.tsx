@@ -65,14 +65,12 @@ const CreateDoctorModal = ({
       };
       const response = await CreateDoctor(newDoctor, config);
 
-      
-      if (response?.data.result.status === 'NG') {
+      if (response?.data.result.status === "NG") {
         const code = response?.data?.result?.code;
         const item = response?.data?.result?.item;
         const msg = response?.data?.result?.msg;
         const message = showErrorMessage(code, item, msg);
-        toast.error(message);     
-          
+        toast.error(message);
       } else {
         toast.success("Doctor created successfully");
         onDoctorCreated();
@@ -92,7 +90,7 @@ const CreateDoctorModal = ({
     if (!fullName) newErrors.fullName = "Full name is required";
     if (!type) newErrors.type = "Type is required";
     if (!gender) newErrors.gender = "Gender is required";
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

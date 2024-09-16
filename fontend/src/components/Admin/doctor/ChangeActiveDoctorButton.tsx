@@ -4,7 +4,6 @@ import { ChangeActiveDoctors } from "@/services/apiService";
 
 import { useState } from "react";
 import { toast } from "react-toastify";
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 type ChangeActiveDoctorButtonProps = {
   buttonStatus: string;
