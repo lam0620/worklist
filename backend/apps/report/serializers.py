@@ -235,7 +235,16 @@ class UpdateDoctorSerializers(serializers.Serializer):
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
         return value
-        
+
+class PatchDoctorSerializers(serializers.Serializer):
+    sign = serializers.ImageField(required=False, use_url=True)
+    is_active = serializers.BooleanField(required=True)
+
+    def validate_sign(self, value): # noqa
+        if not value:
+            return None
+ 
+            
 class ADectivateDoctorListSerializer(serializers.Serializer):
     is_active = serializers.BooleanField(required=True)
     ids_doctor = serializers.ListField(child=serializers.UUIDField(required=True), required=True)

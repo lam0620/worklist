@@ -40,7 +40,7 @@ const PieChart = ({ data, type }: { data: Data[]; type: string }) => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as const,
+        position: "top" as string,
       },
       title: {
         display: true,
@@ -49,9 +49,10 @@ const PieChart = ({ data, type }: { data: Data[]; type: string }) => {
             ? "Blood Pressure Status"
             : `${type.toUpperCase()} Status`
         }`,
+        position: "bottom",
       },
     },
-  };
+  } as any;
   return (
     <div
       style={{

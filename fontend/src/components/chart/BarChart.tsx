@@ -60,11 +60,12 @@ const BarChart = ({ data, type }: { data: Data[]; type: string }) => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as const,
+        position: "top" as string,
       },
       title: {
         display: true,
         text: `${type.toUpperCase()} Status by Age Group`,
+        position: "bottom",
       },
     },
     scales: {
@@ -82,7 +83,7 @@ const BarChart = ({ data, type }: { data: Data[]; type: string }) => {
         },
       },
     },
-  };
+  } as any;
 
   return (
     <div
