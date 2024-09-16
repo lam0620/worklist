@@ -25,6 +25,7 @@ const DoctorDetail = ({ doctor }: Props) => {
   const baseUrl = new URL(apiUrl).origin;
   const a = doctor?.sign;
   const urlImage = `${baseUrl}${a}`;
+  console.log(urlImage);
 
   const [sign, setSign] = useState(doctor?.sign);
   const [showDeleteSignPopup, setShowDeleteSignPopup] = useState(false);
@@ -132,21 +133,21 @@ const DoctorDetail = ({ doctor }: Props) => {
               <Dialog.Title className="text-xl font-bold mb-4">
                 Delete Sign
               </Dialog.Title>
-              <p>Are you sure you want to delete sign ?</p>
+              <p>Are you sure to delete this doctor's sign ?</p>
               <div className="flex justify-end space-x-2 mt-4">
                 <button
                   type="button"
                   className="px-4 py-2 bg-gray-200 rounded-md"
                   onClick={closePopup}
                 >
-                  No
+                  Cancel
                 </button>
                 <button
                   type="button"
                   className="px-4 py-2 bg-red-600 text-white rounded-md"
                   onClick={confirmPopup}
                 >
-                  Yes
+                  OK
                 </button>
               </div>
             </Dialog.Content>
