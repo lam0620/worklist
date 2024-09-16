@@ -10,7 +10,8 @@ interface Props {
 }
 
 const DoctorDetail = ({ doctor }: Props) => {
-  const urlImage = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL+doctor?.sign
+  let urlImage = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL?process.env.NEXT_PUBLIC_DICOM_VIEWER_URL:"http://localhost"
+  urlImage = urlImage + doctor?.sign;
   
 
   const onDeleteSign = () => {

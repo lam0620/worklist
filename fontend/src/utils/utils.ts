@@ -1,4 +1,4 @@
-export const getGenderLabel = (gender: string) => {
+export const getGenderLabel = (gender: string|undefined) => {
     switch (gender) {
       case "F":
         return "Female";
