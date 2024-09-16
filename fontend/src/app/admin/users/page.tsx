@@ -36,6 +36,7 @@ const UserListPage = () => {
       setTotalPages(
         Math.ceil(response.data?.count / response?.data?.page_size)
       );
+     
     } catch (error: any) {
       if (error.response?.status === 403) {
         toast.error("You don't have permission to view users");
@@ -81,7 +82,7 @@ const UserListPage = () => {
   const debouncedSearch = useCallback(
     debounce((query: string) => {
       setSearchQuery(query);
-    }, 1000),
+    }, 300),
     []
   );
 
@@ -125,11 +126,11 @@ const UserListPage = () => {
             </div>
           </div>
           <input
-              type="text"
-              placeholder="Search users..."
-              onChange={handleSearchChange}
-              className="mb-4 p-2 border rounded"
-            />
+            type="text"
+            placeholder="Search users..."
+            onChange={handleSearchChange}
+            className="mb-4 p-2 border rounded"
+          />
           <UserList
             users={users}
             onSelectUser={handleUserSelect}

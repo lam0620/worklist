@@ -16,6 +16,7 @@ export const PERMISSIONS = {
     VIEW_DOCTOR : "view_doctor",
     ADD_DOCTOR : "add_doctor",
     EDIT_DOCTOR : "edit_doctor",
-    DELETE_DOCTOR : "delete_doctor"
+    DELETE_DOCTOR : "delete_doctor",
+    ACTIVE_DOCTOR : "active_doctor"
 };
 

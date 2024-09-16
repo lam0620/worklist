@@ -150,6 +150,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+
     ],
     'DEFAULT_PAGINATION_CLASS': 'third_parties.contribution.paginator.CustomResultsSetPagination',
     'DEFAULT_FILTER_BACKENDS': (
@@ -248,6 +251,7 @@ LOG_DIR = os.path.join(settings.BASE_DIR, 'logs')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = 'static/'
+MEDIA_URL = "/media/"
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

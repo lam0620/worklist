@@ -36,6 +36,9 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
   const handleRoleManagement = () => {
     router.push("/admin/roles");
   };
+  const handleDoctorManagement = () => {
+    router.push("/admin/doctors");
+  }
 
   const hasViewUserPermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_ACCOUNT) || user?.is_superuser;
@@ -93,6 +96,14 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
           >
             Role management
+          </DropdownMenu.Item>
+        )}
+        {hasViewRolePermission && (
+          <DropdownMenu.Item
+            onSelect={handleDoctorManagement}
+            className="cursor-pointer p-2 hover:bg-gray-100 rounded"
+          >
+            Doctor management
           </DropdownMenu.Item>
         )}
         <DropdownMenu.Separator className="my-1 border-t border-gray-200" />

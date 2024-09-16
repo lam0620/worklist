@@ -4,10 +4,14 @@ from django.utils import timezone
 
 from django.db import transaction,connections
 from drf_yasg.utils import swagger_auto_schema
-from apps.report.get_report_view import GetReportView
+from apps.report.doctor_base_view import DoctorBaseView
+from apps.report.report_base_view import ReportBaseView
 from third_parties.contribution.api_view import CustomAPIView
 from django.db.models import F, Prefetch
 from drf_yasg import openapi
+
+from rest_framework.parsers import MultiPartParser,JSONParser
+from rest_framework.decorators import parser_classes
 
 from library.constant import error_codes as ec
 from library.constant import module_code as module_code
@@ -20,7 +24,7 @@ from apps.report.models import (
     Order,Patient,Procedure,ProcedureType
 )
 from apps.account.permission import CheckPermission
-from apps.report.utils import  get_image_link
+from apps.report.utils import  get_image_field_str,get_username
 
 
 logger = logging.getLogger(__name__)
@@ -31,7 +35,7 @@ logger = logging.getLogger(__name__)
 Order class
 """
 
-class OrderView(GetReportView):
+class OrderView(ReportBaseView):
     queryset = User.objects.all()
     # Call overwrite here to skip authenticate or don't call request.user
     # uncomment if no need to check permission 
@@ -113,7 +117,7 @@ class OrderView(GetReportView):
             return self.get_paginated_response(page)
    
 
-class OrderByACNView(GetReportView):
+class OrderByACNView(ReportBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -176,7 +180,7 @@ class OrderByACNView(GetReportView):
         return self.response_success(data=order_data)
     
 # =============== Report class ==================
-class ReportView(GetReportView):
+class ReportView(ReportBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -281,7 +285,7 @@ class ReportView(GetReportView):
             return self.response_NG(ec.SYSTEM_ERR, str(e))
     
 
-class ReportById(GetReportView):
+class ReportById(ReportBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -389,11 +393,62 @@ class ReportById(GetReportView):
 """
 Doctor view class
 """   
-class DoctorView(CustomAPIView):
-    queryset = User.objects.all()
+class DoctorView(DoctorBaseView):
+    queryset = Doctor.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
 
+    # for search box (?search=xxx). which you want to search. 
+    search_fields = ['fullname', 'doctor_no']
+    # for query string (?type=xxx)
+    filter_fields = ['type', 'user_id', 'is_active']
+
+    parser_classes = [MultiPartParser, JSONParser]
+
+    """
+    Get a doctor
+    kwargs = accession_no and procedure_code
+    """
+    @swagger_auto_schema(
+        operation_summary='Get doctors',
+        operation_description='Get doctors',
+        tags=[swagger_tags.REPORT_DOCTOR],
+    )
+    def get(self, request, *args, **kwargs):
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_DOCTOR, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_DOCTOR)
+
+        data= {}
+        try:
+            doctors = self.filter_queryset(self.get_queryset())
+
+            data = [{'id': item.id,
+                     'user_id':item.user_id,
+                     'doctor_no':item.doctor_no,
+                     'type':item.type,
+                     'fullname':item.fullname,
+                     'gender':item.gender,
+                     'title':item.title,
+                     'is_active':item.is_active,
+                     'username':get_username(item.user),
+                     'sign':get_image_field_str(item.sign)} for item in doctors]
+
+                        
+        except Doctor.DoesNotExist:
+            return self.cus_response_empty_data(ec.REPORT)
+        
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+        # return self.response_success(data=data)
+        page = self.paginate_queryset(data)
+        return self.get_paginated_response(page)    
+    
     """
     Create new a doctor
     """
@@ -401,8 +456,9 @@ class DoctorView(CustomAPIView):
         operation_summary='Create new a doctor',
         operation_description='Create new a doctor',
         request_body=ser.CreateDoctorSerializers,
-        tags=[swagger_tags.REPORT_DOCTOR],
+        tags=[swagger_tags.REPORT_DOCTOR]
     )
+    # @parser_classes((MultiPartParser,))
     def post(self, request):
         updatedBy = None
         # Get and check version to secure or not
@@ -429,6 +485,8 @@ class DoctorView(CustomAPIView):
                     type=data['type'],
                     gender=data['gender'],
                     title=data['title'],
+                    # tel=data['tel'],
+                    # address=data['address'],
                     sign=data['sign'],
                     is_active=data['is_active'],
                     created_by = updatedBy
@@ -443,65 +501,37 @@ class DoctorView(CustomAPIView):
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))       
-
-    """
-    Get a doctor
-    kwargs = accession_no and procedure_code
-    """
+  
     @swagger_auto_schema(
-        operation_summary='Get doctors',
-        operation_description='Get doctors',
-        query_serializer= ser.GetDoctorSerializers,
+        operation_summary="Activate/Deactivate doctors",
+        operation_description='Activate/Deactivate doctors',
+        request_body=ser.ADectivateDoctorListSerializer,
         tags=[swagger_tags.REPORT_DOCTOR],
     )
-    def get(self, request, *args, **kwargs):
-        # Get and check version to secure or not
-        if request.META.get('HTTP_X_API_VERSION') != "X":  
-            user = request.user
-            is_per = CheckPermission(per_code.VIEW_DOCTOR, user.id).check()
-            if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.VIEW_DOCTOR)
+    def patch(self, request):
+        user = request.user
+        is_per = CheckPermission(per_code.EDIT_DOCTOR, user.id).check()
+        if not is_per and not user.is_superuser:
+            return self.cus_response_403()
 
-        # type = P: referring physician, R: radilogist    
-        # Get type from query params: /?type=XX   
-        user_id=request.query_params.get('user_id')
-        type=request.query_params.get('type')
+        serializers = ser.ADectivateDoctorListSerializer(data=request.data)
+        serializers.is_valid(raise_exception=True)
+        data = serializers.validated_data
 
-        data= {}
         try:
-            if type and user_id:
-                doctors = Doctor.objects.filter(user_id=user_id,type=type, is_active = True)
-            elif type:
-                doctors = Doctor.objects.filter(type=type, is_active = True)    
-            elif user_id:
-                doctors = Doctor.objects.filter(user_id=user_id, is_active = True)
-            else:
-                doctors = Doctor.objects.filter(is_active = True)
-
-            data = [{'id': item.id,
-                     'user_id':item.user_id,
-                     'doctor_no':item.doctor_no,
-                     'type':item.type,
-                     'fullname':item.fullname,
-                     'title':item.title,
-                     'is_active':item.is_active,
-                     'sign':item.sign} for item in doctors]
-            
-        except Doctor.DoesNotExist:
-            return self.cus_response_empty_data(ec.REPORT)
-        
+            with transaction.atomic():
+                Doctor.objects.filter(id__in=data['ids_doctor']).update(is_active=data['is_active'], updated_by=user.id)
+            return self.cus_response_updated('Activate/Deactivate successfully')
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
-        
-        # return self.response_success(data=data)
-        page = self.paginate_queryset(data)
-        return self.get_paginated_response(page)        
+        return self.cus_response_500()
+    
 
-class DoctorDetailView(CustomAPIView):
+class DoctorDetailView(DoctorBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
+    parser_classes = [MultiPartParser, JSONParser]
 
     """
     Get a report
@@ -521,7 +551,7 @@ class DoctorDetailView(CustomAPIView):
                 return self.cus_response_403(per_code.VIEW_DOCTOR)
                     
         # Get latest Doctor
-        return self._get_doctor_by_id(kwargs['pk'])
+        return self.get_doctor_by_id(kwargs['pk'])
 
     @swagger_auto_schema(
         operation_summary='Update the doctor by id',
@@ -550,7 +580,9 @@ class DoctorDetailView(CustomAPIView):
 
             with transaction.atomic():
                 for key, value in data.items():
-                    setattr(doctor, key, value)
+                    # No update "sign" if it isnot passed in data
+                    if key != 'sign' or 'sign' in request.data:
+                        setattr(doctor, key, value)
 
                 doctor.updated_by = updatedBy
                 doctor.updated_at = timezone.now()
@@ -558,7 +590,7 @@ class DoctorDetailView(CustomAPIView):
                 
                 #return self.cus_response_updated()
             # Get latest doctor
-            return self._get_doctor_by_id(doctor.id)
+            return self.get_doctor_by_id(doctor.id)
 
         except Exception as e:
             logger.error(e, exc_info=True)
@@ -600,32 +632,12 @@ class DoctorDetailView(CustomAPIView):
                 
                 #return self.cus_response_updated()
             # Get latest doctor
-            return self._get_doctor_by_id(doctor.id)
+            return self.get_doctor_by_id(doctor.id)
 
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))
         
-    def _get_doctor_by_id(self, pk):
-        try:
-            item = Doctor.objects.get(pk=pk)
-            if item is None:
-                return self.cus_response_empty_data()
-        except Exception as e:
-            logger.error(e, exc_info=True)
-            return self.response_NG('SYSTEM_ERR', str(e))
-        
-        
-        data = {'id': item.id,
-                     'user_id':item.user_id,
-                     'doctor_no':item.doctor_no,
-                     'type':item.type,
-                     'fullname':item.fullname,
-                     'title':item.title,
-                     'sign':item.sign,
-                     'is_active':item.is_active
-                }
-        return self.response_success(data=data) 
     
 """
 Report Template view class

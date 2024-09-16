@@ -32,10 +32,14 @@ class Patient(BaseModels):
         default_permissions = ()
         permissions = ()
 
+def rename_sign(instance, filename):
+    filebase, extension = filename.split('.')
+    return 'signs/%s.%s' % (instance.doctor_no, extension)
+
 class Doctor(BaseModels):
     # username is unique and should be equal in the user model. = null if doctor is not a user
-    #username = models.CharField(verbose_name='username',max_length=150,unique=True, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    # user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING, null=True)
 
     # user.last_name(ho) + first_name(ten)
     fullname = models.CharField(verbose_name='fullname', max_length=100, blank=False, null=False)
@@ -49,8 +53,13 @@ class Doctor(BaseModels):
     # Bs., Ths.,....
     title = models.CharField(verbose_name='title', max_length=10, null=True, blank=True)
     # Signature
-    sign = models.CharField(verbose_name='sign', max_length=100, null=True, blank=True)
+    #sign = models.CharField(verbose_name='sign', max_length=100, null=True, blank=True)
+    sign = models.ImageField(upload_to=rename_sign, verbose_name='sign', null=True, blank=True)
+
     is_active = models.BooleanField(default=True, verbose_name='active')
+
+    # tel = models.CharField(verbose_name='tel', max_length=15, null=True, blank=True)
+    # address = models.CharField(verbose_name='address', max_length=255, null=True, blank=True)
 
     objects = ObjectManager()
 
@@ -155,14 +164,26 @@ class Report(BaseModels):
         db_table = 'c_report'
         verbose_name = 'Report'
         # couple unique
-        # unique_together = ('accession_no', 'procedure', 'delete_flag',)
+        # unique_together = ('accession_no', 'procedure', 'delete_flag=false',)
         constraints = [
+            # models.UniqueConstraint(
+            #     fields=["accession_no", "procedure"], 
+            #     condition=Q(delete_flag=False),
+            #     name="unique_report_procedure"
+            # ),
+            # A report has one and just one procedure and delete_flag = false
             models.UniqueConstraint(
-            fields=["accession_no", "procedure"], 
-            condition=Q(delete_flag=False),
-            name="unique_report_procedure"
+                fields=["procedure"], 
+                condition=Q(delete_flag=False),
+                name="unique_procedure_deleteflag(false)"
             )
+            # models.UniqueConstraint(
+            #     fields=["study_iuid"], 
+            #     condition=Q(delete_flag=False),
+            #     name="unique_study_iuid_deleteflag(false)"
+            # )
         ]
+      
         default_permissions = ()
         permissions = ()
 

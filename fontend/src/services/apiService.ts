@@ -16,11 +16,15 @@ export const fetchInfo = async () => {
 
 // accounts
 export const fetchAccounts = async (params: { [key: string]: any } = {}) => {
-    const queryString = Object.keys(params)
-      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-      .join('&');
-    return axios.get(`${API_BASE_URL}/accounts?${queryString}`);
-  };
+  const queryString = Object.keys(params)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    .join('&');
+  return axios.get(`${API_BASE_URL}/accounts?${queryString}`);
+};
+
+export const fetchAccountsList = async () => {
+  return axios.get(`${API_BASE_URL}/accounts`);
+}
 
 export const fetchAccountById = async (id: string) => {
   return axios.get(`${API_BASE_URL}/accounts/${id}`);
@@ -111,16 +115,16 @@ export const InfoProfileUser = async () => {
   return axios.get(`${API_BASE_URL}/me`);
 }
 
-export const refreshAccessToken = async (data: {[key: string]: any}) => {
+export const refreshAccessToken = async (data: { [key: string]: any }) => {
   return axios.post(`${API_BASE_URL}/auth/refresh-token`, data);
 }
 
 // Chart
-export const fetchChartData = async (params: { [key: string]: any } = {} ) => {
-    const queryString = Object.keys(params)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-        .join('&');
-    return axios.get(`${API_BASE_URL}/chart?${queryString}`);
+export const fetchChartData = async (params: { [key: string]: any } = {}) => {
+  const queryString = Object.keys(params)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    .join('&');
+  return axios.get(`${API_BASE_URL}/chart?${queryString}`);
 }
 
 // Provider 
@@ -138,3 +142,30 @@ export const exportCSV = async (params: { [key: string]: any } = {}) => {
     .join('&');
   return axios.get(`${API_BASE_URL}/chart/export?${queryString}`);
 }
+
+//Doctor
+export const fetchDoctorById = async (id: string) => {
+  return axios.get(`${API_BASE_URL}/doctors/${id}`);
+}
+
+export const fetchDoctorsList = async (params: { [key: string]: any } = {}) => {
+  const queryString = Object.keys(params)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    .join('&');
+  return axios.get(`${API_BASE_URL}/doctors?${queryString}`);
+};
+
+export const CreateDoctor = async (data: { [key: string]: any }, config: Object) => {
+  return axios.post(`${API_BASE_URL}/doctors`, data, config);
+}
+
+export const UpdateDoctor = async (id: string, data: { [key: string]: any }, config: Object) => {
+  return axios.put(`${API_BASE_URL}/doctors/${id}`, data, config);
+}
+
+export const ChangeActiveDoctors = async (active?: string, ids?: string[]) => {
+  return axios.patch(`${API_BASE_URL}/doctors`, {
+    is_active: active,
+    ids_doctor: ids
+  });
+};
