@@ -599,7 +599,7 @@ class DoctorDetailView(DoctorBaseView):
     @swagger_auto_schema(
         operation_summary='Activate/Deactivate the doctor',
         operation_description='Activate/Deactivate the doctor',
-        request_body=ser.UpdateDoctorSerializers,
+        request_body=ser.PatchDoctorSerializers,
         tags=[swagger_tags.REPORT_DOCTOR],
     )
     def patch(self, request, *args, **kwargs):
@@ -618,10 +618,13 @@ class DoctorDetailView(DoctorBaseView):
                 return self.cus_response_empty_data()
 
             # partial=True for patch method
-            serializer = ser.UpdateDoctorSerializers(data=request.data, instance=doctor, partial=True)
+            serializer = ser.PatchDoctorSerializers(data=request.data, instance=doctor, partial=True)
             serializer.is_valid(raise_exception=True)
             data = serializer.validated_data
 
+            if 'sign' in request.data and not request.data['sign']:
+                data['sign'] = None
+                
             with transaction.atomic():
                 for key, value in data.items():
                     setattr(doctor, key, value)

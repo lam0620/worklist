@@ -68,7 +68,7 @@ const LineChart = ({ data, type }: { data: Data[]; type: string }) => {
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as const,
+        position: "top" as string,
       },
       title: {
         display: true,
@@ -77,6 +77,7 @@ const LineChart = ({ data, type }: { data: Data[]; type: string }) => {
             ? "Blood Pressure Status by Age Group"
             : `${type.toUpperCase()} Status by Age Group`
         }`,
+        position: "bottom",
       },
     },
     elements: {
@@ -87,7 +88,7 @@ const LineChart = ({ data, type }: { data: Data[]; type: string }) => {
         radius: 5,
       },
     },
-  };
+  } as any;
 
   return (
     <div
