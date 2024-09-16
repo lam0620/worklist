@@ -242,7 +242,7 @@ const CreateUserModal = ({
                   className="px-4 py-2 bg-gray-200 rounded-md"
                   onClick={closeDiscardPopup}
                 >
-                  No
+                  Cancel
                 </button>
                 <button
                   type="button"

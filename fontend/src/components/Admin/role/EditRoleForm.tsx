@@ -161,7 +161,7 @@ const EditRoleForm = ({ role, onEdit, onClose }: EditRoleFormProps) => {
               className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md mr-2"
               onClick={closeDiscardPopup}
             >
-              No
+              Cancel
             </button>
             <button
               type="button"

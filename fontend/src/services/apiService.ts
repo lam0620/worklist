@@ -171,7 +171,7 @@ export const ChangeActiveDoctors = async (active?: string, ids?: string[]) => {
   });
 };
 
-export const DeleteImageDoctor = async (id : string | undefined, config: Object) => {
+export const DeleteDoctorSign = async (id : string | undefined, config: Object) => {
   return axios.patch(`${API_BASE_URL}/doctors/${id}`,{
     sign : "",
   }, config )

@@ -4,7 +4,7 @@ import { DoctorDetailProps } from "@/app/types/DoctorDetail";
 import { Checkbox } from "@radix-ui/themes";
 import { getGenderLabel } from "@/utils/utils";
 import Link from "next/link";
-import { DeleteImageDoctor } from "@/services/apiService";
+import { DeleteDoctorSign } from "@/services/apiService";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import ConfirmModal from "../../ConfirmModal";
@@ -23,9 +23,8 @@ const DoctorDetail = ({ doctor }: Props) => {
   //doan tren dung, chi can cau hinh lai thoi.
 
   const baseUrl = new URL(apiUrl).origin;
-  const a = doctor?.sign;
-  const urlImage = `${baseUrl}${a}`;
-  console.log(urlImage);
+  const urlImage = `${baseUrl}${doctor?.sign}`;
+  // console.log(urlImage);
 
   const [sign, setSign] = useState(doctor?.sign);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -37,7 +36,7 @@ const DoctorDetail = ({ doctor }: Props) => {
       },
     };
 
-    const response = await DeleteImageDoctor(doctor?.id, config);
+    const response = await DeleteDoctorSign(doctor?.id, config);
     if (response.status == 200 && response.data?.result?.status === "OK") {
       toast.success("Sign deleted successfully");
       setSign("");
