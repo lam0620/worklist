@@ -23,8 +23,9 @@ const DoctorDetail = ({ doctor }: Props) => {
   //doan tren dung, chi can cau hinh lai thoi.
 
   const baseUrl = new URL(apiUrl).origin;
-  const urlImage = `${baseUrl}${doctor?.sign}`;
-  // console.log(urlImage);
+  const a = doctor?.sign;
+  const urlImage = `${baseUrl}${a}`;
+  console.log(urlImage);
 
   const [sign, setSign] = useState(doctor?.sign);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 
+import { fetchOrders, fetchReports, fetchStudies } from "@/services/apiService";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -19,86 +21,87 @@ ChartJS.register(
 );
 
 interface Data {
-  age_group: string;
-  values: {
-    yes: number;
-    no: number;
-    unknown: number;
-  };
+  month: number;
+  count: number;
 }
 
-const BarChart = ({ data, type }: { data: Data[]; type: string }) => {
-  const ageGroups = data.map((item) => item.age_group);
-  const smokingYes = data.map((item) => item.values.yes);
-  const smokingNo = data.map((item) => item.values.no);
-  const smokingUnknown = data.map((item) => item.values.unknown);
+interface BarChartProps {
+  selectedYear: string;
+  selectedType: string;
+  onDataFetched: (data: Data[]) => void;
+}
 
-  const chartData = {
-    labels: ageGroups,
+const BarChart: React.FC<BarChartProps> = ({
+  selectedType,
+  selectedYear,
+  onDataFetched,
+}) => {
+  const [chartData, setChartData] = useState({
+    labels: [] as (string | number)[],
     datasets: [
       {
-        label: `${type === "ht" ? "HIGHT BP" : `${type.toUpperCase()} YES`}`,
-        data: smokingYes,
-        backgroundColor: "#4CAF50",
-      },
-      {
-        label: `${type === "ht" ? "LOWER BP" : `${type.toUpperCase()} NO`}`,
-        data: smokingNo,
-        backgroundColor: "#F44336",
-      },
-      {
-        label: `${
-          type === "ht" ? "NORMAL BP" : `${type.toUpperCase()} UNKNOWN`
-        }`,
-        data: smokingUnknown,
-        backgroundColor: "#FFC107",
+        label: "Appointments",
+        data: [] as number[],
+        backgroundColor: [] as string[],
+        borderColor: [] as string[],
+        borderWidth: 1,
       },
     ],
-  };
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response;
+        if (selectedType === "studies" && selectedYear === "2024") {
+          response = await fetchStudies("year");
+        } else if (selectedType === "reports" && selectedYear === "2024") {
+          response = await fetchReports("year");
+        } else if (selectedType === "orders" && selectedYear === "2024") {
+          response = await fetchOrders("year");
+        }
+
+        if (response) {
+          console.log("year", response);
+          const data = response.data;
+
+          const labels = data.map((item: Data) => item.month);
+          const counts = data.map((item: Data) => item.count);
+          const backgroundColor = ["#36A2EB"];
+
+          setChartData({
+            labels: labels,
+            datasets: [
+              {
+                label: "Appointments",
+                data: counts,
+                backgroundColor: backgroundColor.slice(0, counts.length),
+                borderColor: backgroundColor.slice(0, counts.length),
+                borderWidth: 1,
+              },
+            ],
+          });
+          onDataFetched(data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [selectedType, selectedYear]);
 
   const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as string,
-      },
-      title: {
-        display: true,
-        text: `${type.toUpperCase()} Status by Age Group`,
-        position: "bottom",
-      },
-    },
     scales: {
+      x: {
+        beginAtZero: true,
+      },
       y: {
         beginAtZero: true,
-        title: {
-          display: true,
-          text: "Number of People",
-        },
-      },
-      x: {
-        title: {
-          display: true,
-          text: "Age Group",
-        },
       },
     },
-  } as any;
+  };
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <div style={{ width: "1000px", height: "800px" }}>
-        <Bar data={chartData} options={options} />
-      </div>
-    </div>
-  );
+  return <Bar data={chartData} options={options} />;
 };
 
 export default BarChart;
