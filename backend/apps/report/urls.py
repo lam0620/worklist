@@ -1,8 +1,12 @@
 from django.urls import path
 
+from rest_framework import routers
+from rest_framework.routers import DefaultRouter
+
 from apps.report.views import (
     ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById,
-    OrderView,DoctorView,DoctorDetailView
+    OrderView,DoctorView,DoctorDetailView,
+    StatsViewSet
 )
 from apps.report.views import (
     External_ReportById, External_ReportByACNProcedure,
@@ -53,3 +57,7 @@ urlpatterns = [
     path('report-templates/<uuid:pk>', ReportTemplateDetailView.as_view(), name='ReportTemplate Detail'),
     # report-templates?modality=xx aslo existing in the pattern /report-templates
 ]
+
+router = DefaultRouter()
+router.register('stats', StatsViewSet, basename='stats')
+urlpatterns += router.urls

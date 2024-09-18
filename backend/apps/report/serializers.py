@@ -286,3 +286,7 @@ class CreateReportTemplateSerializers(serializers.Serializer):
 class UpdateReportTemplateSerializers(serializers.Serializer):
     findings = serializers.CharField(required=True)
     conclusion = serializers.CharField(required=True)
+
+class StatsSerializers(serializers.Serializer):
+    type = serializers.CharField(required=False)
+    year = serializers.CharField(required=False)
