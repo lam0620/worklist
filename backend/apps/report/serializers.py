@@ -1,3 +1,4 @@
+import datetime
 from rest_framework import serializers
 
 from apps.report.models import Doctor
@@ -290,3 +291,20 @@ class UpdateReportTemplateSerializers(serializers.Serializer):
 class StatsSerializers(serializers.Serializer):
     type = serializers.CharField(required=False)
     year = serializers.CharField(required=False)
+
+    def validate_year(self, value): 
+        dateStr = value + '-01-01'
+        try:
+            datetime.datetime.strptime(dateStr, "%Y-%m-%d")
+        except Exception as e:
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'year',
+                                               'detail':"'"+ value+"' is invalid"})
+        return value
+    
+    def validate_type(self, value): 
+        if not is_valid(value, ['today','1week','1month']):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'type',
+                                               'detail':"'"+ value+"' is invalid. Value must be one of ['today','1week','1month']"})
+        return value

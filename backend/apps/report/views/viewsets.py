@@ -58,6 +58,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.VIEW_ORDER)
 
+        serializers = ser.StatsSerializers(data=request.query_params)
+        serializers.is_valid(raise_exception=True)
+        data = serializers.validated_data
 
         data= {}
         try:
@@ -81,7 +84,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
                     values('referring_phys__doctor_no','referring_phys__fullname', 'count').\
                     order_by("referring_phys__doctor_no")
             else:
-                return self.response_NG(ec.SYSTEM_ERR, 'type is invalid')
+                return self.response_NG(ec.SYSTEM_ERR, "type is invalid. Value must be one of ['today','1week','1month']")
         
 
            #doctors = Doctor.objects.select_related('referring_phys__id').filter(delete_flag=False, created_at__date=date.today())
@@ -117,6 +120,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.VIEW_ORDER)
 
+        serializers = ser.StatsSerializers(data=request.query_params)
+        serializers.is_valid(raise_exception=True)
+        data = serializers.validated_data
 
         data= {}
         try:
@@ -181,7 +187,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
                     values('radiologist__doctor_no','radiologist__fullname', 'count').\
                     order_by("radiologist__doctor_no")
             else:
-                return self.response_NG(ec.SYSTEM_ERR, 'type is invalid')
+                return self.response_NG(ec.SYSTEM_ERR, "type is invalid. Value must be one of ['today','1week','1month']")
         
 
            #doctors = Doctor.objects.select_related('radiologist__id').filter(delete_flag=False, created_at__date=date.today())
@@ -216,6 +222,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.VIEW_ORDER)
 
+        serializers = ser.StatsSerializers(data=request.query_params)
+        serializers.is_valid(raise_exception=True)
+        data = serializers.validated_data
 
         data= {}
         try:
@@ -237,3 +246,62 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+
+    @swagger_auto_schema(
+        operation_summary='Get studies by year',
+        operation_description='Get studies by year',
+        query_serializer=ser.StatsSerializers,
+        tags=[swagger_tags.REPORT_STATS],
+    )
+    @action(detail=False, methods=['get'], url_path='studies')
+    def get_studies_by_year(self, request, *args, **kwargs):
+        """
+        Get study list who did orders by range date (today, 1week, 1month)
+        """
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_ORDER)
+
+        serializers = ser.StatsSerializers(data=request.query_params)
+        serializers.is_valid(raise_exception=True)
+        data = serializers.validated_data
+
+        data= {}
+        try:
+            year = '' if 'year' not in request.query_params else request.query_params['year']
+            start_time = year + '-01-01T00:00:00'
+            end_time = year + '-12-31T23:59:59.999999'
+
+            sql = """select EXTRACT('month' FROM created_time) as month, COUNT(EXTRACT('month' FROM created_time)) as count 
+                    from study where created_time BETWEEN %s AND %s 
+                    GROUP BY EXTRACT('month' FROM created_time)"""
+            
+            # select count join on where
+            # Get pacsdb.study by accession_no
+            with connections["pacs_db"].cursor() as cursor:
+                cursor.execute(sql, (start_time,end_time))
+                results = self._dictfetchall(cursor)
+
+                if results is not None:
+                    data = [{
+                     'month':item['month'],
+                     'count':item['count']} for item in results]
+
+            return self.response_success(data=data)                             
+        
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+
+
+    def _dictfetchall(self, cursor):
+        """
+        Return all rows from a cursor as a dict.
+        Assume the column names are unique.
+        """
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
