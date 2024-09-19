@@ -45,7 +45,7 @@ const BarChart: React.FC<BarChartProps> = ({
     labels: [] as (string | number)[],
     datasets: [
       {
-        label: "Appointments",
+        label: "Số Lượng",
         data: [] as number[],
         backgroundColor: [] as string[],
         borderColor: [] as string[],
@@ -80,7 +80,7 @@ const BarChart: React.FC<BarChartProps> = ({
             labels: labels,
             datasets: [
               {
-                label: "Appointments",
+                label: "Số Lượng",
                 data: counts,
                 backgroundColor: backgroundColor.slice(0, counts.length),
                 borderColor: backgroundColor.slice(0, counts.length),
