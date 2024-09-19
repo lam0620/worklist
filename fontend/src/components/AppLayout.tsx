@@ -27,7 +27,7 @@ const AppLayout = ({ children, name }: AppLayoutProps) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="flex justify-between p-4">
+      <header className="flex justify-between">
         <h1 className="text-2xl font-bold">{name}</h1>
         {user && (
           <UserAvatar

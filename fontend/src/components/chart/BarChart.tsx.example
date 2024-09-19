@@ -1,0 +1,104 @@
+// import { Bar } from "react-chartjs-2";
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title,
+//   Tooltip,
+//   Legend,
+// } from "chart.js";
+
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// );
+
+// interface Data {
+//   age_group: string;
+//   values: {
+//     yes: number;
+//     no: number;
+//     unknown: number;
+//   };
+// }
+
+// const BarChart = ({ data, type }: { data: Data[]; type: string }) => {
+//   const ageGroups = data.map((item) => item.age_group);
+//   const smokingYes = data.map((item) => item.values.yes);
+//   const smokingNo = data.map((item) => item.values.no);
+//   const smokingUnknown = data.map((item) => item.values.unknown);
+
+//   const chartData = {
+//     labels: ageGroups,
+//     datasets: [
+//       {
+//         label: `${type === "ht" ? "HIGHT BP" : `${type.toUpperCase()} YES`}`,
+//         data: smokingYes,
+//         backgroundColor: "#4CAF50",
+//       },
+//       {
+//         label: `${type === "ht" ? "LOWER BP" : `${type.toUpperCase()} NO`}`,
+//         data: smokingNo,
+//         backgroundColor: "#F44336",
+//       },
+//       {
+//         label: `${
+//           type === "ht" ? "NORMAL BP" : `${type.toUpperCase()} UNKNOWN`
+//         }`,
+//         data: smokingUnknown,
+//         backgroundColor: "#FFC107",
+//       },
+//     ],
+//   };
+
+//   const options = {
+//     responsive: true,
+//     plugins: {
+//       legend: {
+//         position: "top" as string,
+//       },
+//       title: {
+//         display: true,
+//         text: `${type.toUpperCase()} Status by Age Group`,
+//         position: "bottom",
+//       },
+//     },
+//     scales: {
+//       y: {
+//         beginAtZero: true,
+//         title: {
+//           display: true,
+//           text: "Number of People",
+//         },
+//       },
+//       x: {
+//         title: {
+//           display: true,
+//           text: "Age Group",
+//         },
+//       },
+//     },
+//   } as any;
+
+//   return (
+//     <div
+//       style={{
+//         display: "flex",
+//         justifyContent: "center",
+//         alignItems: "center",
+//         height: "100vh",
+//       }}
+//     >
+//       <div style={{ width: "1000px", height: "800px" }}>
+//         <Bar data={chartData} options={options} />
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default BarChart;

@@ -176,3 +176,25 @@ export const DeleteDoctorSign = async (id : string | undefined, config: Object) 
     sign : "",
   }, config )
 }
+
+//Chart
+export const fetchStatsOrderDoctors = async(param : string) => {
+  return axios.get(`${API_BASE_URL}/stats/order-doctors/?type=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/order-doctors/${param}`)
+}
+export const fetchStatsOrders = async(param : string) => {
+  return axios.get(`${API_BASE_URL}/stats/orders/?year=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/orders/${param}`)
+}
+export const fetchStatsReportDoctors = async(param : string) => {
+  return axios.get(`${API_BASE_URL}/stats/report-doctors/?type=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/report-doctors/${param}`)
+}
+export const fetchStatsReports = async(param : string) => {
+  return axios.get(`${API_BASE_URL}/stats/reports/?year=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/reports/${param}`)
+}
+export const fetchStatsStudies = async(param : string) => {
+  return axios.get(`${API_BASE_URL}/stats/studies/?year=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/studies/${param}`)
+}

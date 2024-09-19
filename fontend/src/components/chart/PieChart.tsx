@@ -1,71 +1,115 @@
+import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
-
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import {
+  fetchStatsOrderDoctors,
+  fetchStatsReportDoctors,
+} from "@/services/apiService";
+import { showErrorMessage } from "@/utils/showMessageError";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 interface Data {
-  age_group: string;
-  values: {
-    yes: number;
-    no: number;
-    unknown: number;
-  };
+  fullname: string;
+  doctor_no: string;
+  count: number;
 }
 
-const PieChart = ({ data, type }: { data: Data[]; type: string }) => {
-  const ValuesYes = data.reduce((acc, item) => acc + item.values.yes, 0);
-  const ValuesNo = data.reduce((acc, item) => acc + item.values.no, 0);
-  const ValuesUnknown = data.reduce(
-    (acc, item) => acc + item.values.unknown,
-    0
-  );
+interface PieChartProps {
+  selectedDWM: string;
+  selectedType: string;
+  onDataFetched: (data: Data[]) => void;
+}
 
-  const chartData = {
-    labels: [
-      `${type === "ht" ? "HIGHT BP" : `${type.toUpperCase()} YES`}`,
-      `${type === "ht" ? "LOWER BP" : `${type.toUpperCase()} NO`}`,
-      `${type === "ht" ? "NORMAL BP" : `${type.toUpperCase()} UNKNOWN`}`,
-    ],
+const PieChart: React.FC<PieChartProps> = ({
+  selectedDWM,
+  selectedType,
+  onDataFetched,
+}) => {
+  const [chartData, setChartData] = useState({
+    labels: [] as (string | number)[],
     datasets: [
       {
-        data: [ValuesYes, ValuesNo, ValuesUnknown],
-        backgroundColor: ["#4CAF50", "#F44336", "#FFC107"],
-        hoverOffset: 4,
+        data: [] as number[],
+        backgroundColor: [] as string[],
       },
     ],
-  };
+  });
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as string,
-      },
-      title: {
-        display: true,
-        text: `${
-          type === "ht"
-            ? "Blood Pressure Status"
-            : `${type.toUpperCase()} Status`
-        }`,
-        position: "bottom",
-      },
-    },
-  } as any;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response;
+        if (selectedType === "orders" && selectedDWM) {
+          response = await fetchStatsOrderDoctors(selectedDWM);
+        } else if (selectedType === "reports" && selectedDWM) {
+          response = await fetchStatsReportDoctors(selectedDWM);
+        }
+        if (
+          response?.status === 200 &&
+          response.data?.result?.status === "OK"
+        ) {
+          console.log(selectedDWM, response.data);
+          const data = response?.data.data;
+          const labels = data.map((item: Data) => item.fullname);
+          const counts = data.map((item: Data) => item.count);
+          const backgroundColor = [
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56",
+            "#4BC0C0",
+            "#9966FF",
+            "#FF2311",
+            "#4B2145",
+            "#4B2777",
+          ];
+          setChartData({
+            labels: labels,
+            datasets: [
+              {
+                data: counts,
+                backgroundColor: backgroundColor.slice(0, counts.length),
+              },
+            ],
+          });
+          onDataFetched(data);
+        } else if (response?.data.result.status === "NG") {
+          const code = response?.data?.result?.code;
+          const item = response?.data?.result?.item;
+          const msg = response?.data?.result?.msg;
+          const message = showErrorMessage(code, item, msg);
+          console.log(message);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [selectedDWM, selectedType]);
+
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "70vh",
+    <Pie
+      data={chartData}
+      options={{
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          datalabels: {
+            formatter: (value: number, context: any) => {
+              const total = context.dataset.data.reduce(
+                (acc: number, val: number) => acc + val,
+                0
+              );
+              const percentage = ((value / total) * 100).toFixed(2);
+              return `${percentage}%`;
+            },
+            color: "#fff",
+          },
+        },
       }}
-    >
-      <div style={{ width: "600px", height: "600px" }}>
-        <Pie data={chartData} options={options} />
-      </div>
-    </div>
+    />
   );
 };
 
