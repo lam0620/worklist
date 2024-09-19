@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { fetchOrderDoctors, fetchReportDoctors } from "@/services/apiService";
+import { showErrorMessage } from "@/utils/showMessageError";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-import { fetchOrderDoctors, fetchReportDoctors } from "@/services/apiService";
-
 interface Data {
-  doctor_name: string;
+  fullname: string;
   doctor_id: string;
   count: number;
 }
@@ -38,15 +38,18 @@ const PieChart: React.FC<PieChartProps> = ({
     const fetchData = async () => {
       try {
         let response;
-        if (selectedType === "orders" && selectedDWM === "today") {
-          response = await fetchOrderDoctors("today");
-        } else if (selectedType === "reports" && selectedDWM === "today") {
-          response = await fetchReportDoctors("today");
+        if (selectedType === "orders" && selectedDWM) {
+          response = await fetchOrderDoctors(selectedDWM);
+        } else if (selectedType === "reports" && selectedDWM) {
+          response = await fetchReportDoctors(selectedDWM);
         }
-        if (response) {
-          const data = response?.data;
-
-          const labels = data.map((item: Data) => item.doctor_name);
+        if (
+          response?.status === 200 &&
+          response.data?.result?.status === "OK"
+        ) {
+          console.log(selectedDWM, response.data);
+          const data = response?.data.data;
+          const labels = data.map((item: Data) => item.fullname);
           const counts = data.map((item: Data) => item.count);
           const backgroundColor = [
             "#FF6384",
@@ -68,6 +71,12 @@ const PieChart: React.FC<PieChartProps> = ({
             ],
           });
           onDataFetched(data);
+        } else if (response?.data.result.status === "NG") {
+          const code = response?.data?.result?.code;
+          const item = response?.data?.result?.item;
+          const msg = response?.data?.result?.msg;
+          const message = showErrorMessage(code, item, msg);
+          console.log(message);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -81,22 +90,8 @@ const PieChart: React.FC<PieChartProps> = ({
       data={chartData}
       options={{
         plugins: {
-          tooltip: {
-            callbacks: {
-              label: function (tooltipItem: any) {
-                const data = tooltipItem.dataset.data;
-                const total = data.reduce(
-                  (acc: number, value: number) => acc + value,
-                  0
-                );
-                const currentValue = data[tooltipItem.dataIndex];
-                const percentage = ((currentValue / total) * 100).toFixed(2);
-                return `${tooltipItem.label}: ${currentValue} (${percentage}%)`;
-              },
-            },
-          },
           legend: {
-            position: "right",
+            position: "top",
           },
           datalabels: {
             formatter: (value: number, context: any) => {

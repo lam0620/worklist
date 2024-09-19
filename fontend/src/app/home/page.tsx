@@ -7,7 +7,7 @@ import BarChart from "@/components/chart/BarChart";
 import { useState } from "react";
 
 interface DataPieChart {
-  doctor_name: string;
+  fullname: string;
   doctor_id: string;
   count: number;
 }
@@ -22,7 +22,7 @@ const HomePage = () => {
   const [text, setText] = useState("");
   const [selectedType, setSelectedType] = useState("orders");
   const [selectedYear, setSelectedYear] = useState(year);
-  const [selectedDWM, setSelectedDWM] = useState("today");
+  const [selectedDWM, setSelectedDWM] = useState("today"); //day,week,month
   const [dataPieChart, setDataPieChart] = useState<DataPieChart[]>([]);
   const [dataBarChart, setDataBarChart] = useState<DataBarChart[]>([]);
 
@@ -33,6 +33,7 @@ const HomePage = () => {
     setDataPieChart(fetchedData);
   };
   const onChangeText = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    //change text label "tong so luong ... trong 1 nam"
     setText(event.target.value);
     setSelectedType(event.target.value);
   };
@@ -140,7 +141,7 @@ const HomePage = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="border border-neutral-950 px-1 py-1">
+                        <td className="border border-neutral-950 px-1 py-1 text-center">
                           Số lượng
                         </td>
                         {dataBarChart.map((item, index) => (
@@ -163,49 +164,51 @@ const HomePage = () => {
                   />
                 </div>
               </div>
-              <div className="w-1/2 flex flex-col p-4 items-center">
-                <div className="w-full p-3 text-xs">
-                  <table className="border-collapse border border-neutral-950 px-1 py-1 w-full">
-                    <thead style={{ backgroundColor: "#ffe699" }}>
-                      <tr>
-                        <th className="border border-neutral-950 px-1 py-1">
-                          Bác sĩ
-                        </th>
-                        {dataPieChart.map((item, index) => (
-                          <th
-                            key={index}
-                            className="border border-neutral-950 px-1 py-1"
-                          >
-                            {item.doctor_name}
+              {selectedType != "studies" && (
+                <div className="w-1/2 flex flex-col p-4 items-center">
+                  <div className="w-full p-3 text-xs">
+                    <table className="border-collapse border border-neutral-950 px-1 py-1 w-full">
+                      <thead style={{ backgroundColor: "#ffe699" }}>
+                        <tr>
+                          <th className="border border-neutral-950 px-1 py-1">
+                            Bác sĩ
                           </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="border border-neutral-950 px-1 py-1">
-                          Số lượng
-                        </td>
-                        {dataPieChart.map((item, index) => (
-                          <td
-                            key={index}
-                            className="border border-neutral-950 px-1 py-1 text-center"
-                          >
-                            {item.count}
+                          {dataPieChart.map((item, index) => (
+                            <th
+                              key={index}
+                              className="border border-neutral-950 px-1 py-1"
+                            >
+                              {item.fullname}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="border border-neutral-950 px-1 py-1 text-center">
+                            Số lượng
                           </td>
-                        ))}
-                      </tr>
-                    </tbody>
-                  </table>
+                          {dataPieChart.map((item, index) => (
+                            <td
+                              key={index}
+                              className="border border-neutral-950 px-1 py-1 text-center"
+                            >
+                              {item.count}
+                            </td>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="w-3/4 h-3/4 flex justify-center items-center">
+                    <PieChart
+                      selectedDWM={selectedDWM}
+                      selectedType={selectedType}
+                      onDataFetched={handleDataFetchedPieChart}
+                    />
+                  </div>
                 </div>
-                <div className="w-11/12 h-11/12">
-                  <PieChart
-                    selectedDWM={selectedDWM}
-                    selectedType={selectedType}
-                    onDataFetched={handleDataFetchedPieChart}
-                  />
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

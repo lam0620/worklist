@@ -179,22 +179,22 @@ export const DeleteDoctorSign = async (id : string | undefined, config: Object) 
 
 //Chart
 export const fetchOrderDoctors = async(param : string) => {
-  //return axios.get(`${API_BASE_URL}/stats/order-doctors/?type=${param}`)
-  return axios.get(`http://localhost:3001/api/stats/order-doctors/${param}`)
+  return axios.get(`${API_BASE_URL}/stats/order-doctors/?type=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/order-doctors/${param}`)
 }
 export const fetchOrders = async(param : string) => {
-  //return axios.get(`${API_BASE_URL}/stats/orders/?year=${param}`)
-  return axios.get(`http://localhost:3001/api/stats/orders/${param}`)
+  return axios.get(`${API_BASE_URL}/stats/orders/?year=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/orders/${param}`)
 }
 export const fetchReportDoctors = async(param : string) => {
-  //return axios.get(`${API_BASE_URL}/stats/report-doctors/?type=${param}`)
-  return axios.get(`http://localhost:3001/api/stats/report-doctors/${param}`)
+  return axios.get(`${API_BASE_URL}/stats/report-doctors/?type=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/report-doctors/${param}`)
 }
 export const fetchReports = async(param : string) => {
-  //return axios.get(`${API_BASE_URL}/stats/reports/?type=${param}`)
-  return axios.get(`http://localhost:3001/api/stats/reports/${param}`)
+  return axios.get(`${API_BASE_URL}/stats/reports/?year=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/reports/${param}`)
 }
 export const fetchStudies = async(param : string) => {
-  //return axios.get(`${API_BASE_URL}/stats/studies/?year=${param}`)
-  return axios.get(`http://localhost:3001/api/stats/studies/${param}`)
+  return axios.get(`${API_BASE_URL}/stats/studies/?year=${param}`)
+  //return axios.get(`http://localhost:3001/api/stats/studies/${param}`)
 }

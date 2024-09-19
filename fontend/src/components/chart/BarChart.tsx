@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { fetchOrders, fetchReports, fetchStudies } from "@/services/apiService";
+import { showErrorMessage } from "@/utils/showMessageError";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +12,6 @@ import {
   Legend,
 } from "chart.js";
 
-import { fetchOrders, fetchReports, fetchStudies } from "@/services/apiService";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -53,17 +54,19 @@ const BarChart: React.FC<BarChartProps> = ({
     const fetchData = async () => {
       try {
         let response;
-        if (selectedType === "studies" && selectedYear === "2024") {
-          response = await fetchStudies("year");
-        } else if (selectedType === "reports" && selectedYear === "2024") {
-          response = await fetchReports("year");
-        } else if (selectedType === "orders" && selectedYear === "2024") {
-          response = await fetchOrders("year");
+        if (selectedType === "studies" && selectedYear) {
+          response = await fetchStudies(selectedYear);
+        } else if (selectedType === "reports" && selectedYear) {
+          response = await fetchReports(selectedYear);
+        } else if (selectedType === "orders" && selectedYear) {
+          response = await fetchOrders(selectedYear);
         }
-
-        if (response) {
-          console.log("year", response);
-          const data = response.data;
+        if (
+          response?.status === 200 &&
+          response.data?.result?.status === "OK"
+        ) {
+          console.log(selectedYear, response);
+          const data = response.data.data;
 
           const labels = data.map((item: Data) => item.month);
           const counts = data.map((item: Data) => item.count);
@@ -82,6 +85,12 @@ const BarChart: React.FC<BarChartProps> = ({
             ],
           });
           onDataFetched(data);
+        } else if (response?.data.result.status === "NG") {
+          const code = response?.data?.result?.code;
+          const item = response?.data?.result?.item;
+          const msg = response?.data?.result?.msg;
+          const message = showErrorMessage(code, item, msg);
+          console.log(message);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -94,9 +103,17 @@ const BarChart: React.FC<BarChartProps> = ({
     scales: {
       x: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: "Tháng",
+        },
       },
       y: {
         beginAtZero: true,
+        title: {
+          display: true,
+          text: "Số lượng",
+        },
       },
     },
   };
