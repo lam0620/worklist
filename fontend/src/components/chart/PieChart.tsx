@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { fetchOrderDoctors, fetchReportDoctors } from "@/services/apiService";
+import {
+  fetchStatsOrderDoctors,
+  fetchStatsReportDoctors,
+} from "@/services/apiService";
 import { showErrorMessage } from "@/utils/showMessageError";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 interface Data {
   fullname: string;
-  doctor_id: string;
+  doctor_no: string;
   count: number;
 }
 
@@ -39,9 +42,9 @@ const PieChart: React.FC<PieChartProps> = ({
       try {
         let response;
         if (selectedType === "orders" && selectedDWM) {
-          response = await fetchOrderDoctors(selectedDWM);
+          response = await fetchStatsOrderDoctors(selectedDWM);
         } else if (selectedType === "reports" && selectedDWM) {
-          response = await fetchReportDoctors(selectedDWM);
+          response = await fetchStatsReportDoctors(selectedDWM);
         }
         if (
           response?.status === 200 &&

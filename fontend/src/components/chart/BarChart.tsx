@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { fetchOrders, fetchReports, fetchStudies } from "@/services/apiService";
+import {
+  fetchStatsOrders,
+  fetchStatsReports,
+  fetchStatsStudies,
+} from "@/services/apiService";
 import { showErrorMessage } from "@/utils/showMessageError";
 import {
   Chart as ChartJS,
@@ -55,11 +59,11 @@ const BarChart: React.FC<BarChartProps> = ({
       try {
         let response;
         if (selectedType === "studies" && selectedYear) {
-          response = await fetchStudies(selectedYear);
+          response = await fetchStatsStudies(selectedYear);
         } else if (selectedType === "reports" && selectedYear) {
-          response = await fetchReports(selectedYear);
+          response = await fetchStatsReports(selectedYear);
         } else if (selectedType === "orders" && selectedYear) {
-          response = await fetchOrders(selectedYear);
+          response = await fetchStatsOrders(selectedYear);
         }
         if (
           response?.status === 200 &&
