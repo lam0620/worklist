@@ -5,9 +5,10 @@ import AppLayout from "@/components/AppLayout";
 import PieChart from "@/components/chart/PieChart";
 import BarChart from "@/components/chart/BarChart";
 import { useState } from "react";
-import Link from "next/link";
-
 import { useRouter } from "next/navigation";
+
+import { useUser } from "@/context/UserContext";
+import { PERMISSIONS } from "@/utils/constant";
 
 interface DataPieChart {
   fullname: string;
@@ -30,7 +31,8 @@ const HomePage = () => {
   const [dataBarChart, setDataBarChart] = useState<DataBarChart[]>([]);
 
   const router = useRouter();
-
+  const { user } = useUser();
+  
   const handleDataFetchedBarChart = (fetchedData: DataBarChart[]) => {
     setDataBarChart(fetchedData);
   };
@@ -49,9 +51,19 @@ const HomePage = () => {
     setSelectedDWM(event.target.value);
   };
 
+  const hasViewStatisticsPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_STATISTICS) ||
+    user?.is_superuser;
+
   return (
     <AppLayout name="Statistics">
+      {!hasViewStatisticsPermission && (
+        <div className="flex flex-row items-center space-x-2 w-full m-5">
+          <label>You don't have view permission.</label>
+        </div>
+      )}
 
+      {hasViewStatisticsPermission && (<>
       <div className="flex flex-row items-center space-x-2 w-full m-5">
         <label>Lọc theo:</label>
         <div className="text-sm flex-grow">
@@ -195,7 +207,9 @@ const HomePage = () => {
           </div>
         </div>)}
       </div>
+      </>)}
     </AppLayout>
+    
   );
 };
 

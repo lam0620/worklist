@@ -98,5 +98,15 @@
             "permission_id": "3b2a05ad-9faf-4ffe-bd84-4a312bb9c334",
             "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
         }
-    }
+    },
+
+    {
+        "model": "account.RolePermission",
+        "pk": "d542260d-5263-4292-9378-0199abbaa0e7",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "84a1fe06-0cba-487e-a059-4971288ce48a",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    } 
 ]

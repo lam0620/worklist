@@ -263,5 +263,15 @@
             "name": "Delete doctor",
             "tag": "doctor"
         }
-    }   
+    },
+
+    {
+        "model": "account.permission",
+        "pk": "84a1fe06-0cba-487e-a059-4971288ce48a",
+        "fields": {
+            "code": "view_statistics",
+            "name": "View statistics",
+            "tag": "statistics"
+        }
+    }    
 ]
