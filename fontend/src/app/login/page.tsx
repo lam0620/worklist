@@ -7,6 +7,7 @@ import * as Toast from "@radix-ui/react-toast";
 import Head from "next/head";
 import { useUser } from "@/context/UserContext";
 import { Login } from "@/services/apiService";
+import { PERMISSIONS } from "@/utils/constant";
 
 import backgroundImage from "../../../public/images/login_bg.jpg";
 
@@ -16,11 +17,15 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
-  const router = useRouter();
   const { user, login, logout } = useUser();
 
+  const hasViewStatisticsPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_STATISTICS) ||
+    user?.is_superuser;
+
   const redirectUrl = (username:string) => {
-    if (username === 'root' || username === 'admin') {
+    //if (username === 'root' || username === 'admin') {
+    if (hasViewStatisticsPermission) {
       // router.push("/home");
       redirect("/home");
     } else {
