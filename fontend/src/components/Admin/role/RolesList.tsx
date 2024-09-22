@@ -35,6 +35,14 @@ const RolesList = ({
   const hasDeletePermission =
     (userPermissions ?? []).includes(PERMISSIONS.DELETE_GROUP) || isAdminUser;
 
+  const isIntegRole = (detailRole: any) => {
+    // Root, Integ or login user
+    if (["Integration","Administrator"].includes(detailRole.name)) {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex items-center justify-between p-2 border-b bg-gray-100">
@@ -49,19 +57,21 @@ const RolesList = ({
             key={role.id}
             className="flex items-center justify-between p-2 border-b mb-2"
           >
-            {hasDeletePermission && (
-              <div className="w-1/12">
-                <div className="flex items-center justify-center">
-                  <Checkbox
-                    checked={selectedRoles[role.id]}
-                    onCheckedChange={(checked) =>
-                      onSelectRoleForDelete(role.id, checked as boolean)
-                    }
-                    className="border-2 border-gray-400 rounded-sm h-4 w-4"
-                  />
-                </div>
+
+            <div className="w-1/12">
+              <div className="flex items-center justify-center">
+              {hasDeletePermission && !isIntegRole(role) && (
+                <Checkbox
+                  checked={selectedRoles[role.id]}
+                  onCheckedChange={(checked) =>
+                    onSelectRoleForDelete(role.id, checked as boolean)
+                  }
+                  className="border-2 border-gray-400 rounded-sm h-4 w-4"
+                />
+              )}
               </div>
-            )}
+            </div>
+
             <div
               className="w-2/12 cursor-pointer"
               onClick={() => onSelectRole(role.id)}

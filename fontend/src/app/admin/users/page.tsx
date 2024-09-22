@@ -93,7 +93,7 @@ const UserListPage = () => {
   return (
     <AppLayout name="Users">
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
-        <div className="w-full max-w-7xl p-4">
+        <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <div className="flex gap-2 relative">
               <button

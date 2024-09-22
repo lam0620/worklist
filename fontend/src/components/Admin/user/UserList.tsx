@@ -3,6 +3,8 @@ import { Checkbox } from "@radix-ui/themes";
 import { PERMISSIONS } from "@/utils/constant";
 import { UserDetailProps } from "@/app/types/UserDetail";
 
+import { useUser } from "@/context/UserContext";
+
 interface UserListProps {
   users: UserDetailProps[];
   onSelectUser: (userId: string) => void;
@@ -26,6 +28,9 @@ const UserList = ({
   onPageChange,
   selectedUsers,
 }: UserListProps) => {
+
+  const { user } = useUser();
+
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
@@ -33,6 +38,14 @@ const UserList = ({
   };
   const hasDeletePermission =
     (userPermissions ?? []).includes(PERMISSIONS.DELETE_ACCOUNT) || isAdminUser;
+
+  const isRootOrIntegUser = (detailUser: any) => {
+    // Root, Integ or login user
+    if (["root","integ_user"].includes(detailUser.username) || user.username === detailUser.username) {
+      return true;
+    }
+    return false;
+  }
 
   return (
     <div className="flex flex-col min-h-screen w-full">
@@ -51,7 +64,7 @@ const UserList = ({
           >
             <div className="w-1/12">
               <div className="flex items-center justify-center">
-                {hasDeletePermission && (
+                {hasDeletePermission && !isRootOrIntegUser(user) && (
                   <Checkbox
                     checked={!!selectedUsers[user.id]}
                     onCheckedChange={(checked) =>

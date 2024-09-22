@@ -2,6 +2,7 @@ import React, { useState, useEffect, ReactNode } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import { useUser } from "@/context/UserContext";
 import UserAvatar from "./Avatar";
+import Link from "next/link";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -25,10 +26,14 @@ const AppLayout = ({ children, name }: AppLayoutProps) => {
     return <LoadingSpinner />;
   }
 
+  const DicomUrl = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL?process.env.NEXT_PUBLIC_DICOM_VIEWER_URL:"http://localhost:3000";
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="flex justify-between">
-        <h1 className="text-2xl font-bold">{name}</h1>
+        <h1 className="text-2xl font-bold ml-5">{name}  {name == "Statistics" && (
+          <><label>| </label><Link href={DicomUrl} className="text-blue-500 cursor-pointer">Dicom Viewer</Link></>
+        )}</h1>
         {user && (
           <UserAvatar
             firstName={user.first_name}

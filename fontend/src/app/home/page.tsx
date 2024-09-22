@@ -49,18 +49,9 @@ const HomePage = () => {
     setSelectedDWM(event.target.value);
   };
 
-  const DicomUrl = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL?process.env.NEXT_PUBLIC_DICOM_VIEWER_URL:"http://localhost:3000";
-
   return (
-    <AppLayout name="">
-      <div className="ml-1 text-blue-500">
-        <button
-              className="bg-blue-500 rounded px-4 py-2 text-white ml-4"
-              onClick={() => router.push(DicomUrl)}
-            >
-              Dicom Viewer
-        </button>        
-      </div>
+    <AppLayout name="Statistics">
+
       <div className="flex flex-row items-center space-x-2 w-full m-5">
         <label>Lọc theo:</label>
         <div className="text-sm flex-grow">
