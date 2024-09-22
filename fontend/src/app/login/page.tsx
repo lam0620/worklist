@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import { ClipLoader } from "react-spinners";
 import * as Toast from "@radix-ui/react-toast";
 import Head from "next/head";
@@ -17,9 +17,31 @@ const LoginPage = () => {
   const [open, setOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const router = useRouter();
-  const { login, logout } = useUser();
+  const { user, login, logout } = useUser();
 
+  const redirectUrl = (username:string) => {
+    if (username === 'root' || username === 'admin') {
+      // router.push("/home");
+      redirect("/home");
+    } else {
+      const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}`);
+      const urlParams = new URLSearchParams(currentUrl.search);
 
+      const formattedDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000))
+                            .toISOString().slice(0, 10).replace(/-/g, "");
+      urlParams.set('startDate', formattedDate);
+
+      // router.push(currentUrl.toString());
+      redirect(currentUrl.toString());
+    }
+  }
+
+  // If already logged in, rediect to /home
+  if (user) {
+    redirectUrl(user.username);
+  }
+
+    
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -33,24 +55,7 @@ const LoginPage = () => {
 
         // router.push("/home");
 
-        if (username === 'root' || username === 'admin') {
-          router.push("/home");
-        } else {
-          // Redirect to study list
-          //const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}/preworklist`);
-          // Transfer to viewer. At viewer, can get access_token,...from Cookie
-          const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}`);
-          const urlParams = new URLSearchParams(currentUrl.search);
-
-          const formattedDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000))
-                                .toISOString().slice(0, 10).replace(/-/g, "");
-          urlParams.set('startDate', formattedDate);
-          // urlParams.set('key', access_token);
-          // currentUrl.search = urlParams.toString();
-          console.log('currentUrl.search:',currentUrl.search);
-          
-          router.push(currentUrl.toString());
-        }
+        redirectUrl(user.username);
       }
     } catch (error: any) {
       if (error.response && error.response.status === 400) {

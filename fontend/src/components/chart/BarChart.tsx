@@ -69,8 +69,13 @@ const BarChart: React.FC<BarChartProps> = ({
           response?.status === 200 &&
           response.data?.result?.status === "OK"
         ) {
-          console.log(selectedYear, response);
+          // console.log(selectedYear, response);
           const data = response.data.data;
+
+          // Sort month  
+          data.sort(function(a:any, b:any){
+            return a.month - b.month;
+          });
 
           const labels = data.map((item: Data) => item.month);
           const counts = data.map((item: Data) => item.count);

@@ -5,6 +5,9 @@ import AppLayout from "@/components/AppLayout";
 import PieChart from "@/components/chart/PieChart";
 import BarChart from "@/components/chart/BarChart";
 import { useState } from "react";
+import Link from "next/link";
+
+import { useRouter } from "next/navigation";
 
 interface DataPieChart {
   fullname: string;
@@ -26,6 +29,8 @@ const HomePage = () => {
   const [dataPieChart, setDataPieChart] = useState<DataPieChart[]>([]);
   const [dataBarChart, setDataBarChart] = useState<DataBarChart[]>([]);
 
+  const router = useRouter();
+
   const handleDataFetchedBarChart = (fetchedData: DataBarChart[]) => {
     setDataBarChart(fetchedData);
   };
@@ -44,8 +49,18 @@ const HomePage = () => {
     setSelectedDWM(event.target.value);
   };
 
+  const DicomUrl = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL?process.env.NEXT_PUBLIC_DICOM_VIEWER_URL:"http://localhost:3000";
+
   return (
     <AppLayout name="">
+      <div className="ml-1 text-blue-500">
+        <button
+              className="bg-blue-500 rounded px-4 py-2 text-white ml-4"
+              onClick={() => router.push(DicomUrl)}
+            >
+              Dicom Viewer
+        </button>        
+      </div>
       <div className="flex flex-row items-center space-x-2 w-full m-5">
         <label>Lọc theo:</label>
         <div className="text-sm flex-grow">
@@ -134,7 +149,7 @@ const HomePage = () => {
         </div>
 
         {/* Right Section */}
-        <div className="flex flex-col w-full md:w-1/2 space-y-4 mx-5 md:mt-0">
+        {text !== "studies" && (<div className="flex flex-col w-full md:w-1/2 space-y-4 mx-5 md:mt-0">
           <div className="flex flex-row items-center space-x-2 w-full whitespace-nowrap">
             <label className="mr-8">
               Số lượng theo bác sĩ trong khoảng thời gian mới nhất
@@ -187,7 +202,7 @@ const HomePage = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </div>)}
       </div>
     </AppLayout>
   );

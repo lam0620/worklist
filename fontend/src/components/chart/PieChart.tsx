@@ -50,7 +50,7 @@ const PieChart: React.FC<PieChartProps> = ({
           response?.status === 200 &&
           response.data?.result?.status === "OK"
         ) {
-          console.log(selectedDWM, response.data);
+          // console.log(selectedDWM, response.data);
           const data = response?.data.data;
           const labels = data.map((item: Data) => item.fullname);
           const counts = data.map((item: Data) => item.count);
