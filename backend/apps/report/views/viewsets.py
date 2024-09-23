@@ -171,19 +171,25 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
             if type == 'today':
                 # select count join on where
                 items = Report.objects.values('radiologist__doctor_no').\
-                    filter(created_at__date=date.today()).annotate(count=Count('radiologist')).\
+                    filter(created_at__date=date.today()).\
+                    exclude(status='D').\
+                    annotate(count=Count('radiologist')).\
                     values('radiologist__doctor_no','radiologist__fullname', 'count').\
                     order_by("radiologist__doctor_no")
             elif type == '1week':
                 min_date = date.today() - timedelta(days=7) #7 days ago
                 items = Report.objects.values('radiologist__doctor_no').\
-                    filter(created_at__date__lte=date.today(), created_at__date__gt=min_date).annotate(count=Count('radiologist')).\
+                    filter(created_at__date__lte=date.today(), created_at__date__gt=min_date).\
+                    exclude(status='D').\
+                    annotate(count=Count('radiologist')).\
                     values('radiologist__doctor_no','radiologist__fullname', 'count').\
                     order_by("radiologist__doctor_no")
             elif type == '1month':
                 min_date = date.today() - timedelta(days=30) #300 days ago
                 items = Report.objects.values('radiologist__doctor_no').\
-                    filter(created_at__date__lte=date.today(), created_at__date__gt=min_date).annotate(count=Count('radiologist')).\
+                    filter(created_at__date__lte=date.today(), created_at__date__gt=min_date).\
+                    exclude(status='D').\
+                    annotate(count=Count('radiologist')).\
                     values('radiologist__doctor_no','radiologist__fullname', 'count').\
                     order_by("radiologist__doctor_no")
             else:
@@ -233,6 +239,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
             # select count join on where
             # Don't know why but add order_by("created_at__month"), 'created_at' in group by is removed => sql correct
             items = Report.objects.filter(created_at__year=year).\
+                    exclude(status='D').\
                     values('created_at__month').\
                     annotate(count=Count('created_at__month')).\
                     order_by("created_at__month")
