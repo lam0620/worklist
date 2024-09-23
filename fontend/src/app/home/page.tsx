@@ -171,14 +171,15 @@ const HomePage = () => {
               </select>
             </div>
           </div>
-
-          <div className="max-h-72 flex items-center justify-center">
-            <PieChart
-              selectedDWM={selectedDWM}
-              selectedType={selectedType}
-              onDataFetched={handleDataFetchedPieChart}
-            />
-          </div>
+          {selectedType !== "studies" && (
+            <div className="max-h-72 flex items-center justify-center">
+              <PieChart
+                selectedDWM={selectedDWM}
+                selectedType={selectedType}
+                onDataFetched={handleDataFetchedPieChart}
+              />
+            </div>
+          )}
           <div className="w-full p-3 text-xs">
             <table className="border-collapse border border-neutral-950 px-1 py-1 w-full">
               <thead style={{ backgroundColor: "#ffe699" }}>
@@ -195,10 +196,10 @@ const HomePage = () => {
                 {dataPieChart.map((item, index) => (
                   <tr key={index}>
                     <td className="border border-neutral-950 px-1 py-1 text-center">
-                      {item.fullname}
+                      {selectedType === "studies" ? "" : item.fullname}
                     </td>
                     <td className="border border-neutral-950 px-1 py-1 text-center">
-                      {item.count}
+                      {selectedType === "studies" ? 0 : item.count}
                     </td>
                   </tr>
                 ))}
