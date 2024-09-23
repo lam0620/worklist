@@ -104,7 +104,7 @@ const PieChart: React.FC<PieChartProps> = ({
       options={{
         plugins: {
           legend: {
-            position: "top",
+            position: "right",
             labels: {
               boxWidth: 20,
               padding: 10,
@@ -122,7 +122,6 @@ const PieChart: React.FC<PieChartProps> = ({
               const percentage = ((value / total) * 100).toFixed(2);
               return `${percentage}%`;
             },
-            color: "#fff",
           },
         },
       }}

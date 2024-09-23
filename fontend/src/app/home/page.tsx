@@ -22,7 +22,7 @@ interface DataBarChart {
 
 const HomePage = () => {
   const year: string = new Date().getFullYear().toString();
-  const [text, setText] = useState("");
+  const [type, setType] = useState(""); //type = orders, studies, reports
   const [selectedType, setSelectedType] = useState("orders");
   const [selectedYear, setSelectedYear] = useState(year);
   const [selectedDWM, setSelectedDWM] = useState("today"); //day,week,month
@@ -38,9 +38,9 @@ const HomePage = () => {
   const handleDataFetchedPieChart = (fetchedData: DataPieChart[]) => {
     setDataPieChart(fetchedData);
   };
-  const onChangeText = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeType = (event: React.ChangeEvent<HTMLSelectElement>) => {
     //change text label "tong so luong ... trong 1 nam"
-    setText(event.target.value);
+    setType(event.target.value);
     setSelectedType(event.target.value);
   };
   const onChangeYear = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -69,7 +69,7 @@ const HomePage = () => {
             <div className="text-sm flex-grow">
               <select
                 className="p-2 border rounded w-48"
-                onChange={onChangeText}
+                onChange={onChangeType}
               >
                 <option value={"orders"}>Số lượng chỉ định</option>
                 <option value={"reports"}>Số lượng kết quả</option>
@@ -83,9 +83,9 @@ const HomePage = () => {
               <div className="flex flex-row items-center space-x-2 w-full">
                 <p className="ml-5">
                   Tổng{" "}
-                  {text === "orders"
+                  {type === "orders"
                     ? "số lượng chỉ định"
-                    : text === "reports"
+                    : type === "reports"
                     ? "số lượng kết quả"
                     : "số lượng ảnh chụp"}{" "}
                   trong 1 năm
@@ -99,7 +99,7 @@ const HomePage = () => {
                     onChange={onChangeYear}
                   >
                     {Array.from(
-                      { length: new Date().getFullYear() - 1999 },
+                      { length: new Date().getFullYear() - 2019 },
                       (_, i) => {
                         const year = new Date().getFullYear() - i;
                         return (
@@ -113,15 +113,15 @@ const HomePage = () => {
                 </div>
               </div>
 
-              <div className="h-72 w-full items-center flex justify-center">
+              <div className="h-96 w-full items-center flex justify-center">
                 <BarChart
                   selectedType={selectedType}
                   selectedYear={selectedYear}
                   onDataFetched={handleDataFetchedBarChart}
                 />
               </div>
-              <div className="w-full p-3 text-xs">
-                <table className="border-collapse border border-neutral-950 px-1 py-1 w-full">
+              <div className="w-full text-xs">
+                <table className="border-collapse border border-neutral-950 px-1 w-full">
                   <thead style={{ backgroundColor: "#ffe699" }}>
                     <tr>
                       <th className="border border-neutral-950 px-1 py-1">
@@ -157,7 +157,7 @@ const HomePage = () => {
             </div>
 
             {/* Right Section */}
-            {text !== "studies" && (
+            {type !== "studies" && (
               <div className="flex flex-col w-full md:w-1/2 space-y-4 mr-5 md:mt-0">
                 <div className="flex flex-row items-center space-x-2 w-full ml-5">
                   <label className="mr-8">
@@ -165,7 +165,7 @@ const HomePage = () => {
                   </label>
                 </div>
                 <div className="flex flex-row items-center space-x-2 w-full ml-5">
-                  <label className="mr-8">Lọc theo:</label>
+                  <label className="mr-8">Thời gian:</label>
                   <div className="text-sm flex-grow">
                     <select
                       className="p-2 border rounded w-48"
@@ -178,7 +178,7 @@ const HomePage = () => {
                   </div>
                 </div>
                 {selectedType !== "studies" && (
-                  <div className="max-h-72 flex items-center justify-center">
+                  <div className="h-96 flex items-center justify-center">
                     <PieChart
                       selectedDWM={selectedDWM}
                       selectedType={selectedType}
@@ -186,8 +186,8 @@ const HomePage = () => {
                     />
                   </div>
                 )}
-                <div className="w-full p-3 text-xs">
-                  <table className="border-collapse border border-neutral-950 px-1 py-1 w-full">
+                <div className="w-full text-xs">
+                  <table className="border-collapse border border-neutral-950 px-1 w-full">
                     <thead style={{ backgroundColor: "#ffe699" }}>
                       <tr>
                         <th className="border border-neutral-950 px-1 py-1">
