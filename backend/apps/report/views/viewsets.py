@@ -283,8 +283,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
             start_time = year + '-01-01T00:00:00'
             end_time = year + '-12-31T23:59:59.999999'
 
+            # rejection_state = 2 (REJECTED)
             sql = """select EXTRACT('month' FROM created_time) as month, COUNT(EXTRACT('month' FROM created_time)) as count 
-                    from study where created_time BETWEEN %s AND %s 
+                    from study where created_time BETWEEN %s AND %s and rejection_state <> 2
                     GROUP BY EXTRACT('month' FROM created_time)"""
             
             # select count join on where
