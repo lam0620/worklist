@@ -40,6 +40,17 @@ const PieChart: React.FC<PieChartProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Reset the piechart's data to empty, avoid being stuck every time choose another option.
+        setChartData({
+          labels: [],
+          datasets: [
+            {
+              data: [],
+              backgroundColor: [],
+            },
+          ],
+        });
+
         let response;
         if (selectedType === "orders" && selectedDWM) {
           response = await fetchStatsOrderDoctors(selectedDWM);
@@ -50,7 +61,6 @@ const PieChart: React.FC<PieChartProps> = ({
           response?.status === 200 &&
           response.data?.result?.status === "OK"
         ) {
-          // console.log(selectedDWM, response.data);
           const data = response?.data.data;
           const labels = data.map((item: Data) => item.fullname);
           const counts = data.map((item: Data) => item.count);
@@ -95,6 +105,13 @@ const PieChart: React.FC<PieChartProps> = ({
         plugins: {
           legend: {
             position: "top",
+            labels: {
+              boxWidth: 20,
+              padding: 10,
+              font: {
+                size: 11,
+              },
+            },
           },
           datalabels: {
             formatter: (value: number, context: any) => {
