@@ -57,7 +57,7 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
         const msg = response?.data?.result?.msg;
         const message = showErrorMessage(code, item, msg);
         toast.error(message);
-        
+
       } else {
         const roles_obj = fullRoles.filter((role) => userRoles.includes(role.id));
         onEdit({
@@ -87,9 +87,9 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
     if (!lastName) {
       errors.lastName = "Last name is required";
     }
-    if (!email) {
-      errors.email = "Email is required";
-    }
+    // if (!email) {
+    //   errors.email = "Email is required";
+    // }
     if (userRoles.length === 0) {
       errors.roles = "Roles is required";
     }

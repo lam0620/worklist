@@ -88,7 +88,7 @@ const CreateUserModal = ({
     if (!firstName) newErrors.firstName = "This field is required";
     if (!lastName) newErrors.lastName = "This field is required";
     if (!email) {
-      newErrors.email = "This field is required";
+      //newErrors.email = "This field is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Email is invalid";
     }

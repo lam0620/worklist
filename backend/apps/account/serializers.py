@@ -18,7 +18,7 @@ class CreateAccountSerializers(serializers.Serializer):
     password = serializers.CharField(required=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
-    email = serializers.CharField(required=True)
+    email = serializers.CharField(required=False, allow_blank=True)
     roles = serializers.ListField(child=serializers.UUIDField(required=False), required=False)
 
     def validate_username(self, value): # noqa
@@ -27,9 +27,11 @@ class CreateAccountSerializers(serializers.Serializer):
         return value
 
     def validate_email(self, value): # noqa
-        if re.match(EMAIL_REGEX, value) is None:
+        if not value:
+            return None
+        if value and re.match(EMAIL_REGEX, value) is None:
             raise serializers.ValidationError({'detail': ec.EMAIL_INVALID})
-        if User.objects.filter(email=value).exists():
+        if value and User.objects.filter(email=value).exists():
             raise serializers.ValidationError({'detail': ec.USERNAME_EXISTS, 'item': ec.EMAIL})
         return value
 
@@ -42,10 +44,13 @@ class CreateAccountSerializers(serializers.Serializer):
 class UpdateAccountSerializers(serializers.Serializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
-    email = serializers.CharField(required=False)
+    email = serializers.CharField(required=False, allow_blank=True)
     roles = serializers.ListField(child=serializers.UUIDField(required=False), required=False)
 
     def validate_email(self, value):
+        if not value:
+            return None
+
         if re.match(EMAIL_REGEX, value) is None:
             raise serializers.ValidationError({'detail': ec.EMAIL_INVALID})
         if User.objects.filter(email=value).exclude(id=self.instance.id).exists():
