@@ -124,7 +124,7 @@ const RolesPage = () => {
               >
                 Home
               </button>
-              {hasDeleteRolePermission > 0 && (
+              {hasDeleteRolePermission && (
                 <DeleteRoleButtons
                   isMany={true}
                   roleIds={Object.keys(selectedRoles).filter(

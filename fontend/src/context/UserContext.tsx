@@ -10,10 +10,11 @@ import {
 import axios from "axios";
 import Cookies from "js-cookie";
 import { InfoProfileUser, refreshAccessToken } from "@/services/apiService";
+import { MyInfoProps } from "@/app/types/UserDetail";
 
 interface UserContextType {
-  user: any;
-  setUser: (user: any) => void;
+  user: MyInfoProps;
+  setUser: (user: MyInfoProps) => void;
   login: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
 }
@@ -40,7 +41,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (accessToken && refreshToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      fetchUser();
+      fetchUser().then((r) => r);
     } else if (refreshToken) {
       const refreshAccessTokenAndFetchUser = async () => {
         try {
@@ -59,13 +60,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             "Authorization"
           ] = `Bearer ${newAccessToken}`;
 
-          fetchUser();
+          await fetchUser();
         } catch (refreshError) {
           setUser(null);
         }
       };
 
-      refreshAccessTokenAndFetchUser();
+      refreshAccessTokenAndFetchUser().then((r) => r);
     } else {
       setUser(null);
     }
@@ -75,7 +76,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     Cookies.set("access_token", accessToken, { expires: 1 });
     Cookies.set("refresh_token", refreshToken, { expires: 7 });
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    fetchUser();
+    fetchUser().then((r) => r);
   };
 
   const logout = () => {

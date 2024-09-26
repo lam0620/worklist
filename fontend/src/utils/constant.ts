@@ -19,5 +19,6 @@ export const PERMISSIONS = {
     DELETE_DOCTOR : "delete_doctor",
     ACTIVE_DOCTOR : "active_doctor",
     VIEW_STATISTICS : "view_statistics",
+    RESET_PASSWORD : "reset_password",
 };
 

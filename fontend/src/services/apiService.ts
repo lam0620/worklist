@@ -120,28 +120,10 @@ export const refreshAccessToken = async (data: { [key: string]: any }) => {
   return axios.post(`${API_BASE_URL}/auth/refresh-token`, data);
 }
 
-// Chart
-export const fetchChartData = async (params: { [key: string]: any } = {}) => {
-  const queryString = Object.keys(params)
-    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-    .join('&');
-  return axios.get(`${API_BASE_URL}/chart?${queryString}`);
-}
+// Reset password
 
-// Provider 
-export const fetchProviders = async (params: { [key: string]: any } = {}) => {
-  const queryString = Object.keys(params)
-    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-    .join('&');
-  return axios.get(`${API_BASE_URL}/providers?${queryString}`);
-}
-
-// Export csv
-export const exportCSV = async (params: { [key: string]: any } = {}) => {
-  const queryString = Object.keys(params)
-    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-    .join('&');
-  return axios.get(`${API_BASE_URL}/chart/export?${queryString}`);
+export const ResetPassword = async (data: { [key: string]: string }) => {
+  return axios.post(`${API_BASE_URL}/accounts/reset-password`, data);
 }
 
 //Doctor

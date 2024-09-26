@@ -122,7 +122,10 @@ const UserListPage = () => {
                   onClose={() => {}}
                 />
               )}
-              {hasAddRolePermission && <CreateRoleButton onCreate={() => {}} />}
+              {hasAddRolePermission && (
+                <CreateRoleButton onCreate={() => {}} user={user} />
+              )}
+
             </div>
           </div>
           <input
