@@ -1,12 +1,18 @@
+import { MyInfoProps } from "@/app/types/UserDetail";
 import EditRoleForm from "./EditRoleForm";
 import { useState } from "react";
 
 interface EditRoleButtonProps {
   roleDetail: any;
   onRoleUpdated: (Role: any) => void;
+  user: MyInfoProps;
 }
 
-const EditRoleButton = ({ roleDetail, onRoleUpdated }: EditRoleButtonProps) => {
+const EditRoleButton = ({
+  roleDetail,
+  onRoleUpdated,
+  user,
+}: EditRoleButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -28,6 +34,7 @@ const EditRoleButton = ({ roleDetail, onRoleUpdated }: EditRoleButtonProps) => {
             onRoleUpdated(roleUpdate);
             handleCloseModal();
           }}
+          user={user}
         />
       )}
     </div>

@@ -232,7 +232,7 @@ class CustomAPIView(generics.GenericAPIView):
     def cus_response_500(self):
         return self.cus_response({
             'status': status.HTTP_500_INTERNAL_SERVER_ERROR,
-            'detail': ec.ERROR_CODE_MESSAGE[ec.HTTP_500_INTERNAL_SERVER_ERROR]
+            'detail': ec.SERVER_ERROR
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def cus_response_empty_data(self, type=None):

@@ -5,21 +5,25 @@ import { toast } from "react-toastify";
 import CheckboxGroup from "../../CheckboxGroup";
 import { showErrorMessage } from "@/utils/showMessageError";
 import { RoleDetailProps } from "@/app/types/RoleDetail";
-import {PermissionListProps} from "@/app/types/Permission";
+import { PermissionListProps } from "@/app/types/Permission";
+import { MyInfoProps } from "@/app/types/UserDetail";
 
 interface EditRoleFormProps {
   role: RoleDetailProps;
   onEdit: (role: any) => void;
   onClose: () => void;
+  user: MyInfoProps;
 }
 
-const EditRoleForm = ({ role, onEdit, onClose }: EditRoleFormProps) => {
+const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
   const [name, setName] = useState(role.name);
   const [description, setDescription] = useState(role.description);
   const [permissions, setPermissions] = useState(
     role.permissions?.map((permission: any) => permission.id) ?? []
   );
-  const [fullPermissions, setFullPermissions] = useState<PermissionListProps[]>([]);
+  const [fullPermissions, setFullPermissions] = useState<PermissionListProps[]>(
+    []
+  );
   const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -33,7 +37,7 @@ const EditRoleForm = ({ role, onEdit, onClose }: EditRoleFormProps) => {
       }
     };
 
-    fetchPermissions().then(r => r);
+    fetchPermissions().then((r) => r);
   }, []);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -82,6 +86,7 @@ const EditRoleForm = ({ role, onEdit, onClose }: EditRoleFormProps) => {
   const closeDiscardPopup = () => {
     setShowUnsavedChangesPopup(false);
   };
+
   return (
     <>
       <Dialog.Root open onOpenChange={onClose}>
@@ -89,7 +94,7 @@ const EditRoleForm = ({ role, onEdit, onClose }: EditRoleFormProps) => {
       <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl text-justify">
         <Dialog.Title className="text-xl font-bold mb-4 ml-0">
             Edit Role 
-        </Dialog.Title>
+          </Dialog.Title>
           <form>
             <div className="mb-4">
               <label className="block text-gray-700">Name</label>
@@ -122,6 +127,7 @@ const EditRoleForm = ({ role, onEdit, onClose }: EditRoleFormProps) => {
                 options={fullPermissions}
                 selectedOptions={permissions}
                 onChange={setPermissions}
+                user={user}
               />
               {errors.permissions && (
                 <p className="text-red-500 text-sm mt-1">

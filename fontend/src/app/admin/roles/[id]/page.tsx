@@ -87,6 +87,7 @@ const RoleDetailPage = () => {
                   <EditRoleButton
                     roleDetail={roleDetail}
                     onRoleUpdated={handleRoleEdit}
+                    user={user}
                   />
                 </>
               )}

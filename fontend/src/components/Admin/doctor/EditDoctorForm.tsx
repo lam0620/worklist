@@ -201,6 +201,10 @@ const EditDoctorForm = ({
                 onChange={handleDoctorNoChange}
               />
             </div>
+            {errors.doctorNo && (
+              <p className="text-red-500 text-sm">{errors.doctorNo}</p>
+            )}
+
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
                 Full name
@@ -233,10 +237,6 @@ const EditDoctorForm = ({
             </div>
             {errors.title && (
               <p className="text-red-500 text-sm">{errors.title}</p>
-            )}
-
-            {errors.doctorNo && (
-              <p className="text-red-500 text-sm">{errors.doctorNo}</p>
             )}
 
             <div className="mb-4 flex items-center">

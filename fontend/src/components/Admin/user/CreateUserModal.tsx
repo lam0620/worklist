@@ -57,7 +57,15 @@ const CreateUserModal = ({
         roles: selectedRoles,
       };
       const response = await CreateAccount(newUser);
-      if (response.status === 201) {
+
+      if (response?.data.result.status === "NG") {
+        const code = response?.data?.result?.code;
+        const item = response?.data?.result?.item;
+        const msg = response?.data?.result?.msg;
+        const message = showErrorMessage(code, item, msg);
+        toast.error(message);
+      } else {
+      // if (response.status === 201) {
         toast.success("User created successfully");
         onUserCreated();
         onClose();
@@ -65,7 +73,7 @@ const CreateUserModal = ({
     } catch (error: any) {
       const msg = error.response?.data?.result?.msg;
       const item = error.response?.data?.result?.item || null;
-      const message = showErrorMessage(msg, item);
+      const message = showErrorMessage(msg, item, error.message);
       toast.error(message);
     }
   };

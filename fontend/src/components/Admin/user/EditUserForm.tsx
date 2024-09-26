@@ -44,22 +44,33 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
       return;
     }
     try {
-      await UpdateAccount(user.id, {
+      const response = await UpdateAccount(user.id, {
         first_name: firstName,
         last_name: lastName,
         email,
         roles: userRoles,
       });
-      const roles_obj = fullRoles.filter((role) => userRoles.includes(role.id));
-      onEdit({
-        ...user,
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        roles: roles_obj,
-      });
-      toast.success("User updated successfully");
-      onClose();
+
+      if (response?.data.result.status === "NG") {
+        const code = response?.data?.result?.code;
+        const item = response?.data?.result?.item;
+        const msg = response?.data?.result?.msg;
+        const message = showErrorMessage(code, item, msg);
+        toast.error(message);
+        
+      } else {
+        const roles_obj = fullRoles.filter((role) => userRoles.includes(role.id));
+        onEdit({
+          ...user,
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          roles: roles_obj,
+        });
+
+        toast.success("User updated successfully");
+        onClose();
+      }
     } catch (error: any) {
       const code = error?.response?.data?.result?.code;
       const item = error?.response?.data?.result?.item;

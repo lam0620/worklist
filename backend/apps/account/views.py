@@ -279,7 +279,7 @@ class AccountView(CustomAPIView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.cus_response_500()
+            return self.response_NG(ec.SYSTEM_ERR, str(e))  
 
     @swagger_auto_schema(
         operation_summary="Xóa tài khoản",
@@ -388,7 +388,7 @@ class AccountDetailView(CustomAPIView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.cus_response_500()
+            return self.response_NG(ec.SYSTEM_ERR, str(e))  
 
     @swagger_auto_schema(
         operation_summary='Xóa tài khoản admin',
@@ -554,10 +554,7 @@ class AdminRoleGroupView(CustomAPIView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.cus_response({
-                'status': status.HTTP_500_INTERNAL_SERVER_ERROR,
-                'detail': status.HTTP_500_INTERNAL_SERVER_ERROR,
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
 
     @swagger_auto_schema(
         operation_summary='Xóa nhóm quyền',

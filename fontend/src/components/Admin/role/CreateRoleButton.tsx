@@ -1,11 +1,13 @@
 import { useState } from "react";
 import CreateRoleModal from "./CreateRoleModal";
+import { MyInfoProps } from "@/app/types/UserDetail";
 
 interface CreateRoleButtonProps {
   onCreate: (newRole: any) => void;
+  user: MyInfoProps;
 }
 
-const CreateRoleButton = ({ onCreate }: CreateRoleButtonProps) => {
+const CreateRoleButton = ({ onCreate, user }: CreateRoleButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
@@ -26,6 +28,7 @@ const CreateRoleButton = ({ onCreate }: CreateRoleButtonProps) => {
             onCreate(newRole);
             handleCloseModal();
           }}
+          user={user}
         />
       )}
     </div>

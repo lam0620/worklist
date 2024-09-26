@@ -13,3 +13,5 @@ export const ItemMessages = {
   USERNAME : "Username",
   ROLENAME : "Role name",
 }
+
+export const authorized = "You are not authorized to view permissions"

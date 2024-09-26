@@ -7,10 +7,13 @@ import { toast } from "react-toastify";
 import { UUID } from "crypto";
 import { CreateRole, fetchPermissionsList } from "@/services/apiService";
 import { showErrorMessage } from "@/utils/showMessageError";
+import { authorized } from "@/enum/errorCode";
+import { MyInfoProps } from "@/app/types/UserDetail";
 
 interface CreateRoleModalProps {
   onClose: () => void;
   onCreate: (newRole: Role) => void;
+  user: MyInfoProps;
 }
 
 interface Permission {
@@ -26,11 +29,10 @@ interface Role {
   permissions: string[];
 }
 
-const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
+const CreateRoleModal = ({ onClose, onCreate, user }: CreateRoleModalProps) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [permissions, setPermissions] = useState<string[]>([]);
-  const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [availablePermissions, setAvailablePermissions] = useState<
     Permission[]
   >([]);
@@ -41,8 +43,10 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
       try {
         const response = await fetchPermissionsList({ isPage: false });
         setAvailablePermissions(response.data?.data);
-      } catch (error) {
-        console.error("Failed to fetch permissions:", error);
+      } catch (error: any) {
+        if (error.response.status === 403) {
+          toast.error(authorized);
+        }
       }
     };
 
@@ -63,9 +67,19 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
 
     try {
       const response = await CreateRole(newRole);
-      onCreate(response?.data?.data);
-      toast.success("Role created successfully");
-      onClose();
+      if (response?.data.result.status === "NG") {
+        const code = response?.data?.result?.code;
+        const item = response?.data?.result?.item;
+        const msg = response?.data?.result?.msg;
+        const message = showErrorMessage(code, item, msg);
+        toast.error(message);
+        
+      } else {
+
+        onCreate(response?.data?.data);
+        toast.success("Role created successfully");
+        onClose();
+      }
     } catch (error: any) {
       const msg = error.response.data?.result?.msg;
       const item = error.response.data?.result?.item || null;
@@ -88,22 +102,8 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleCancel = () => {
-    setShowUnsavedChangesPopup(true);
-  };
-
-  const confirmDiscardChanges = () => {
-    setShowUnsavedChangesPopup(false);
-    onClose();
-  };
-
-  const closeDiscardPopup = () => {
-    setShowUnsavedChangesPopup(false);
-  };
-
   return (
-    <>
-      <Dialog.Root open onOpenChange={onClose}>
+    <Dialog.Root open onOpenChange={onClose}>
       <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
       <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
         <Dialog.Title className="text-xl font-bold mb-4">
@@ -139,6 +139,7 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
               options={availablePermissions}
               selectedOptions={permissions}
               onChange={setPermissions}
+              user={user}
             />
             {errors.permissions && (
               <p className="text-red-500 text-sm mt-1">{errors.permissions}</p>
@@ -148,7 +149,7 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
             <button
               type="button"
               className="px-4 py-2 bg-gray-200 rounded-md"
-              onClick={handleCancel}
+              onClick={onClose}
             >
               Cancel
             </button>
@@ -160,35 +161,9 @@ const CreateRoleModal = ({ onClose, onCreate }: CreateRoleModalProps) => {
               Create
             </button>
           </div>
-          <Dialog.Root open={showUnsavedChangesPopup}>
-            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-            <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
-              <Dialog.Title className="text-xl font-bold mb-4">
-                Unsaved Changes
-              </Dialog.Title>
-              <p>Are you sure you want to discard your changes?</p>
-              <div className="flex justify-end space-x-2 mt-4">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-200 rounded-md"
-                  onClick={closeDiscardPopup}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-red-600 text-white rounded-md"
-                  onClick={confirmDiscardChanges}
-                >
-                  Yes
-                </button>
-              </div>
-            </Dialog.Content>
-          </Dialog.Root>
         </form>
       </Dialog.Content>
     </Dialog.Root>
-    </>
   );
 };
 

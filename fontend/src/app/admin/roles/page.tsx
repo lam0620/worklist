@@ -139,7 +139,7 @@ const RolesPage = () => {
                 />
               )}
               {hasAddRolePermission && (
-                <CreateRoleButton onCreate={handleRoleCreate} />
+                <CreateRoleButton onCreate={handleRoleCreate} user={user} />
               )}
             </div>
           </div>
