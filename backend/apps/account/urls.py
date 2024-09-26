@@ -3,8 +3,7 @@ from django.urls import path
 from apps.account.views import (
     AccountDetailView, AccountUser, AccountView, AuthRefreshToken,
     AdminRoleGroupDetailView, AdminRoleGroupView, AuthLogin,
-    ChangePassword, CodePermissionDetail, CodePermissionView, 
-    StatusCheck
+    ChangePassword, CodePermissionDetail, CodePermissionView, StatusCheck, AccountResetPassword
 )
 
 urlpatterns = [
@@ -15,6 +14,7 @@ urlpatterns = [
 
     # Account admin
     path('accounts', AccountView.as_view(), name='AccountView'),
+    path('accounts/reset-password', AccountResetPassword.as_view(), name='ResetPassword'),
     path('accounts/<uuid:pk>', AccountDetailView.as_view(), name='AccountDetailView'),
     path('me', AccountUser.as_view(), name='AccountUser'),
 
@@ -27,5 +27,7 @@ urlpatterns = [
 
     # Status check
     path('status', StatusCheck.as_view(), name='StatusCheck'),
+
+
 
 ]

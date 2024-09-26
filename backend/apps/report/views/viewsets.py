@@ -54,9 +54,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         # Get and check version to secure or not
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
-            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            is_per = CheckPermission(per_code.VIEW_STATISTICS, user.id).check()
             if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.VIEW_ORDER)
+                return self.cus_response_403(per_code.VIEW_STATISTICS)
 
         serializers = ser.StatsSerializers(data=request.query_params)
         serializers.is_valid(raise_exception=True)
@@ -116,9 +116,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         # Get and check version to secure or not
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
-            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            is_per = CheckPermission(per_code.VIEW_STATISTICS, user.id).check()
             if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.VIEW_ORDER)
+                return self.cus_response_403(per_code.VIEW_STATISTICS)
 
         serializers = ser.StatsSerializers(data=request.query_params)
         serializers.is_valid(raise_exception=True)
@@ -160,9 +160,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         # Get and check version to secure or not
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
-            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            is_per = CheckPermission(per_code.VIEW_STATISTICS, user.id).check()
             if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.VIEW_ORDER)
+                return self.cus_response_403(per_code.VIEW_STATISTICS)
 
 
         data= {}
@@ -224,9 +224,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         # Get and check version to secure or not
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
-            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            is_per = CheckPermission(per_code.VIEW_STATISTICS, user.id).check()
             if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.VIEW_ORDER)
+                return self.cus_response_403(per_code.VIEW_STATISTICS)
 
         serializers = ser.StatsSerializers(data=request.query_params)
         serializers.is_valid(raise_exception=True)
@@ -269,9 +269,9 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         # Get and check version to secure or not
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
-            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            is_per = CheckPermission(per_code.VIEW_STATISTICS, user.id).check()
             if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.VIEW_ORDER)
+                return self.cus_response_403(per_code.VIEW_STATISTICS)
 
         serializers = ser.StatsSerializers(data=request.query_params)
         serializers.is_valid(raise_exception=True)

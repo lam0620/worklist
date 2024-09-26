@@ -135,3 +135,8 @@ class DeleteAccount(serializers.Serializer):
 class RefreshTokenSerializers(serializers.Serializer):
     refresh_token = serializers.CharField(required=True)
 
+
+class ResetPasswordSerializers(serializers.Serializer):
+    user_id = serializers.UUIDField(required=True)
+    password = serializers.CharField(required=True)
+    

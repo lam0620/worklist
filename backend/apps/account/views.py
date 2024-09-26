@@ -6,24 +6,22 @@ from django.utils import timezone
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
-from django.db import transaction,connections
+from django.db import transaction
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from third_parties.contribution.api_view import CustomAPIView
-from django.db.models import F, Prefetch
-from drf_yasg import openapi
+from django.db.models import Prefetch
 
 from apps.account import serializers as ser
 from apps.account.models import (
     User, RolePermission, Role,
-    UserRole, Permission,
+    UserRole, Permission
 )
 from apps.account.permission import CheckPermission
-from apps.account.utils import  convert_return_data_format, convert_str_to_datetime
+from apps.account.utils import convert_return_data_format
 from apps.shared.services import get_account_permissions, get_account_roles
 from apps.shared.utils import CusResponse
 from library.constant import error_codes as ec
-from library.constant import module_code as module_code
 from library.constant import permission_code as per_code
 from library.constant import swagger_tags
 from rest_framework import serializers, status
@@ -64,7 +62,7 @@ class AuthRefreshToken(APIView):
             access_token = refresh.access_token
             access_token.set_exp(lifetime=timedelta(days=settings.ACCESS_TOKEN_LIFETIME))
             access_token.set_iat()
-            
+
             refresh.set_exp(lifetime=timedelta(days=settings.REFRESH_TOKEN_LIFETIME))
             refresh.set_iat()
             return CusResponse(convert_return_data_format(code="", error=False, data={
@@ -77,6 +75,7 @@ class AuthRefreshToken(APIView):
             return CusResponse(convert_return_data_format(code=ec.SERVER_ERROR, error=True, data={}),
                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 class AuthLogin(APIView):
     @swagger_auto_schema(
         operation_summary='Đăng nhập',
@@ -85,26 +84,30 @@ class AuthLogin(APIView):
         tags=[swagger_tags.AUTH],
     )
     def post(self, request):
-        serializer = ser.LoginSerializers(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        validated_data = serializer.validated_data
-        username = validated_data.get('username')
-        password = validated_data.get('password')
+        try:
+            serializer = ser.LoginSerializers(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            validated_data = serializer.validated_data
+            username = validated_data.get('username')
+            password = validated_data.get('password')
 
-        user = User.objects.filter(username=username, is_active=True).first()
-        with transaction.atomic():
-            if not user:
-                data = convert_return_data_format(code=ec.USER_NAME_PASSWORD_NOT_MATCH, error=True, data={})
-                return CusResponse(data, status=status.HTTP_400_BAD_REQUEST)
-            if not self.authenticate_login(user, password):
-                data = convert_return_data_format(code=ec.USER_NAME_PASSWORD_NOT_MATCH, error=True, data={})
-                return CusResponse(data, status=status.HTTP_400_BAD_REQUEST)
+            user = User.objects.filter(username=username, is_active=True).first()
+            with transaction.atomic():
+                if not user:
+                    data = convert_return_data_format(code=ec.USER_NAME_PASSWORD_NOT_MATCH, error=True, data={})
+                    return CusResponse(data, status=status.HTTP_400_BAD_REQUEST)
+                if not self.authenticate_login(user, password):
+                    data = convert_return_data_format(code=ec.USER_NAME_PASSWORD_NOT_MATCH, error=True, data={})
+                    return CusResponse(data, status=status.HTTP_400_BAD_REQUEST)
 
-            token = self.generator_token(user)
-            user.last_login = timezone.now()
-            user.save()
-            return CusResponse(convert_return_data_format(code="", error=False, data=token), status=status.HTTP_200_OK)
-
+                token = self.generator_token(user)
+                user.last_login = timezone.now()
+                user.save()
+                return CusResponse(convert_return_data_format(code="", error=False, data=token), status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return CusResponse(convert_return_data_format(code=ec.SERVER_ERROR, error=True, data={}),
+                               status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @staticmethod
     def authenticate_login(user, password):
@@ -124,7 +127,7 @@ class AuthLogin(APIView):
         access_token["display_name"] = user.last_name + " " + user.first_name
 
         refresh_token = RefreshToken.for_user(user)
-        refresh_token.set_exp(lifetime= refresh_token_lifetime)
+        refresh_token.set_exp(lifetime=refresh_token_lifetime)
 
         return {
             'access_token': str(access_token),
@@ -141,27 +144,31 @@ class AccountUser(CustomAPIView):
         tags=[swagger_tags.ADMIN],
     )
     def get(self, request):
-        user = request.user
-        permission_list = get_account_permissions(user.id)
-        roles_list = get_account_roles(user.id)
-        return self.cus_response({
-            'result': {
-                'code': '',
-                'status': 'ok',
-                'msg': ''
-            },
-            'data': {
-                'id': user.id,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'username': user.username,
-                'email': user.email,
-                'avatar_color': user.avatar_color,
-                'permissions': permission_list,
-                'is_superuser': user.is_superuser,
-                'roles': roles_list
-            }
-        }, status=status.HTTP_200_OK)
+        try:
+            user = request.user
+            permission_list = get_account_permissions(user.id)
+            roles_list = get_account_roles(user.id)
+            return self.cus_response({
+                'result': {
+                    'code': '',
+                    'status': 'ok',
+                    'msg': ''
+                },
+                'data': {
+                    'id': user.id,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'username': user.username,
+                    'email': user.email,
+                    'avatar_color': user.avatar_color,
+                    'permissions': permission_list,
+                    'is_superuser': user.is_superuser,
+                    'roles': roles_list
+                }
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Cập nhật thông tin tài khoản đang đăng nhập',
@@ -191,40 +198,43 @@ class AccountView(CustomAPIView):
 
     filter_fields = ['username', 'email', 'first_name', 'last_name']
 
-
     @swagger_auto_schema(
         operation_summary='Lấy thông tin chi tiết tài khoản',
         operation_description='Lấy thông tin chi tiết tài khoản',
         tags=[swagger_tags.ADMIN],
     )
     def get(self, request, *args, **kwargs):
-        user = request.user
-        is_per = CheckPermission(per_code.VIEW_ACCOUNT, user.id).check()
-        if not is_per and not user.is_superuser:
-            return self.cus_response_403()
+        try:
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_ACCOUNT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403()
 
-        user_roles_prefetch = Prefetch(
-            'userrole_set',
-            queryset=UserRole.objects.select_related('role'),
-            to_attr='roles_list'
-        )
-        queryset = self.filter_queryset(User.objects.prefetch_related(user_roles_prefetch))
-        users_data = []
-        for user in queryset:
-            user_data = {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'avatar_color': user.avatar_color,
-                'created_at': user.created_at,
-                'roles': [{'id': role.role.id, 'name': role.role.name} for role in user.roles_list]
-            }
-            users_data.append(user_data)
+            user_roles_prefetch = Prefetch(
+                'userrole_set',
+                queryset=UserRole.objects.select_related('role'),
+                to_attr='roles_list'
+            )
+            queryset = self.filter_queryset(User.objects.prefetch_related(user_roles_prefetch))
+            users_data = []
+            for user in queryset:
+                user_data = {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'avatar_color': user.avatar_color,
+                    'created_at': user.created_at,
+                    'roles': [{'id': role.role.id, 'name': role.role.name} for role in user.roles_list]
+                }
+                users_data.append(user_data)
 
-        page = self.paginate_queryset(users_data)
-        return self.get_paginated_response(page)
+            page = self.paginate_queryset(users_data)
+            return self.get_paginated_response(page)
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500
 
     @swagger_auto_schema(
         operation_summary='Tạo tài khoản user',
@@ -264,14 +274,13 @@ class AccountView(CustomAPIView):
                             role_id=item
                         ) for item in data['roles']
                     ])
-
-
+                logger.info(f"Create user {user_new.username}")
                 return self.cus_response_created()
 
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response_500()
-    
+            return self.cus_response_500()
+
     @swagger_auto_schema(
         operation_summary="Xóa tài khoản",
         operation_description='Xóa tài khoản',
@@ -290,11 +299,13 @@ class AccountView(CustomAPIView):
 
         try:
             with transaction.atomic():
-                User.objects.filter(id__in=data['ids_user']).exclude(is_superuser=True).update(delete_flag=True, updated_by=user.id)
+                User.objects.filter(id__in=data['ids_user']).exclude(is_superuser=True).update(delete_flag=True,
+                                                                                               updated_by=user.id)
+            logger.info(f"Delete user {data['ids_user']}")
             return self.cus_response_deleted()
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response_500()
+            return self.cus_response_500()
 
 
 class AccountDetailView(CustomAPIView):
@@ -306,32 +317,35 @@ class AccountDetailView(CustomAPIView):
         tags=[swagger_tags.ADMIN],
     )
     def get(self, request, *args, **kwargs):
-        user = request.user
-        if not (CheckPermission(per_code.VIEW_ACCOUNT, user.id).check() or user.is_superuser):
-            return self.cus_response_403()
-        user_prefetch = Prefetch(
-            'userrole_set',
-            queryset=UserRole.objects.select_related('role').all(),
-            to_attr='prefetched_roles'
-        )
         try:
+            user = request.user
+            if not (CheckPermission(per_code.VIEW_ACCOUNT, user.id).check() or user.is_superuser):
+                return self.cus_response_403()
+            user_prefetch = Prefetch(
+                'userrole_set',
+                queryset=UserRole.objects.select_related('role').all(),
+                to_attr='prefetched_roles'
+            )
             instance = User.objects.prefetch_related(user_prefetch).get(**kwargs)
-        except User.DoesNotExist:
-            return self.cus_response_404(ec.USER)
-        
-        roles = [{'id': role.role.id, 'name': role.role.name} for role in instance.prefetched_roles]
-        data = {
-            'id': instance.id,
-            'username': instance.username,
-            'email': instance.email,
-            'first_name': instance.first_name,
-            'last_name': instance.last_name,
-            'avatar_color': instance.avatar_color,
-            'created_at': instance.created_at,
-            'roles': list(roles)
-        }
+            if not instance:
+                return self.cus_response_404(ec.USER)
 
-        return self.response_success(data=data)
+            roles = [{'id': role.role.id, 'name': role.role.name} for role in instance.prefetched_roles]
+            data = {
+                'id': instance.id,
+                'username': instance.username,
+                'email': instance.email,
+                'first_name': instance.first_name,
+                'last_name': instance.last_name,
+                'avatar_color': instance.avatar_color,
+                'created_at': instance.created_at,
+                'roles': list(roles)
+            }
+
+            return self.response_success(data=data)
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Cập nhật chi tiết tài khoản',
@@ -360,7 +374,7 @@ class AccountDetailView(CustomAPIView):
                     setattr(instance, key, value)
                 instance.updated_by = user.id
                 instance.save()
-                
+
                 if roles:
                     UserRole.objects.filter(user_id=instance.id).delete()
                     UserRole.objects.bulk_create([
@@ -369,12 +383,12 @@ class AccountDetailView(CustomAPIView):
                             role_id=item
                         ) for item in roles
                     ])
-
+                logger.info(f"User {user.username} update user {instance.username}")
                 return self.cus_response_updated()
 
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response_500()
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Xóa tài khoản admin',
@@ -382,29 +396,33 @@ class AccountDetailView(CustomAPIView):
         tags=[swagger_tags.ADMIN],
     )
     def delete(self, request, *args, **kwargs):
-        user = request.user
-        is_per = CheckPermission(per_code.DELETE_ACCOUNT, user.id).check()
-        if not is_per and not user.is_superuser:
-            return self.cus_response_403()
+        try:
+            user = request.user
+            is_per = CheckPermission(per_code.DELETE_ACCOUNT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403()
 
-        instance = User.objects.filter(**kwargs).first()
-        if not instance:
-            return self.cus_response_404(type=ec.USER)
-        if instance.is_superuser:
-            return self.cus_response({
-                'result': {
-                    'status': 'NG',
-                    'code': ec.CANNOT_DELETE_SUPERUSER,
-                    'msg': ''
-                },
-                'data': {}
-            }, status=status.HTTP_200_OK)
+            instance = User.objects.filter(**kwargs).first()
+            if not instance:
+                return self.cus_response_404(type=ec.USER)
+            if instance.is_superuser:
+                return self.cus_response({
+                    'result': {
+                        'status': 'NG',
+                        'code': ec.CANNOT_DELETE_SUPERUSER,
+                        'msg': ''
+                    },
+                    'data': {}
+                }, status=status.HTTP_200_OK)
 
-        instance.delete_flag = True
-        instance.updated_by = user.id
-        instance.save()
-
-        return self.cus_response_deleted()
+            instance.delete_flag = True
+            instance.updated_by = user.id
+            instance.save()
+            logger.info(f"User {user.username} delete user {instance.username}")
+            return self.cus_response_deleted()
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
 
 
 class ChangePassword(CustomAPIView):
@@ -417,21 +435,25 @@ class ChangePassword(CustomAPIView):
         tags=[swagger_tags.AUTH],
     )
     def put(self, request, *args, **kwargs):
-        user = request.user
-        serializer = ser.ChangePasswordSerializers(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        data = serializer.validated_data
+        try:
+            user = request.user
+            serializer = ser.ChangePasswordSerializers(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            data = serializer.validated_data
 
-        instance = User.objects.filter(id=user.id).first()
-        if 'old_password' in data:
-            if not instance.check_password(data.get('old_password')): # noqa
-                return self.cus_response(convert_return_data_format(code=ec.OLD_PASSWORD_INVALID, error=True, data={}),
-                                         status=status.HTTP_400_BAD_REQUEST)
-        instance.set_password(data.get('password'))
-        instance.updated_by = user.id
-        instance.save()
+            instance = User.objects.filter(id=user.id).first()
+            if 'old_password' in data:
+                if not instance.check_password(data.get('old_password')):  # noqa
+                    return self.cus_response(convert_return_data_format(code=ec.OLD_PASSWORD_INVALID, error=True, data={}),
+                                            status=status.HTTP_400_BAD_REQUEST)
+            instance.set_password(data.get('password'))
+            instance.updated_by = user.id
+            instance.save()
 
-        return self.cus_response_updated()
+            return self.cus_response_updated()
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
 
 
 class AdminRoleGroupView(CustomAPIView):
@@ -445,33 +467,38 @@ class AdminRoleGroupView(CustomAPIView):
         tags=[swagger_tags.ADMIN],
     )
     def get(self, request):
-        user = request.user
-        is_per = CheckPermission(per_code.VIEW_GROUP, user.id).check()
+        try:
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_GROUP, user.id).check()
 
-        if not is_per and not user.is_superuser:
-            return self.cus_response_403()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403()
 
-        role_permissions_prefetch = Prefetch(
-            'rolepermission_set',
-            queryset=RolePermission.objects.select_related('permission').all(),
-            to_attr='prefetched_permissions'
-        )
+            role_permissions_prefetch = Prefetch(
+                'rolepermission_set',
+                queryset=RolePermission.objects.select_related('permission').all(),
+                to_attr='prefetched_permissions'
+            )
 
-        roles_with_permissions = self.filter_queryset(Role.objects.prefetch_related(role_permissions_prefetch))
-        roles_data = []
-        for role in roles_with_permissions:
-            permissions = [{'id': perm.permission.id, 'name': perm.permission.name} for perm in role.prefetched_permissions]
-            roles_data.append({
-                'id': role.id,
-                'name': role.name,
-                'description': role.description,
-                'created_at': role.created_at,
-                'created_by': role.created_by,
-                'permissions': permissions
-            })
+            roles_with_permissions = self.filter_queryset(Role.objects.prefetch_related(role_permissions_prefetch))
+            roles_data = []
+            for role in roles_with_permissions:
+                permissions = [{'id': perm.permission.id, 'name': perm.permission.name} for perm in
+                            role.prefetched_permissions]
+                roles_data.append({
+                    'id': role.id,
+                    'name': role.name,
+                    'description': role.description,
+                    'created_at': role.created_at,
+                    'created_by': role.created_by,
+                    'permissions': permissions
+                })
 
-        page = self.paginate_queryset(roles_data)
-        return self.get_paginated_response(page)
+            page = self.paginate_queryset(roles_data)
+            return self.get_paginated_response(page)
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Tạo nhóm quyền',
@@ -485,9 +512,17 @@ class AdminRoleGroupView(CustomAPIView):
         if not is_per and not user.is_superuser:
             return self.cus_response_403()
 
-        serializers = ser.CreateAccountGroup(data=request.data) # noqa
+        serializers = ser.CreateAccountGroup(data=request.data)  # noqa
         serializers.is_valid(raise_exception=True)
         data = serializers.validated_data
+
+        permission_ids = data.get("permissions", [])
+        if not user.is_superuser:
+            
+            user_permissions = set(RolePermission.objects.filter(role__userrole__user__id=user.id).values_list('permission__id', flat=True))
+
+            if not user_permissions.issuperset(set(permission_ids)):
+                return self.cus_response(convert_return_data_format(code=ec.PERMISSION_DENIED, error=True, data={}), status=status.HTTP_400_BAD_REQUEST)
 
         try:
             with transaction.atomic():
@@ -496,7 +531,6 @@ class AdminRoleGroupView(CustomAPIView):
                     description=data.get('description', None),
                     created_by=user.id
                 )
-                permission_ids = data.get("permissions", [])
                 permissions = Permission.objects.filter(id__in=permission_ids).in_bulk()
                 group_per = [RolePermission(role=instance, permission_id=perm_id) for perm_id in permission_ids]
                 permisson_info = [
@@ -505,7 +539,7 @@ class AdminRoleGroupView(CustomAPIView):
                         'name': permissions[perm_id].name,
                         'code': permissions[perm_id].code
                     }
-                 for perm_id in permission_ids if perm_id in permission_ids
+                    for perm_id in permission_ids if perm_id in permission_ids
                 ]
                 RolePermission.objects.bulk_create(group_per)
                 data = {
@@ -515,19 +549,20 @@ class AdminRoleGroupView(CustomAPIView):
                     'created_at': instance.created_at.strftime(settings.DATETIME_FORMAT),
                     'created_by': instance.created_by
                 }
+                logger.info(f"User {user.username} create group {instance.name}")
                 return self.cus_response_created(data=data)
 
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response({
-            'status': status.HTTP_500_INTERNAL_SERVER_ERROR,
-            'detail': status.HTTP_500_INTERNAL_SERVER_ERROR,
-        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+            return self.cus_response({
+                'status': status.HTTP_500_INTERNAL_SERVER_ERROR,
+                'detail': status.HTTP_500_INTERNAL_SERVER_ERROR,
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     @swagger_auto_schema(
         operation_summary='Xóa nhóm quyền',
         operation_description='Xóa nhóm quyền',
-        request_body= ser.DeleteAccountGroup,
+        request_body=ser.DeleteAccountGroup,
         tags=[swagger_tags.ADMIN],
     )
     def delete(self, request):
@@ -543,11 +578,11 @@ class AdminRoleGroupView(CustomAPIView):
         try:
             with transaction.atomic():
                 Role.objects.filter(id__in=data['ids_group']).update(delete_flag=True, updated_by=user.id)
-               
+                logger.info(f"User {user.username} delete group {data['ids_group']}")
                 return self.cus_response_deleted()
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response_500()
+            return self.cus_response_500()
 
 
 class AdminRoleGroupDetailView(CustomAPIView):
@@ -559,46 +594,50 @@ class AdminRoleGroupDetailView(CustomAPIView):
         tags=[swagger_tags.ADMIN],
     )
     def get(self, request, *args, **kwargs):
-        user = request.user
-        is_per = CheckPermission(per_code.VIEW_GROUP, user.id).check()
-        if not is_per and not user.is_superuser:
-            return self.cus_response_403()
+        try:
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_GROUP, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403()
 
-        instance = Role.objects.filter(**kwargs).values('id', 'name', 'description', 'created_at').first()
+            instance = Role.objects.filter(**kwargs).values('id', 'name', 'description', 'created_at').first()
 
-        if not instance:
-            return self.cus_response_404(type=ec.GROUP)
+            if not instance:
+                return self.cus_response_404(type=ec.GROUP)
 
-        per_group = RolePermission.objects.filter(role_id=instance['id']).select_related('permission')
-        user_group = UserRole.objects.filter(role_id=instance['id'], user__delete_flag=False).select_related('user')
-        per_group_result = [{'id': item.permission.id, 'name': item.permission.name} for item in per_group]
-        user_group_result = [
-            {
-                'id': item.user.id,
-                'first_name': item.user.first_name,
-                'last_name': item.user.last_name,
-                'avatar_color': item.user.avatar_color,
-                'username': item.user.username,
-            } for item in user_group
-        ]
+            per_group = RolePermission.objects.filter(role_id=instance['id']).select_related('permission')
+            user_group = UserRole.objects.filter(role_id=instance['id'], user__delete_flag=False).select_related('user')
+            per_group_result = [{'id': item.permission.id, 'name': item.permission.name} for item in per_group]
+            user_group_result = [
+                {
+                    'id': item.user.id,
+                    'first_name': item.user.first_name,
+                    'last_name': item.user.last_name,
+                    'avatar_color': item.user.avatar_color,
+                    'username': item.user.username,
+                } for item in user_group
+            ]
 
-        data = {
-            'id': instance['id'],
-            'name': instance['name'],
-            'description': instance['description'],
-            'created_at': instance['created_at'].strftime(settings.DATETIME_FORMAT),
-            'permissions': per_group_result,
-            'users': user_group_result,
-        }
-        res = {
-            'result': {
-                'code': '',
-                'status': 'ok',
-                'msg': ''
-            },
-            'data': data
-        }
-        return self.cus_response(data=res, status=status.HTTP_200_OK)
+            data = {
+                'id': instance['id'],
+                'name': instance['name'],
+                'description': instance['description'],
+                'created_at': instance['created_at'].strftime(settings.DATETIME_FORMAT),
+                'permissions': per_group_result,
+                'users': user_group_result,
+            }
+            res = {
+                'result': {
+                    'code': '',
+                    'status': 'ok',
+                    'msg': ''
+                },
+                'data': data
+            }
+            return self.cus_response(data=res, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Cập nhật nhóm quyền',
@@ -650,7 +689,7 @@ class AdminRoleGroupDetailView(CustomAPIView):
                 if 'users' in data:
                     new_user = data['users']
                     old_user = UserRole.objects.filter(role_id=instance.id).values_list('user__id',
-                                                                                         flat=True)
+                                                                                        flat=True)
                     user_ids_add = list(set(new_user) - set(old_user))
                     user_ids_del = list(set(old_user) - set(new_user))
                     if user_ids_add:
@@ -661,12 +700,11 @@ class AdminRoleGroupDetailView(CustomAPIView):
                         ])
                     if user_ids_del:
                         UserRole.objects.filter(user_id__in=user_ids_del).delete()
-                
-
+                logger.info(f"User {user.username} update group {instance.name}")
                 return self.cus_response_updated()
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response_500()
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Xóa nhóm quyền',
@@ -688,7 +726,7 @@ class AdminRoleGroupDetailView(CustomAPIView):
                 instance.delete_flag = True
                 instance.updated_by = user.id
                 instance.save()
-
+                logger.info(f"User {user.username} delete group {instance.name}")
                 return self.cus_response_deleted()
         except Exception as e:
             logger.error(e, exc_info=True)
@@ -706,15 +744,17 @@ class CodePermissionView(CustomAPIView):
         tags=[swagger_tags.ADMIN],
     )
     def get(self, request):
-        user = request.user
-        is_per = CheckPermission(per_code.EDIT_GROUP, user.id).check()
-        if not user.is_superuser and not is_per:
-            return self.cus_response_403()
-        # query = self.filter_queryset(Permission.objects.values('id', 'name', 'code'))
-        query = self.filter_queryset(Permission.objects.values('id', 'name', 'code', 'tag'))
-        page = self.paginate_queryset(list(query))
-
-        return self.get_paginated_response(page)
+        try:
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_CORE_PERMISSION, user.id).check()
+            if not user.is_superuser and not is_per:
+                return self.cus_response_403()
+            query = self.filter_queryset(Permission.objects.values('id', 'name', 'code', 'tag'))
+            page = self.paginate_queryset(list(query))
+            return self.get_paginated_response(page)
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Tạo mã quyền',
@@ -723,8 +763,9 @@ class CodePermissionView(CustomAPIView):
         tags=[swagger_tags.ADMIN],
     )
     def post(self, request):
+
         user = request.user
-        is_per = CheckPermission(per_code.EDIT_GROUP, user.id).check()
+        is_per = CheckPermission(per_code.ADD_CORE_PERMISSION, user.id).check()
         if not user.is_superuser and not is_per:
             return self.cus_response_403()
         serializers_data = ser.CodePermissionSerializer(data=request.data)
@@ -741,11 +782,12 @@ class CodePermissionView(CustomAPIView):
                     code=data.get('code'),
                     created_by=user.id
                 )
+                logger.info(f"User {user.username} create permission {data['name']}")
                 return self.cus_response_created()
 
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response_500()
+            return self.cus_response_500()
 
 
 class CodePermissionDetail(CustomAPIView):
@@ -757,15 +799,19 @@ class CodePermissionDetail(CustomAPIView):
         tags=[swagger_tags.ADMIN],
     )
     def get(self, request, *args, **kwargs):
-        user = request.user
-        is_per = CheckPermission(per_code.EDIT_GROUP, user.id).check()
-        if not user.is_superuser and not is_per:
-            return self.cus_response_403()
-        instance = Permission.objects.filter(**kwargs).values('id', 'name', 'code').first()
-        if not instance:
-            return self.cus_response_404(ec.PERMISSION)
+        try:
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_CORE_PERMISSION, user.id).check()
+            if not user.is_superuser and not is_per:
+                return self.cus_response_403()
+            instance = Permission.objects.filter(**kwargs).values('id', 'name', 'code').first()
+            if not instance:
+                return self.cus_response_404(ec.PERMISSION)
 
-        return self.response_success(data=instance)
+            return self.response_success(data=instance)
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Cập nhật mã quyền',
@@ -775,8 +821,8 @@ class CodePermissionDetail(CustomAPIView):
     )
     def put(self, request, *args, **kwargs):
         user = request.user
-        is_per = CheckPermission(per_code.EDIT_GROUP, user.id).check()
-        if not user.is_superuser :
+        is_per = CheckPermission(per_code.EDIT_CORE_PERMISSION, user.id).check()
+        if not user.is_superuser and not is_per:
             return self.cus_response_403()
         instance = Permission.objects.filter(**kwargs).first()
 
@@ -803,11 +849,11 @@ class CodePermissionDetail(CustomAPIView):
                     setattr(instance, key, value)
                 instance.updated_by = user.id
                 instance.save()
+                logger.info(f"User {user.username} update permission {instance.name}")
                 return self.cus_response_updated()
-
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response_500()
+            return self.cus_response_500()
 
     @swagger_auto_schema(
         operation_summary='Xóa mã quyền',
@@ -816,7 +862,7 @@ class CodePermissionDetail(CustomAPIView):
     )
     def delete(self, request, *args, **kwargs):
         user = request.user
-        is_per = CheckPermission(per_code.EDIT_GROUP, user.id).check()
+        is_per = CheckPermission(per_code.DELETE_CORE_PERMISSION, user.id).check()
         if not user.is_superuser and not is_per:
             return self.cus_response_403()
         instance = Permission.objects.filter(**kwargs).first()
@@ -828,12 +874,49 @@ class CodePermissionDetail(CustomAPIView):
             return self.cus_response_404(ec.PERMISSION)
         try:
             with transaction.atomic():
-                instance.delete_flag
+                instance.delete_flag = True
                 instance.updated_by = user.id
                 instance.save()
+                logger.info(f"User {user.username} delete permission {instance.name}")
                 return self.cus_response_deleted()
-
         except Exception as e:
             logger.error(e, exc_info=True)
-        return self.cus_response_500()
+            return self.cus_response_500()
 
+
+class AccountResetPassword(CustomAPIView):
+
+    @swagger_auto_schema(
+        operation_summary='Reset mật khẩu',
+        operation_description='Reset mật khẩu',
+        request_body=ser.ResetPasswordSerializers,
+        tags=[swagger_tags.ADMIN],
+    )
+    def post(self, request, *args, **kwargs):
+        try:
+            user_login = request.user
+            is_per = CheckPermission(per_code.RESET_PASSWORD, user_login.id).check()
+            if not is_per and not user_login.is_superuser:
+                return self.cus_response_403()
+        
+            serializers = ser.ResetPasswordSerializers(data=request.data)
+            serializers.is_valid(raise_exception=True)
+            data = serializers.validated_data
+
+            try:
+                with transaction.atomic():
+                    user = User.objects.filter(id=data['user_id']).first()
+                    if not user:
+                        return self.cus_response_404(ec.USER)
+                    user.set_password(data['password'])
+                    user.updated_by = user_login.id
+                    user.save()
+                    logger.info(f"User {user.username} reset password by {user_login.username}")
+                    return self.cus_response_updated()
+            except Exception as e:
+                logger.error(e, exc_info=True)
+                return self.cus_response_500()
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.cus_response_500()
+        

@@ -10,6 +10,8 @@ ADD_ACCOUNT = 'add_account'
 EDIT_ACCOUNT = 'edit_account'
 DELETE_ACCOUNT = 'delete_account'
 
+# Admin
+RESET_PASSWORD = 'reset_password'
 
 # Cấu hình phân quyền
 VIEW_CORE_PERMISSION = 'view_core_permission'
@@ -41,4 +43,7 @@ VIEW_REPORT_TEMPLATE = 'view_report_template'
 ADD_REPORT_TEMPLATE = 'add_report_template'
 EDIT_REPORT_TEMPLATE = 'edit_report_template'
 DELETE_REPORT_TEMPLATE = 'delete_report_template'
+
+# Statistics
+VIEW_STATISTICS = 'view_statistics'
 

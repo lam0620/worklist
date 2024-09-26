@@ -37,6 +37,15 @@
     },
     {
         "model": "account.permission",
+        "pk": "d3dfd69c-100c-40a7-9511-bf65f26deda1",
+        "fields": {
+            "code": "reset_password",
+            "name": "Reset password user",
+            "tag": "account"
+        }
+    },
+    {
+        "model": "account.permission",
         "pk": "40eaf014-1ce4-42ac-a634-c0b289477ce5",
         "fields": {
             "code": "view_roles",
@@ -273,5 +282,6 @@
             "name": "View statistics",
             "tag": "statistics"
         }
-    }    
+    }
+        
 ]
