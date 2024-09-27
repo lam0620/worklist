@@ -18,12 +18,13 @@ const LoginPage = () => {
   const [open, setOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const { user, login, logout } = useUser();
+  const [showPassword, setShowPassword] = useState(false);
 
   const hasViewStatisticsPermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_STATISTICS) ||
     user?.is_superuser;
 
-  const redirectUrl = (username:string) => {
+  const redirectUrl = (username: string) => {
     //if (username === 'root' || username === 'admin') {
     if (hasViewStatisticsPermission) {
       // router.push("/home");
@@ -32,26 +33,29 @@ const LoginPage = () => {
       const currentUrl = new URL(`${process.env.NEXT_PUBLIC_DICOM_VIEWER_URL}`);
       const urlParams = new URLSearchParams(currentUrl.search);
 
-      const formattedDate = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000))
-                            .toISOString().slice(0, 10).replace(/-/g, "");
-      urlParams.set('startDate', formattedDate);
+      const formattedDate = new Date(
+        Date.now() - new Date().getTimezoneOffset() * 60000
+      )
+        .toISOString()
+        .slice(0, 10)
+        .replace(/-/g, "");
+      urlParams.set("startDate", formattedDate);
 
       // router.push(currentUrl.toString());
       redirect(currentUrl.toString());
     }
-  }
+  };
 
   // If already logged in, rediect to /home
   if (user) {
     redirectUrl(user.username);
   }
 
-    
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      console.log('Login...');
+      console.log("Login...");
       const response = await Login({ username, password });
       if (response.status === 200) {
         const { access_token, refresh_token } = response.data?.data;
@@ -79,13 +83,18 @@ const LoginPage = () => {
       <Head>
         <title>Login</title>
       </Head>
-      <div style= {{
-                    backgroundImage: `url(${backgroundImage.src})`,
-                    backgroundSize: 'cover',
-                    opacity: 1
-                }}
-      className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
-        <div className="p-8 rounded shadow-md w-full max-w-md" style={{backgroundColor: '#323237',color:'#d0d0d0' }}>
+      <div
+        style={{
+          backgroundImage: `url(${backgroundImage.src})`,
+          backgroundSize: "cover",
+          opacity: 1,
+        }}
+        className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4"
+      >
+        <div
+          className="p-8 rounded shadow-md w-full max-w-md"
+          style={{ backgroundColor: "#323237", color: "#d0d0d0" }}
+        >
           <h1 className="text-3xl font-bold mb-6 text-center"></h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col">
@@ -96,25 +105,70 @@ const LoginPage = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300"
-                style={{backgroundColor: '#27272b'}}
+                style={{ backgroundColor: "#27272b" }}
               />
             </div>
             <div className="flex flex-col">
               {/* <label className="mb-2 font-medium">Password</label> */}
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300"
-                style={{backgroundColor: '#27272b'}}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="rounded p-3 w-full focus:outline-none focus:ring focus:border-blue-300"
+                  style={{ backgroundColor: "#27272b" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  {" "}
+                  {showPassword ? (
+                    <svg
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="#ffff"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C4.97196 6.49956 7.81811 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957Z"
+                        stroke="#1C274C"
+                        strokeWidth="1.5"
+                      />
+                      <path
+                        d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
+                        stroke="#1C274C"
+                        strokeWidth="1.5"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="#ffff"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5"
+                        stroke="#ffff"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
             <button
               type="submit"
               className="bg-blue-500 font-bold rounded p-3 w-full flex items-center justify-center"
               disabled={isLoading}
-              style={{backgroundColor: '#fe615a'}}
+              style={{ backgroundColor: "#fe615a" }}
             >
               {isLoading ? <ClipLoader color="white" size={24} /> : "LOGIN"}
             </button>
