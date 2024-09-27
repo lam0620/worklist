@@ -5,7 +5,6 @@ import AppLayout from "@/components/AppLayout";
 import PieChart from "@/components/chart/PieChart";
 import BarChart from "@/components/chart/BarChart";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { PERMISSIONS } from "@/utils/constant";
 
@@ -29,7 +28,6 @@ const HomePage = () => {
   const [dataPieChart, setDataPieChart] = useState<DataPieChart[]>([]);
   const [dataBarChart, setDataBarChart] = useState<DataBarChart[]>([]);
 
-  const router = useRouter();
   const { user } = useUser();
 
   const handleDataFetchedBarChart = (fetchedData: DataBarChart[]) => {
