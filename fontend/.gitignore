@@ -37,3 +37,5 @@ yarn-error.log*
 next-env.d.ts
 
 login_bg.jpg
+my_logo.*
+favicon.ico

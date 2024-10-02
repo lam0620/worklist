@@ -19,6 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <title>Login - Dicom Viewer</title>
+
       <body className={inter.className} suppressHydrationWarning>
         <UserProvider>
           {children}
