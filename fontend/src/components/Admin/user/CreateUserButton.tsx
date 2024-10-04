@@ -1,5 +1,7 @@
 import BaseButton from "../../Button";
 import CreateUserModal from "./CreateUserModal";
+import { useTranslation } from "../../../i18n";
+import { useState, useEffect } from "react";
 
 const CreateUserButton = ({
   onUserCreated,
@@ -8,9 +10,18 @@ const CreateUserButton = ({
   onUserCreated: () => void;
   onClose: () => void;
 }) => {
+  const [t, setT] = useState(() => (key: string) => key);
+
+  useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("userManagement");
+      setT(() => t);
+    };
+    loadTranslation();
+  }, []);
   return (
     <BaseButton
-      buttonText="Create User"
+      buttonText={t("Create User")}
       modalComponent={
         <CreateUserModal onUserCreated={onUserCreated} onClose={onClose} />
       }

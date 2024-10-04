@@ -1,28 +1,32 @@
 "use client";
 import * as Avatar from "@radix-ui/react-avatar";
 import { RoleDetailProps } from "@/app/types/RoleDetail";
+import { useTranslation } from "../../../i18n/client";
+import { useState, useEffect } from "react";
 
 interface Props {
   role: RoleDetailProps | null;
 }
 
 const RoleDetail = ({ role }: Props) => {
+  const { t } = useTranslation("roleManagement");
+
   return (
     <div className="flex flex-col items-center justify-center min-h-8 px-4">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <form className="space-y-6">
           <div className="flex items-center">
-            <label className="w-1/3 font-medium">Role Name</label>
+            <label className="w-1/3 font-medium">{t("Role Name")}</label>
             <div className="border rounded p-3 bg-gray-50">{role?.name}</div>
           </div>
           <div className="flex items-center">
-            <label className="w-1/3 font-medium">Description</label>
+            <label className="w-1/3 font-medium">{t("Description")}</label>
             <div className="border rounded p-3 bg-gray-50">
               {role?.description}
             </div>
           </div>
           <div className="flex items-center">
-            <label className="w-1/3 font-medium">Permissions</label>
+            <label className="w-1/3 font-medium">{t("Permissions")}</label>
             <div className="flex flex-wrap gap-2 justify-center w-2/3">
               {Array.isArray(role?.permissions) &&
                 role.permissions.map((permission) => (
@@ -36,7 +40,7 @@ const RoleDetail = ({ role }: Props) => {
             </div>
           </div>
           <div className="flex items-center">
-            <label className="w-1/3 font-medium">Users</label>
+            <label className="w-1/3 font-medium">{t("Users")}</label>
             <div className="flex flex-wrap gap-2 justify-center">
               {Array.isArray(role?.users) &&
                 role.users.map((user) => (

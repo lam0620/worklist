@@ -1,0 +1,16 @@
+{
+    "User":"User",
+    "Roles":"Roles",
+    "Doctor":"Doctor",
+    "Dicom Viewer":"Dicom Viewer",
+    "Submit":"Submit",
+    "Cancel":"Cancel",
+    "API call failed:":"API call failed:",
+    "Change password":"Change password",
+    "Change profile":"Change profile",
+    "User management":"User management",
+    "Role management":"Role management",
+    "Doctor management":"Doctor management",
+    "Log out":"Log out",
+    "Statistics":"Statistics"
+}

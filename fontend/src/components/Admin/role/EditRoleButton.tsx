@@ -1,6 +1,7 @@
 import { MyInfoProps } from "@/app/types/UserDetail";
 import EditRoleForm from "./EditRoleForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTranslation } from "../../../i18n";
 
 interface EditRoleButtonProps {
   roleDetail: any;
@@ -14,6 +15,15 @@ const EditRoleButton = ({
   user,
 }: EditRoleButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [t, setT] = useState(() => (key: string) => key);
+
+  useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("roleManagement");
+      setT(() => t);
+    };
+    loadTranslation();
+  }, []);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -24,7 +34,7 @@ const EditRoleButton = ({
         onClick={handleOpenModal}
         className="bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-500"
       >
-        Edit Role
+        {t("Edit Role")}
       </button>
       {isModalOpen && (
         <EditRoleForm

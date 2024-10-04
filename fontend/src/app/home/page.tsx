@@ -4,9 +4,10 @@ import withLoading from "@/components/withLoading";
 import AppLayout from "@/components/AppLayout";
 import PieChart from "@/components/chart/PieChart";
 import BarChart from "@/components/chart/BarChart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
 import { PERMISSIONS } from "@/utils/constant";
+import { useTranslation } from "../../i18n/client";
 
 interface DataPieChart {
   fullname: string;
@@ -27,9 +28,17 @@ const HomePage = () => {
   const [selectedDWM, setSelectedDWM] = useState("today"); //day,week,month
   const [dataPieChart, setDataPieChart] = useState<DataPieChart[]>([]);
   const [dataBarChart, setDataBarChart] = useState<DataBarChart[]>([]);
-
   const { user } = useUser();
 
+  // const [t, setT] = useState(() => (key: string) => key);
+
+  // useEffect(() => {
+  //   const loadTranslation = async () => {
+  const { t } = useTranslation("chartHome");
+  //     setT(() => t);
+  //   };
+  //   loadTranslation();
+  // }, []);
   const handleDataFetchedBarChart = (fetchedData: DataBarChart[]) => {
     setDataBarChart(fetchedData);
   };
@@ -53,25 +62,25 @@ const HomePage = () => {
     user?.is_superuser;
 
   return (
-    <AppLayout name="Statistics">
+    <AppLayout name={t("Statistics")}>
       {!hasViewStatisticsPermission && (
         <div className="flex flex-row items-center space-x-2 w-full m-5">
-          <label>You don't have view permission.</label>
+          <label>{t("You do not have view permission.")}</label>
         </div>
       )}
 
       {hasViewStatisticsPermission && (
         <>
           <div className="flex flex-row items-center space-x-2 w-full m-5">
-            <label>Lọc theo:</label>
+            <label>{t("Filter by:")}</label>
             <div className="text-sm flex-grow">
               <select
                 className="p-2 border rounded w-48"
                 onChange={onChangeType}
               >
-                <option value={"orders"}>Số lượng chỉ định</option>
-                <option value={"reports"}>Số lượng kết quả</option>
-                <option value={"studies"}>Số lượng ảnh chụp</option>
+                <option value={"orders"}>{t("Number of orders")}</option>
+                <option value={"reports"}>{t("Number of reports")}</option>
+                <option value={"studies"}>{t("Number of studies")}</option>
               </select>
             </div>
           </div>
@@ -80,17 +89,17 @@ const HomePage = () => {
             <div className="flex flex-col w-full md:w-1/2 space-y-4 mr-5 mb-5">
               <div className="flex flex-row items-center space-x-2 w-full">
                 <p className="ml-5">
-                  Tổng{" "}
+                  {t("Sum of")}{" "}
                   {type === "orders"
-                    ? "số lượng chỉ định"
+                    ? t("Number of orders")
                     : type === "reports"
-                    ? "số lượng kết quả"
-                    : "số lượng ảnh chụp"}{" "}
-                  trong 1 năm
+                    ? t("Number of reports")
+                    : t("Number of studies")}{" "}
+                  {t("in 1 year")}
                 </p>
               </div>
               <div className="flex flex-row items-center space-x-2 w-full ml-5">
-                <label className="mr-8">Năm:</label>
+                <label className="mr-8">{t("Year:")}</label>
                 <div className="text-sm flex-grow">
                   <select
                     className="p-2 border rounded w-48"
@@ -123,7 +132,7 @@ const HomePage = () => {
                   <thead style={{ backgroundColor: "#ffe699" }}>
                     <tr>
                       <th className="border border-neutral-950 px-1 py-1">
-                        Tháng
+                        {t("Month")}
                       </th>
                       {dataBarChart.map((item, index) => (
                         <th
@@ -138,7 +147,7 @@ const HomePage = () => {
                   <tbody>
                     <tr>
                       <td className="border border-neutral-950 px-1 py-1 text-center">
-                        Số lượng
+                        {t("Quantity")}
                       </td>
                       {dataBarChart.map((item, index) => (
                         <td
@@ -159,19 +168,19 @@ const HomePage = () => {
               <div className="flex flex-col w-full md:w-1/2 space-y-4 mr-5 md:mt-0">
                 <div className="flex flex-row items-center space-x-2 w-full ml-5">
                   <label className="mr-8">
-                    Số lượng theo bác sĩ trong khoảng thời gian mới nhất
+                    {t("Number by doctor in the latest period")}
                   </label>
                 </div>
                 <div className="flex flex-row items-center space-x-2 w-full ml-5">
-                  <label className="mr-8">Thời gian:</label>
+                  <label className="mr-8">{t("Time:")}</label>
                   <div className="text-sm flex-grow">
                     <select
                       className="p-2 border rounded w-48"
                       onChange={onChangeDWM}
                     >
-                      <option value={"today"}>Hôm nay</option>
-                      <option value={"1week"}>1 tuần qua</option>
-                      <option value={"1month"}>1 tháng qua</option>
+                      <option value={"today"}>{t("Today")}</option>
+                      <option value={"1week"}>{t("1 week ago")}</option>
+                      <option value={"1month"}>{t("1 month ago")}</option>
                     </select>
                   </div>
                 </div>
@@ -189,10 +198,10 @@ const HomePage = () => {
                     <thead style={{ backgroundColor: "#ffe699" }}>
                       <tr>
                         <th className="border border-neutral-950 px-1 py-1">
-                          Bác sĩ
+                          {t("Doctor")}
                         </th>
                         <th className="border border-neutral-950 px-1 py-1">
-                          Số lượng
+                          {t("Quantity")}
                         </th>
                       </tr>
                     </thead>
@@ -218,5 +227,4 @@ const HomePage = () => {
     </AppLayout>
   );
 };
-
 export default withLoading(HomePage);

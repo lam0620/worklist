@@ -4,6 +4,8 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { PERMISSIONS } from "@/utils/constant";
+import { useTranslation } from "../i18n/client";
+import { useState, useEffect } from "react";
 
 interface AvatarProps {
   firstName: string;
@@ -15,6 +17,8 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
   const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`;
   const router = useRouter();
   const { logout, user } = useUser();
+
+  const { t } = useTranslation("others");
 
   const handleSignOut = () => {
     logout();
@@ -38,7 +42,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
   };
   const handleDoctorManagement = () => {
     router.push("/admin/doctors");
-  }
+  };
 
   const hasViewUserPermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_ACCOUNT) || user?.is_superuser;
@@ -73,13 +77,13 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
           onSelect={handleChangePassword}
           className="cursor-pointer p-2 hover:bg-gray-100 rounded"
         >
-          Change password
+          {t("Change password")}
         </DropdownMenu.Item>
         <DropdownMenu.Item
           onSelect={handleEditProfile}
           className="cursor-pointer p-2 hover:bg-gray-100 rounded"
         >
-          Change profile
+          {t("Change profile")}
         </DropdownMenu.Item>
         <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
         {hasViewUserPermission && (
@@ -87,7 +91,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             onSelect={handleUserManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
           >
-            User management
+            {t("User management")}
           </DropdownMenu.Item>
         )}
         {hasViewRolePermission && (
@@ -95,7 +99,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             onSelect={handleRoleManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
           >
-            Role management
+            {t("Role management")}
           </DropdownMenu.Item>
         )}
         {hasViewRolePermission && (
@@ -103,7 +107,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             onSelect={handleDoctorManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
           >
-            Doctor management
+            {t("Doctor management")}
           </DropdownMenu.Item>
         )}
         <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
@@ -111,7 +115,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
           onSelect={handleSignOut}
           className="cursor-pointer p-2 hover:bg-gray-100 rounded"
         >
-          Log out
+          {t("Log out")}
         </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>

@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import MultiSelect from "../../MultiSelect";
 import { UUID } from "crypto";
-import { CreateAccount, CreateDoctor, fetchRolesList } from "@/services/apiService";
+import {
+  CreateAccount,
+  CreateDoctor,
+  fetchRolesList,
+} from "@/services/apiService";
 import { toast } from "react-toastify";
 import { showErrorMessage } from "@/utils/showMessageError";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useTranslation } from "../../../i18n";
 interface Role {
   id: UUID;
   name: string;
@@ -28,8 +33,14 @@ const CreateUserModal = ({
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
+  const [t, setT] = useState(() => (key: string) => key);
 
   useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("userManagement");
+      setT(() => t);
+    };
+    loadTranslation();
     const fetchRoles = async () => {
       try {
         const response = await fetchRolesList();
@@ -65,8 +76,8 @@ const CreateUserModal = ({
         const message = showErrorMessage(code, item, msg);
         toast.error(message);
       } else {
-      // if (response.status === 201) {
-        toast.success("User created successfully");
+        // if (response.status === 201) {
+        toast.success(t("User created successfully"));
         onUserCreated();
         onClose();
       }
@@ -80,25 +91,26 @@ const CreateUserModal = ({
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!username) newErrors.username = "This field is required";
-    if (!password) newErrors.password = "This field is required";
-    if (!confirmPassword) newErrors.confirmPassword = "This field is required";
+    if (!username) newErrors.username = t("This field is required");
+    if (!password) newErrors.password = t("This field is required");
+    if (!confirmPassword)
+      newErrors.confirmPassword = t("This field is required");
     if (password !== confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
-    if (!firstName) newErrors.firstName = "This field is required";
-    if (!lastName) newErrors.lastName = "This field is required";
+      newErrors.confirmPassword = t("Passwords do not match");
+    if (!firstName) newErrors.firstName = t("This field is required");
+    if (!lastName) newErrors.lastName = t("This field is required");
     if (!email) {
       //newErrors.email = "This field is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Email is invalid";
+      newErrors.email = t("Email is invalid");
     }
     if (selectedRoles.length === 0) {
-      newErrors.roles = "Please select at least one role";
+      newErrors.roles = t("Please select at least one role");
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   const handleCancel = () => {
     setShowUnsavedChangesPopup(true);
   };
@@ -115,11 +127,13 @@ const CreateUserModal = ({
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold mb-4">Create User</h2>
+        <h2 className="text-2xl font-bold mb-4">{t("Create User")}</h2>
         <form onSubmit={handleCreateUser} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium">Username</label>
+              <label className="block text-sm font-medium">
+                {t("Username")}
+              </label>
               <input
                 type="text"
                 value={username}
@@ -147,7 +161,9 @@ const CreateUserModal = ({
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium">First Name</label>
+              <label className="block text-sm font-medium">
+                {t("First Name")}
+              </label>
               <input
                 type="text"
                 value={firstName}
@@ -161,7 +177,9 @@ const CreateUserModal = ({
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium">Last Name</label>
+              <label className="block text-sm font-medium">
+                {t("Last Name")}
+              </label>
               <input
                 type="text"
                 value={lastName}
@@ -175,7 +193,9 @@ const CreateUserModal = ({
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium">Password</label>
+              <label className="block text-sm font-medium">
+                {t("Password")}
+              </label>
               <input
                 type="password"
                 value={password}
@@ -189,7 +209,9 @@ const CreateUserModal = ({
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium">Confirm Password</label>
+              <label className="block text-sm font-medium">
+                {t("Confirm Password")}
+              </label>
               <input
                 type="password"
                 value={confirmPassword}
@@ -208,7 +230,7 @@ const CreateUserModal = ({
                   errors.lastName ? "border-red-500" : "border-gray-300"
                 } `}
               >
-                Roles
+                {t("Roles")}
               </label>
               <MultiSelect
                 options={roles}
@@ -228,36 +250,36 @@ const CreateUserModal = ({
               onClick={handleCancel}
               className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-              Create
+              {t("Create")}
             </button>
           </div>
           <Dialog.Root open={showUnsavedChangesPopup}>
             <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
             <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
               <Dialog.Title className="text-xl font-bold mb-4">
-                Unsaved Changes
+                {t("Unsaved Changes")}
               </Dialog.Title>
-              <p>Are you sure you want to discard your changes?</p>
+              <p>{t("Are you sure you want to discard your changes?")}</p>
               <div className="flex justify-end space-x-2 mt-4">
                 <button
                   type="button"
                   className="px-4 py-2 bg-gray-200 rounded-md"
                   onClick={closeDiscardPopup}
                 >
-                  Cancel
+                  {t("Cancel")}
                 </button>
                 <button
                   type="button"
                   className="px-4 py-2 bg-red-600 text-white rounded-md"
                   onClick={confirmDiscardChanges}
                 >
-                  Yes
+                  {t("Yes")}
                 </button>
               </div>
             </Dialog.Content>

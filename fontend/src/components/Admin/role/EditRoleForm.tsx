@@ -7,6 +7,7 @@ import { showErrorMessage } from "@/utils/showMessageError";
 import { RoleDetailProps } from "@/app/types/RoleDetail";
 import { PermissionListProps } from "@/app/types/Permission";
 import { MyInfoProps } from "@/app/types/UserDetail";
+import { useTranslation } from "../../../i18n";
 
 interface EditRoleFormProps {
   role: RoleDetailProps;
@@ -26,14 +27,20 @@ const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
   );
   const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [t, setT] = useState(() => (key: string) => key);
 
   useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("roleManagement");
+      setT(() => t);
+    };
+    loadTranslation();
     const fetchPermissions = async () => {
       try {
         const response = await fetchPermissionsList({ isPage: false });
         setFullPermissions(response.data?.data);
       } catch (error) {
-        console.error("Failed to fetch permissions:", error);
+        console.error(t("Failed to fetch permissions:"), error);
       }
     };
 
@@ -51,7 +58,7 @@ const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
         permissions.includes(permission.id)
       );
       onEdit({ ...role, name, description, permissions: permissions_obj });
-      toast.success("Role updated successfully");
+      toast.success(t("Role updated successfully"));
       onClose();
     } catch (error: any) {
       const code = error?.response?.data?.result?.code;
@@ -64,11 +71,11 @@ const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
     if (!name) {
-      errors.name = "Name is required";
+      errors.name = t("Name is required");
     }
 
     if (permissions.length === 0) {
-      errors.permissions = "Permissions are required";
+      errors.permissions = t("Permissions are required");
     }
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -90,14 +97,14 @@ const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
   return (
     <>
       <Dialog.Root open onOpenChange={onClose}>
-      <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-      <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl text-justify">
-        <Dialog.Title className="text-xl font-bold mb-4 ml-0">
-            Edit Role 
+        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+        <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl text-justify">
+          <Dialog.Title className="text-xl font-bold mb-4 ml-0">
+            {t("Edit Role")}
           </Dialog.Title>
           <form>
             <div className="mb-4">
-              <label className="block text-gray-700">Name</label>
+              <label className="block text-gray-700">{t("Name")}</label>
               <input
                 type="text"
                 className={`w-full px-3 py-2 border border-gray-300 rounded-md ${
@@ -111,7 +118,7 @@ const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
               )}
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700">Description</label>
+              <label className="block text-gray-700">{t("Description")}</label>
               <input
                 type="text"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -122,7 +129,7 @@ const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
             <div
               className={`mb-4 ${errors.permissions ? "border-red-500" : ""}`}
             >
-              <label className="block text-gray-700">Permissions</label>
+              <label className="block text-gray-700">{t("Permissions")}</label>
               <CheckboxGroup
                 options={fullPermissions}
                 selectedOptions={permissions}
@@ -141,14 +148,14 @@ const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
                 className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md mr-2"
                 onClick={handleCancel}
               >
-                Cancel
+                {t("Cancel")}
               </button>
               <button
                 type="button"
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 onClick={handleSave}
               >
-                Save
+                {t("Save")}
               </button>
             </div>
           </form>
@@ -158,23 +165,25 @@ const EditRoleForm = ({ role, onEdit, onClose, user }: EditRoleFormProps) => {
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
         <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
           <Dialog.Title className="text-xl font-bold mb-4">
-            Discard Changes
+            {t("Discard Changes")}
           </Dialog.Title>
-          <p className="mb-4">Are you sure you want to discard changes?</p>
+          <p className="mb-4">
+            {t("Are you sure you want to discard changes?")}
+          </p>
           <div className="flex justify-end">
             <button
               type="button"
               className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md mr-2"
               onClick={closeDiscardPopup}
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               type="button"
               className="px-4 py-2 bg-red-500 text-white rounded-md"
               onClick={confirmDiscardChanges}
             >
-              Yes
+              {t("Yes")}
             </button>
           </div>
         </Dialog.Content>

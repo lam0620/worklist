@@ -3,6 +3,7 @@ import CreateDoctorModal from "./CreateDoctorModal";
 import { fetchAccountsList, fetchDoctorsList } from "@/services/apiService";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { useTranslation } from "../../../i18n";
 
 const CreateDoctorButton = ({
   onDoctorCreated,
@@ -13,8 +14,14 @@ const CreateDoctorButton = ({
 }) => {
   const [users, setUsers] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const [t, setT] = useState(() => (key: string) => key);
 
   useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("doctorManagement");
+      setT(() => t);
+    };
+    loadTranslation();
     fetchUsers().then((r) => r);
     fetchDoctors().then((r) => r);
   }, []);
@@ -25,9 +32,9 @@ const CreateDoctorButton = ({
       setUsers(response.data?.data);
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error("You don't have permission to view users");
+        toast.error(t("You don't have permission to view users"));
       } else {
-        toast.error("Failed to fetch users");
+        toast.error(t("Failed to fetch users"));
       }
     }
   };
@@ -37,18 +44,19 @@ const CreateDoctorButton = ({
       setDoctors(response.data?.data);
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error("You don't have permission to view users");
+        toast.error(t("You don't have permission to view users"));
       } else {
-        toast.error("Failed to fetch users");
+        toast.error(t("Failed to fetch users"));
       }
     }
   };
 
   return (
     <BaseButton
-      buttonText="Create Doctor"
+      buttonText={t("Create Doctor")}
       modalComponent={
         <CreateDoctorModal
+          t={t}
           doctors={doctors}
           users={users}
           onDoctorCreated={onDoctorCreated}

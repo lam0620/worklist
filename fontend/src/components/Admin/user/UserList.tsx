@@ -3,11 +3,12 @@ import { Checkbox } from "@radix-ui/themes";
 import { PERMISSIONS } from "@/utils/constant";
 import { UserDetailProps } from "@/app/types/UserDetail";
 import BaseDialog from "@/components/BaseDialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ResetPassword } from "@/services/apiService";
 import { toast } from "react-toastify";
 import { showErrorMessage } from "@/utils/showMessageError";
 import { useUser } from "@/context/UserContext";
+import { useTranslation } from "../../../i18n";
 
 interface UserListProps {
   users: UserDetailProps[];
@@ -19,6 +20,7 @@ interface UserListProps {
   totalPages: number;
   onPageChange: (page: number) => void;
   selectedUsers: { [key: string]: boolean };
+  t: (key: string) => string;
 }
 
 const UserList = ({
@@ -31,14 +33,24 @@ const UserList = ({
   totalPages,
   onPageChange,
   selectedUsers,
+  t,
 }: UserListProps) => {
   const { user } = useUser();
-  
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserDetailProps | null>(
     null
   );
   const [newPassword, setNewPassword] = useState("");
+  // const [t, setT] = useState(() => (key: string) => key);
+
+  // useEffect(() => {
+  //   const loadTranslation = async () => {
+  //     const { t } = await useTranslation("userManagement");
+  //     setT(() => t);
+  //   };
+  //   loadTranslation();
+  // }, []);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -54,11 +66,14 @@ const UserList = ({
 
   const isRootOrIntegUser = (detailUser: any) => {
     // Root, Integ or login user
-    if (["root","integ_user"].includes(detailUser.username) || user.username === detailUser.username) {
+    if (
+      ["root", "integ_user"].includes(detailUser.username) ||
+      user.username === detailUser.username
+    ) {
       return true;
     }
     return false;
-  }
+  };
 
   const openDialog = (user: UserDetailProps) => {
     setSelectedUser(user);
@@ -78,7 +93,7 @@ const UserList = ({
           user_id: selectedUser.id,
           password: newPassword,
         });
-        toast.success("Password reset successfully");
+        toast.success(t("Password reset successfully"));
         closeDialog();
       } catch (error: any) {
         console.log(error);
@@ -94,10 +109,10 @@ const UserList = ({
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex items-center justify-between p-2 border-b bg-gray-100">
         <div className="w-1/12 font-semibold"></div>
-        <div className="w-4/12 font-semibold">Full Name</div>
+        <div className="w-4/12 font-semibold">{t("Full Name")}</div>
         <div className="w-2/12 font-semibold">Email</div>
-        <div className="w-3/12 font-semibold">Role</div>
-        <div className="w-2/12 font-semibold">Date Created</div>
+        <div className="w-3/12 font-semibold">{t("Role")}</div>
+        <div className="w-2/12 font-semibold">{t("Date Created")}</div>
       </div>
       <ul className="flex-grow">
         {users.map((user) => (
@@ -160,7 +175,7 @@ const UserList = ({
                   className="text-blue-500"
                   onClick={() => openDialog(user)}
                 >
-                  Reset password
+                  {t("Reset password")}
                 </button>
               )}
             </div>
@@ -175,7 +190,7 @@ const UserList = ({
               disabled={currentPage === 1}
               className="px-4 py-2 mx-1 bg-gray-200 rounded-md disabled:opacity-50"
             >
-              Previous
+              {t("Previous")}
             </button>
             {[...Array(totalPages)].map((_, index) => (
               <button
@@ -195,7 +210,7 @@ const UserList = ({
               disabled={currentPage === totalPages}
               className="px-4 py-2 mx-1 bg-gray-200 rounded-md disabled:opacity-50"
             >
-              Next
+              {t("Next")}
             </button>
           </div>
         </div>
@@ -217,13 +232,13 @@ const UserList = ({
             className="px-4 py-2 bg-red-500 text-white rounded-md mr-2"
             onClick={closeDialog}
           >
-            Cancel
+            {t("Cancel")}
           </button>
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-md"
             onClick={handleResetPassword}
           >
-            Reset
+            {t("Reset")}
           </button>
         </div>
       </BaseDialog>

@@ -6,8 +6,9 @@ import { getGenderLabel } from "@/utils/utils";
 import Link from "next/link";
 import { DeleteDoctorSign } from "@/services/apiService";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ConfirmModal from "../../ConfirmModal";
+import { useTranslation } from "../../../i18n/client";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
@@ -29,6 +30,9 @@ const DoctorDetail = ({ doctor }: Props) => {
 
   const [sign, setSign] = useState(doctor?.sign);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const { t } = useTranslation("doctorManagement");
+
   const onDeleteSign = async () => {
     const config = {
       headers: {
@@ -39,10 +43,10 @@ const DoctorDetail = ({ doctor }: Props) => {
 
     const response = await DeleteDoctorSign(doctor?.id, config);
     if (response.status == 200 && response.data?.result?.status === "OK") {
-      toast.success("Sign deleted successfully");
+      toast.success(t("Sign deleted successfully"));
       setSign("");
     } else {
-      toast.error("Failed to delete sign");
+      toast.error(t("Failed to delete sign"));
     }
   };
 
@@ -64,18 +68,20 @@ const DoctorDetail = ({ doctor }: Props) => {
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <form className="space-y-6">
           {[
-            { label: "Username", value: doctor?.username },
-            { label: "Doctor's code", value: doctor?.doctor_no },
-            { label: "Full name", value: doctor?.fullname },
-            { label: "Title", value: doctor?.title },
-            { label: "Gender", value: getGenderLabel(doctor?.gender) },
+            { label: t("Username"), value: doctor?.username },
+            { label: t("Doctor's code"), value: doctor?.doctor_no },
+            { label: t("Full name"), value: doctor?.fullname },
+            { label: t("Title"), value: doctor?.title },
+            { label: t("Gender"), value: getGenderLabel(doctor?.gender) },
             {
-              label: "Type",
+              label: t("Type"),
               value:
-                doctor?.type === "R" ? "Radiologist" : "Referring Physician",
+                doctor?.type === "R"
+                  ? t("Radiologist")
+                  : t("Referring Physician"),
             },
             {
-              label: "Sign",
+              label: t("Sign"),
               value: sign ? (
                 <div className="flex items-center justify-between">
                   <div></div>
@@ -87,7 +93,7 @@ const DoctorDetail = ({ doctor }: Props) => {
                   <Link
                     href={""}
                     onClick={openConfirmModal}
-                    title="Delete sign"
+                    title={t("Delete sign")}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +119,7 @@ const DoctorDetail = ({ doctor }: Props) => {
               ) : null,
             },
             {
-              label: "Active",
+              label: t("Active"),
               value: (
                 <Checkbox
                   checked={doctor?.is_active}
@@ -133,7 +139,9 @@ const DoctorDetail = ({ doctor }: Props) => {
           ))}
           {isConfirmOpen && (
             <ConfirmModal
-              message="Are you sure you want to delete this doctor's sign ?"
+              message={t(
+                "Are you sure you want to delete this doctor's sign ?"
+              )}
               onConfirm={confirmDelete}
               onCancel={closeConfirmModal}
             />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -7,6 +7,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { useRouter } from "next/navigation";
 import { UUID } from "crypto";
+import { useTranslation } from "../../../i18n";
 
 interface DropdownMenuProps {
   userId: UUID;
@@ -20,6 +21,15 @@ const UserDropdownMenu = ({
   isAdminUser,
 }: DropdownMenuProps) => {
   const router = useRouter();
+  const [t, setT] = useState(() => (key: string) => key);
+
+  useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("userManagement");
+      setT(() => t);
+    };
+    loadTranslation();
+  }, []);
 
   const handleEdit = () => {
     // Logic to handle edit user
@@ -35,7 +45,7 @@ const UserDropdownMenu = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className="p-2 rounded-full hover:bg-gray-200 focus:outline-none">
-          <span className="sr-only">Open options</span>
+          <span className="sr-only">{t("Open options")}</span>
           <svg
             className="w-6 h-6"
             fill="none"
@@ -61,7 +71,7 @@ const UserDropdownMenu = ({
               : ""
           }`}
         >
-          Edit
+          {t("Edit")}
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={handleDelete}
@@ -72,7 +82,7 @@ const UserDropdownMenu = ({
               : ""
           }`}
         >
-          Delete
+          {t("Delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

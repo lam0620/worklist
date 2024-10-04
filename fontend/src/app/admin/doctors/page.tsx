@@ -10,6 +10,7 @@ import { PERMISSIONS } from "@/utils/constant";
 import { toast } from "react-toastify";
 import CreateDoctorButton from "@/components/Admin/doctor/CreateDoctorButton";
 import ChangeActiveDoctorButton from "@/components/Admin/doctor/ChangeActiveDoctorButton";
+import { useTranslation } from "../../../i18n/client";
 
 const DocterListPage = () => {
   const { user } = useUser();
@@ -24,9 +25,10 @@ const DocterListPage = () => {
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState("");
 
+  const { t } = useTranslation("doctorManagement");
   useEffect(() => {
     if (user) {
-      fetchDoctor(currentPage, searchQuery, activeFilter).then((r) => r);
+      fetchDoctor(currentPage, searchQuery, activeFilter);
     }
   }, [user, currentPage, searchQuery, activeFilter]);
 
@@ -48,10 +50,10 @@ const DocterListPage = () => {
       );
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error("You don't have permission to view doctors");
+        toast.error(t("You don't have permission to view doctors"));
         router.back();
       } else {
-        toast.error("Failed to fetch doctors");
+        toast.error(t("Failed to fetch doctors"));
         router.back();
       }
     }
@@ -105,7 +107,7 @@ const DocterListPage = () => {
   };
 
   return (
-    <AppLayout name="Doctors">
+    <AppLayout name={t("Doctors")}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
         <div className="w-full">
           <div className="flex justify-between items-center mb-4">
@@ -114,7 +116,7 @@ const DocterListPage = () => {
                 className="bg-gray-400 rounded px-4 py-2 text-white"
                 onClick={() => router.push("/home")}
               >
-                Home
+                {t("Home")}
               </button>
               {hasActiveDoctorPermission &&
                 (activeFilter === "true" || activeFilter === "false") && (
@@ -146,7 +148,7 @@ const DocterListPage = () => {
             <div className="flex gap-2 relative">
               <input
                 type="text"
-                placeholder="Search doctors..."
+                placeholder={t("Search doctors...")}
                 onChange={handleSearchChange}
                 className="mb-4 p-2 border rounded"
               />
@@ -154,9 +156,9 @@ const DocterListPage = () => {
                 className="mb-4 p-2 border rounded"
                 onChange={handleActiveChange}
               >
-                <option value="all">All</option>
-                <option value="true">Active</option>
-                <option value="false">Deactive</option>
+                <option value="all">{t("All")}</option>
+                <option value="true">{t("Active")}</option>
+                <option value="false">{t("Deactive")}</option>
               </select>
             </div>
           </div>

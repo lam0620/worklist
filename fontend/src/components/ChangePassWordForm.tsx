@@ -1,10 +1,12 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { ChangePassword } from "../services/apiService";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { showErrorMessage } from "@/utils/showMessageError";
+import { useTranslation } from "../i18n/client";
 
 const ChangePasswordForm = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -16,6 +18,8 @@ const ChangePasswordForm = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const { t } = useTranslation("changePassword");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +33,7 @@ const ChangePasswordForm = () => {
         confirm_password: confirmNewPassword,
       });
       if (response.status === 200) {
-        toast.success("Password changed successfully");
+        toast.success(t("Password changed successfully"));
         router.push("/login");
         logout();
       }
@@ -44,16 +48,16 @@ const ChangePasswordForm = () => {
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     if (!currentPassword) {
-      newErrors.currentPassword = "Current password is required";
+      newErrors.currentPassword = t("Current password is required");
     }
     if (!newPassword) {
-      newErrors.newPassword = "New password is required";
+      newErrors.newPassword = t("New password is required");
     }
     if (!confirmNewPassword) {
-      newErrors.confirmNewPassword = "Confirm new password is required";
+      newErrors.confirmNewPassword = t("Confirm new password is required");
     }
     if (newPassword !== confirmNewPassword) {
-      newErrors.confirmNewPassword = "Passwords do not match";
+      newErrors.confirmNewPassword = t("Passwords do not match");
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -61,26 +65,26 @@ const ChangePasswordForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h2 className="text-xl font-bold">Change password</h2>
+      <h2 className="text-xl font-bold">{t("Change password")}</h2>
       <div>
         <label
           htmlFor="currentPassword"
           className="block text-sm font-medium text-gray-700"
         >
-          Current password
+          {t("Current password")}
         </label>
         {/* <div className="relative">
-          <input
-            id="currentPassword"
-            name="currentPassword"
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 ${
-              errors.currentPassword ? "border-red-500" : "border-gray-300"
-            } rounded `}
-          />
-        </div> */}
+            <input
+              id="currentPassword"
+              name="currentPassword"
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 ${
+                errors.currentPassword ? "border-red-500" : "border-gray-300"
+              } rounded `}
+            />
+          </div> */}
         <div className="relative">
           <input
             type={showCurrentPassword ? "text" : "password"}
@@ -146,18 +150,18 @@ const ChangePasswordForm = () => {
           htmlFor="newPassword"
           className="block text-sm font-medium text-gray-700"
         >
-          New password
+          {t("New password")}
         </label>
         {/* <input
-          id="newPassword"
-          name="newPassword"
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 ${
-            errors.newPassword ? "border-red-500" : "border-gray-300"
-          } rounded `}
-        /> */}
+            id="newPassword"
+            name="newPassword"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 ${
+              errors.newPassword ? "border-red-500" : "border-gray-300"
+            } rounded `}
+          /> */}
         <div className="relative">
           <input
             type={showNewPassword ? "text" : "password"}
@@ -223,18 +227,18 @@ const ChangePasswordForm = () => {
           htmlFor="confirmNewPassword"
           className="block text-sm font-medium text-gray-700"
         >
-          New password (Confirm)
+          {t("New password (Confirm)")}
         </label>
         {/* <input
-          id="confirmNewPassword"
-          name="confirmNewPassword"
-          type="password"
-          value={confirmNewPassword}
-          onChange={(e) => setConfirmNewPassword(e.target.value)}
-          className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 ${
-            errors.confirmNewPassword ? "border-red-500" : "border-gray-300"
-          } rounded `}
-        /> */}
+            id="confirmNewPassword"
+            name="confirmNewPassword"
+            type="password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+            className={`w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 ${
+              errors.confirmNewPassword ? "border-red-500" : "border-gray-300"
+            } rounded `}
+          /> */}
         <div className="relative">
           <input
             type={showConfirmPassword ? "text" : "password"}
@@ -301,13 +305,13 @@ const ChangePasswordForm = () => {
           className="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-md hover:bg-gray-700"
           onClick={() => router.back()}
         >
-          Cancel
+          {t("Cancel")}
         </button>
         <button
           type="submit"
           className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
         >
-          Update
+          {t("Update")}
         </button>
       </div>
     </form>

@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter, redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 import { ClipLoader } from "react-spinners";
 import * as Toast from "@radix-ui/react-toast";
 import Head from "next/head";
 import { useUser } from "@/context/UserContext";
 import { Login } from "@/services/apiService";
 import { PERMISSIONS } from "@/utils/constant";
-
+import { lng } from "../../i18n/index";
 import backgroundImage from "../../../public/images/login_bg.jpg";
+import "../../../node_modules/flag-icons/css/flag-icons.min.css";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -19,6 +20,9 @@ const LoginPage = () => {
   const [toastMessage, setToastMessage] = useState("");
   const { user, login, logout } = useUser();
   const [showPassword, setShowPassword] = useState(false);
+  const [language, setLanguage] = useState("vi");
+  const [isOpen, setIsOpen] = useState(false);
+  const [pageTitle, setPageTitle] = useState("Login");
 
   const hasViewStatisticsPermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_STATISTICS) ||
@@ -78,10 +82,54 @@ const LoginPage = () => {
     }
   };
 
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language");
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+      lng(savedLanguage);
+      updatePageTitle(savedLanguage);
+    }
+  }, []);
+
+  const handleChangeLanguage = (selectedLanguage: string) => {
+    setLanguage(selectedLanguage);
+    lng(selectedLanguage);
+    localStorage.setItem("language", selectedLanguage);
+    updatePageTitle(selectedLanguage);
+    setIsOpen(false);
+  };
+
+  const flagCode = (lang: string) => {
+    switch (lang) {
+      case "en":
+        return "gb";
+      case "vi":
+        return "vn";
+      case "jp":
+        return "jp";
+      default:
+        return "gb";
+    }
+  };
+  const updatePageTitle = (lang: string) => {
+    switch (lang) {
+      case "vi":
+        setPageTitle("Đăng nhập");
+        break;
+      case "jp":
+        setPageTitle("ログイン");
+        break;
+      case "en":
+      default:
+        setPageTitle("Login");
+        break;
+    }
+  };
+
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>{pageTitle}</title>
       </Head>
       <div
         style={{
@@ -89,16 +137,105 @@ const LoginPage = () => {
           backgroundSize: "cover",
           opacity: 1,
         }}
-        className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4"
+        className="flex flex-col items-center justify-center min-h-screen bg-white px-4"
       >
         <div
-          className="p-8 rounded shadow-md w-full max-w-md"
+          className="p-8 rounded shadow-md w-full max-w-md relative"
           style={{ backgroundColor: "#323237", color: "#d0d0d0" }}
         >
-          <h1 className="text-3xl font-bold mb-6 text-center"></h1>
+          <div className="absolute right-4">
+            <div className="relative">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                type="button"
+                className="items-center inline-flex justify-center whitespace-nowrap w-32 rounded-md shadow-sm px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <span
+                  className={`fi fis fi-${flagCode(language)} rounded-full`}
+                  style={{
+                    display: "inline-block",
+                    width: "24px",
+                    height: "24px",
+                    overflow: "hidden",
+                    border: "1px solid black",
+                    boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "50%",
+                    marginRight: "4px",
+                  }}
+                />
+                {language === "en"
+                  ? "English"
+                  : language === "vi"
+                  ? "Tiếng Việt"
+                  : "日本語"}
+              </button>
+              {isOpen && (
+                <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="py-1 grid grid-cols-1 gap-2" role="none">
+                    <button
+                      onClick={() => handleChangeLanguage("en")}
+                      className="flex items-center px-4 py-2 text-sm hover:bg-gray-900 text-white"
+                    >
+                      <span
+                        className="fi fis fi-gb mr-2"
+                        style={{
+                          display: "inline-block",
+                          width: "24px",
+                          height: "24px",
+                          borderRadius: "50%",
+                          border: "1px solid black",
+                          overflow: "hidden",
+                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+                        }}
+                      />
+                      English
+                    </button>
+                    <button
+                      onClick={() => handleChangeLanguage("vi")}
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-900"
+                    >
+                      <span
+                        className="fi fis fi-vn rounded-full"
+                        style={{
+                          display: "inline-block",
+                          width: "24px",
+                          height: "24px",
+                          overflow: "hidden",
+                          border: "1px solid black",
+                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+                          borderRadius: "50%",
+                          marginRight: "4px",
+                        }}
+                      />
+                      Tiếng Việt
+                    </button>
+                    <button
+                      onClick={() => handleChangeLanguage("jp")}
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-900"
+                    >
+                      <span
+                        className="fi fis fi-jp mr-2"
+                        style={{
+                          display: "inline-block",
+                          width: "24px",
+                          height: "24px",
+                          borderRadius: "50%",
+                          border: "1px solid black",
+                          overflow: "hidden",
+                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+                        }}
+                      />
+                      日本語
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <h1 className="text-3xl font-bold mb-6 text-center">{pageTitle}</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col">
-              {/* <label className="mb-2 font-medium">Username</label> */}
               <input
                 type="text"
                 placeholder="Username"
@@ -109,7 +246,6 @@ const LoginPage = () => {
               />
             </div>
             <div className="flex flex-col">
-              {/* <label className="mb-2 font-medium">Password</label> */}
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -124,7 +260,6 @@ const LoginPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 >
-                  {" "}
                   {showPassword ? (
                     <svg
                       width="24px"
@@ -136,9 +271,9 @@ const LoginPage = () => {
                       <path
                         d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5"
                         stroke="#ffff"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
                   ) : (
@@ -170,11 +305,10 @@ const LoginPage = () => {
               disabled={isLoading}
               style={{ backgroundColor: "#fe615a" }}
             >
-              {isLoading ? <ClipLoader color="white" size={24} /> : "LOGIN"}
+              {isLoading ? <ClipLoader color="white" size={24} /> : pageTitle}
             </button>
           </form>
         </div>
-
         <Toast.Provider>
           <Toast.Root
             open={open}
