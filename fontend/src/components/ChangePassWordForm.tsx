@@ -227,7 +227,7 @@ const ChangePasswordForm = () => {
           htmlFor="confirmNewPassword"
           className="block text-sm font-medium text-gray-700"
         >
-          {t("New password (Confirm)")}
+          {t("Confirm new password")}
         </label>
         {/* <input
             id="confirmNewPassword"

@@ -140,100 +140,12 @@ const LoginPage = () => {
         className="flex flex-col items-center justify-center min-h-screen bg-white px-4"
       >
         <div
-          className="p-8 rounded shadow-md w-full max-w-md relative"
+          className="px-14 pt-16 pb-6 rounded shadow-md w-full max-w-lg relative"
           style={{ backgroundColor: "#323237", color: "#d0d0d0" }}
         >
-          <div className="absolute right-4">
-            <div className="relative">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                type="button"
-                className="items-center inline-flex justify-center whitespace-nowrap w-32 rounded-md shadow-sm px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                <span
-                  className={`fi fis fi-${flagCode(language)} rounded-full`}
-                  style={{
-                    display: "inline-block",
-                    width: "24px",
-                    height: "24px",
-                    overflow: "hidden",
-                    border: "1px solid black",
-                    boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
-                    borderRadius: "50%",
-                    marginRight: "4px",
-                  }}
-                />
-                {language === "en"
-                  ? "English"
-                  : language === "vi"
-                  ? "Tiếng Việt"
-                  : "日本語"}
-              </button>
-              {isOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
-                  <div className="py-1 grid grid-cols-1 gap-2" role="none">
-                    <button
-                      onClick={() => handleChangeLanguage("en")}
-                      className="flex items-center px-4 py-2 text-sm hover:bg-gray-900 text-white"
-                    >
-                      <span
-                        className="fi fis fi-gb mr-2"
-                        style={{
-                          display: "inline-block",
-                          width: "24px",
-                          height: "24px",
-                          borderRadius: "50%",
-                          border: "1px solid black",
-                          overflow: "hidden",
-                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
-                        }}
-                      />
-                      English
-                    </button>
-                    <button
-                      onClick={() => handleChangeLanguage("vi")}
-                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-900"
-                    >
-                      <span
-                        className="fi fis fi-vn rounded-full"
-                        style={{
-                          display: "inline-block",
-                          width: "24px",
-                          height: "24px",
-                          overflow: "hidden",
-                          border: "1px solid black",
-                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
-                          borderRadius: "50%",
-                          marginRight: "4px",
-                        }}
-                      />
-                      Tiếng Việt
-                    </button>
-                    <button
-                      onClick={() => handleChangeLanguage("jp")}
-                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-900"
-                    >
-                      <span
-                        className="fi fis fi-jp mr-2"
-                        style={{
-                          display: "inline-block",
-                          width: "24px",
-                          height: "24px",
-                          borderRadius: "50%",
-                          border: "1px solid black",
-                          overflow: "hidden",
-                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
-                        }}
-                      />
-                      日本語
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
 
-          <h1 className="text-3xl font-bold mb-6 text-center">{pageTitle}</h1>
+
+          {/* <h1 className="text-3xl font-bold mb-6 text-center">{pageTitle}</h1> */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col">
               <input
@@ -262,8 +174,8 @@ const LoginPage = () => {
                 >
                   {showPassword ? (
                     <svg
-                      width="24px"
-                      height="24px"
+                      width="20px"
+                      height="20px"
                       viewBox="0 0 24 24"
                       fill="#ffff"
                       xmlns="http://www.w3.org/2000/svg"
@@ -278,8 +190,8 @@ const LoginPage = () => {
                     </svg>
                   ) : (
                     <svg
-                      width="24px"
-                      height="24px"
+                      width="20px"
+                      height="20px"
                       viewBox="0 0 24 24"
                       fill="#ffff"
                       xmlns="http://www.w3.org/2000/svg"
@@ -308,6 +220,98 @@ const LoginPage = () => {
               {isLoading ? <ClipLoader color="white" size={24} /> : pageTitle}
             </button>
           </form>
+
+          {/* Select language         */}
+          <div className="pt-8 flex justify-center">
+            <div className="relative">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                type="button"
+                className="items-center inline-flex justify-center whitespace-nowrap w-32 rounded-md shadow-sm px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <span
+                  className={`fi fis fi-${flagCode(language)} rounded-full`}
+                  style={{
+                    display: "inline-block",
+                    width: "20px",
+                    height: "20px",
+                    overflow: "hidden",
+                    border: "1px solid black",
+                    boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "50%",
+                    marginRight: "4px",
+                  }}
+                />
+                {language === "en"
+                  ? "English"
+                  : language === "vi"
+                  ? "Tiếng Việt"
+                  : "日本語"}
+              </button>
+              {isOpen && (
+                <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="py-1 grid grid-cols-1 gap-2" role="none">
+                    <button
+                      onClick={() => handleChangeLanguage("en")}
+                      className="flex items-center px-4 py-2 text-sm hover:bg-gray-900 text-white"
+                    >
+                      <span
+                        className="fi fis fi-gb mr-2"
+                        style={{
+                          display: "inline-block",
+                          width: "20px",
+                          height: "20px",
+                          borderRadius: "50%",
+                          border: "1px solid black",
+                          overflow: "hidden",
+                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+                        }}
+                      />
+                      English
+                    </button>
+                    <button
+                      onClick={() => handleChangeLanguage("vi")}
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-900"
+                    >
+                      <span
+                        className="fi fis fi-vn rounded-full"
+                        style={{
+                          display: "inline-block",
+                          width: "20px",
+                          height: "20px",
+                          overflow: "hidden",
+                          border: "1px solid black",
+                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+                          borderRadius: "50%",
+                          marginRight: "4px",
+                        }}
+                      />
+                      Tiếng Việt
+                    </button>
+                    <button
+                      onClick={() => handleChangeLanguage("jp")}
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-900"
+                    >
+                      <span
+                        className="fi fis fi-jp mr-2"
+                        style={{
+                          display: "inline-block",
+                          width: "20px",
+                          height: "20px",
+                          borderRadius: "50%",
+                          border: "1px solid black",
+                          overflow: "hidden",
+                          boxShadow: "inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+                        }}
+                      />
+                      日本語
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
         </div>
         <Toast.Provider>
           <Toast.Root
