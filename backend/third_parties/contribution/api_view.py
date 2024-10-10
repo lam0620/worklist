@@ -203,7 +203,11 @@ class CustomAPIView(generics.GenericAPIView):
     def cus_response_403(self, msg_code = ''):
         return self.cus_response(convert_return_data_format(code=ec.NOT_HAVE_PERMISSION, error=True, data={}, msg="You don't have permission: "+msg_code), 
                                  status=status.HTTP_403_FORBIDDEN)
-
+    
+    def cus_response_403_contraint(self, msg = ''):
+        return self.cus_response(convert_return_data_format(code=ec.LINK_OTHER_EXIST, error=True, data={}, msg=msg), 
+                                 status=status.HTTP_403_FORBIDDEN)
+    
     def cus_response_created(self, data={}):
         return self.cus_response(convert_return_data_format(
             code=ec.CREATE_SUCCESS, error=False, data=data, msg='Created successfully'), status=status.HTTP_201_CREATED

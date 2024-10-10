@@ -37,6 +37,18 @@
             "is_staff":false,
             "is_active":true
         }
-    }   
-
+    },   
+    {
+        "model": "account.User",
+        "pk": "1fec27d6-aa4d-4245-a97f-3ff664e0b480",
+        "fields": {
+            "username": "tvthanh",
+            "password": "pbkdf2_sha256$260000$EcFXcBjU8teUe9vx27cQhw$6FKCxbKbaP2OhSED6DUuis6Qd+J/OcHAeBUNYPAX8CY=",
+            "first_name":"Thành",
+            "last_name":"Thái Văn",
+            "is_superuser":false,
+            "is_staff":false,
+            "is_active":true
+        }
+    }
 ]

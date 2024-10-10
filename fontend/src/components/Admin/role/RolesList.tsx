@@ -2,6 +2,8 @@
 import { PERMISSIONS } from "@/utils/constant";
 import { Checkbox } from "@radix-ui/themes";
 import { RoleDetailProps } from "@/app/types/RoleDetail";
+import { useTranslation } from "../../../i18n/client";
+import { useState, useEffect } from "react";
 
 interface RolesListProps {
   roles: RoleDetailProps[];
@@ -26,6 +28,8 @@ const RolesList = ({
   onPageChange,
   selectedRoles,
 }: RolesListProps) => {
+  const { t } = useTranslation("roleManagement");
+
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
@@ -37,19 +41,19 @@ const RolesList = ({
 
   const isIntegRole = (detailRole: any) => {
     // Root, Integ or login user
-    if (["Integration","Administrator"].includes(detailRole.name)) {
+    if (["Integration", "Administrator"].includes(detailRole.name)) {
       return true;
     }
     return false;
-  }
+  };
 
   return (
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex items-center justify-between p-2 border-b bg-gray-100">
         <div className="w-1/12 font-semibold"></div>
-        <div className="w-2/12 font-semibold">Name</div>
-        <div className="w-6/12 font-semibold">Permissions</div>
-        <div className="w-3/12 font-semibold">Date Created</div>
+        <div className="w-2/12 font-semibold">{t("Name")}</div>
+        <div className="w-6/12 font-semibold">{t("Permissions")}</div>
+        <div className="w-3/12 font-semibold">{t("Date Created")}</div>
       </div>
       <ul className="flex-grow">
         {roles.map((role) => (
@@ -57,18 +61,17 @@ const RolesList = ({
             key={role.id}
             className="flex items-center justify-between p-2 border-b mb-2"
           >
-
             <div className="w-1/12">
               <div className="flex items-center justify-center">
-              {hasDeletePermission && !isIntegRole(role) && (
-                <Checkbox
-                  checked={selectedRoles[role.id]}
-                  onCheckedChange={(checked) =>
-                    onSelectRoleForDelete(role.id, checked as boolean)
-                  }
-                  className="border-2 border-gray-400 rounded-sm h-4 w-4"
-                />
-              )}
+                {hasDeletePermission && !isIntegRole(role) && (
+                  <Checkbox
+                    checked={selectedRoles[role.id]}
+                    onCheckedChange={(checked) =>
+                      onSelectRoleForDelete(role.id, checked as boolean)
+                    }
+                    className="border-2 border-gray-400 rounded-sm h-4 w-4"
+                  />
+                )}
               </div>
             </div>
 
@@ -102,7 +105,7 @@ const RolesList = ({
               disabled={currentPage === 1}
               className="px-4 py-2 mx-1 bg-gray-200 rounded-md disabled:opacity-50"
             >
-              Previous
+              {t("Previous")}
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
@@ -122,7 +125,7 @@ const RolesList = ({
               disabled={currentPage === totalPages}
               className="px-4 py-2 mx-1 bg-gray-200 rounded-md disabled:opacity-50"
             >
-              Next
+              {t("Next")}
             </button>
           </div>
         </div>

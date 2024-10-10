@@ -13,6 +13,7 @@ interface CreateDoctorFormProps {
   users: UserDetailProps[];
   onClose: () => void;
   onDoctorCreated: () => void;
+  t: (key: string) => string;
 }
 
 const CreateDoctorModal = ({
@@ -20,6 +21,7 @@ const CreateDoctorModal = ({
   users,
   onClose,
   onDoctorCreated,
+  t,
 }: CreateDoctorFormProps) => {
   const [doctorNo, setDoctorNo] = useState("");
   const [fullName, setFullName] = useState("");
@@ -30,15 +32,7 @@ const CreateDoctorModal = ({
   const [userId, setUserId] = useState("");
   const [gender, setGender] = useState("");
   const param = useParams<{ id: UUID }>();
-  const [id, setId] = useState("");
   const [image, setImage] = useState<File | undefined>(undefined);
-
-  useEffect(() => {
-    //get user_id
-    if (param.id) {
-      setId(param.id);
-    }
-  }, [param.id]);
 
   const handleCreateDoctor = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +66,7 @@ const CreateDoctorModal = ({
         const message = showErrorMessage(code, item, msg);
         toast.error(message);
       } else {
-        toast.success("Doctor created successfully");
+        toast.success(t("Doctor created successfully"));
         onDoctorCreated();
         onClose();
       }
@@ -86,10 +80,10 @@ const CreateDoctorModal = ({
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!doctorNo) newErrors.doctorNo = "Doctor's code is required";
-    if (!fullName) newErrors.fullName = "Full name is required";
-    if (!type) newErrors.type = "Type is required";
-    if (!gender) newErrors.gender = "Gender is required";
+    if (!doctorNo) newErrors.doctorNo = t("Doctor's code is required");
+    if (!fullName) newErrors.fullName = t("Full name is required");
+    if (!type) newErrors.type = t("Type is required");
+    if (!gender) newErrors.gender = t("Gender is required");
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -138,7 +132,7 @@ const CreateDoctorModal = ({
     if (doctorNumbers.includes(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        doctorNo: "Doctor No exists",
+        doctorNo: t("Doctor No exists"),
       }));
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, doctorNo: "" }));
@@ -150,10 +144,10 @@ const CreateDoctorModal = ({
       style={{ zIndex: 1000 }}
     >
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold mb-4">Create Doctor</h2>
+        <h2 className="text-2xl font-bold mb-4">{t("Create Doctor")}</h2>
         <form onSubmit={handleCreateDoctor} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Username</label>
+            <label className="block text-sm font-medium">{t("Username")}</label>
             <select
               value={userId}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -172,7 +166,9 @@ const CreateDoctorModal = ({
           )}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium">FullName</label>
+              <label className="block text-sm font-medium">
+                {t("FullName")}
+              </label>
               <input
                 type="text"
                 value={fullName}
@@ -186,7 +182,9 @@ const CreateDoctorModal = ({
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium">Doctor's code</label>
+              <label className="block text-sm font-medium">
+                {t("Doctor's code")}
+              </label>
               <input
                 type="text"
                 value={doctorNo}
@@ -200,7 +198,7 @@ const CreateDoctorModal = ({
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium">Title</label>
+              <label className="block text-sm font-medium">{t("Title")}</label>
               <input
                 type="text"
                 value={title}
@@ -215,7 +213,7 @@ const CreateDoctorModal = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium">Type</label>
+              <label className="block text-sm font-medium">{t("Type")}</label>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
@@ -224,15 +222,15 @@ const CreateDoctorModal = ({
                 } rounded`}
               >
                 <option value="">...</option>
-                <option value="P">Radiologist</option>
-                <option value="R">Referring Physician</option>
+                <option value="P">{t("Radiologist")}</option>
+                <option value="R">{t("Referring Physician")}</option>
               </select>
               {errors.type && (
                 <p className="text-red-500 text-sm">{errors.type}</p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium">Gender</label>
+              <label className="block text-sm font-medium">{t("Gender")}</label>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
@@ -241,17 +239,19 @@ const CreateDoctorModal = ({
                 } rounded`}
               >
                 <option value="">...</option>
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-                <option value="O">Other</option>
-                <option value="U">Unknow</option>
+                <option value="M">{t("Male")}</option>
+                <option value="F">{t("Female")}</option>
+                <option value="O">{t("Other")}</option>
+                <option value="U">{t("Unknow")}</option>
               </select>
               {errors.gender && (
                 <p className="text-red-500 text-sm">{errors.gender}</p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Sign</label>
+              <label className="block text-sm font-medium mb-1">
+                {t("Sign")}
+              </label>
               <div className="border rounded p-1 overflow-hidden">
                 <input
                   className="form-control w-full"
@@ -269,36 +269,36 @@ const CreateDoctorModal = ({
               onClick={handleCancel}
               className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-              Create
+              {t("Create")}
             </button>
           </div>
           <Dialog.Root open={showUnsavedChangesPopup}>
             <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
             <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
               <Dialog.Title className="text-xl font-bold mb-4">
-                Unsaved Changes
+                {t("Unsaved Changes")}
               </Dialog.Title>
-              <p>Are you sure you want to discard your changes?</p>
+              <p>{t("Are you sure you want to discard your changes?")}</p>
               <div className="flex justify-end space-x-2 mt-4">
                 <button
                   type="button"
                   className="px-4 py-2 bg-gray-200 rounded-md"
                   onClick={closeDiscardPopup}
                 >
-                  Cancel
+                  {t("Cancel")}
                 </button>
                 <button
                   type="button"
                   className="px-4 py-2 bg-red-600 text-white rounded-md"
                   onClick={confirmDiscardChanges}
                 >
-                  Yes
+                  {t("Yes")}
                 </button>
               </div>
             </Dialog.Content>

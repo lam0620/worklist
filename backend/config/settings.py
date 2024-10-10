@@ -191,7 +191,7 @@ LOGGING = {
             'propagate': True,
         },
         'django.db.backends': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'handlers': ['file'],
         }        
     },

@@ -21,7 +21,7 @@
         "model": "account.Role",
         "pk": "d0f76603-adad-468f-a46c-1fbd00628f81",
         "fields": {
-            "name": "Integration",
+            "name": "Integration (HIS)",
             "description": "HIS Integration role",
             "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
         }
@@ -41,6 +41,15 @@
         "fields": {
             "name": "Referring Physician",
             "description": "Referring Physician role",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.Role",
+        "pk": "2668cffd-75e8-4371-869b-93b4d75fcd20",
+        "fields": {
+            "name": "BOD/Manager",
+            "description": "BOD/Manager role",
             "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
         }
     }

@@ -4,6 +4,7 @@ import { fetchRolesList, UpdateAccount } from "@/services/apiService";
 import { toast } from "react-toastify";
 import MultiSelect from "../../MultiSelect";
 import { showErrorMessage } from "@/utils/showMessageError";
+import { useTranslation } from "../../../i18n";
 
 interface EditUserFormProps {
   user: any;
@@ -21,8 +22,14 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
   const [fullRoles, setFullRoles] = useState<any[]>([]);
   const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [t, setT] = useState(() => (key: string) => key);
 
   useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("userManagement");
+      setT(() => t);
+    };
+    loadTranslation();
     const fetchRoles = async () => {
       try {
         const response = await fetchRolesList({ isPage: false });
@@ -57,9 +64,10 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
         const msg = response?.data?.result?.msg;
         const message = showErrorMessage(code, item, msg);
         toast.error(message);
-
       } else {
-        const roles_obj = fullRoles.filter((role) => userRoles.includes(role.id));
+        const roles_obj = fullRoles.filter((role) =>
+          userRoles.includes(role.id)
+        );
         onEdit({
           ...user,
           first_name: firstName,
@@ -68,7 +76,7 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
           roles: roles_obj,
         });
 
-        toast.success("User updated successfully");
+        toast.success(t("User updated successfully"));
         onClose();
       }
     } catch (error: any) {
@@ -82,16 +90,16 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
   const validateForm = () => {
     let errors: { [key: string]: string } = {};
     if (!firstName) {
-      errors.firstName = "First name is required";
+      errors.firstName = t("First name is required");
     }
     if (!lastName) {
-      errors.lastName = "Last name is required";
+      errors.lastName = t("Last name is required");
     }
     // if (!email) {
     //   errors.email = "Email is required";
     // }
     if (userRoles.length === 0) {
-      errors.roles = "Roles is required";
+      errors.roles = t("Roles is required");
     }
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -116,11 +124,13 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
         <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
           <Dialog.Title className="text-xl font-bold mb-4">
-            Edit User
+            {t("Edit User")}
           </Dialog.Title>
           <form>
             <div className="mb-4 flex items-center">
-              <label className="block text-gray-700 w-1/4">First Name</label>
+              <label className="block text-gray-700 w-1/4">
+                {t("First Name")}
+              </label>
               <input
                 type="text"
                 className={`w-3/4 px-3 py-2 border border-gray-300 rounded-md ${
@@ -135,7 +145,9 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
             )}
 
             <div className="mb-4 flex items-center">
-              <label className="block text-gray-700 w-1/4">Last Name</label>
+              <label className="block text-gray-700 w-1/4">
+                {t("Last Name")}
+              </label>
               <input
                 type="text"
                 className={`w-3/4 px-3 py-2 border border-gray-300 rounded-md ${
@@ -164,8 +176,12 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
               <p className="text-red-500 text-sm">{errors.email}</p>
             )}
 
-            <div className={`mb-4 flex items-center ${errors.roles ? "border-red-500" : "border-gray-300"}`}>
-              <label className="block text-gray-700 w-1/4">Roles</label>
+            <div
+              className={`mb-4 flex items-center ${
+                errors.roles ? "border-red-500" : "border-gray-300"
+              }`}
+            >
+              <label className="block text-gray-700 w-1/4">{t("Roles")}</label>
               <div className="w-3/4">
                 <MultiSelect
                   options={fullRoles}
@@ -184,14 +200,14 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
                 className="px-4 py-2 bg-gray-200 rounded-md"
                 onClick={handleCancel}
               >
-                Cancel
+                {t("Cancel")}
               </button>
               <button
                 type="button"
                 className="px-4 py-2 bg-blue-600 text-white rounded-md"
                 onClick={handleSave}
               >
-                Save
+                {t("Save")}
               </button>
             </div>
           </form>
@@ -201,23 +217,23 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
         <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
           <Dialog.Title className="text-xl font-bold mb-4">
-            Unsaved Changes
+            {t("Unsaved Changes")}
           </Dialog.Title>
-          <p>Are you sure you want to discard your changes?</p>
+          <p>{t("Are you sure you want to discard your changes?")}</p>
           <div className="flex justify-end space-x-2 mt-4">
             <button
               type="button"
               className="px-4 py-2 bg-gray-200 rounded-md"
               onClick={closeDiscardPopup}
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               type="button"
               className="px-4 py-2 bg-red-600 text-white rounded-md"
               onClick={confirmDiscardChanges}
             >
-              Yes
+              {t("Yes")}
             </button>
           </div>
         </Dialog.Content>

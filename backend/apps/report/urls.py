@@ -37,7 +37,7 @@ urlpatterns = [
     path('orders', OrderView.as_view(), name='Order'),
     # orders?accession=xxx also existing. pattern /orders
     # Should use orders?accession=xxx instead
-    path('orders/acn/<accession_no>', OrderByACNView.as_view(), name='Order Detail by AccessionNumber'),
+    # path('orders/acn/<accession_no>', OrderByACNView.as_view(), name='Order Detail by AccessionNumber'),
 
     # Report
     path('reports', ReportView.as_view(), name='Report'),

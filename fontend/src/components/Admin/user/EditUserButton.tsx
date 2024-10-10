@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditUserForm from "./EditUserForm";
+import { useTranslation } from "../../../i18n";
 
 interface EditUserButtonProps {
   userDetail: any;
@@ -8,6 +9,15 @@ interface EditUserButtonProps {
 
 const EditUserButton = ({ userDetail, onUserUpdated }: EditUserButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [t, setT] = useState(() => (key: string) => key);
+
+  useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("userManagement");
+      setT(() => t);
+    };
+    loadTranslation();
+  }, []);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -18,7 +28,7 @@ const EditUserButton = ({ userDetail, onUserUpdated }: EditUserButtonProps) => {
         onClick={handleOpenModal}
         className="bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-500"
       >
-        Edit User
+        {t("Edit User")}
       </button>
       {isModalOpen && (
         <EditUserForm

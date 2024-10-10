@@ -13,12 +13,15 @@ import { useRouter } from "next/navigation";
 import AppLayout from "@/components/AppLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { UserDetailProps } from "@/app/types/UserDetail";
+import { useTranslation } from "../../../../i18n/client";
 
 const UserDetailPage = () => {
   const { user } = useUser();
   const param = useParams<{ id: UUID }>();
   const [userDetail, setUserDetail] = useState<UserDetailProps>();
   const router = useRouter();
+
+  const { t } = useTranslation("userManagement");
 
   useEffect(() => {
     if (param.id) {
@@ -51,7 +54,7 @@ const UserDetailPage = () => {
     user?.permissions?.includes(PERMISSIONS.DELETE_ACCOUNT) ||
     user?.is_superuser;
   return (
-    <AppLayout name="User Detail">
+    <AppLayout name={t("User Detail")}>
       <div className="relative flex flex-col items-center min-h-screen p-4">
         <div className="w-full max-w-2xl text-center">
           <div className="absolute left-4 top-4">
@@ -59,13 +62,13 @@ const UserDetailPage = () => {
               className="bg-gray-400 rounded px-4 py-2 text-white"
               onClick={() => router.push("/admin/users")}
             >
-              Back to user list
+              {t("Back to user list")}
             </button>
             <button
               className="bg-gray-400 rounded px-4 py-2 text-white ml-4"
               onClick={() => router.push("/home")}
             >
-              Home
+              {t("Home")}
             </button>
           </div>
 

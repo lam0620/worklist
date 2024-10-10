@@ -3,10 +3,10 @@ import React from "react";
 import EditProfileForm from "@/components/EditProfileForm";
 import { useUser } from "@/context/UserContext";
 import AppLayout from "@/components/AppLayout";
+import { useTranslation } from "../../../i18n";
 
 const EditProfilePage = () => {
   const { user } = useUser();
-
   return (
     <AppLayout>
       <div className="min-h flex justify-center py-12 px-4 sm:px-6 lg:px-8">

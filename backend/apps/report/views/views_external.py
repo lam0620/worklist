@@ -136,7 +136,73 @@ class External_OrderView(ReportBaseView):
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))
     
+    """
+    Delete the order - For HIS(1)
+    """
+    @swagger_auto_schema(
+        operation_summary='Delete the order',
+        operation_description='Delete the order',
+        # request_body=ser.DeleteOrderSerializers,
+        query_serializer= ser.DeleteOrderSerializers,
+        tags=[swagger_tags.REPORT_HIS],
+        manual_parameters=[
+            openapi.Parameter('x-auth-key', openapi.IN_HEADER, 
+                              description="Custom Header",
+                              type=openapi.TYPE_STRING),
+        ],
+    )
+    def delete(self, request, *args, **kwargs):
+        # Get and check external app. Headers: x-auth-key
+        if request.META.get('HTTP_X_AUTH_KEY'):
+            user = self.check_integration_token(request.META.get('HTTP_X_AUTH_KEY'))
+        else:
+            user = request.user
 
+        has_permission = CheckPermission(per_code.DELETE_ORDER, user.id).check()
+        if not has_permission and not user.is_superuser:
+            return self.cus_response_403(per_code.DELETE_ORDER)   
+
+        serializer = ser.DeleteOrderSerializers(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        try:
+            # Get accession_no from query params: /?accession=XX   
+            accession=data['accession']
+
+            instance = Order.objects.filter(accession_no=accession, delete_flag=False).first()
+            if not instance:
+                return self.cus_response_empty_data(type=ec.ORDER)
+
+            # Check if the order's image or report is not exist, if already, return 403 error
+            # is_exist = Report.objects.filter(accession_no=accession, delete_flag = False).exists()
+            # if is_exist:
+            #     return self.cus_response_403_contraint('Cannot delete! The order has been linked with report')
+            
+            # More check image link if report doesnot exist
+            # Get pacsdb.study by accession_no
+            with connections["pacs_db"].cursor() as cursor:
+                cursor.execute("select study_iuid from study where accession_no=%s",[accession])
+                results = cursor.fetchall()
+
+                if results is not None and len(results) > 0:
+                    # Return error 403 Forbidden
+                    return self.cus_response_403_contraint('Cannot delete! The order has been linked with images')
+
+            # Update    
+            instance.delete_flag = True
+            # this uid is created first in \shared\data\integration_app.json
+            instance.updated_by = "65838386-c439-44b4-8ee6-68f134eb5bc2"
+            instance.updated_at=timezone.now()
+
+            instance.save()
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+        return self.cus_response_deleted()
+    
+        
 # =============== Report class ==================    
 """
 Report detail view class - For HIS(2)
@@ -306,10 +372,13 @@ class External_ImageLinkView(CustomAPIView):
                 cursor.execute("select study_iuid from study where accession_no=%s",[accession])
                 results = cursor.fetchall()
 
-                if results is not None:
-                    data= [{
-                        'image_link':get_image_link(request, item[0])
-                    } for item in results]
+                if results is None or len(results) <= 0:
+                    return self.cus_response_empty_data(type=ec.REPORT)
+                
+                # if results is not None:
+                data= [{
+                    'image_link':get_image_link(request, item[0])
+                } for item in results]
         
         except Exception as e:
             logger.error(e, exc_info=True)

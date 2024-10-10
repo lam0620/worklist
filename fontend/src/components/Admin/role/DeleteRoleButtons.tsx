@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DeleteRole, DeleteRoles } from "@/services/apiService";
 import BaseButton from "../../Button";
 import ConfirmModal from "../../ConfirmModal";
 import { toast } from "react-toastify";
+import { useTranslation } from "../../../i18n";
 
 type DeleteRoleButtonProps = {
   isMany: boolean;
@@ -20,21 +21,30 @@ const DeleteRoleButtons = ({
   isDisabled,
 }: DeleteRoleButtonProps) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [t, setT] = useState(() => (key: string) => key);
+
+  useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("roleManagement");
+      setT(() => t);
+    };
+    loadTranslation();
+  }, []);
 
   const handleDelete = async () => {
     if (isMany) {
       const response = await DeleteRoles(roleIds);
       if (response.status === 200 && response.data?.result?.status === "OK") {
-        toast.success("Roles deleted successfully");
+        toast.success(t("Roles deleted successfully"));
         onRoleDeleted();
       }
     } else {
       const response = await DeleteRole(roleId);
       if (response.status === 200 && response.data?.result?.status === "OK") {
-        toast.success("Role deleted successfully");
+        toast.success(t("Role deleted successfully"));
         onRoleDeleted();
       } else {
-        toast.error("Failed to delete role");
+        toast.error(t("Failed to delete role"));
       }
     }
     onRoleDeleted();
@@ -56,7 +66,7 @@ const DeleteRoleButtons = ({
   return (
     <div>
       <BaseButton
-        buttonText="Delete"
+        buttonText={t("Delete")}
         onApiCall={openConfirmModal}
         className={`mr-2 ${
           isDisabled
@@ -67,7 +77,7 @@ const DeleteRoleButtons = ({
       />
       {isConfirmOpen && (
         <ConfirmModal
-          message="Are you sure you want to delete this role?"
+          message={t("Are you sure you want to delete this role?")}
           onConfirm={confirmDelete}
           onCancel={closeConfirmModal}
         />

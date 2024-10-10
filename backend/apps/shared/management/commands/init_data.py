@@ -22,7 +22,8 @@ class Command(BaseCommand):
             "init_user_role_permission_bscd.json",
             "init_user_role_permission_bsdt.json",
             "init_user_role_permission_his.json",
-            "init_user_role_permission_rad_mng.json"
+            "init_user_role_permission_rad_mng.json",
+            "init_user_role_permission_bod.json",
         ]
         for data in list_data:
             call_command("loaddata", main_url + data)

@@ -1,0 +1,12 @@
+{
+    "Profile updated successfully":"プロフィールが正常に更新されました",
+    "Failed to update profile:":"プロフィールの更新に失敗しました:",
+    "First name is required":"名は必須です",
+    "Last name is required":"姓は必須です",
+    "Edit profile":"プロフィールの編集",
+    "First Name":"名",
+    "Last Name":"姓",
+    "Role":"役割",
+    "Cancel":"キャンセル",
+    "Update":"更新"
+}

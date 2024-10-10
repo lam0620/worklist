@@ -3,8 +3,12 @@ import React, { useState, useEffect } from "react";
 import { UpdateProfile } from "../services/apiService";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "../i18n/client";
+interface Props {
+  user: any;
+}
 
-const EditProfileForm = ({ user }: any) => {
+const EditProfileForm = ({ user }: Props) => {
   const router = useRouter();
   const [firstName, setFirstName] = useState(user?.first_name);
   const [lastName, setLastName] = useState(user?.last_name);
@@ -12,6 +16,8 @@ const EditProfileForm = ({ user }: any) => {
   const [role, setRole] = useState(user?.roles || []);
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const { t } = useTranslation("changeProfile");
 
   useEffect(() => {
     if (user) {
@@ -37,21 +43,21 @@ const EditProfileForm = ({ user }: any) => {
         last_name: lastName,
       });
       if (response.status === 200) {
-        toast.success("Profile updated successfully");
+        toast.success(t("Profile updated successfully"));
       }
       router.push("/home");
     } catch (error) {
-      console.error("Failed to update profile:", error);
+      console.error(t("Failed to update profile:"), error);
     }
   };
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     if (!firstName) {
-      newErrors.firstName = "First name is required";
+      newErrors.firstName = t("First name is required");
     }
     if (!lastName) {
-      newErrors.lastName = "Last name is required";
+      newErrors.lastName = t("Last name is required");
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -59,14 +65,14 @@ const EditProfileForm = ({ user }: any) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h2 className="text-xl font-bold">Edit profile</h2>
+      <h2 className="text-xl font-bold">{t("Edit profile")}</h2>
 
       <div>
         <label
           htmlFor="firstName"
           className="block text-sm font-medium text-gray-700"
         >
-          First Name
+          {t("First Name")}
         </label>
         <input
           id="firstName"
@@ -88,7 +94,7 @@ const EditProfileForm = ({ user }: any) => {
           htmlFor="lastName"
           className="block text-sm font-medium text-gray-700"
         >
-          Last Name
+          {t("Last Name")}
         </label>
         <input
           id="lastName"
@@ -127,7 +133,7 @@ const EditProfileForm = ({ user }: any) => {
           htmlFor="role"
           className="block text-sm font-medium text-gray-700"
         >
-          Role
+          {t("Role")}
         </label>
         <input
           id="role"
@@ -145,13 +151,13 @@ const EditProfileForm = ({ user }: any) => {
           className="px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-md hover:bg-gray-700"
           onClick={() => router.back()}
         >
-          Cancel
+          {t("Cancel")}
         </button>
         <button
           type="submit"
           className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
         >
-          Update
+          {t("Update")}
         </button>
       </div>
     </form>

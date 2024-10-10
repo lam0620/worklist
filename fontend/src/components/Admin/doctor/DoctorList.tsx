@@ -2,7 +2,8 @@ import { Checkbox } from "@radix-ui/themes";
 import { PERMISSIONS } from "@/utils/constant";
 import { getGenderLabel } from "@/utils/utils";
 import { DoctorDetailProps } from "@/app/types/DoctorDetail";
-import { cursorTo } from "readline";
+import { useTranslation } from "../../../i18n";
+import { useState, useEffect } from "react";
 
 interface DoctorListProps {
   buttonStatus: string;
@@ -29,6 +30,15 @@ const DoctorList = ({
   onPageChange,
   selectedDoctors,
 }: DoctorListProps) => {
+  const [t, setT] = useState(() => (key: string) => key);
+
+  useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("doctorManagement");
+      setT(() => t);
+    };
+    loadTranslation();
+  }, []);
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
@@ -42,12 +52,12 @@ const DoctorList = ({
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex items-center justify-between p-2 border-b bg-gray-100">
         <div className="w-2/12 font-semibold"></div>
-        <div className="w-4/12 font-semibold">Full name</div>
-        <div className="w-3/12 font-semibold">Doctor's code</div>
-        <div className="w-3/12 font-semibold">Username</div>        
-        <div className="w-2/12 font-semibold">Gender</div>
-        <div className="w-2/12 font-semibold">Title</div>
-        <div className="w-2/12 font-semibold">Active</div>
+        <div className="w-4/12 font-semibold">{t("Full name")}</div>
+        <div className="w-3/12 font-semibold">{t("Doctor's code")}</div>
+        <div className="w-3/12 font-semibold">{t("Username")}</div>
+        <div className="w-2/12 font-semibold">{t("Gender")}</div>
+        <div className="w-2/12 font-semibold">{t("Title")}</div>
+        <div className="w-2/12 font-semibold">{t("Active")}</div>
       </div>
       <ul className="flex-grow">
         {doctors.map((doctor) => (
@@ -75,15 +85,19 @@ const DoctorList = ({
             >
               {doctor.fullname}
             </div>
-            <div className="w-3/12 flex flex-wrap gap-1">{doctor.doctor_no}</div>
+            <div className="w-3/12 flex flex-wrap gap-1">
+              {doctor.doctor_no}
+            </div>
             <div className="w-3/12 flex flex-wrap gap-1">{doctor.username}</div>
-            <div className="w-2/12 flex flex-wrap gap-1">{getGenderLabel(doctor?.gender)}</div>
+            <div className="w-2/12 flex flex-wrap gap-1">
+              {getGenderLabel(doctor?.gender)}
+            </div>
             <div className="w-2/12 flex flex-wrap gap-1">{doctor.title}</div>
             <div className="w-2/12 text-sm text-gray-500">
               <Checkbox
                 checked={doctor.is_active}
                 className="border-2 border-gray-400 rounded-sm h-4 w-4"
-                style={{cursor:'not-allowed'}}
+                style={{ cursor: "not-allowed" }}
               />
             </div>
           </li>
@@ -97,7 +111,7 @@ const DoctorList = ({
               disabled={currentPage === 1}
               className="px-4 py-2 mx-1 bg-gray-200 rounded-md disabled:opacity-50"
             >
-              Previous
+              {t("Previous")}
             </button>
             {[...Array(totalPages)].map((_, index) => (
               <button
@@ -117,7 +131,7 @@ const DoctorList = ({
               disabled={currentPage === totalPages}
               className="px-4 py-2 mx-1 bg-gray-200 rounded-md disabled:opacity-50"
             >
-              Next
+              {t("Next")}
             </button>
           </div>
         </div>

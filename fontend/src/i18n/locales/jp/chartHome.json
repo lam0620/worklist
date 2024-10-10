@@ -1,0 +1,19 @@
+{
+    "You do not have view permission." :"表示権限がありません。",
+    "Filter by:" : "フィルター条件:",
+    "Number of orders" :"注文数",
+    "Number of reports" :"レポート数",
+    "Number of studies" :"研究数",
+    "Sum of" :"合計",
+    "in 1 year":"1 年間",
+    "Year:" :"年:",
+    "Month":"月",
+    "Quantity":"数量",
+    "Number by doctor in the latest period":"最新期間の医師別数",
+    "Time:":"時間:",
+    "Today":"今日",
+    "1 week ago":"1 週間前",
+    "1 month ago":"1 か月前",
+    "Doctor":"医師",
+    "Statistics":"統計"
+}

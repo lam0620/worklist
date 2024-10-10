@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
 import { UpdateDoctor } from "@/services/apiService";
@@ -7,6 +7,7 @@ import { showErrorMessage } from "@/utils/showMessageError";
 import { UserDetailProps } from "@/app/types/UserDetail";
 import { DoctorDetailProps } from "@/app/types/DoctorDetail";
 import Link from "next/link";
+import { useTranslation } from "../../../i18n";
 
 interface EditDoctorFormProps {
   doctors: DoctorDetailProps[];
@@ -14,6 +15,7 @@ interface EditDoctorFormProps {
   doctor: any;
   onEdit: (doctor: any) => any;
   onClose: () => any;
+  t: (key: string) => string;
 }
 
 const EditDoctorForm = ({
@@ -22,6 +24,7 @@ const EditDoctorForm = ({
   doctor,
   onEdit,
   onClose,
+  t,
 }: EditDoctorFormProps) => {
   const [fullName, setFullName] = useState(doctor.fullname);
   const [title, setTitle] = useState(doctor.title);
@@ -89,7 +92,7 @@ const EditDoctorForm = ({
           user_id: userId,
           sign: image,
         });
-        toast.success("Doctor updated successfully");
+        toast.success(t("Doctor updated successfully"));
         // onClose();
         window.location.href = "/admin/doctors";
       }
@@ -105,11 +108,11 @@ const EditDoctorForm = ({
   const validateForm = () => {
     let errors: { [key: string]: string } = {};
     if (!fullName) {
-      errors.fullName = "FullName is required";
+      errors.fullName = t("Full name is required");
     }
 
     if (!doctorNo) {
-      errors.doctorNo = "Doctor's code is required";
+      errors.doctorNo = t("Doctor's code is required");
     }
 
     setErrors(errors);
@@ -152,7 +155,7 @@ const EditDoctorForm = ({
     if (doctorNumbers.includes(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        doctorNo: "Doctor No exists",
+        doctorNo: t("Doctor No exists"),
       }));
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, doctorNo: "" }));
@@ -165,12 +168,12 @@ const EditDoctorForm = ({
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
         <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-lg">
           <Dialog.Title className="text-xl font-bold mb-4">
-            Edit Doctor
+            {t("Edit Doctor")}
           </Dialog.Title>
           <form>
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
-                Username
+                {t("Username")}
               </label>
               <select
                 value={userId}
@@ -190,7 +193,7 @@ const EditDoctorForm = ({
             )}
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
-                Doctor's code
+                {t("Doctor's code")}
               </label>
               <input
                 type="text"
@@ -207,7 +210,7 @@ const EditDoctorForm = ({
 
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
-                Full name
+                {t("Full name")}
               </label>
               <input
                 type="text"
@@ -224,7 +227,7 @@ const EditDoctorForm = ({
 
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
-                Title
+                {t("Title")}
               </label>
               <input
                 type="text"
@@ -241,7 +244,7 @@ const EditDoctorForm = ({
 
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
-                Sign
+                {t("Sign")}
               </label>
               <div className="flex flex-row text-blue-600">
                 <label className="ml-2">
@@ -252,7 +255,7 @@ const EditDoctorForm = ({
                   )}
                 </label>
                 <Link onClick={onEditSign} href={""} className="ml-4">
-                  {disabledSign ? "Edit" : "Cancel Edit"}
+                  {disabledSign ? t("Edit") : t("Cancel Edit")}
                 </Link>
               </div>
             </div>
@@ -270,7 +273,7 @@ const EditDoctorForm = ({
             </div>
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
-                Gender
+                {t("Gender")}
               </label>
               <select
                 value={gender}
@@ -279,16 +282,16 @@ const EditDoctorForm = ({
                   errors.gender ? "border-red-500" : "border-gray-300"
                 } rounded`}
               >
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-                <option value="O">Other</option>
-                <option value="U">Unknow</option>
+                <option value="M">{t("Male")}</option>
+                <option value="F">{t("Female")}</option>
+                <option value="O">{t("Other")}</option>
+                <option value="U">{t("Unknow")}</option>
               </select>
             </div>
 
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4 text-right mr-5">
-                Type
+                {t("Type")}
               </label>
               <select
                 value={type}
@@ -297,8 +300,8 @@ const EditDoctorForm = ({
                   errors.type ? "border-red-500" : "border-gray-300"
                 } rounded`}
               >
-                <option value="P">Referring Physician</option>
-                <option value="R">Radiologist</option>
+                <option value="P">{t("Referring Physician")}</option>
+                <option value="R">{t("Radiologist")}</option>
               </select>
             </div>
 
@@ -308,14 +311,14 @@ const EditDoctorForm = ({
                 className="px-4 py-2 bg-gray-200 rounded-md"
                 onClick={handleCancel}
               >
-                Cancel
+                {t("Cancel")}
               </button>
               <button
                 type="button"
                 className="px-4 py-2 bg-blue-600 text-white rounded-md"
                 onClick={handleSave}
               >
-                Save
+                {t("Save")}
               </button>
             </div>
           </form>
@@ -325,23 +328,23 @@ const EditDoctorForm = ({
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
         <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
           <Dialog.Title className="text-xl font-bold mb-4">
-            Unsaved Changes
+            {t("Unsaved Changes")}
           </Dialog.Title>
-          <p>Are you sure you want to discard your changes?</p>
+          <p>{t("Are you sure you want to discard your changes?")}</p>
           <div className="flex justify-end space-x-2 mt-4">
             <button
               type="button"
               className="px-4 py-2 bg-gray-200 rounded-md"
               onClick={closeDiscardPopup}
             >
-              Cancel
+              {t("Cancel")}
             </button>
             <button
               type="button"
               className="px-4 py-2 bg-red-600 text-white rounded-md"
               onClick={confirmDiscardChanges}
             >
-              Yes
+              {t("Yes")}
             </button>
           </div>
         </Dialog.Content>

@@ -12,7 +12,7 @@ import AppLayout from "@/components/AppLayout";
 import { PERMISSIONS } from "@/utils/constant";
 import { RoleDetailProps } from "@/app/types/RoleDetail";
 import { toast } from "react-toastify";
-
+import { useTranslation } from "../../../i18n/client";
 const RolesPage = () => {
   const { user } = useUser();
   const [roles, setRoles] = useState<RoleDetailProps[]>([]);
@@ -22,7 +22,9 @@ const RolesPage = () => {
   const [selectedRoles, setSelectedRoles] = useState<{
     [key: string]: boolean;
   }>({});
+
   const router = useRouter();
+  const { t } = useTranslation("roleManagement");
 
   useEffect(() => {
     if (user) {
@@ -40,10 +42,10 @@ const RolesPage = () => {
       );
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error("You don't have permission to view roles");
+        toast.error(t("You don't have permission to view roles"));
         router.back();
       } else {
-        toast.error("Failed to fetch roles");
+        toast.error(t("Failed to fetch roles"));
         router.back();
       }
     }
@@ -82,7 +84,7 @@ const RolesPage = () => {
       await fetchRoles(1, searchQuery);
       setSelectedRoles({});
     } catch (error) {
-      console.error("Failed to delete roles:", error);
+      console.error(t("Failed to delete roles:"), error);
     }
   };
 
@@ -113,7 +115,7 @@ const RolesPage = () => {
     user?.permissions?.includes(PERMISSIONS.ADD_GROUP) || user?.is_superuser;
 
   return (
-    <AppLayout name="Roles">
+    <AppLayout name={t("Roles")}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
         <div className="w-full">
           <div className="flex justify-between items-center mb-4">
@@ -122,7 +124,7 @@ const RolesPage = () => {
                 className="bg-gray-400 rounded px-4 py-2 text-white"
                 onClick={() => router.push("/home")}
               >
-                Home
+                {t("Home")}
               </button>
               {hasDeleteRolePermission && (
                 <DeleteRoleButtons
@@ -144,11 +146,11 @@ const RolesPage = () => {
             </div>
           </div>
           <input
-              type="text"
-              placeholder="Search roles..."
-              onChange={handleSearchChange}
-              className="mb-4 p-2 border-2 rounded "
-            />
+            type="text"
+            placeholder={t("Search roles...")}
+            onChange={handleSearchChange}
+            className="mb-4 p-2 border-2 rounded "
+          />
           <RolesList
             roles={roles}
             onSelectRole={handleRoleSelect}

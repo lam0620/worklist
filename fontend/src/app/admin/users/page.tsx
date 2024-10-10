@@ -11,6 +11,7 @@ import AppLayout from "@/components/AppLayout";
 import { PERMISSIONS } from "@/utils/constant";
 import { toast } from "react-toastify";
 import CreateRoleButton from "@/components/Admin/role/CreateRoleButton";
+import { useTranslation } from "../../../i18n/client";
 
 const UserListPage = () => {
   const { user } = useUser();
@@ -22,6 +23,8 @@ const UserListPage = () => {
     [key: string]: boolean;
   }>({});
   const router = useRouter();
+
+  const { t } = useTranslation("userManagement");
 
   useEffect(() => {
     if (user) {
@@ -36,13 +39,12 @@ const UserListPage = () => {
       setTotalPages(
         Math.ceil(response.data?.count / response?.data?.page_size)
       );
-     
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error("You don't have permission to view users");
+        toast.error(t("You don't have permission to view users"));
         router.back();
       } else {
-        toast.error("Failed to fetch users");
+        toast.error(t("Failed to fetch users"));
         router.back();
       }
     }
@@ -91,7 +93,7 @@ const UserListPage = () => {
   };
 
   return (
-    <AppLayout name="Users">
+    <AppLayout name={t("Users")}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
         <div className="w-full">
           <div className="flex justify-between items-center mb-4">
@@ -100,7 +102,7 @@ const UserListPage = () => {
                 className="bg-gray-400 rounded px-4 py-2 text-white"
                 onClick={() => router.push("/home")}
               >
-                Home
+                {t("Home")}
               </button>
               {hasDeleteUserPermission && (
                 <DeleteUserButton
@@ -125,16 +127,16 @@ const UserListPage = () => {
               {hasAddRolePermission && (
                 <CreateRoleButton onCreate={() => {}} user={user} />
               )}
-
             </div>
           </div>
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder={t("Search users...")}
             onChange={handleSearchChange}
             className="mb-4 p-2 border rounded"
           />
           <UserList
+            t={t}
             users={users}
             onSelectUser={handleUserSelect}
             onSelectUserForDelete={handleUserCheck}

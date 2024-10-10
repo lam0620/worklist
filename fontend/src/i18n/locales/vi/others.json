@@ -1,0 +1,16 @@
+{
+    "User": "Người dùng",
+    "Roles": "Role",
+    "Doctor": "Bác sĩ",
+    "Dicom Viewer": "Trình xem Dicom",
+    "Submit": "Gửi",
+    "Cancel": "Hủy",
+    "API call failed:": "Gọi API thất bại:",
+    "Change password": "Đổi mật khẩu",
+    "Change profile": "Chỉnh sửa thông tin cá nhân",
+    "User management": "Quản lý người dùng",
+    "Role management": "Quản lý role (vai trò)",
+    "Doctor management": "Quản lý bác sĩ",
+    "Log out": "Đăng xuất",
+    "Statistics":"Thống kê"
+}
