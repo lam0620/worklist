@@ -21,7 +21,7 @@
         "model": "account.Role",
         "pk": "d0f76603-adad-468f-a46c-1fbd00628f81",
         "fields": {
-            "name": "Integration",
+            "name": "Integration (HIS)",
             "description": "HIS Integration role",
             "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
         }
