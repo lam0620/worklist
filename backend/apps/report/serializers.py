@@ -42,7 +42,9 @@ class CreateProcedureTypeSerializers(serializers.Serializer):
 class GetOrderSerializers(serializers.Serializer):
     accession = serializers.CharField(required=False)
 
-    
+class DeleteOrderSerializers(serializers.Serializer):
+    accession = serializers.CharField(required=True)
+
 class CreateOrderSerializers(serializers.Serializer):
     accession_no = serializers.CharField(required=True)
     req_dept_code = serializers.CharField(required=True)

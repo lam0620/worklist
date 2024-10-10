@@ -28,6 +28,8 @@ DELETE_REPORT = 'delete_report'
 # Order
 VIEW_ORDER = 'view_order'
 ADD_ORDER = 'add_order'
+EDIT_ORDER = 'edit_order'
+DELETE_ORDER = 'delete_order'
 
 # Image
 VIEW_IMAGE = 'view_image'

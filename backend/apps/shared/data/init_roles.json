@@ -43,5 +43,14 @@
             "description": "Referring Physician role",
             "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
         }
+    },
+    {
+        "model": "account.Role",
+        "pk": "2668cffd-75e8-4371-869b-93b4d75fcd20",
+        "fields": {
+            "name": "BOD/Manager",
+            "description": "BOD/Manager role",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
     }
 ]
