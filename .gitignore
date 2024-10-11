@@ -43,7 +43,4 @@ media/
 .env
 .env.prod
 .env.dev
-default.js
-org_logo.*
-my_logo.*
-favicon.ico
+#favicon.ico
