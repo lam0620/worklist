@@ -36,6 +36,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-login_bg.jpg
-my_logo.*
-favicon.ico
+#login_bg.jpg
+#favicon.ico
