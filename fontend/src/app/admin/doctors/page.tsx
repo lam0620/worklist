@@ -158,7 +158,7 @@ const DocterListPage = () => {
               >
                 <option value="all">{t("All")}</option>
                 <option value="true">{t("Active")}</option>
-                <option value="false">{t("Deactive")}</option>
+                <option value="false">{t("Inactive")}</option>
               </select>
             </div>
           </div>

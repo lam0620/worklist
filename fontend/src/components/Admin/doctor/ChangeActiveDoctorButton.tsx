@@ -67,7 +67,7 @@ const ChangeActiveDoctorButton = ({
   return (
     <div>
       <BaseButton
-        buttonText={buttonStatus === "true" ? t("Deactive") : t("Active")}
+        buttonText={buttonStatus === "true" ? t("Deactivate") : t("Activate")}
         onApiCall={openConfirmModal}
         className={
           isDisable
@@ -82,7 +82,7 @@ const ChangeActiveDoctorButton = ({
       {isConfirmOpen && (
         <ConfirmModal
           message={`${t("Do you want to")} ${
-            buttonStatus === "true" ? t("deactive") : t("active")
+            buttonStatus === "true" ? t("Deactivate") : t("Activate")
           } ${t("doctor (s)?")}`}
           onConfirm={confirmChangeActive}
           onCancel={closeConfirmModal}
