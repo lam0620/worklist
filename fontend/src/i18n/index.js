@@ -3,9 +3,7 @@ import resourcesToBackend from 'i18next-resources-to-backend';
 import { initReactI18next } from 'react-i18next/initReactI18next';
 import { getOptions} from './setting';
 
-export const lng = (language) => {
-  localStorage.setItem('language', language);
-};
+
 const initI18next = (lng, ns) => {
   const i18nInstance = createInstance();
   i18nInstance

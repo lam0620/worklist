@@ -8,7 +8,6 @@ import Head from "next/head";
 import { useUser } from "@/context/UserContext";
 import { Login } from "@/services/apiService";
 import { PERMISSIONS } from "@/utils/constant";
-import { lng } from "../../i18n/index";
 import backgroundImage from "../../../public/images/login_bg.jpg";
 import "../../../node_modules/flag-icons/css/flag-icons.min.css";
 
@@ -88,13 +87,12 @@ const LoginPage = () => {
       savedLanguage = 'vi'
     }
     setLanguage(savedLanguage);
-    lng(savedLanguage);
+    localStorage.setItem("language", savedLanguage);
     updatePageTitle(savedLanguage);
   }, []);
 
   const handleChangeLanguage = (selectedLanguage: string) => {
     setLanguage(selectedLanguage);
-    lng(selectedLanguage);
     localStorage.setItem("language", selectedLanguage);
     updatePageTitle(selectedLanguage);
     setIsOpen(false);
