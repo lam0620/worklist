@@ -185,9 +185,9 @@ class CreateDoctorSerializers(serializers.Serializer):
         return data
 
     def validate_user_id(self, value): # noqa
-        if Doctor.objects.filter(user_id=value).exists():
+        if value and Doctor.objects.filter(user_id=value).exists():
             raise serializers.ValidationError({'code': ec.USERNAME_EXISTS, 
-                                               'item': 'user_id',
+                                               'item':  ec.USERNAME,
                                                'detail':"'"+ value+"' already exists"})
         return value
        
@@ -233,9 +233,9 @@ class UpdateDoctorSerializers(serializers.Serializer):
         return data
 
     def validate_user_id(self, value): # noqa
-        if Doctor.objects.filter(user_id=value).exists():
+        if value and Doctor.objects.filter(user_id=value).exclude(id=self.instance.id).exists():
             raise serializers.ValidationError({'code': ec.USERNAME_EXISTS, 
-                                               'item': 'user_id',
+                                               'item':  ec.USERNAME,
                                                'detail':"'"+ value+"' already exists"})
         return value
 

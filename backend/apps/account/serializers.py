@@ -44,7 +44,7 @@ class CreateAccountSerializers(serializers.Serializer):
 class UpdateAccountSerializers(serializers.Serializer):
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
-    email = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     roles = serializers.ListField(child=serializers.UUIDField(required=False), required=False)
 
     def validate_email(self, value):
@@ -54,7 +54,9 @@ class UpdateAccountSerializers(serializers.Serializer):
         if re.match(EMAIL_REGEX, value) is None:
             raise serializers.ValidationError({'detail': ec.EMAIL_INVALID})
         if User.objects.filter(email=value).exclude(id=self.instance.id).exists():
-            raise serializers.ValidationError({'detail': ec.ERROR_CODE_MESSAGE[ec.FIELDS_EXISTS], 'item': ec.EMAIL})
+            raise serializers.ValidationError({'detail': ec.ERROR_CODE_MESSAGE[ec.FIELDS_EXISTS], 
+                                               'item': ec.EMAIL,
+                                               'detail':"'"+ value+"' already exists"})
         return value
     
     def validate_roles(self, value): # noqa

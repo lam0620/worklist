@@ -569,15 +569,16 @@ class DoctorDetailView(DoctorBaseView):
                 return self.cus_response_403(per_code.EDIT_DOCTOR)
             updatedBy = user.id
             
+
+        doctor = Doctor.objects.get(**kwargs)
+        if not doctor:
+            return self.cus_response_empty_data()
+
+        serializer = ser.UpdateDoctorSerializers(data=request.data, instance=doctor)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        
         try:
-            doctor = Doctor.objects.get(**kwargs)
-            if not doctor:
-                return self.cus_response_empty_data()
-
-            serializer = ser.UpdateDoctorSerializers(data=request.data, instance=doctor)
-            serializer.is_valid(raise_exception=True)
-            data = serializer.validated_data
-
             with transaction.atomic():
                 for key, value in data.items():
                     # No update "sign" if it isnot passed in data

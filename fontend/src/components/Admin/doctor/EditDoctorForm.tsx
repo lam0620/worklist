@@ -30,7 +30,7 @@ const EditDoctorForm = ({
   const [title, setTitle] = useState(doctor.title);
   const [doctorNo, setDoctorNo] = useState(doctor.doctor_no);
   const [type, setType] = useState(doctor.type);
-  const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
+  // const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [gender, setGender] = useState(doctor.gender);
   const [userId, setUserId] = useState(doctor.user_id);
@@ -120,16 +120,17 @@ const EditDoctorForm = ({
   };
 
   const handleCancel = () => {
-    setShowUnsavedChangesPopup(true);
-  };
-  const confirmDiscardChanges = () => {
-    setShowUnsavedChangesPopup(false);
+    // setShowUnsavedChangesPopup(true);
     onClose();
   };
+  // const confirmDiscardChanges = () => {
+  //   setShowUnsavedChangesPopup(false);
+  //   onClose();
+  // };
 
-  const closeDiscardPopup = () => {
-    setShowUnsavedChangesPopup(false);
-  };
+  // const closeDiscardPopup = () => {
+  //   setShowUnsavedChangesPopup(false);
+  // };
 
   const list = users.map((user) => ({
     label: `${user.last_name} ${user.first_name} <${user.username}>`,
@@ -172,7 +173,7 @@ const EditDoctorForm = ({
           </Dialog.Title>
           <form>
             <div className="mb-4 flex items-center">
-              <label className="block text-gray-700 w-1/4 text-right mr-5">
+              <label className="block text-gray-700 w-1/4 text-right mr-5 whitespace-nowrap">
                 {t("Username")}
               </label>
               <select
@@ -324,7 +325,7 @@ const EditDoctorForm = ({
           </form>
         </Dialog.Content>
       </Dialog.Root>
-      <Dialog.Root open={showUnsavedChangesPopup}>
+      {/* <Dialog.Root open={showUnsavedChangesPopup}>
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
         <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
           <Dialog.Title className="text-xl font-bold mb-4">
@@ -348,7 +349,7 @@ const EditDoctorForm = ({
             </button>
           </div>
         </Dialog.Content>
-      </Dialog.Root>
+      </Dialog.Root> */}
     </>
   );
 };

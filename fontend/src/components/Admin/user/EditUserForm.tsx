@@ -20,7 +20,7 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
     user.roles.map((role: any) => role.id)
   );
   const [fullRoles, setFullRoles] = useState<any[]>([]);
-  const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
+  // const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [t, setT] = useState(() => (key: string) => key);
 
@@ -82,7 +82,9 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
     } catch (error: any) {
       const code = error?.response?.data?.result?.code;
       const item = error?.response?.data?.result?.item;
-      const message = showErrorMessage(code, item);
+      const msg = error.response?.data?.result?.msg;
+
+      const message = showErrorMessage(code, item, msg);
       toast.error(message);
     }
   };
@@ -106,17 +108,18 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
   };
 
   const handleCancel = () => {
-    setShowUnsavedChangesPopup(true);
-  };
-
-  const confirmDiscardChanges = () => {
-    setShowUnsavedChangesPopup(false);
+    // setShowUnsavedChangesPopup(true);
     onClose();
   };
 
-  const closeDiscardPopup = () => {
-    setShowUnsavedChangesPopup(false);
-  };
+  // const confirmDiscardChanges = () => {
+  //   setShowUnsavedChangesPopup(false);
+  //   onClose();
+  // };
+
+  // const closeDiscardPopup = () => {
+  //   setShowUnsavedChangesPopup(false);
+  // };
 
   return (
     <>
@@ -127,22 +130,7 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
             {t("Edit User")}
           </Dialog.Title>
           <form>
-            <div className="mb-4 flex items-center">
-              <label className="block text-gray-700 w-1/4">
-                {t("First Name")}
-              </label>
-              <input
-                type="text"
-                className={`w-3/4 px-3 py-2 border border-gray-300 rounded-md ${
-                  errors.firstName ? "border-red-500" : ""
-                }`}
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
-            {errors.firstName && (
-              <p className="text-red-500 text-sm">{errors.firstName}</p>
-            )}
+
 
             <div className="mb-4 flex items-center">
               <label className="block text-gray-700 w-1/4">
@@ -159,6 +147,22 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
             </div>
             {errors.lastName && (
               <p className="text-red-500 text-sm">{errors.lastName}</p>
+            )}
+            <div className="mb-4 flex items-center">
+              <label className="block text-gray-700 w-1/4">
+                {t("First Name")}
+              </label>
+              <input
+                type="text"
+                className={`w-3/4 px-3 py-2 border border-gray-300 rounded-md ${
+                  errors.firstName ? "border-red-500" : ""
+                }`}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName}</p>
             )}
 
             <div className="mb-4 flex items-center">
@@ -213,7 +217,7 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
           </form>
         </Dialog.Content>
       </Dialog.Root>
-      <Dialog.Root open={showUnsavedChangesPopup}>
+      {/* <Dialog.Root open={showUnsavedChangesPopup}>
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
         <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
           <Dialog.Title className="text-xl font-bold mb-4">
@@ -236,8 +240,8 @@ const EditUserForm = ({ user, onEdit, onClose }: EditUserFormProps) => {
               {t("Yes")}
             </button>
           </div>
-        </Dialog.Content>
-      </Dialog.Root>
+        </Dialog.Content> 
+      </Dialog.Root>*/}
     </>
   );
 };

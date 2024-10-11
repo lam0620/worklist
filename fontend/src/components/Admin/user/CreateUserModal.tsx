@@ -32,7 +32,7 @@ const CreateUserModal = ({
   const [roles, setRoles] = useState<Role[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
+  // const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [t, setT] = useState(() => (key: string) => key);
 
   useEffect(() => {
@@ -112,17 +112,18 @@ const CreateUserModal = ({
   };
 
   const handleCancel = () => {
-    setShowUnsavedChangesPopup(true);
-  };
-
-  const confirmDiscardChanges = () => {
-    setShowUnsavedChangesPopup(false);
+    // setShowUnsavedChangesPopup(true);
     onClose();
   };
 
-  const closeDiscardPopup = () => {
-    setShowUnsavedChangesPopup(false);
-  };
+  // const confirmDiscardChanges = () => {
+  //   setShowUnsavedChangesPopup(false);
+  //   onClose();
+  // };
+
+  // const closeDiscardPopup = () => {
+  //   setShowUnsavedChangesPopup(false);
+  // };
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
@@ -160,22 +161,7 @@ const CreateUserModal = ({
                 <p className="text-red-500 text-sm">{errors.email}</p>
               )}
             </div>
-            <div>
-              <label className="block text-sm font-medium">
-                {t("First Name")}
-              </label>
-              <input
-                type="text"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className={`mt-1 block w-full p-2 border ${
-                  errors.firstName ? "border-red-500" : "border-gray-300"
-                } rounded`}
-              />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm">{errors.firstName}</p>
-              )}
-            </div>
+
             <div>
               <label className="block text-sm font-medium">
                 {t("Last Name")}
@@ -192,6 +178,22 @@ const CreateUserModal = ({
                 <p className="text-red-500 text-sm">{errors.lastName}</p>
               )}
             </div>
+            <div>
+              <label className="block text-sm font-medium">
+                {t("First Name")}
+              </label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className={`mt-1 block w-full p-2 border ${
+                  errors.firstName ? "border-red-500" : "border-gray-300"
+                } rounded`}
+              />
+              {errors.firstName && (
+                <p className="text-red-500 text-sm">{errors.firstName}</p>
+              )}
+            </div>            
             <div>
               <label className="block text-sm font-medium">
                 {t("Password")}
@@ -259,7 +261,7 @@ const CreateUserModal = ({
               {t("Create")}
             </button>
           </div>
-          <Dialog.Root open={showUnsavedChangesPopup}>
+          {/* <Dialog.Root open={showUnsavedChangesPopup}>
             <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
             <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
               <Dialog.Title className="text-xl font-bold mb-4">
@@ -283,7 +285,7 @@ const CreateUserModal = ({
                 </button>
               </div>
             </Dialog.Content>
-          </Dialog.Root>
+          </Dialog.Root> */}
         </form>
       </div>
     </div>

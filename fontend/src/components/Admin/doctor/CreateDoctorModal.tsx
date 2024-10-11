@@ -27,7 +27,7 @@ const CreateDoctorModal = ({
   const [fullName, setFullName] = useState("");
   const [title, setTitle] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
+  // const [showUnsavedChangesPopup, setShowUnsavedChangesPopup] = useState(false);
   const [type, setType] = useState("");
   const [userId, setUserId] = useState("");
   const [gender, setGender] = useState("");
@@ -71,9 +71,10 @@ const CreateDoctorModal = ({
         onClose();
       }
     } catch (error: any) {
+      const code = error?.response?.data?.result?.code;
       const msg = error.response?.data?.result?.msg;
       const item = error.response?.data?.result?.item || null;
-      const message = showErrorMessage(msg, item);
+      const message = showErrorMessage(code, item, msg);
       toast.error(message);
     }
   };
@@ -90,17 +91,18 @@ const CreateDoctorModal = ({
   };
 
   const handleCancel = () => {
-    setShowUnsavedChangesPopup(true);
-  };
-
-  const confirmDiscardChanges = () => {
-    setShowUnsavedChangesPopup(false);
+    // setShowUnsavedChangesPopup(true);
     onClose();
   };
 
-  const closeDiscardPopup = () => {
-    setShowUnsavedChangesPopup(false);
-  };
+  // const confirmDiscardChanges = () => {
+  //   setShowUnsavedChangesPopup(false);
+  //   onClose();
+  // };
+
+  // const closeDiscardPopup = () => {
+  //   setShowUnsavedChangesPopup(false);
+  // };
 
   const list = users.map((user) => ({
     label: `${user.last_name} ${user.first_name} <${user.username}>`,
@@ -278,7 +280,7 @@ const CreateDoctorModal = ({
               {t("Create")}
             </button>
           </div>
-          <Dialog.Root open={showUnsavedChangesPopup}>
+          {/* <Dialog.Root open={showUnsavedChangesPopup}>
             <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
             <Dialog.Content className="fixed bg-white p-6 rounded-md shadow-md top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
               <Dialog.Title className="text-xl font-bold mb-4">
@@ -302,7 +304,7 @@ const CreateDoctorModal = ({
                 </button>
               </div>
             </Dialog.Content>
-          </Dialog.Root>
+          </Dialog.Root> */}
         </form>
       </div>
     </div>
