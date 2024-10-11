@@ -183,7 +183,14 @@ class CreateDoctorSerializers(serializers.Serializer):
             data['sign'] = None
 
         return data
-    
+
+    def validate_user_id(self, value): # noqa
+        if Doctor.objects.filter(user_id=value).exists():
+            raise serializers.ValidationError({'code': ec.USERNAME_EXISTS, 
+                                               'item': 'user_id',
+                                               'detail':"'"+ value+"' already exists"})
+        return value
+       
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
             raise serializers.ValidationError({'code': ec.INVALID, 
@@ -224,7 +231,15 @@ class UpdateDoctorSerializers(serializers.Serializer):
             data['sign'] = None
 
         return data
-    
+
+    def validate_user_id(self, value): # noqa
+        if Doctor.objects.filter(user_id=value).exists():
+            raise serializers.ValidationError({'code': ec.USERNAME_EXISTS, 
+                                               'item': 'user_id',
+                                               'detail':"'"+ value+"' already exists"})
+        return value
+
+
     def validate_type(self, value): # noqa
         if not is_valid(value, ['P','R']):
             raise serializers.ValidationError({'code': ec.INVALID, 
