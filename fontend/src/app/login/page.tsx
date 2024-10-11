@@ -83,12 +83,13 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem("language");
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-      lng(savedLanguage);
-      updatePageTitle(savedLanguage);
+    let savedLanguage = localStorage.getItem("language");
+    if (!savedLanguage) {
+      savedLanguage = 'vi'
     }
+    setLanguage(savedLanguage);
+    lng(savedLanguage);
+    updatePageTitle(savedLanguage);
   }, []);
 
   const handleChangeLanguage = (selectedLanguage: string) => {

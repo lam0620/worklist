@@ -28,7 +28,8 @@ i18next
   };
 
 export function useTranslation(ns, options) {
-  const lng = localStorage.getItem('language') || 'en';
+  //const lng = localStorage.getItem('language') || 'en';
+  let lng = 'en';
   const [cookies, setCookie] = useCookies([cookieName])
   const ret = useTranslationOrg(ns, options)
   const { i18n } = ret
@@ -44,6 +45,7 @@ export function useTranslation(ns, options) {
     }, [activeLng, i18n.resolvedLanguage])
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
+      lng = localStorage.getItem('language') || 'en';
       if (!lng || i18n.resolvedLanguage === lng) return
       i18n.changeLanguage(lng)
     }, [lng, i18n])

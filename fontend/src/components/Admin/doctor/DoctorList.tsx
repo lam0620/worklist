@@ -1,3 +1,5 @@
+"use client";
+
 import { Checkbox } from "@radix-ui/themes";
 import { PERMISSIONS } from "@/utils/constant";
 import { getGenderLabel } from "@/utils/utils";

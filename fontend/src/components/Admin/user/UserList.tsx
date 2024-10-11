@@ -1,3 +1,5 @@
+"use client";
+
 import * as Avatar from "@radix-ui/react-avatar";
 import { Checkbox } from "@radix-ui/themes";
 import { PERMISSIONS } from "@/utils/constant";
@@ -150,7 +152,7 @@ const UserList = ({
               </Avatar.Root>
               <div className="ml-4">
                 <div className="">
-                  {user.first_name} {user.last_name}
+                  {user.last_name} {user.first_name} 
                 </div>
               </div>
             </div>
