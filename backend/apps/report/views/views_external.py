@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from django.db import transaction,connections
 from drf_yasg.utils import swagger_auto_schema
-from apps.report.report_base_view import ReportBaseView
+
 from third_parties.contribution.api_view import CustomAPIView
 from django.db.models import F, Prefetch
 from drf_yasg import openapi
@@ -15,6 +15,8 @@ from library.constant import permission_code as per_code
 from library.constant import swagger_tags
 
 from apps.report import serializers as ser
+from apps.report.report_base_view import ReportBaseView
+from apps.report.order_base_view import OrderBaseView
 from apps.report.models import (
     Doctor, Report, User, 
     Order,Patient,Procedure,ProcedureType
@@ -29,7 +31,7 @@ logger = logging.getLogger(__name__)
 HIS PACS integration class
 """
 
-class External_OrderView(ReportBaseView):
+class External_OrderView(OrderBaseView):
     queryset = User.objects.all()
     authentication_classes = ()
  
