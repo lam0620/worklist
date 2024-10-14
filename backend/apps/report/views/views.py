@@ -69,8 +69,8 @@ class OrderView(OrderBaseView):
 
         # Get modality from query params: /?accession=XX   
         accession=request.query_params.get('accession')
-        if accession =='':
-            return self.response_item_NG(ec.SYSTEM_ERR, 'accession', "Accession number is empty")
+        # if accession =='':
+        #     return self.response_item_NG(ec.SYSTEM_ERR, 'accession', "Accession number is empty")
     
         procedure_prefetch = Prefetch(
             'procedure_set',
@@ -88,32 +88,7 @@ class OrderView(OrderBaseView):
         except Order.DoesNotExist:
             return self.cus_response_empty_data(ec.REPORT)
         
-        orders_data = []
-        for order in queryset:
-            order_data = {
-                'id': order.id,
-                'accession_no': order.accession_no,
-                'referring_phys_code': order.referring_phys.doctor_no,
-                'referring_phys_name': order.referring_phys.fullname,
-                'clinical_diagnosis': order.clinical_diagnosis,
-                'order_time': order.order_time,
-                'modality_type': order.modality_type,
-                'patient': {
-                    'pid':order.patient.pid,
-                    'fullname':order.patient.fullname,
-                    'gender':order.patient.gender,
-                    'dob':order.patient.dob,
-                    'tel':order.patient.tel,
-                    'address':order.patient.address,
-                    'insurance_no':order.patient.insurance_no
-                },
-                'procedures': [{'proc_id': proc.id,
-                                'study_iuid':proc.study_iuid,
-                                'code': proc.procedure_type.code, 
-                                'name': proc.procedure_type.name,
-                                'report':self.get_order_report_json(proc.id)} for proc in order.procedure_list]
-            }
-            orders_data.append(order_data)
+        orders_data = [self.get_pure_order_json(order) for order in queryset]
 
         if accession:
             if len(orders_data) > 1:

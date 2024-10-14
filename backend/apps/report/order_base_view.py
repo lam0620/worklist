@@ -31,29 +31,38 @@ class OrderBaseView(CustomAPIView):
         Get order data in json for order item
         """
                 
-        patient = {
-            'pid': order.patient.pid,
-            'fullname': order.patient.fullname,
-            'gender': order.patient.gender, 
-            'dob': order.patient.dob            
-        }        
-        data = {
-            'id': order.id,
-            'accession_no': order.accession_no,
-            'referring_phys_name': order.referring_phys.fullname,
-            'clinical_diagnosis': order.clinical_diagnosis,
-            'patient_class':order.patient_class,
-            'modality_type': order.modality_type,
-            'patient': patient,
-            'created_time':order.created_at.strftime('%d/%m/%Y %H:%M'),
-            'procedures': [{
-                            'code': proc.procedure_type.code, 
-                            'name': proc.procedure_type.name} for proc in order.procedure_list]
-        }
+        data = self.get_pure_order_json(order)
         #return data
         return self.response_success(data=data)       
 
-    
+    def get_pure_order_json(self, order):
+        order_data = {
+            'id': order.id,
+            'accession_no': order.accession_no,
+            'referring_phys_code': order.referring_phys.doctor_no,
+            'referring_phys_name': order.referring_phys.fullname,
+            'clinical_diagnosis': order.clinical_diagnosis,
+            'order_time': order.order_time,
+            'modality_type': order.modality_type,
+            'patient': {
+                'pid':order.patient.pid,
+                'fullname':order.patient.fullname,
+                'gender':order.patient.gender,
+                'dob':order.patient.dob,
+                'tel':order.patient.tel,
+                'address':order.patient.address,
+                'insurance_no':order.patient.insurance_no
+            },
+            'procedures': [{'proc_id': proc.id,
+                            'study_iuid':proc.study_iuid,
+                            'code': proc.procedure_type.code, 
+                            'name': proc.procedure_type.name,
+                            'report':self.get_order_report_json(proc.id)} for proc in order.procedure_list]
+        }
+
+        return order_data
+
+
     def get_order_report_json(self, proc_id):
         """
         Get report data in json for order item
