@@ -4,8 +4,7 @@ from django.utils import timezone
 
 from django.db import transaction,connections
 from drf_yasg.utils import swagger_auto_schema
-from apps.report.doctor_base_view import DoctorBaseView
-from apps.report.report_base_view import ReportBaseView
+
 from third_parties.contribution.api_view import CustomAPIView
 from django.db.models import F, Prefetch
 from drf_yasg import openapi
@@ -18,12 +17,17 @@ from library.constant import module_code as module_code
 from library.constant import permission_code as per_code
 from library.constant import swagger_tags
 
+from apps.account.permission import CheckPermission
+
+from apps.report.doctor_base_view import DoctorBaseView
+from apps.report.report_base_view import ReportBaseView
+from apps.report.order_base_view import OrderBaseView
 from apps.report import serializers as ser
 from apps.report.models import (
     Doctor, Report, ReportTemplate, User, 
     Order,Patient,Procedure,ProcedureType
 )
-from apps.account.permission import CheckPermission
+
 from apps.report.utils import  get_image_field_str,get_username
 
 
@@ -35,11 +39,16 @@ logger = logging.getLogger(__name__)
 Order class
 """
 
-class OrderView(ReportBaseView):
+class OrderView(OrderBaseView):
     queryset = User.objects.all()
     # Call overwrite here to skip authenticate or don't call request.user
     # uncomment if no need to check permission 
     # authentication_classes = ()
+    
+    # for search box (?search=xxx). which you want to search. 
+    search_fields = ['accession_no', 'patient__fullname']
+    # for query string (?type=xxx)
+    #filter_fields = ['type', 'user_id', 'is_active']
 
     """
     Get list of order
@@ -82,9 +91,10 @@ class OrderView(ReportBaseView):
         orders_data = []
         for order in queryset:
             order_data = {
+                'id': order.id,
                 'accession_no': order.accession_no,
-                'req_phys_code': order.referring_phys.doctor_no,
-                'req_phys_name': order.referring_phys.fullname,
+                'referring_phys_code': order.referring_phys.doctor_no,
+                'referring_phys_name': order.referring_phys.fullname,
                 'clinical_diagnosis': order.clinical_diagnosis,
                 'order_time': order.order_time,
                 'modality_type': order.modality_type,
@@ -116,71 +126,7 @@ class OrderView(ReportBaseView):
             page = self.paginate_queryset(orders_data)
             return self.get_paginated_response(page)
    
-
-class OrderByACNView(ReportBaseView):
-    queryset = User.objects.all()
-    # uncomment if no need to check permission 
-    # authentication_classes = ()
-
-    """
-    Get list of order
-    """
-    @swagger_auto_schema(
-        operation_summary='Order Detail by AccessionNumber',
-        operation_description='Order Detail by AccessionNumber',
-        tags=[swagger_tags.REPORT_ORDER],
-    )
-    def get(self, request, *args, **kwargs):
-        # Get and check version to secure or not
-        if request.META.get('HTTP_X_API_VERSION') != "X":  
-            user = request.user
-            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
-            if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.VIEW_ORDER)
-
-        # procedure and procedure_type queries
-        procedure_prefetch = Prefetch(
-            'procedure_set',
-            queryset=Procedure.objects.select_related('procedure_type'),
-            to_attr='procedure_list'
-        )
-
-        try:
-            order = Order.objects.prefetch_related(procedure_prefetch).get(**kwargs, delete_flag=False)
-        except Order.DoesNotExist:
-            return self.cus_response_empty_data(ec.REPORT)
-        
-        except Exception as e:
-            logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
-        
-        order_data = {
-            'accession_no': order.accession_no,
-            'req_phys_code': order.referring_phys.doctor_no,
-            'req_phys_name': order.referring_phys.fullname,
-            'clinical_diagnosis': order.clinical_diagnosis,
-            'order_time': order.order_time,
-            'modality_type': order.modality_type,
-            'is_insurance_applied': order.is_insurance_applied,
-            'patient': {
-                'pid':order.patient.pid,
-                'fullname':order.patient.fullname,
-                'gender':order.patient.gender,
-                'dob':order.patient.dob,
-                'tel':order.patient.tel,
-                'address':order.patient.address,
-                'insurance_no':order.patient.insurance_no
-            },
-            'procedures': [{'proc_id': proc.id,
-                            'study_iuid':proc.study_iuid,
-                            'code': proc.procedure_type.code, 
-                            'name': proc.procedure_type.name,
-                            'report':self.get_order_report_json(proc.id)} for proc in order.procedure_list]
-        }
-        return self.response_success(data=order_data)
-    
-# =============== Report class ==================
-class ReportView(ReportBaseView):
+class OrderDetail(OrderBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -190,9 +136,102 @@ class ReportView(ReportBaseView):
     kwargs = study_iuid
     """
     @swagger_auto_schema(
+        operation_summary='Get Detail Order by Id',
+        operation_description='Get Detail Order by Id',
+        tags=[swagger_tags.REPORT_ORDER],
+    )
+    def get(self, request, *args, **kwargs):
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_ORDER)
+                    
+        # Get latest report        
+        return self.get_order_by_id(request, kwargs['pk'])
+    
+# class OrderByACNView(ReportBaseView):
+#     queryset = User.objects.all()
+#     # uncomment if no need to check permission 
+#     # authentication_classes = ()
+
+#     """
+#     Get list of order
+#     """
+#     @swagger_auto_schema(
+#         operation_summary='Order Detail by AccessionNumber',
+#         operation_description='Order Detail by AccessionNumber',
+#         tags=[swagger_tags.REPORT_ORDER],
+#     )
+#     def get(self, request, *args, **kwargs):
+#         # Get and check version to secure or not
+#         if request.META.get('HTTP_X_API_VERSION') != "X":  
+#             user = request.user
+#             is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+#             if not is_per and not user.is_superuser:
+#                 return self.cus_response_403(per_code.VIEW_ORDER)
+
+#         # procedure and procedure_type queries
+#         procedure_prefetch = Prefetch(
+#             'procedure_set',
+#             queryset=Procedure.objects.select_related('procedure_type'),
+#             to_attr='procedure_list'
+#         )
+
+#         try:
+#             order = Order.objects.prefetch_related(procedure_prefetch).get(**kwargs, delete_flag=False)
+#         except Order.DoesNotExist:
+#             return self.cus_response_empty_data(ec.REPORT)
+        
+#         except Exception as e:
+#             logger.error(e, exc_info=True)
+#             return self.response_NG(ec.SYSTEM_ERR, str(e))
+        
+#         order_data = {
+#             'accession_no': order.accession_no,
+#             'req_phys_code': order.referring_phys.doctor_no,
+#             'req_phys_name': order.referring_phys.fullname,
+#             'clinical_diagnosis': order.clinical_diagnosis,
+#             'order_time': order.order_time,
+#             'modality_type': order.modality_type,
+#             'is_insurance_applied': order.is_insurance_applied,
+#             'patient': {
+#                 'pid':order.patient.pid,
+#                 'fullname':order.patient.fullname,
+#                 'gender':order.patient.gender,
+#                 'dob':order.patient.dob,
+#                 'tel':order.patient.tel,
+#                 'address':order.patient.address,
+#                 'insurance_no':order.patient.insurance_no
+#             },
+#             'procedures': [{'proc_id': proc.id,
+#                             'study_iuid':proc.study_iuid,
+#                             'code': proc.procedure_type.code, 
+#                             'name': proc.procedure_type.name,
+#                             'report':self.get_order_report_json(proc.id)} for proc in order.procedure_list]
+#         }
+#         return self.response_success(data=order_data)
+    
+# =============== Report class ==================
+class ReportView(ReportBaseView):
+    queryset = Report.objects.all()
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
+
+    # for search box (?search=xxx). which you want to search. 
+    search_fields = ['accession_no', 'radiologist__fullname']
+    # for query string (?type=xxx)
+    filter_fields = ['study_iuid']
+
+    """
+    Get a report
+    kwargs = study_iuid
+    """
+    @swagger_auto_schema(
         operation_summary='Get reports',
         operation_description='Get reports',
-        query_serializer=ser.GetReportSerializers,
+        # query_serializer=ser.GetReportSerializers,
         tags=[swagger_tags.REPORT],
     )
     def get(self, request, *args, **kwargs):
@@ -204,17 +243,25 @@ class ReportView(ReportBaseView):
                 return self.cus_response_403(per_code.VIEW_REPORT)
                     
         try:
-            study_iuid=request.query_params.get('study_iuid')
-            # Get report by study_iuid and status != 'X' (deleted)
-            report = Report.objects.filter(study_iuid=study_iuid, delete_flag = False).first()
-            if report is None:
-                return self.cus_response_empty_data(ec.REPORT)
+            # study_iuid=request.query_params.get('study_iuid')
+            # # Get report by study_iuid and status != 'X' (deleted)
+            # report = Report.objects.filter(study_iuid=study_iuid, delete_flag = False).first()
+            reports = self.filter_queryset(self.get_queryset())
+            # if report is None:
+            #     return self.cus_response_empty_data(ec.REPORT)
+            data = [self.get_pure_report_json(request, report) for report in reports]
+
+                        
+        except Report.DoesNotExist:
+            return self.cus_response_empty_data(ec.REPORT)
+                    
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))
         
         # Get latest report
-        return self.get_report_json(request, report)
+        page = self.paginate_queryset(data)
+        return self.get_paginated_response(page)    
     
     """
     Create new a report

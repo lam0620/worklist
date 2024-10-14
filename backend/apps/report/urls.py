@@ -5,14 +5,14 @@ from rest_framework.routers import DefaultRouter
 
 from apps.report.views import (
     ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById,
-    OrderView,DoctorView,DoctorDetailView,
+    OrderView,OrderDetail, DoctorView,DoctorDetailView,
     StatsViewSet
 )
 from apps.report.views import (
     External_ReportById, External_ReportByACNProcedure,
     External_OrderView,External_ImageLinkView,External_ImageLinkByACNProcedure
 )
-from apps.report.views.views import OrderByACNView
+# from apps.report.views.views import OrderByACNView
 
 urlpatterns = [
 
@@ -36,8 +36,7 @@ urlpatterns = [
     # Order
     path('orders', OrderView.as_view(), name='Order'),
     # orders?accession=xxx also existing. pattern /orders
-    # Should use orders?accession=xxx instead
-    # path('orders/acn/<accession_no>', OrderByACNView.as_view(), name='Order Detail by AccessionNumber'),
+    path('orders/<uuid:pk>', OrderDetail.as_view(), name='Order Detail by Id'),
 
     # Report
     path('reports', ReportView.as_view(), name='Report'),

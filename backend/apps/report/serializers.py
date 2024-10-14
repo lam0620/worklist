@@ -92,7 +92,7 @@ class CreateOrderSerializers(serializers.Serializer):
     # def validate(self, data): # noqa
     #     if data['dob']:
 class GetReportSerializers(serializers.Serializer):
-    study_iuid = serializers.CharField(required=True)
+    study_iuid = serializers.CharField(required=False)
 
 class CreateReportSerializers(serializers.Serializer):
     accession_no = serializers.CharField(required=True)
