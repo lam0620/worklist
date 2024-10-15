@@ -1,0 +1,109 @@
+@media all {
+  /* .page-break {
+    display: none;
+  } */
+}
+
+@media print {
+
+  html,
+  body {
+    height: 100%;
+    /* Use 100% here to support printing more than a single page*/
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible;
+  }
+}
+
+/* .print-section {
+  max-height: 100%;
+  height: 100%;
+  position: relative;
+} */
+
+@media print {
+  .print-section {
+    /* max-height: 100%;
+    height: 100%; */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .page-break {
+    /* margin-top: 1rem;
+    display: block; */
+    page-break-before: always;
+    /* overflow: visible; */
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  .header img {
+    width: 100px;
+  }
+
+  .clinic-info {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    flex-grow: 1;
+    margin-left: 50px;
+  }
+
+  .clinic-info h2 {
+    color: red;
+    font-weight: bold;
+  }
+
+
+  .title-barcode {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .title {
+
+    position: relative;
+    font-weight: bold;
+    font-size: 23px;
+    margin-right: 35px;
+    margin-left: 80px;
+  }
+
+  .barcode {
+    width: 160px;
+    height: 30px;
+    overflow: hidden;
+    transform: translateX(130px);
+  }
+
+  .translateX {
+    transform: translateX(130px);
+  }
+
+  .patient-info div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .footer {
+    /* To move qrcode section to the bottom (2) */
+    /* position: absolute;
+    width: 100%;
+    bottom: 0; */
+    margin-top: auto;
+    position: relative;
+  }
+
+  .border {
+    border: 0px solid green;
+  }
+}

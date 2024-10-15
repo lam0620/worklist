@@ -43,7 +43,12 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
   const handleDoctorManagement = () => {
     router.push("/admin/doctors");
   };
-
+  const handleOrderManagement = () => {
+    router.push("/admin/orders");
+  };
+  const handleReportManagement = () => {
+    router.push("/admin/reports");
+  };
   const hasViewUserPermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_ACCOUNT) || user?.is_superuser;
 
@@ -108,6 +113,23 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
           >
             {t("Doctor management")}
+          </DropdownMenu.Item>
+        )}
+        <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
+        {hasViewRolePermission && (
+          <DropdownMenu.Item
+            onSelect={handleOrderManagement}
+            className="cursor-pointer p-2 hover:bg-gray-100 rounded"
+          >
+            {t("Order management")}
+          </DropdownMenu.Item>
+        )}
+        {hasViewRolePermission && (
+          <DropdownMenu.Item
+            onSelect={handleReportManagement}
+            className="cursor-pointer p-2 hover:bg-gray-100 rounded"
+          >
+            {t("Report management")}
           </DropdownMenu.Item>
         )}
         <DropdownMenu.Separator className="my-1 border-t border-gray-200" />

@@ -1,0 +1,24 @@
+{
+    "Accession Number":"Accession Number",
+    "Request Phys":"Request Phys",
+    "Patient Name":"Patient Name",
+    "Created Time":"Created Time",
+    "Report Status":"Report Status",
+    "Not Yet":"Not Yet",
+    "Reported":"Reported",
+    "Previous":"Previous",
+    "Next":"Next",
+    "Order Detail":"Order Detail",
+    "Back to order list":"Back to order list",
+    "Home":"Home",
+    "You don't have permission to view orders":"You don't have permission to view orders",
+    "Failed to fetch orders":"Failed to fetch orders",
+    "Orders":"Orders",
+    "Search orders...":"Search orders...",
+    "Procedure":"Procedure",
+    "Clinical Diagnosis":"Clinical Diagnosis",
+    "Modality":"Modality",
+    "PID":"PID",
+    "Order Time":"Order Time"
+
+}

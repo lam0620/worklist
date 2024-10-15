@@ -1,0 +1,22 @@
+{
+    "Report Detail":"Report Detail",
+    "Back to report list":"Back to report list",
+    "Home":"Home",
+    "Accession Number":"Accession Number",
+    "Patient Name":"Patient Name",
+    "Conclusions":"Conclusions",
+    "Radiologist":"Radiologist",
+    "Created Time":"Created Time",
+    "View Image":"View Image",
+    "Study IUID":"Study IUID",
+    "Patient ID":"Patient ID",
+    "Procedure":"Procedure",
+    "Findings":"Findings",
+    "Conclusion":"Conclusion",
+    "Status":"Status",
+    "Created time":"Created time",
+    "You don't have permission to view reports":"You don't have permission to view reports",
+    "Failed to fetch reports":"Failed to fetch reports",
+    "Reports":"Reports",
+    "Search reports...":"Search reports..."
+}

@@ -1,0 +1,23 @@
+{
+    "Accession Number": "入院番号",
+    "Request Phys": "担当医",
+    "Patient Name": "患者の名前",
+    "Created Time": "作成日時",
+    "Report Status": "レポートステータス",
+    "Not Yet": "まだ",
+    "Reported": "報告済み",
+    "Previous": "前",
+    "Next": "次",
+    "Order Detail": "注文の詳細",
+    "Back to order list": "注文リストに戻る",
+    "Home": "ホーム",
+    "You don't have permission to view orders": "注文を表示する権限がありません",
+    "Failed to fetch orders": "注文の取得に失敗しました",
+    "Orders": "注文",
+    "Search orders...": "注文を検索...",
+    "Procedure": "手順",
+    "Clinical Diagnosis": "臨床診断",
+    "Modality": "方法",
+    "PID": "患者ID",
+    "Order Time": "注文時間"
+}

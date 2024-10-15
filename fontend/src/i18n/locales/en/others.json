@@ -12,5 +12,7 @@
     "Role management":"Role management",
     "Doctor management":"Doctor management",
     "Log out":"Log out",
-    "Statistics":"Statistics"
+    "Statistics":"Statistics",
+    "Order management":"Order management",
+    "Report management": "Report management"
 }
