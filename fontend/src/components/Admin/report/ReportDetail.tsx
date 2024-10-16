@@ -47,7 +47,6 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
                   />
                 ),
               },
-              { label: t("Status"), value: report?.status },
               { label: t("Created time"), value: report?.created_time },
             ].map((field, index) => (
               <div key={index} className="flex items-center">
