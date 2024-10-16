@@ -20,5 +20,7 @@
     "Modality":"Modality",
     "PID":"PID",
     "Order Time":"Order Time",
-    "Delete" : "Delete"
+    "Delete" : "Delete",
+    "DOB" : "DOB",
+    "Gender":"Gender"
 }

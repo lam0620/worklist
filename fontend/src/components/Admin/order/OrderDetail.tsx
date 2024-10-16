@@ -12,6 +12,13 @@ interface Props {
 
 const OrderDetail = ({ order }: Props) => {
   const { t } = useTranslation("orderManagement");
+  const formatDate = (dateString: any) => {
+    if (!dateString) return "";
+    const year = dateString.slice(0, 4);
+    const month = dateString.slice(4, 6);
+    const day = dateString.slice(6, 8);
+    return `${day}-${month}-${year}`;
+  };
 
   return (
     <div className="flex flex-col items-start justify-center min-h-8 px-4">
@@ -49,6 +56,11 @@ const OrderDetail = ({ order }: Props) => {
             { label: t("Modality"), value: order?.modality_type },
             { label: t("PID"), value: order?.patient.pid },
             { label: t("Patient Name"), value: order?.patient.fullname },
+            {
+              label: t("DOB"),
+              value: formatDate(order?.patient.dob),
+            },
+            { label: t("Gender"), value: order?.patient.gender },
             { label: t("Created Time"), value: order?.created_time },
           ].map((field, index) => (
             <div key={index} className="flex items-center">

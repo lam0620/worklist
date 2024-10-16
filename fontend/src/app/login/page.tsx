@@ -10,7 +10,10 @@ import { Login } from "@/services/apiService";
 import { PERMISSIONS } from "@/utils/constant";
 import backgroundImage from "../../../public/images/login_bg.jpg";
 import "../../../node_modules/flag-icons/css/flag-icons.min.css";
-
+import {
+  initReactI18next,
+  useTranslation as useTranslationOrg,
+} from "react-i18next";
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -84,7 +87,7 @@ const LoginPage = () => {
   useEffect(() => {
     let savedLanguage = localStorage.getItem("language");
     if (!savedLanguage) {
-      savedLanguage = 'vi'
+      savedLanguage = "vi";
     }
     setLanguage(savedLanguage);
     localStorage.setItem("language", savedLanguage);
@@ -142,8 +145,6 @@ const LoginPage = () => {
           className="px-14 pt-16 pb-6 rounded shadow-md w-full max-w-lg relative"
           style={{ backgroundColor: "#323237", color: "#d0d0d0" }}
         >
-
-
           {/* <h1 className="text-3xl font-bold mb-6 text-center">{pageTitle}</h1> */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-col">
@@ -310,7 +311,6 @@ const LoginPage = () => {
               )}
             </div>
           </div>
-
         </div>
         <Toast.Provider>
           <Toast.Root

@@ -20,6 +20,8 @@
     "Modality": "方法",
     "PID": "患者ID",
     "Order Time": "注文時間",
-    "Delete" : "消去"
+    "Delete" : "消去",
+    "DOB" : "生年月日",
+    "Gender":"性別"
 
 }

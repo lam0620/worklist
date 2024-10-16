@@ -20,5 +20,7 @@
     "Modality": "Loại",
     "PID": "Mã bệnh nhân",
     "Order Time": "Thời gian chỉ định",
-    "Delete" : "Xóa"
+    "Delete" : "Xóa",
+    "DOB" : "Ngày sinh",
+    "Gender":"Giới tính"
 }
