@@ -43,6 +43,7 @@ class OrderBaseView(CustomAPIView):
             'referring_phys_name': order.referring_phys.fullname,
             'clinical_diagnosis': order.clinical_diagnosis,
             'order_time': order.order_time,
+            'created_time':order.created_at.strftime('%d/%m/%Y %H:%M'),
             'modality_type': order.modality_type,
             'patient': {
                 'pid':order.patient.pid,
