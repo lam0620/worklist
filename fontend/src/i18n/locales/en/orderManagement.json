@@ -19,6 +19,6 @@
     "Clinical Diagnosis":"Clinical Diagnosis",
     "Modality":"Modality",
     "PID":"PID",
-    "Order Time":"Order Time"
-
+    "Order Time":"Order Time",
+    "Delete" : "Delete"
 }

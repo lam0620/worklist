@@ -19,5 +19,7 @@
     "Clinical Diagnosis": "臨床診断",
     "Modality": "方法",
     "PID": "患者ID",
-    "Order Time": "注文時間"
+    "Order Time": "注文時間",
+    "Delete" : "消去"
+
 }

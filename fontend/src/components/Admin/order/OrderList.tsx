@@ -35,17 +35,6 @@ const OrdersList = ({
     }
   };
 
-  const formatDate = (dateString: any) => {
-    const date = new Date(dateString);
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-    const hh = String(date.getHours()).padStart(2, "0");
-    const min = String(date.getMinutes()).padStart(2, "0");
-    const ss = String(date.getSeconds()).padStart(2, "0");
-    return `${hh}:${min}  /  ${dd}-${mm}-${yyyy}`;
-  };
-
   const hasDeletePermission =
     (orderPermissions ?? []).includes(PERMISSIONS.DELETE_ORDER) || isAdminUser;
 
@@ -67,10 +56,10 @@ const OrdersList = ({
           {t("Patient Name")}
         </div>
         <div className="w-1/12 font-semibold text-center">{t("Modality")}</div>
-        <div className="w-1/12 font-semibold text-center">{t("Procedure")}</div>
         <div className="w-2/12 font-semibold text-center">
           {t("Created Time")}
         </div>
+        <div className="w-1/12 font-semibold text-center">{t("Procedure")}</div>
         <div className="w-1/12 font-semibold text-center">
           {t("Report Status")}
         </div>
@@ -116,37 +105,42 @@ const OrdersList = ({
               <div className="w-1/12 flex flex-wrap gap-1 justify-center">
                 {order.modality_type}
               </div>
-              <div className="w-1/12 flex flex-wrap gap-1 justify-center">
-                {order.procedures?.map((procedure) => (
-                  <span key={procedure.proc_id}>{procedure.name}</span>
-                ))}
-              </div>
               <div className="w-2/12 flex flex-wrap gap-1 justify-center">
-                {formatDate(order.order_time)}
+                {order.created_time}
               </div>
-              <div className="w-1/12 flex flex-wrap gap-1 justify-center">
-                {order.procedures?.some(
-                  (procedure) => procedure.report && procedure.report.id
-                ) ? (
-                  <a
-                    href={`/admin/reports/${
-                      order.procedures.find(
-                        (procedure) => procedure.report && procedure.report.id
-                      )?.report.id
+              <div className="w-2/12 text-center">
+                {order.procedures?.map((procedure, index) => (
+                  <div
+                    key={procedure.proc_id}
+                    className={`grid grid-cols-2 gap-4 border-b border-gray-300 ${
+                      index === (order.procedures?.length ?? 0) - 1
+                        ? "border-b-0"
+                        : ""
                     }`}
-                    className="text-blue-500 underline"
                   >
-                    {t("Reported")}
-                  </a>
-                ) : (
-                  t("Not Yet")
-                )}
+                    <span className="my-2">{procedure.name}</span>
+                    <div className="my-2">
+                      {procedure.report &&
+                      procedure.report.id &&
+                      (procedure.report.status === "F" ||
+                        procedure.report.status === "C") ? (
+                        <a
+                          href={`/admin/reports/${procedure.report.id}`}
+                          className="text-blue-500 underline"
+                        >
+                          {t("Reported")}
+                        </a>
+                      ) : (
+                        <span>{t("Not Yet")}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </li>
           ))}
         </ul>
       )}
-
       {totalPages > 1 && (
         <div className="sticky bottom-0 bg-white py-4">
           <div className="flex justify-center">

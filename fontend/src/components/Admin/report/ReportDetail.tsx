@@ -19,7 +19,7 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
           <form className="space-y-6">
             {[
               { label: t("Accession Number"), value: report?.accession_no },
-              { label: t("Study IUID"), value: report?.study_iuid },
+              //   { label: t("Study IUID"), value: report?.study_iuid },
               { label: t("Patient ID"), value: report?.patient.pid },
               { label: t("Patient Name"), value: report?.patient.fullname },
               { label: t("Procedure"), value: report?.procedure.name },

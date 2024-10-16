@@ -12,6 +12,7 @@ import { OrderDetailProps } from "@/app/types/OrderDetail";
 import { toast } from "react-toastify";
 import { useTranslation } from "../../../i18n/client";
 import CreateOrderButton from "@/components/Admin/order/CreateOrderButton";
+import DeleteOrderButton from "@/components/Admin/order/DeleteOrderButton";
 
 const OrdersPage = () => {
   const { user } = useUser();
@@ -65,6 +66,21 @@ const OrdersPage = () => {
     });
   };
 
+  const handleOrderDelete = async () => {
+    try {
+      const orderIds = Object.keys(selectedOrders).filter(
+        (orderId) => selectedOrders[orderId]
+      );
+      if (orderIds.length === 0) {
+        return;
+      }
+      await fetchOrders(1, searchQuery);
+      setSelectedOrders({});
+    } catch (error) {
+      console.error(t("Failed to delete orders:"), error);
+    }
+  };
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -109,12 +125,26 @@ const OrdersPage = () => {
               >
                 {t("Home")}
               </button>
+              {/* {hasDeleteOrderPermission && (
+                <DeleteOrderButton
+                  isMany={true}
+                  orderIds={Object.keys(selectedOrders).filter(
+                    (orderId) => selectedOrders[orderId]
+                  )}
+                  onOrderDeleted={handleOrderDelete}
+                  isDisabled={
+                    Object.keys(selectedOrders).filter(
+                      (orderId) => selectedOrders[orderId]
+                    ).length === 0
+                  }
+                />
+              )}
               {hasAddOrderPermission && (
                 <CreateOrderButton
                   onOrderCreated={() => fetchOrders(currentPage, searchQuery)}
                   onClose={() => {}}
                 />
-              )}
+              )} */}
             </div>
           </div>
           <input

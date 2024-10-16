@@ -14,17 +14,33 @@ const OrderDetail = ({ order }: Props) => {
   const { t } = useTranslation("orderManagement");
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-8 px-4">
+    <div className="flex flex-col items-start justify-center min-h-8 px-4">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <form className="space-y-6">
           {[
             { label: t("Accession Number"), value: order?.accession_no },
             {
               label: t("Procedure"),
-              value: order?.procedures?.map((procedure) => (
-                <span key={procedure.code}>{procedure.name}</span>
-              )),
+              value: (
+                <div>
+                  {order?.procedures?.map((procedure, index) => (
+                    <span
+                      key={procedure.code}
+                      style={{
+                        display: "block",
+                        marginBottom:
+                          index !== (order.procedures?.length ?? -1)
+                            ? "0.5rem"
+                            : "0",
+                      }}
+                    >
+                      {procedure.name}
+                    </span>
+                  ))}
+                </div>
+              ),
             },
+
             { label: t("Request Phys"), value: order?.referring_phys_name },
             {
               label: t("Clinical Diagnosis"),
@@ -33,7 +49,7 @@ const OrderDetail = ({ order }: Props) => {
             { label: t("Modality"), value: order?.modality_type },
             { label: t("PID"), value: order?.patient.pid },
             { label: t("Patient Name"), value: order?.patient.fullname },
-            { label: t("Order Time"), value: order?.order_time },
+            { label: t("Created Time"), value: order?.created_time },
           ].map((field, index) => (
             <div key={index} className="flex items-center">
               <label className="w-1/3 font-medium text-right">

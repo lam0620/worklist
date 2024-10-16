@@ -18,5 +18,6 @@
     "You don't have permission to view reports": "レポートを見る権限がありません",
     "Failed to fetch reports": "レポートの取得に失敗しました",
     "Reports": "レポート",
-    "Search reports...": "レポートを検索..."
+    "Search reports...": "レポートを検索...",
+    "View" :"ゼム"
 }

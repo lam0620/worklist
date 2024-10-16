@@ -6,6 +6,7 @@ export interface OrderDetailProps{
     referring_phys_name :string;
     clinical_diagnosis :    string;
     order_time : string;
+    created_time : string;
     modality_type : string;
     patient_class: string;
     patient : {

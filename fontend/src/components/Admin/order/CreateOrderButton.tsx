@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-//import CreateRoleModal from "./CreateRoleModal";
+import CreateOrderModal from "./CreateOrderModal";
 import { MyInfoProps } from "@/app/types/UserDetail";
 import { useTranslation } from "../../../i18n";
 import BaseButton from "@/components/Button";
@@ -12,7 +12,7 @@ const CreateOrderButton = ({
   onOrderCreated: () => void;
   onClose: () => void;
 }) => {
-  const [doctors, setDoctors] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [t, setT] = useState(() => (key: string) => key);
 
   useEffect(() => {
@@ -24,14 +24,14 @@ const CreateOrderButton = ({
   }, []);
   return (
     <BaseButton
-      buttonText={t("Create Doctor")}
-      //   modalComponent={
-      //     <CreateOrderModal
-      //       t={t}
-      //       onOrderCreated={onOrderCreated}
-      //       onClose={onClose}
-      //     />
-      //   }
+      buttonText={t("Create Order")}
+      // modalComponent={
+      //   <CreateOrderModal
+      //     t={t}
+      //     onOrderCreated={onOrderCreated}
+      //     onClose={onClose}
+      //   />
+      // }
       className="bg-blue-400 hover:bg-blue-500"
     />
   );

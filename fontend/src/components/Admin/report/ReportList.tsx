@@ -63,54 +63,58 @@ const ReportList = ({
         </div>
       </div>
       <ul className="flex-grow">
-        {reports.map((report) => (
-          <li
-            key={report.accession_no}
-            className="flex items-center justify-between p-4 border-b gap-x-4"
-          >
-            <div
-              className="w-1/12 text-center cursor-pointer"
-              onClick={() => onSelectReport(report.id)}
+        {reports
+          .filter((report) => report.status === "F" || report.status === "C")
+          .map((report) => (
+            <li
+              key={report.accession_no}
+              className="flex items-center justify-between p-4 border-b gap-x-4"
             >
-              {report.accession_no}
-            </div>
-            <div className="w-1/12 text-center">{report.procedure.name}</div>
-            <div className="w-1/12 text-center">{report.patient.pid}</div>
-            <div className="w-2/12 text-center">{report.patient.fullname}</div>
-            <div
-              className="w-2/12 text-center px-5"
-              dangerouslySetInnerHTML={{
-                __html:
-                  report.findings.substring(0, 30) +
-                  (report.findings.length > 30 ? "..." : ""),
-              }}
-            ></div>
-            <div
-              className="w-2/12 text-center px-5"
-              dangerouslySetInnerHTML={{
-                __html:
-                  report.conclusion.substring(0, 30) +
-                  (report.conclusion.length > 30 ? "..." : ""),
-              }}
-            ></div>
-
-            <div className="w-1/12 text-center">
-              {report.radiologist.fullname}
-            </div>
-            <div className="w-1/12 text-center">{report.created_time}</div>
-            <div className="w-1/12 text-center">
-              <a
-                href={report.image_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-blue-500 hover:underline"
+              <div
+                className="w-1/12 text-center cursor-pointer"
+                onClick={() => onSelectReport(report.id)}
               >
-                View
-              </a>
-            </div>
-          </li>
-        ))}
+                {report.accession_no}
+              </div>
+              <div className="w-1/12 text-center">{report.procedure.name}</div>
+              <div className="w-1/12 text-center">{report.patient.pid}</div>
+              <div className="w-2/12 text-center">
+                {report.patient.fullname}
+              </div>
+              <div
+                className="w-2/12 text-center px-5"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    report.findings.substring(0, 30) +
+                    (report.findings.length > 30 ? "..." : ""),
+                }}
+              ></div>
+              <div
+                className="w-2/12 text-center px-5"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    report.conclusion.substring(0, 30) +
+                    (report.conclusion.length > 30 ? "..." : ""),
+                }}
+              ></div>
+              <div className="w-1/12 text-center">
+                {report.radiologist.fullname}
+              </div>
+              <div className="w-1/12 text-center">{report.created_time}</div>
+              <div className="w-1/12 text-center">
+                <a
+                  href={report.image_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-500 hover:underline"
+                >
+                  {t("View")}
+                </a>
+              </div>
+            </li>
+          ))}
       </ul>
+
       {totalPages > 1 && (
         <div className="sticky bottom-0 bg-white py-4">
           <div className="flex justify-center">

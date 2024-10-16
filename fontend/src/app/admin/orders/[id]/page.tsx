@@ -12,6 +12,7 @@ import { useTranslation } from "../../../../i18n/client";
 import { OrderDetailProps } from "@/app/types/OrderDetail";
 import { fetchOrderById } from "@/services/apiService";
 import OrderDetail from "@/components/Admin/order/OrderDetail";
+import DeleteOrderButton from "@/components/Admin/order/DeleteOrderButton";
 
 const OrderDetailPage = () => {
   const { user } = useUser();
@@ -46,6 +47,8 @@ const OrderDetailPage = () => {
 
   const hasEditPermission =
     user?.permissions?.includes(PERMISSIONS.EDIT_ORDER) || user?.is_superuser;
+  const hasDeletePermission =
+    user?.permissions?.includes(PERMISSIONS.DELETE_ORDER) || user?.is_superuser;
   return (
     <AppLayout name={t("Order Detail")}>
       <div className="relative flex flex-col items-center min-h-screen p-4">
@@ -74,6 +77,13 @@ const OrderDetailPage = () => {
                 <EditDoctorButton
                   doctorDetail={doctorDetail}
                   onDoctorUpdated={HandleUpdateUse}
+                />
+              )} */}
+              {/* {hasDeletePermission && (
+                <DeleteOrderButton
+                  isMany={false}
+                  orderId={param.id}
+                  onOrderDeleted={() => router.push("/admin/orders")}
                 />
               )} */}
             </div>

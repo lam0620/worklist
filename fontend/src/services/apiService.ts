@@ -192,6 +192,23 @@ export const fetchOrdersList = async (params: { [key: string]: any } = {})=>{
 export const fetchOrderById = async (id: string) => {
   return axios.get(`${API_BASE_URL}/orders/${id}`);
 }
+export const CreateOrder = async (data: { [key: string]: any }) => {
+  return axios.post(`${API_BASE_URL}/orders`, data);
+}
+
+export const UpdateOrder = async (id: string, data: { [key: string]: any }) => {
+  return axios.put(`${API_BASE_URL}/orders/${id}`, data);
+}
+
+export const DeleteOrder = async (id?: string) => {
+  return axios.delete(`${API_BASE_URL}/order/${id}`);
+}
+
+export const DeleteOrders = async (ids_group?: string[]) => {
+  return axios.delete(`${API_BASE_URL}/orders`, {
+    data: { ids_group },
+  });
+}
 
 //Report
 export const fetchReportsList = async (params: { [key: string]: any } = {})=>{
