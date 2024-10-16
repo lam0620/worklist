@@ -56,6 +56,9 @@ class External_OrderView(OrderBaseView):
         else:
             user = request.user
 
+        logger.info("Order data: ")
+        #logger.info(request.data)
+
         has_permission = CheckPermission(per_code.ADD_ORDER, user.id).check()
         if not has_permission and not user.is_superuser:
             return self.cus_response_403(per_code.ADD_ORDER)   

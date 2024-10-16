@@ -35,6 +35,8 @@ class CreatePatientSerializers(serializers.Serializer):
                                                'item': 'gender',
                                                'detail':"'"+ value+"' is invalid"})
         
+        return value
+        
 class CreateProcedureTypeSerializers(serializers.Serializer):
     code = serializers.CharField(required=True)
     name = serializers.CharField(required=True)
