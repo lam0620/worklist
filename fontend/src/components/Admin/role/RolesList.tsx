@@ -47,6 +47,9 @@ const RolesList = ({
     return false;
   };
 
+  const hasViewPermission =
+    (userPermissions ?? []).includes(PERMISSIONS.VIEW_REPORT) || isAdminUser;
+
   return (
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex items-center justify-between p-2 border-b bg-gray-100">
@@ -55,48 +58,51 @@ const RolesList = ({
         <div className="w-6/12 font-semibold">{t("Permissions")}</div>
         <div className="w-3/12 font-semibold">{t("Date Created")}</div>
       </div>
-      <ul className="flex-grow">
-        {roles.map((role) => (
-          <li
-            key={role.id}
-            className="flex items-center justify-between p-2 border-b mb-2"
-          >
-            <div className="w-1/12">
-              <div className="flex items-center justify-center">
-                {hasDeletePermission && !isIntegRole(role) && (
-                  <Checkbox
-                    checked={selectedRoles[role.id]}
-                    onCheckedChange={(checked) =>
-                      onSelectRoleForDelete(role.id, checked as boolean)
-                    }
-                    className="border-2 border-gray-400 rounded-sm h-4 w-4"
-                  />
-                )}
-              </div>
-            </div>
-
-            <div
-              className="w-2/12 cursor-pointer"
-              onClick={() => onSelectRole(role.id)}
+      {hasViewPermission && (
+        <ul className="flex-grow">
+          {roles.map((role) => (
+            <li
+              key={role.id}
+              className="flex items-center justify-between p-2 border-b mb-2"
             >
-              {role.name}
-            </div>
-            <div className="w-6/12 flex flex-wrap gap-1">
-              {role.permissions?.map((permission) => (
-                <span
-                  key={permission.id}
-                  className="px-2 py-1 text-xs font-semibold text-white bg-green-500 rounded-full"
-                >
-                  {permission.name}
-                </span>
-              ))}
-            </div>
-            <div className="w-3/12 text-sm text-gray-500">
-              {new Date(role.created_at).toLocaleDateString()}
-            </div>
-          </li>
-        ))}
-      </ul>
+              <div className="w-1/12">
+                <div className="flex items-center justify-center">
+                  {hasDeletePermission && !isIntegRole(role) && (
+                    <Checkbox
+                      checked={selectedRoles[role.id]}
+                      onCheckedChange={(checked) =>
+                        onSelectRoleForDelete(role.id, checked as boolean)
+                      }
+                      className="border-2 border-gray-400 rounded-sm h-4 w-4"
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div
+                className="w-2/12 cursor-pointer"
+                onClick={() => onSelectRole(role.id)}
+              >
+                {role.name}
+              </div>
+              <div className="w-6/12 flex flex-wrap gap-1">
+                {role.permissions?.map((permission) => (
+                  <span
+                    key={permission.id}
+                    className="px-2 py-1 text-xs font-semibold text-white bg-green-500 rounded-full"
+                  >
+                    {permission.name}
+                  </span>
+                ))}
+              </div>
+              <div className="w-3/12 text-sm text-gray-500">
+                {new Date(role.created_at).toLocaleDateString()}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
       {totalPages > 1 && (
         <div className="sticky bottom-0 bg-white py-4">
           <div className="flex justify-center">

@@ -25,5 +25,12 @@ export const PERMISSIONS = {
     ACTIVE_DOCTOR : "active_doctor",
 
     VIEW_STATISTICS : "view_statistics",
+
+    VIEW_ORDER : "view_order",
+    ADD_ORDER : "add_order",
+    EDIT_ORDER : "edit_order",
+    DELETE_ORDER : "delete_order",
+
+    VIEW_REPORT : "view_report",
 };
 

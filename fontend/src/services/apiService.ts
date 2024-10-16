@@ -180,3 +180,44 @@ export const fetchStatsStudies = async(param : string) => {
   return axios.get(`${API_BASE_URL}/stats/studies/?year=${param}`)
   //return axios.get(`http://localhost:3001/api/stats/studies/${param}`)
 }
+
+//Order
+export const fetchOrdersList = async (params: { [key: string]: any } = {})=>{
+  const queryString = Object.keys(params)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    .join('&');
+  return axios.get(`${API_BASE_URL}/orders?${queryString}`);
+}
+
+export const fetchOrderById = async (id: string) => {
+  return axios.get(`${API_BASE_URL}/orders/${id}`);
+}
+export const CreateOrder = async (data: { [key: string]: any }) => {
+  return axios.post(`${API_BASE_URL}/orders`, data);
+}
+
+export const UpdateOrder = async (id: string, data: { [key: string]: any }) => {
+  return axios.put(`${API_BASE_URL}/orders/${id}`, data);
+}
+
+export const DeleteOrder = async (id?: string) => {
+  return axios.delete(`${API_BASE_URL}/order/${id}`);
+}
+
+export const DeleteOrders = async (ids_group?: string[]) => {
+  return axios.delete(`${API_BASE_URL}/orders`, {
+    data: { ids_group },
+  });
+}
+
+//Report
+export const fetchReportsList = async (params: { [key: string]: any } = {})=>{
+  const queryString = Object.keys(params)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    .join('&');
+  return axios.get(`${API_BASE_URL}/reports?${queryString}`);
+}
+
+export const fetchReportById = async (id: string) => {
+  return axios.get(`${API_BASE_URL}/reports/${id}`);
+}

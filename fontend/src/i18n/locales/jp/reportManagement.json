@@ -1,0 +1,23 @@
+{
+    "Report Detail": "レポートの詳細",
+    "Back to report list": "レポートリストに戻る",
+    "Home": "ホーム",
+    "Accession Number": "入院番号",
+    "Patient Name": "患者の名前",
+    "Conclusions": "結論",
+    "Radiologist": "放射線科医",
+    "Created Time": "作成日時",
+    "View Image": "画像を見る",
+    "Study IUID": "研究IUID",
+    "Patient ID": "患者ID",
+    "Procedure": "手順",
+    "Findings": "所見",
+    "Conclusion": "結論",
+    "Status": "ステータス",
+    "Created time": "作成時間",
+    "You don't have permission to view reports": "レポートを見る権限がありません",
+    "Failed to fetch reports": "レポートの取得に失敗しました",
+    "Reports": "レポート",
+    "Search reports...": "レポートを検索...",
+    "View" :"ゼム"
+}

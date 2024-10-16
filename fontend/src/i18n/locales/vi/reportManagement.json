@@ -1,0 +1,23 @@
+{
+    "Report Detail": "Chi tiết kết quả",
+    "Back to report list": "Quay lại danh sách kết quả",
+    "Home": "Trang chủ",
+    "Accession Number": "Mã phiếu",
+    "Patient Name": "Tên bệnh nhân",
+    "Conclusions": "Kết luận",
+    "Radiologist": "Bác sĩ chẩn đoán",
+    "Created Time": "Thời gian tạo",
+    "View Image": "Xem hình ảnh",
+    "Study IUID": "IUID nghiên cứu",
+    "Patient ID": "Mã bệnh nhân",
+    "Procedure": "Dịch vụ",
+    "Findings": "Mô tả",
+    "Conclusion": "Kết luận",
+    "Status": "Kết quả",
+    "Created time": "Thời gian tạo",
+    "You don't have permission to view reports": "Bạn không có quyền xem kết quả",
+    "Failed to fetch reports": "Lấy kết quả thất bại",
+    "Reports": "Kết quả đọc ảnh",
+    "Search reports...": "Tìm kiếm kết quả...",
+    "View" :"Xem"
+}
