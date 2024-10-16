@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import ReactToPrint from "react-to-print";
+// import ReactToPrint from "react-to-print";
 import { useTranslation } from "../../../i18n/client";
 import { ReportDetailProps } from "@/app/types/ReportDetail";
 import PDFComponent from "./PDFComponent";
