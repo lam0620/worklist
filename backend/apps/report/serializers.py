@@ -5,7 +5,7 @@ from apps.report.models import Doctor
 from library.constant import error_codes as ec
 
 from apps.report.utils import is_valid_gender,is_valid_modality_type, \
-                is_valid_report_template_type, is_valid,convert_str_to_datetime
+                is_valid_report_template_type, is_valid,convert_str_to_datetime,is_valid_str_datetime
 
 
 """
@@ -36,7 +36,47 @@ class CreatePatientSerializers(serializers.Serializer):
                                                'detail':"'"+ value+"' is invalid"})
         
         return value
+
+    def validate_dob(self, value): # noqa
+        if not is_valid_str_datetime(value, '%Y%m%d'):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'dob',
+                                               'detail':"'"+ value+"' is invalid"})            
+        return value
+    
+class UpdatePatientSerializers(serializers.Serializer):
+    pid = serializers.CharField(required=True)
+    fullname = serializers.CharField(required=True)
+    dob = serializers.CharField(required=True)
+
+    gender = serializers.CharField(required=True)
+
+    # allow_blank=True to prevent error "is required"
+    address = serializers.CharField(required=False, allow_blank=True)
+    tel = serializers.CharField(required=False, allow_blank=True)
+    insurance_no = serializers.CharField(required=False, allow_blank=True)
+
+    def validate(self, data):
+        if 'gender' not in data:
+            data['gender'] = 'U'
+            
+        return data
         
+    def validate_gender(self, value): # noqa
+        if not is_valid_gender(value):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'gender',
+                                               'detail':"'"+ value+"' is invalid"})
+        
+        return value
+
+    def validate_dob(self, value): # noqa
+        if not is_valid_str_datetime(value, '%Y%m%d'):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'dob',
+                                               'detail':"'"+ value+"' is invalid"})            
+        return value
+                
 class CreateProcedureTypeSerializers(serializers.Serializer):
     code = serializers.CharField(required=True)
     name = serializers.CharField(required=True)
@@ -263,7 +303,8 @@ class PatchDoctorSerializers(serializers.Serializer):
     def validate_sign(self, value): # noqa
         if not value:
             return None
- 
+        
+        return value
             
 class ADectivateDoctorListSerializer(serializers.Serializer):
     is_active = serializers.BooleanField(required=True)

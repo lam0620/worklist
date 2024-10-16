@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 from apps.report.views import (
     ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById,
     OrderView,OrderDetail, DoctorView,DoctorDetailView,
+    PatientView,PatientDetailView,
     StatsViewSet
 )
 from apps.report.views import (
@@ -50,6 +51,10 @@ urlpatterns = [
     # doctors?type=R|P also existing. pattern /doctors
     # doctors?user_id=xxxx also existing. pattern /doctors
     path('doctors/<uuid:pk>', DoctorDetailView.as_view(), name='Doctor by Id'),
+
+    # Patient
+    path('patients', PatientView.as_view(), name='Patients'),
+    path('patients/<uuid:pk>', PatientDetailView.as_view(), name='Patient by Id'),    
 
     #Report template
     path('report-templates', ReportTemplateView.as_view(), name='ReportTemplate'),

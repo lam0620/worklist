@@ -40,6 +40,12 @@ ADD_DOCTOR = 'add_doctor'
 EDIT_DOCTOR = 'edit_doctor'
 DELETE_DOCTOR = 'delete_doctor'
 
+# Patient
+VIEW_PATIENT = 'view_patient'
+ADD_PATIENT = 'add_patient'
+EDIT_PATIENT = 'edit_patient'
+DELETE_PATIENT = 'delete_patient'
+
 # Report template
 VIEW_REPORT_TEMPLATE = 'view_report_template'
 ADD_REPORT_TEMPLATE = 'add_report_template'

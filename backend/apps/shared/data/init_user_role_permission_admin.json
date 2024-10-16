@@ -279,5 +279,26 @@
             "permission_id": "84a1fe06-0cba-487e-a059-4971288ce48a",
             "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
         }
-    }                    
+    },
+    
+
+    {
+        "model": "account.RolePermission",
+        "pk": "8b7e28e7-5b0f-49c3-8746-dd8159522fab",
+        "fields": {
+            "role_id": "3e3d4643-afc8-4926-98d5-fbef871ff887",
+            "permission_id": "2a607af3-88f8-4c67-9dc9-9543d13b01af",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+
+    {
+        "model": "account.RolePermission",
+        "pk": "c91024f1-0000-42b2-a996-f0752aae141a",
+        "fields": {
+            "role_id": "3e3d4643-afc8-4926-98d5-fbef871ff887",
+            "permission_id": "d0942123-53a7-4ff9-8870-8e2fb87c6524",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    }                     
 ]

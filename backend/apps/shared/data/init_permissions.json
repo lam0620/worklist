@@ -276,6 +276,25 @@
 
     {
         "model": "account.permission",
+        "pk": "2a607af3-88f8-4c67-9dc9-9543d13b01af",
+        "fields": {
+            "code": "view_patient",
+            "name": "View patient",
+            "tag": "patient"
+        }
+    },
+    {
+        "model": "account.permission",
+        "pk": "d0942123-53a7-4ff9-8870-8e2fb87c6524",
+        "fields": {
+            "code": "edit_patient",
+            "name": "Edit patient",
+            "tag": "patient"
+        }
+    },
+
+    {
+        "model": "account.permission",
         "pk": "84a1fe06-0cba-487e-a059-4971288ce48a",
         "fields": {
             "code": "view_statistics",

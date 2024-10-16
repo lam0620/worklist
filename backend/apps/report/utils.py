@@ -11,6 +11,14 @@ Convert YYYYMMDDHHMMSS (%Y%m%d%H%M%S) date string to datetime
 def convert_str_to_datetime(date_str:str, format_str = '%Y%m%d%H%M%S'):
     return datetime.datetime.strptime(date_str, format_str)
 
+def is_valid_str_datetime(date_str:str, format_str = '%Y%m%d%H%M%S'):
+    try:
+        datetime.datetime.strptime(date_str, format_str)
+    except:
+        return False
+
+    return True
+    
 def get_image_link(request, studyInstanceUID):
     # return request.scheme +"://" + request.get_host() + "/viewer?StudyInstanceUIDs="+studyInstanceUID
     # Parse url, get hostname only
