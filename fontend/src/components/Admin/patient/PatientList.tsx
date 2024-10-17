@@ -38,6 +38,9 @@ const PatientList = ({
     const day = dateString.slice(6, 8);
     return `${day}-${month}-${year}`;
   };
+  const hasViewPermission =
+    (patientPermissions ?? []).includes(PERMISSIONS.VIEW_PATIENT) ||
+    isAdminUser;
 
   return (
     <div className="flex flex-col min-h-screen w-full">
@@ -53,34 +56,36 @@ const PatientList = ({
         <div className="w-3/12 font-semibold text-center">{t("Address")}</div>
       </div>
 
-      <ul className="flex-grow">
-        {patients.map((patient) => (
-          <li
-            key={patient.id}
-            className="flex items-center justify-between p-2 border-b"
-          >
-            <div
-              className="w-2/12 cursor-pointer text-center"
-              onClick={() => onSelectPatient(patient.id)}
+      {hasViewPermission && (
+        <ul className="flex-grow">
+          {patients.map((patient) => (
+            <li
+              key={patient.id}
+              className="flex items-center justify-between p-2 border-b"
             >
-              {patient.pid}
-            </div>
-            <div className="w-3/12 flex flex-wrap gap-1 justify-center">
-              {patient.fullname}
-            </div>
-            <div className="w-2/12 flex flex-wrap gap-1 justify-center">
-              {getGenderLabel(patient.gender)}
-            </div>
+              <div
+                className="w-2/12 cursor-pointer text-center"
+                onClick={() => onSelectPatient(patient.id)}
+              >
+                {patient.pid}
+              </div>
+              <div className="w-3/12 flex flex-wrap gap-1 justify-center">
+                {patient.fullname}
+              </div>
+              <div className="w-2/12 flex flex-wrap gap-1 justify-center">
+                {getGenderLabel(patient.gender)}
+              </div>
 
-            <div className="w-2/12 flex flex-wrap gap-1 justify-center">
-              {formatDate(patient.dob)}
-            </div>
-            <div className="w-3/12 flex flex-wrap gap-1 justify-center">
-              {patient.address}
-            </div>
-          </li>
-        ))}
-      </ul>
+              <div className="w-2/12 flex flex-wrap gap-1 justify-center">
+                {formatDate(patient.dob)}
+              </div>
+              <div className="w-3/12 flex flex-wrap gap-1 justify-center">
+                {patient.address}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {totalPages > 1 && (
         <div className="sticky bottom-0 bg-white py-4">
