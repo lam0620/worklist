@@ -1,15 +1,18 @@
-export const getGenderLabel = (gender: string|undefined) => {
-    switch (gender) {
-      case "F":
-        return "Female";
-      case "M":
-        return "Male";
-      case "O":
-        return "Other";
-      default:
-        return "Unknown";
-    }
-  };
+export const getGenderLabel = (gender: string | undefined) => {
+  const language = localStorage.getItem("i18nextLng");
+
+  switch (gender) {
+    case "F":
+      return language === "vi" ? "Nữ" : language === "jp" ? "女性" : "Female";
+    case "M":
+      return language === "vi" ? "Nam" : language === "jp" ? "男性" : "Male";
+    case "O":
+      return language === "vi" ? "Khác" : language === "jp" ? "その他" : "Other";
+    default:
+      return language === "vi" ? "Chưa xác định" : language === "jp" ? "不明" : "Unknown";
+  }
+};
+
 
 
 export const formatDate = (dateString: any) => {

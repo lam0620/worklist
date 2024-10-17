@@ -117,6 +117,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Role management")}
           </DropdownMenu.Item>
         )}
+        <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
         {hasViewDoctorPermission && (
           <DropdownMenu.Item
             onSelect={handleDoctorManagement}

@@ -53,13 +53,16 @@ const DoctorList = ({
   return (
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex items-center justify-between p-2 border-b bg-gray-100">
-        <div className="w-2/12 font-semibold"></div>
-        <div className="w-4/12 font-semibold">{t("Full name")}</div>
-        <div className="w-3/12 font-semibold">{t("Doctor's code")}</div>
-        <div className="w-3/12 font-semibold">{t("Username")}</div>
-        <div className="w-2/12 font-semibold">{t("Gender")}</div>
-        <div className="w-2/12 font-semibold">{t("Title")}</div>
-        <div className="w-2/12 font-semibold">{t("Active")}</div>
+        <div className="w-2/12 font-semibold text-center"></div>
+        <div className="w-4/12 font-semibold text-center">{t("Full name")}</div>
+        <div className="w-3/12 font-semibold text-center">
+          {t("Doctor's code")}
+        </div>
+        <div className="w-3/12 font-semibold text-center">{t("Type")}</div>
+        <div className="w-3/12 font-semibold text-center">{t("Username")}</div>
+        <div className="w-2/12 font-semibold text-center">{t("Gender")}</div>
+        <div className="w-2/12 font-semibold text-center">{t("Title")}</div>
+        <div className="w-2/12 font-semibold text-center">{t("Active")}</div>
       </div>
       <ul className="flex-grow">
         {doctors.map((doctor) => (
@@ -82,20 +85,29 @@ const DoctorList = ({
               </div>
             </div>
             <div
-              className="w-4/12 cursor-pointer"
+              className="w-4/12 cursor-pointer text-center"
               onClick={() => onSelectDoctor(doctor.id)}
             >
               {doctor.fullname}
             </div>
-            <div className="w-3/12 flex flex-wrap gap-1">
+            <div className="w-3/12 flex flex-wrap gap-1 justify-center">
               {doctor.doctor_no}
             </div>
-            <div className="w-3/12 flex flex-wrap gap-1">{doctor.username}</div>
-            <div className="w-2/12 flex flex-wrap gap-1">
+            <div className="w-3/12 flex flex-wrap gap-1 justify-center">
+              {doctor?.type === "R"
+                ? t("Radiologist")
+                : t("Referring Physician")}
+            </div>
+            <div className="w-3/12 flex flex-wrap gap-1 justify-center">
+              {doctor.username}
+            </div>
+            <div className="w-2/12 flex flex-wrap gap-1 justify-center">
               {getGenderLabel(doctor?.gender)}
             </div>
-            <div className="w-2/12 flex flex-wrap gap-1">{doctor.title}</div>
-            <div className="w-2/12 text-sm text-gray-500">
+            <div className="w-2/12 flex flex-wrap gap-1 justify-center">
+              {doctor.title}
+            </div>
+            <div className="w-2/12 text-sm text-gray-500 text-center">
               <Checkbox
                 checked={doctor.is_active}
                 className="border-2 border-gray-400 rounded-sm h-4 w-4"
