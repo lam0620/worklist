@@ -374,7 +374,13 @@ class ReportById(ReportBaseView):
         except Exception as e:
             logger.error(e, exc_info=True)
             return self.response_NG(ec.SYSTEM_ERR, str(e))
-       
+
+    @swagger_auto_schema(
+        operation_summary='Delete the report by Id',
+        operation_description='Delete the report by Id',
+        tags=[swagger_tags.REPORT],
+    )
+
     def delete(self, request, *args, **kwargs):
         """
         Delete the report.
