@@ -176,12 +176,20 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'his_integration.log',
+            'formatter': 'verbose'
         },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
         },
     },
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {filename} {module} - {message}',
+            'style': '{',
+        },
+    },    
     # A logger for WARNING which has a handler called 'file'. A logger can have multiple handler
     'loggers': {
        # notice the blank '', Usually you would put built in loggers like django or root here based on your needs

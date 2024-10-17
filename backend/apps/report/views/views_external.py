@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.utils import timezone
@@ -56,8 +57,7 @@ class External_OrderView(OrderBaseView):
         else:
             user = request.user
 
-        logger.info("Order data: ")
-        #logger.info(request.data)
+        logger.info("[HIS] Order data: %s",json.dumps(request.data))
 
         has_permission = CheckPermission(per_code.ADD_ORDER, user.id).check()
         if not has_permission and not user.is_superuser:
