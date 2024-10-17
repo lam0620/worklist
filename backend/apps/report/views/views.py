@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.utils import timezone
@@ -258,6 +259,8 @@ class ReportView(ReportBaseView):
             updatedBy = user.id
 
         logger.info('Creating report.....');
+        # logger.info("Report data: %s",json.dumps(request.data))
+
         serializer = ser.CreateReportSerializers(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -350,6 +353,8 @@ class ReportById(ReportBaseView):
             updatedBy = user.id
                     
         try:
+            logger.info('Updating report.....');
+
             report = Report.objects.get(**kwargs, delete_flag = False)
             if not report:
                 return self.cus_response_empty_data(ec.REPORT)
