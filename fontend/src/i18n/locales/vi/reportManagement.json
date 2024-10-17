@@ -19,5 +19,7 @@
     "Failed to fetch reports": "Lấy kết quả thất bại",
     "Reports": "Kết quả đọc ảnh",
     "Search reports...": "Tìm kiếm kết quả...",
-    "View" :"Xem"
+    "View" :"Xem",
+    "DOB": "Ngày sinh",
+    "Gender": "Giới tính" 
 }

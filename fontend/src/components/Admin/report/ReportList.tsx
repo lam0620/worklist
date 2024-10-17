@@ -76,7 +76,11 @@ const ReportList = ({
               >
                 {report.accession_no}
               </div>
-              <div className="w-1/12 text-center">{report.procedure.name}</div>
+              <div className="w-1/12 text-center">
+                {"["}
+                {report.procedure.code}
+                {"]"} {report.procedure.name}
+              </div>
               <div className="w-1/12 text-center">{report.patient.pid}</div>
               <div className="w-2/12 text-center">
                 {report.patient.fullname}

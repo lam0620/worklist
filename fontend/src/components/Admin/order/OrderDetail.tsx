@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import ConfirmModal from "../../ConfirmModal";
 import { useTranslation } from "../../../i18n/client";
 import { OrderDetailProps } from "@/app/types/OrderDetail";
-import { formatDate } from "@/utils/utils";
+import { formatDate, getGenderLabel } from "@/utils/utils";
 
 interface Props {
   order: OrderDetailProps | null;
@@ -35,7 +35,9 @@ const OrderDetail = ({ order }: Props) => {
                             : "0",
                       }}
                     >
-                      {procedure.name}
+                      {"["}
+                      {procedure.code}
+                      {"]"} {procedure.name}
                     </span>
                   ))}
                 </div>
@@ -54,7 +56,10 @@ const OrderDetail = ({ order }: Props) => {
               label: t("DOB"),
               value: formatDate(order?.patient.dob),
             },
-            { label: t("Gender"), value: order?.patient.gender },
+            {
+              label: t("Gender"),
+              value: getGenderLabel(order?.patient.gender),
+            },
             { label: t("Created Time"), value: order?.created_time },
           ].map((field, index) => (
             <div key={index} className="flex items-center">

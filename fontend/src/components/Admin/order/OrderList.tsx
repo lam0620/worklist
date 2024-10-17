@@ -118,7 +118,11 @@ const OrdersList = ({
                         : ""
                     }`}
                   >
-                    <span className="my-2">{procedure.name}</span>
+                    <span className="my-2">
+                      {"["}
+                      {procedure.code}
+                      {"]"} {procedure.name}
+                    </span>
                     <div className="my-2">
                       {procedure.report &&
                       procedure.report.id &&
