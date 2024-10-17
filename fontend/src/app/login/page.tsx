@@ -10,10 +10,7 @@ import { Login } from "@/services/apiService";
 import { PERMISSIONS } from "@/utils/constant";
 import backgroundImage from "../../../public/images/login_bg.jpg";
 import "../../../node_modules/flag-icons/css/flag-icons.min.css";
-import {
-  initReactI18next,
-  useTranslation as useTranslationOrg,
-} from "react-i18next";
+import i18next, { i18n } from "i18next";
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -92,6 +89,7 @@ const LoginPage = () => {
     setLanguage(savedLanguage);
     localStorage.setItem("language", savedLanguage);
     updatePageTitle(savedLanguage);
+    //i18next.changeLanguage(savedLanguage);
   }, []);
 
   const handleChangeLanguage = (selectedLanguage: string) => {

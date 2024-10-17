@@ -32,5 +32,8 @@ export const PERMISSIONS = {
     DELETE_ORDER : "delete_order",
 
     VIEW_REPORT : "view_report",
+
+    VIEW_PATIENT : "view_patient",
+    EDIT_PATIENT : "edit_patient",
 };
 
