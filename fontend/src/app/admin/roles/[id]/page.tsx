@@ -23,11 +23,11 @@ const RoleDetailPage = () => {
 
   const { t } = useTranslation("roleManagement");
   useEffect(() => {
-    if (param.id) {
+    if (param.id && user) {
       fetchRoleDetail();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [param.id]);
+  }, [param.id, user]);
 
   const fetchRoleDetail = async () => {
     try {

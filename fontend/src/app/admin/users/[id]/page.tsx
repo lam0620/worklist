@@ -24,11 +24,11 @@ const UserDetailPage = () => {
   const { t } = useTranslation("userManagement");
 
   useEffect(() => {
-    if (param.id) {
+    if (param.id && user) {
       fetchUserDetail();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [param.id]);
+  }, [param.id, user]);
 
   const fetchUserDetail = async () => {
     try {

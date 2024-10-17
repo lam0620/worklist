@@ -22,10 +22,10 @@ const OrderDetailPage = () => {
   const { t } = useTranslation("orderManagement");
 
   useEffect(() => {
-    if (param.id) {
+    if (param.id && user) {
       fetchOrderDetail();
     }
-  }, [param.id]);
+  }, [param.id, user]);
 
   const fetchOrderDetail = async () => {
     try {

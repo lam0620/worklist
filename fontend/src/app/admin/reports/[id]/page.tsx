@@ -21,10 +21,10 @@ const ReportDetalPage = () => {
   const { t } = useTranslation("reportManagement");
 
   useEffect(() => {
-    if (param.id) {
+    if (param.id && user) {
       fetchReportDetail();
     }
-  }, [param.id]);
+  }, [param.id, user]);
 
   const fetchReportDetail = async () => {
     try {
