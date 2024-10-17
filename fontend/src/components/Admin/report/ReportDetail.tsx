@@ -29,23 +29,28 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
               {
                 label: t("Findings"),
                 value: (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: report?.findings || "",
-                    }}
-                  />
+                  <div style={{ textAlign: "justify" }}>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: report?.findings || "",
+                      }}
+                    />
+                  </div>
                 ),
               },
               {
                 label: t("Conclusion"),
                 value: (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: report?.conclusion || "",
-                    }}
-                  />
+                  <div style={{ textAlign: "justify" }}>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: report?.conclusion || "",
+                      }}
+                    />
+                  </div>
                 ),
               },
+
               { label: t("Created time"), value: report?.created_time },
             ].map((field, index) => (
               <div key={index} className="flex items-center">

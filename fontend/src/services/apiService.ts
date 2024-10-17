@@ -221,3 +221,18 @@ export const fetchReportsList = async (params: { [key: string]: any } = {})=>{
 export const fetchReportById = async (id: string) => {
   return axios.get(`${API_BASE_URL}/reports/${id}`);
 }
+
+//Patient
+export const fetchPatientsList = async (params: { [key: string]: any } = {})=>{
+  const queryString = Object.keys(params)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    .join('&');
+  return axios.get(`${API_BASE_URL}/patients?${queryString}`);
+}
+
+export const fetchPatientById = async (id: string) => {
+  return axios.get(`${API_BASE_URL}/patients/${id}`);
+}
+export const UpdatePatient = async (id: string, data: { [key: string]: any }, config: Object) => {
+  return axios.put(`${API_BASE_URL}/patients/${id}`, data, config);
+}

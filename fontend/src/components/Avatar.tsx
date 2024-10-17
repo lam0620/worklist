@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 import { PERMISSIONS } from "@/utils/constant";
 import { useTranslation } from "../i18n/client";
-import { useState, useEffect } from "react";
 
 interface AvatarProps {
   firstName: string;
@@ -49,11 +48,22 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
   const handleReportManagement = () => {
     router.push("/admin/reports");
   };
+  const handlePatientManagement = () => {
+    router.push("/admin/patients");
+  };
   const hasViewUserPermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_ACCOUNT) || user?.is_superuser;
 
   const hasViewRolePermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_GROUP) || user?.is_superuser;
+  const hasViewOrderPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_ORDER) || user?.is_superuser;
+  const hasViewReportPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_REPORT) || user?.is_superuser;
+  const hasViewDoctorPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_DOCTOR) || user?.is_superuser;
+  const hasViewPatientPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_PATIENT) || user?.is_superuser;
 
   return (
     <DropdownMenu.Root>
@@ -107,7 +117,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Role management")}
           </DropdownMenu.Item>
         )}
-        {hasViewRolePermission && (
+        {hasViewDoctorPermission && (
           <DropdownMenu.Item
             onSelect={handleDoctorManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
@@ -115,8 +125,16 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Doctor management")}
           </DropdownMenu.Item>
         )}
+        {hasViewPatientPermission && (
+          <DropdownMenu.Item
+            onSelect={handlePatientManagement}
+            className="cursor-pointer p-2 hover:bg-gray-100 rounded"
+          >
+            {t("Patient management")}
+          </DropdownMenu.Item>
+        )}
         <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
-        {hasViewRolePermission && (
+        {hasViewOrderPermission && (
           <DropdownMenu.Item
             onSelect={handleOrderManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
@@ -124,7 +142,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Order management")}
           </DropdownMenu.Item>
         )}
-        {hasViewRolePermission && (
+        {hasViewReportPermission && (
           <DropdownMenu.Item
             onSelect={handleReportManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
