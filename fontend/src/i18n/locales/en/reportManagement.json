@@ -19,5 +19,7 @@
     "Failed to fetch reports":"Failed to fetch reports",
     "Reports":"Reports",
     "Search reports...":"Search reports...",
-    "View" :"View"
+    "View" :"View",
+    "DOB": "生年月日",
+    "Gender": "性別"
 }

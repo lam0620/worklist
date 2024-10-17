@@ -21,10 +21,10 @@ const DoctorDetailPage = () => {
   const { t } = useTranslation("doctorManagement");
 
   useEffect(() => {
-    if (param.id) {
+    if (param.id && user) {
       fetchDoctorsDetail();
     }
-  }, [param.id]);
+  }, [param.id, user]);
 
   const fetchDoctorsDetail = async () => {
     try {

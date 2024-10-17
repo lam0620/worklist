@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 //import ReactToPrint from "react-to-print"; //build error
 import { useTranslation } from "../../../i18n/client";
 import { ReportDetailProps } from "@/app/types/ReportDetail";
+import { formatDate, getGenderLabel } from "@/utils/utils";
 
 interface Props {
   report: ReportDetailProps | null;
@@ -18,10 +19,21 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
           <form className="space-y-6">
             {[
               { label: t("Accession Number"), value: report?.accession_no },
-              //   { label: t("Study IUID"), value: report?.study_iuid },
+              {
+                label: t("Procedure"),
+                value: `${"["}${report?.procedure.code}${"]"} ${
+                  report?.procedure.name
+                }`,
+              },
+
               { label: t("Patient ID"), value: report?.patient.pid },
               { label: t("Patient Name"), value: report?.patient.fullname },
-              { label: t("Procedure"), value: report?.procedure.name },
+              { label: t("DOB"), value: formatDate(report?.patient.dob) },
+              {
+                label: t("Gender"),
+                value: getGenderLabel(report?.patient.gender),
+              },
+
               {
                 label: t("Radiologist"),
                 value: `${report?.radiologist.title} ${report?.radiologist.fullname}`,
@@ -52,6 +64,19 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
               },
 
               { label: t("Created time"), value: report?.created_time },
+              {
+                label: t("View Image"),
+                value: (
+                  <a
+                    href={report?.image_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-blue-500 hover:underline"
+                  >
+                    {t("View")}
+                  </a>
+                ),
+              },
             ].map((field, index) => (
               <div key={index} className="flex items-center">
                 <label className="w-1/3 font-medium text-right">

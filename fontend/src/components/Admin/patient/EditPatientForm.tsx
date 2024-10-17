@@ -6,22 +6,20 @@ import { toast } from "react-toastify";
 import { showErrorMessage } from "@/utils/showMessageError";
 import { PatientDetailProps } from "@/app/types/PatientDetail";
 import Link from "next/link";
-import { useTranslation } from "../../../i18n";
 
 interface EditPatientFormProps {
-  patients: PatientDetailProps[];
+  t: (key: string) => string;
   patient: any;
   onEdit: (patient: any) => any;
   onClose: () => any;
 }
 
 const EditPatientForm = ({
-  patients,
+  t,
   patient,
   onEdit,
   onClose,
 }: EditPatientFormProps) => {
-  const { t } = useTranslation("patientManagement");
   const [fullname, setFullName] = useState(patient.fullname);
   const [gender, setGender] = useState(patient.gender);
   const [dob, setDob] = useState(patient.dob);
@@ -42,7 +40,6 @@ const EditPatientForm = ({
         "Content-Type": "application/json",
       },
     };
-
     let data = {
       fullname: fullname,
       gender: gender,
@@ -54,7 +51,6 @@ const EditPatientForm = ({
     };
     try {
       const response = await UpdatePatient(patient.id, data, config);
-
       if (response?.data.result.status === "NG") {
         const code = response?.data?.result?.code;
         const item = response?.data?.result?.item;
@@ -83,6 +79,7 @@ const EditPatientForm = ({
       toast.error(message);
     }
   };
+
   const validateForm = () => {
     let errors: { [key: string]: string } = {};
     if (!fullname) {
@@ -106,28 +103,14 @@ const EditPatientForm = ({
     if (!pid) {
       errors.pid = t("PID is required");
     }
-
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
+
   const handleCancel = () => {
     onClose();
   };
 
-  const pidPatients: string[] = patients.map((patient) => patient.pid);
-
-  const handlePidChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPid(value);
-    if (pidPatients.includes(value)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        pid: t("PID exists"),
-      }));
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, pid: "" }));
-    }
-  };
   return (
     <>
       <Dialog.Root open onOpenChange={onClose}>
@@ -147,7 +130,7 @@ const EditPatientForm = ({
                   errors.pid ? "border-red-500" : ""
                 }`}
                 value={pid}
-                onChange={handlePidChange}
+                onChange={(e) => setPid(e.target.value)}
               />
             </div>
             {errors.pid && <p className="text-red-500 text-sm">{errors.pid}</p>}
