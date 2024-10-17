@@ -100,7 +100,9 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
         >
           {t("Change profile")}
         </DropdownMenu.Item>
-        <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
+        {(hasViewUserPermission || hasViewRolePermission) && (
+          <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
+        )}
         {hasViewUserPermission && (
           <DropdownMenu.Item
             onSelect={handleUserManagement}
@@ -117,7 +119,9 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Role management")}
           </DropdownMenu.Item>
         )}
-        <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
+        {(hasViewDoctorPermission || hasViewPatientPermission) && (
+          <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
+        )}
         {hasViewDoctorPermission && (
           <DropdownMenu.Item
             onSelect={handleDoctorManagement}
@@ -134,7 +138,9 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Patient management")}
           </DropdownMenu.Item>
         )}
-        <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
+        {(hasViewOrderPermission || hasViewReportPermission) && (
+          <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
+        )}
         {hasViewOrderPermission && (
           <DropdownMenu.Item
             onSelect={handleOrderManagement}
