@@ -3,6 +3,7 @@ import { PERMISSIONS } from "@/utils/constant";
 import { PatientDetailProps } from "@/app/types/PatientDetail";
 import { useTranslation } from "../../../i18n/client";
 import { getGenderLabel } from "@/utils/utils";
+import { formatDate } from "@/utils/utils";
 
 interface PatientListProps {
   patients: PatientDetailProps[];
@@ -29,14 +30,6 @@ const PatientList = ({
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
     }
-  };
-
-  const formatDate = (dateString: any) => {
-    if (!dateString) return "";
-    const year = dateString.slice(0, 4);
-    const month = dateString.slice(4, 6);
-    const day = dateString.slice(6, 8);
-    return `${day}-${month}-${year}`;
   };
   const hasViewPermission =
     (patientPermissions ?? []).includes(PERMISSIONS.VIEW_PATIENT) ||

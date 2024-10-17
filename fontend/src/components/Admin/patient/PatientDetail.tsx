@@ -2,19 +2,14 @@
 import { useTranslation } from "../../../i18n/client";
 import { PatientDetailProps } from "@/app/types/PatientDetail";
 import { getGenderLabel } from "@/utils/utils";
+import { formatDate } from "@/utils/utils";
 
 interface Props {
   patient: PatientDetailProps | null;
 }
 const PatientDetail = ({ patient }: Props) => {
   const { t } = useTranslation("patientManagement");
-  const formatDate = (dateString: any) => {
-    if (!dateString) return "";
-    const year = dateString.slice(0, 4);
-    const month = dateString.slice(4, 6);
-    const day = dateString.slice(6, 8);
-    return `${day}-${month}-${year}`;
-  };
+
   return (
     <div className="flex flex-col items-start justify-center min-h-8 px-4">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">

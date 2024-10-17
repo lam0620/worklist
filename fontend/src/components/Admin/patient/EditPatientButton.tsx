@@ -51,7 +51,7 @@ const EditPatientButton = ({
       </button>
       {isModalOpen && (
         <EditPatientForm
-          patients={patients}
+          t={t}
           patient={patientDetail}
           onEdit={(patientUpdate) => {
             onPatientUpdated(patientUpdate);

@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import ConfirmModal from "../../ConfirmModal";
 import { useTranslation } from "../../../i18n/client";
 import { OrderDetailProps } from "@/app/types/OrderDetail";
+import { formatDate } from "@/utils/utils";
 
 interface Props {
   order: OrderDetailProps | null;
@@ -12,13 +13,6 @@ interface Props {
 
 const OrderDetail = ({ order }: Props) => {
   const { t } = useTranslation("orderManagement");
-  const formatDate = (dateString: any) => {
-    if (!dateString) return "";
-    const year = dateString.slice(0, 4);
-    const month = dateString.slice(4, 6);
-    const day = dateString.slice(6, 8);
-    return `${day}-${month}-${year}`;
-  };
 
   return (
     <div className="flex flex-col items-start justify-center min-h-8 px-4">
