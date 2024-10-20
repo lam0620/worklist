@@ -163,6 +163,7 @@ class Report(BaseModels):
     class Meta:
         db_table = 'c_report'
         verbose_name = 'Report'
+        ordering = ('-created_at',)
         # couple unique
         # unique_together = ('accession_no', 'procedure', 'delete_flag=false',)
         constraints = [
