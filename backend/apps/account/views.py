@@ -226,6 +226,7 @@ class AccountView(CustomAPIView):
                     'last_name': user.last_name,
                     'avatar_color': user.avatar_color,
                     'created_at': user.created_at,
+                    'last_login': user.last_login,
                     'roles': [{'id': role.role.id, 'name': role.role.name} for role in user.roles_list]
                 }
                 users_data.append(user_data)
