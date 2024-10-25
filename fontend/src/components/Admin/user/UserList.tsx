@@ -106,18 +106,6 @@ const UserList = ({
       }
     }
   };
-  const formatDate = (dateString: any) => {
-    const date = new Date(dateString);
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-
-    return `${day}/${month}/${year} ${hours}:${minutes}`;
-  };
 
   return (
     <div className="flex flex-col min-h-screen w-full">
@@ -184,11 +172,18 @@ const UserList = ({
             </div>
             <div className="w-2/12 text-sm text-gray-500">
               {!user.last_login ||
-              user.last_login == "null" ||
-              user.last_login == ""
+              user.last_login === "null" ||
+              user.last_login === ""
                 ? "---"
-                : formatDate(user.last_login)}
+                : new Date(user.last_login).toLocaleString("en-GB", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
             </div>
+
             <div className="w-2/12 text-sm text-gray-500">
               {new Date(user.created_at).toLocaleDateString()}
             </div>
