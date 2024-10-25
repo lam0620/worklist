@@ -136,7 +136,7 @@ const UserList = ({
               )}
             </div>
             <div
-              className="flex w-3/12 cursor-pointer justify-center"
+              className="flex w-3/12 cursor-pointer justify-start pl-10"
               onClick={() => onSelectUser(user.id)}
             >
               <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800">
