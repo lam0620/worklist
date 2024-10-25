@@ -44,5 +44,6 @@
     "Role" : "Role",
     "Create" : "Create",
     "User Detail":"User Detail",
-    "Users":"Users"
+    "Users":"Users",
+    "Last Login" : "Last Login"
 }

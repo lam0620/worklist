@@ -2,6 +2,7 @@ import { createInstance } from 'i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { initReactI18next } from 'react-i18next/initReactI18next';
 import { getOptions} from './setting';
+import Cookies from "js-cookie";
 
 
 const initI18next = (lng, ns) => {
@@ -14,7 +15,8 @@ const initI18next = (lng, ns) => {
 };
 
 export  function useTranslation(ns, options = {}) {
-  const lg = localStorage.getItem('language') || 'en';
+  //const lg = localStorage.getItem('language') || 'en';
+  const lg = Cookies.get("i18next") || 'vi';
   const i18nextInstance = initI18next(lg, ns);
   return {
     t: i18nextInstance.getFixedT(lg, Array.isArray(ns) ? ns[0] : ns, options.keyPrefix),

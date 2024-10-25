@@ -44,5 +44,6 @@
     "Create":"Tạo",
     "Role" : "Quyền",
     "User Detail":"Chi tiết người dùng",
-    "Users":"Danh sách người dùng"
+    "Users":"Danh sách người dùng",
+    "Last Login" : "Lần đăng nhập cuối"
 }

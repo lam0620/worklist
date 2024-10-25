@@ -6,6 +6,7 @@ import { initReactI18next, useTranslation as useTranslationOrg } from 'react-i18
 import resourcesToBackend from 'i18next-resources-to-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { getOptions, languages, cookieName } from './setting'
+import Cookies from "js-cookie";
 
 const runsOnServerSide = typeof window === 'undefined'
 
@@ -29,7 +30,8 @@ export function useTranslation(ns, options) {
 
   useEffect(() => {
     if (!runsOnServerSide) {
-      const lng = localStorage.getItem('language')
+      //const lng = localStorage.getItem('language')'
+      const lng = Cookies.get("i18next");
       if (lng && i18n.resolvedLanguage !== lng) {
         i18n.changeLanguage(lng)
       }

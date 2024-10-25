@@ -11,6 +11,7 @@ import { PERMISSIONS } from "@/utils/constant";
 import backgroundImage from "../../../public/images/login_bg.jpg";
 import "../../../node_modules/flag-icons/css/flag-icons.min.css";
 import i18next, { i18n } from "i18next";
+import Cookies from "js-cookie";
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -85,27 +86,29 @@ const LoginPage = () => {
     let savedLanguage = localStorage.getItem("language");
     if (!savedLanguage) {
       savedLanguage = "vi";
+      Cookies.set("i18next", savedLanguage);
     }
     setLanguage(savedLanguage);
-    localStorage.setItem("language", savedLanguage);
+    //localStorage.setItem("language", savedLanguage);
+    Cookies.set("i18next", savedLanguage);
     updatePageTitle(savedLanguage);
-    //i18next.changeLanguage(savedLanguage);
   }, []);
 
   const handleChangeLanguage = (selectedLanguage: string) => {
     setLanguage(selectedLanguage);
-    localStorage.setItem("language", selectedLanguage);
+    //localStorage.setItem("language", selectedLanguage);
+    Cookies.set("i18next", selectedLanguage);
     updatePageTitle(selectedLanguage);
     setIsOpen(false);
   };
 
   const flagCode = (lang: string) => {
     switch (lang) {
-      case "en":
+      case "en-US":
         return "gb";
       case "vi":
         return "vn";
-      case "jp":
+      case "ja-JP":
         return "jp";
       default:
         return "gb";
@@ -116,10 +119,10 @@ const LoginPage = () => {
       case "vi":
         setPageTitle("Đăng nhập");
         break;
-      case "jp":
+      case "ja-JP":
         setPageTitle("ログイン");
         break;
-      case "en":
+      case "en-US":
       default:
         setPageTitle("Login");
         break;
@@ -240,7 +243,7 @@ const LoginPage = () => {
                     marginRight: "4px",
                   }}
                 />
-                {language === "en"
+                {language === "en-US"
                   ? "English"
                   : language === "vi"
                   ? "Tiếng Việt"
@@ -250,7 +253,7 @@ const LoginPage = () => {
                 <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">
                   <div className="py-1 grid grid-cols-1 gap-2" role="none">
                     <button
-                      onClick={() => handleChangeLanguage("en")}
+                      onClick={() => handleChangeLanguage("en-US")}
                       className="flex items-center px-4 py-2 text-sm hover:bg-gray-900 text-white"
                     >
                       <span
@@ -287,7 +290,7 @@ const LoginPage = () => {
                       Tiếng Việt
                     </button>
                     <button
-                      onClick={() => handleChangeLanguage("jp")}
+                      onClick={() => handleChangeLanguage("ja-JP")}
                       className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-900"
                     >
                       <span
