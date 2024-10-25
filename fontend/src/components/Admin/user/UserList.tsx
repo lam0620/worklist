@@ -106,23 +106,37 @@ const UserList = ({
       }
     }
   };
+  const formatDate = (dateString: any) => {
+    const date = new Date(dateString);
+
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  };
 
   return (
     <div className="flex flex-col min-h-screen w-full">
-      <div className="flex items-center justify-between p-2 border-b bg-gray-100">
-        <div className="w-1/12 font-semibold"></div>
-        <div className="w-4/12 font-semibold">{t("Full Name")}</div>
-        <div className="w-2/12 font-semibold">Email</div>
-        <div className="w-3/12 font-semibold">{t("Role")}</div>
+      <div className="flex items-center justify-between p-2 border-b bg-gray-100 text-center">
+        <div className="w-1/12 font-semibold "></div>
+        <div className="w-3/12 font-semibold">{t("Full Name")}</div>
+        <div className="w-3/12 font-semibold">Email</div>
+        <div className="w-2/12 font-semibold">{t("Role")}</div>
+        <div className="w-2/12 font-semibold">{t("Last Login")}</div>
         <div className="w-2/12 font-semibold">{t("Date Created")}</div>
+        <div className="w-1/12 font-semibold"></div>
       </div>
-      <ul className="flex-grow">
+      <ul className="flex-grow text-center">
         {users.map((user) => (
           <li
             key={user.id}
             className="flex items-center justify-between p-2 border-b"
           >
-            <div className="w-0.5/12">
+            <div className="w-1/12">
               {hasDeletePermission && !isRootOrIntegUser(user) && (
                 <Checkbox
                   checked={!!selectedUsers[user.id]}
@@ -134,7 +148,7 @@ const UserList = ({
               )}
             </div>
             <div
-              className="flex w-4/12 cursor-pointer"
+              className="flex w-3/12 cursor-pointer justify-center"
               onClick={() => onSelectUser(user.id)}
             >
               <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800">
@@ -151,13 +165,13 @@ const UserList = ({
                 </Avatar.Fallback>
               </Avatar.Root>
               <div className="ml-4">
-                <div className="">
-                  {user.last_name} {user.first_name} 
+                <div>
+                  {user.last_name} {user.first_name}
                 </div>
               </div>
             </div>
-            <div className="w-2/12 text-sm text-gray-500">{user.email}</div>
-            <div className="w-3/12 flex flex-wrap gap-1">
+            <div className="w-3/12 text-sm text-gray-500">{user.email}</div>
+            <div className="w-2/12 flex flex-wrap gap-1 justify-center">
               {Array.isArray(user.roles) &&
                 user.roles.map((role) => (
                   <span
@@ -168,7 +182,14 @@ const UserList = ({
                   </span>
                 ))}
             </div>
-            <div className="w-1.5/12 text-sm text-gray-500">
+            <div className="w-2/12 text-sm text-gray-500">
+              {!user.last_login ||
+              user.last_login == "null" ||
+              user.last_login == ""
+                ? "---"
+                : formatDate(user.last_login)}
+            </div>
+            <div className="w-2/12 text-sm text-gray-500">
               {new Date(user.created_at).toLocaleDateString()}
             </div>
             <div className="w-1/12">

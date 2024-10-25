@@ -4,6 +4,7 @@ export interface UserDetailProps {
     last_name: string;
     email: string;
     avatar_color: string;
+    last_login : string;
     roles: {
         id: string;
         name: string;
