@@ -236,3 +236,11 @@ export const fetchPatientById = async (id: string) => {
 export const UpdatePatient = async (id: string, data: { [key: string]: any }, config: Object) => {
   return axios.put(`${API_BASE_URL}/patients/${id}`, data, config);
 }
+
+//worklist
+export const fetchWorklist = async (params: { [key: string]: any } = {}) => {
+  const queryString = Object.keys(params)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    .join('&');
+  return axios.get(`http://192.168.201.46:3001/api/data?${queryString}`);
+};

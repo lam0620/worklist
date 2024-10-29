@@ -1,0 +1,620 @@
+"use client";
+import { useTranslation } from "../../i18n";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { fetchWorklist } from "@/services/apiService";
+import { useUser } from "@/context/UserContext";
+import { WorkList } from "@/app/types/WorkList";
+import { toast } from "react-toastify";
+import logo from "../../../public/images/org_logo.png";
+import Image from "next/image";
+import "./.css";
+import * as Avatar from "@radix-ui/react-avatar";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+const Worklist = () => {
+  const API_TEST11 = process.env.NEXT_PUBLIC_API_TEST;
+  const router = useRouter();
+  router.push("/worklist");
+  const { user } = useUser();
+  const [t, setT] = useState(() => (key: string) => key);
+  useEffect(() => {
+    const loadTranslation = async () => {
+      const { t } = await useTranslation("worklist");
+      setT(() => t);
+    };
+    loadTranslation();
+  }, []);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [workList, setWorkList] = useState<WorkList[]>([]);
+  const [isAdvancedSearch, setAdvancedSearch] = useState(false);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
+  const [searchPid, setSearchPid] = useState("");
+  const [searchFullName, setSearchFullName] = useState("");
+  const [searchAcn, setSearchAcn] = useState("");
+  const [searchFromDate, setSearchFromDate] = useState("");
+  const [searchToDate, setSearchToDate] = useState("");
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    //use for expand or collapse if pc or phone (left panel)
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);
+  };
+
+  const toggleAdvancedSearch = () => {
+    setAdvancedSearch(!isAdvancedSearch);
+    setSearchQuery("");
+    setSearchPid("");
+    setSearchFullName("");
+    setSearchAcn("");
+    setSearchFromDate("");
+    setSearchToDate("");
+    setSelectedDate("");
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchWorkList(searchQuery).then((r) => r);
+    }
+  }, [user, searchQuery]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [
+    selectedDate,
+    selectedDevices,
+    selectedStatuses,
+    searchPid,
+    searchFullName,
+    searchAcn,
+    searchFromDate,
+    searchToDate,
+  ]);
+
+  const fetchWorkList = async (query: string) => {
+    try {
+      const response = await fetchWorklist({ search: query });
+      console.log(response);
+      setWorkList(response?.data);
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        toast.error(t("You don't have permission to view worklist"));
+        //router.back();
+      } else {
+        toast.error(t("Failed to fetch worklist"));
+        //router.back();
+      }
+    }
+  };
+  const handleSearch = () => {
+    const searchDevice = selectedDevices.join(",");
+    const searchStatus = selectedStatuses.join(",");
+    const searchParams = new URLSearchParams({
+      devices: searchDevice,
+      status: searchStatus,
+      date: selectedDate,
+      acn: searchAcn,
+      pid: searchPid,
+      fullname: searchFullName,
+      from_date: searchFromDate,
+      to_date: searchToDate,
+    });
+    console.log(API_TEST11);
+    fetch(`${API_TEST11}/data?${searchParams}`)
+      .then((response) => response.json())
+      .then((data) => setWorkList(data))
+      .catch((error) => console.error("Error:", error));
+  };
+  const debounce = (func: Function, wait: number) => {
+    let timeout: ReturnType<typeof setTimeout>;
+    return (...args: any[]) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      setSearchQuery(query);
+    }, 1000),
+    []
+  );
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
+  };
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    stateUpdater: React.Dispatch<React.SetStateAction<string[]>>
+  ) => {
+    const { value, checked } = event.target;
+    stateUpdater((prev) =>
+      value === "all"
+        ? checked
+          ? ["all"]
+          : []
+        : checked
+        ? prev.filter((item) => item !== "all").concat(value)
+        : prev.filter((item) => item !== value)
+    );
+  };
+
+  const handleCheckboxModality = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    handleCheckboxChange(event, setSelectedDevices);
+  };
+
+  const handleCheckboxStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleCheckboxChange(event, setSelectedStatuses);
+  };
+
+  const handleButtonToday = () => {
+    setSelectedDate("today");
+  };
+
+  const handleButtonYesterday = () => {
+    setSelectedDate("yesterday");
+  };
+
+  const handleButtonWeek = () => {
+    setSelectedDate("7days");
+  };
+
+  const handleButtonAllday = () => {
+    setSelectedDate("");
+  };
+  const handlesearchPid = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchPid(event.target.value);
+  };
+
+  const handlesearchFullName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchFullName(event.target.value);
+  };
+
+  const handlesearchAcn = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchAcn(event.target.value);
+  };
+  const handlesearchFromDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchFromDate(event.target.value);
+  };
+  const handlesearchToDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchToDate(event.target.value);
+  };
+
+  return (
+    <div className="flex flex-col h-screen text-sm md:text-base">
+      <header className="w-full flex justify-between items-center bg-top text-white p-1">
+        <Image src={logo} className="max-w-16 ml-5" alt="logo" />
+        <div className="mr-5">
+          <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800 cursor-pointer">
+            <Avatar.Image
+              className="w-full h-full rounded-full"
+              src=""
+              alt="User avatar"
+            />
+            <Avatar.Fallback className="flex items-center justify-center w-full h-full rounded-full text-white"></Avatar.Fallback>
+          </Avatar.Root>
+        </div>
+      </header>
+      <div className="flex flex-1 backgroundcolor overflow-y-hidden">
+        {/* left panel  */}
+        {!collapsed && (
+          <div className="body-left inbox-left w-64 transition-all duration-300 ease-in-out h-screen border-r-4 border-color-col md:static absolute left-0 z-50">
+            <div className="">
+              {!collapsed && (
+                <div className="">
+                  <div className="flex justify-between items-center backgroundcolor-box">
+                    <span className="flex p-2 text-left justify-start">
+                      {t("Modality")}
+                    </span>
+
+                    <button
+                      className="toggle-button backgroundcolor-box px-2 py-1 text-white"
+                      onClick={toggleSidebar}
+                      title={t("Thu gọn")}
+                    >
+                      {collapsed ? (
+                        ""
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          className="lucide lucide-arrow-left-from-line"
+                        >
+                          <path d="m9 6-6 6 6 6" />
+                          <path d="M3 12h14" />
+                          <path d="M21 19V5" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                  <ul className="p-2 backgroundcolor">
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="all"
+                        checked={selectedDevices.includes("all")}
+                        onChange={handleCheckboxModality}
+                      />
+                      {t("All")}
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="MR"
+                        checked={selectedDevices.includes("MR")}
+                        onChange={handleCheckboxModality}
+                      />
+                      MR
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="CT"
+                        checked={selectedDevices.includes("CT")}
+                        onChange={handleCheckboxModality}
+                      />
+                      CT
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="X-Ray"
+                        checked={selectedDevices.includes("X-Ray")}
+                        onChange={handleCheckboxModality}
+                      />
+                      X-Ray
+                    </li>
+                  </ul>
+                </div>
+              )}
+              {!collapsed && (
+                <div>
+                  <div className="flex justify-between items-center backgroundcolor-box">
+                    <span className="p-2">{t("Status")}</span>
+                  </div>
+                  <ul className="p-4 backgroundcolor">
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="all"
+                        checked={selectedStatuses.includes("all")}
+                        onChange={handleCheckboxStatus}
+                      />
+                      {t("All")}
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="P"
+                        checked={selectedStatuses.includes("P")}
+                        onChange={handleCheckboxStatus}
+                      />
+                      {t("Pending")}
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="Unread"
+                        checked={selectedStatuses.includes("Unread")}
+                        onChange={handleCheckboxStatus}
+                      />
+                      {t("Unread")}
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="D"
+                        checked={selectedStatuses.includes("D")}
+                        onChange={handleCheckboxStatus}
+                      />
+                      {t("Reading")}
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox"
+                        value="F"
+                        checked={selectedStatuses.includes("F")}
+                        onChange={handleCheckboxStatus}
+                      />
+                      {t("Approved")}
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {collapsed && (
+          <div className="relative">
+            <button
+              className="toggle-button backgroundcolor-box text-white absolute"
+              onClick={toggleSidebar}
+              title={t("Mở rộng")}
+            >
+              {collapsed ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-arrow-right-from-line"
+                >
+                  <path d="M3 5v14" />
+                  <path d="M21 12H7" />
+                  <path d="m15 18 6-6-6-6" />
+                </svg>
+              ) : (
+                ""
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* right panel  */}
+        <div className="flex-1 backgroundcolor">
+          {!isAdvancedSearch && (
+            <div className="flex flex-col px-9 pb-1 mb-1 md:flex-row justify-between items-start md:items-center pt-1 backgroundcolor-box">
+              <div className="w-full md:w-auto mb-2 md:mb-0">
+                <input
+                  type="text"
+                  placeholder={t("Quick search ...")}
+                  onChange={handleSearchChange}
+                  // className="borderfind shared-border w-full md:w-auto text-sm rounded-lg"
+                  className="mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-3/5 py-2 px-3 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                />
+
+                <button
+                  onClick={toggleAdvancedSearch}
+                  className="text-red-400 underline ml-1 md:ml-2 text-sm"
+                >
+                  {t("Advanced search")}
+                </button>
+              </div>
+              <div className="w-full md:w-auto flex flex-wrap">
+                <div className="w-1/2 md:w-auto p-1">
+                  <button
+                    className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
+                    onClick={handleButtonToday}
+                  >
+                    {t("Today")}
+                  </button>
+                </div>
+                <div className="w-1/2 md:w-auto p-1">
+                  <button
+                    className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
+                    onClick={handleButtonYesterday}
+                  >
+                    {t("Yesterday")}
+                  </button>
+                </div>
+                <div className="w-1/2 md:w-auto p-1">
+                  <button
+                    className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
+                    onClick={handleButtonWeek}
+                  >
+                    {t("7 days")}
+                  </button>
+                </div>
+                <div className="w-1/2 md:w-auto p-1">
+                  <button
+                    className="button px-2 py-1 rounded w-full md:w-auto text-sm hover-purple"
+                    onClick={handleButtonAllday}
+                  >
+                    {t("All")}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isAdvancedSearch && (
+            <div className="advanced-search inbox p-1 mb-1 rounded md:p-4">
+              <div className="flex flex-col md:flex-row mr-2 px-4 w-full md:space-x-4">
+                <div className="flex items-center justify-center md:flex-col md:flex-grow text-white">
+                  <label className="w-1/3 md:w-full text-white md:text-center text-sm">
+                    {t("PID")}
+                  </label>
+                  <input
+                    type="text"
+                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    onChange={handlesearchPid}
+                  />
+                </div>
+                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2">
+                  <label className="w-1/3 md:w-full text-white md:text-center text-sm">
+                    {t("Patient Name")}
+                  </label>
+                  <input
+                    type="text"
+                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    onChange={handlesearchFullName}
+                  />
+                </div>
+                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2">
+                  <label className="w-1/3 md:w-full text-white md:text-center text-sm">
+                    {t("Accession No")}
+                  </label>
+                  <input
+                    type="text"
+                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    onChange={handlesearchAcn}
+                  />
+                </div>
+                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2">
+                  <label className="w-1/3 md:w-full text-white md:text-center text-sm">
+                    {t("From")}
+                  </label>
+                  <input
+                    type="date"
+                    placeholder="mm/dd/yyyy"
+                    className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    onChange={handlesearchFromDate}
+                  />
+                </div>
+                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2">
+                  <label className="w-1/3 md:w-full text-white md:text-center text-sm">
+                    {t("To")}
+                  </label>
+                  <input
+                    type="date"
+                    className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    onChange={handlesearchToDate}
+                  />
+                </div>
+                <div className="flex justify-center md:flex-col md:flex-grow px-2">
+                  <button
+                    onClick={toggleAdvancedSearch}
+                    className="text-red-400 underline mt-4 text-xs md:text-base"
+                  >
+                    {t("Back Quick Search")}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-3 md:grid-cols-8 inbox rounded-t border-b bordervalue p-4">
+            <div className="font-semibold text-center ml-[-10px] hidden md:block">
+              {t("Status")}
+            </div>
+            <div className="font-semibold text-center ml-[-10px]">
+              {t("PID")}
+            </div>
+            <div className="font-semibold text-center ml-[-10px]">
+              {t("Patient Name")}
+            </div>
+            <div className="font-semibold text-center ml-[-10px]">
+              {t("Accession No")}
+            </div>
+            <div className="font-semibold text-center ml-[-10px] hidden md:block">
+              {t("Created_time")}
+            </div>
+            <div className="font-semibold text-center ml-[-15px] hidden md:block">
+              {t("Modality")}
+            </div>
+            <div className="font-semibold text-center ml-[-20px] hidden md:block">
+              {t("Produce")}
+            </div>
+            <div className="font-semibold text-center ml-[-20px] hidden md:block">
+              {t("Quantity Image")}
+            </div>
+          </div>
+          <div className="overflow-y-auto max-height-desktop">
+            {workList.length > 0 ? (
+              <ul>
+                {workList.map((item) => (
+                  <li
+                    key={item.id}
+                    className="grid grid-cols-3 md:grid-cols-8 items-center p-4 border-b bordervalue inboxlist hover-purple"
+                  >
+                    <div className="text-center hidden md:block">
+                      {item.status}
+                    </div>
+                    <div className="text-center">{item.patient.pid}</div>
+                    <div className="text-center">{item.patient.fullname}</div>
+                    <div className="text-center">{item.accession_no}</div>
+                    <div className="text-center hidden md:block">
+                      {new Date(item.created_time).toLocaleDateString()}
+                    </div>
+                    <div className="text-center hidden md:block">
+                      {item.modality_type}
+                    </div>
+                    <div className="text-center hidden md:block">
+                      {item.procedure?.map((procedure) => (
+                        <div key={procedure.proc_id}>
+                          <span>{procedure.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-center hidden md:block">
+                      {item.procedure.map((procedure) => (
+                        <span key={procedure.proc_id}>
+                          {procedure.count_image}
+                        </span>
+                      ))}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="flex flex-col items-center justify-center pt-48">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="111"
+                  height="111"
+                  viewBox="0 0 111 111"
+                  className="mb-4"
+                >
+                  <g
+                    fill="none"
+                    fillRule="evenodd"
+                    stroke="#3A3F99"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="3"
+                    transform="translate(2 2)"
+                  >
+                    <circle
+                      cx="53.419"
+                      cy="53.419"
+                      r="53.419"
+                      fill="#06081D"
+                    ></circle>
+                    <circle cx="49.411" cy="49.411" r="23.862"></circle>
+                    <path d="M66.282 66.282 81.29 81.29"></path>
+                  </g>
+                </svg>
+                <span className="text-white">No data available</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Worklist;
