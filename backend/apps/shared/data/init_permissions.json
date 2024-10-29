@@ -153,7 +153,16 @@
             "tag": "report"
         }
     },
-
+    {
+        "model": "account.permission",
+        "pk": "24af1341-fde8-4768-8e48-68352ae6cba9",
+        "fields": {
+            "code": "print_report",
+            "name": "Print report",
+            "tag": "report" 
+        }
+    },
+    
     {
         "model": "account.permission",
         "pk": "8f2d6a3a-4af0-4653-b723-076c5808518a",

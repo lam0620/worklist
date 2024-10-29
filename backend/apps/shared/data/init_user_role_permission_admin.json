@@ -80,6 +80,15 @@
             "permission_id": "7787f3f0-32a4-4bef-86f6-3dd1cef2db25",
             "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
         }
+    },    
+    {
+        "model": "account.RolePermission",
+        "pk": "6f2f1c58-6dfa-4d10-8baa-129cdc80f93c",
+        "fields": {
+            "role_id": "3e3d4643-afc8-4926-98d5-fbef871ff887",
+            "permission_id": "24af1341-fde8-4768-8e48-68352ae6cba9",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
     },        
     {
         "model": "account.RolePermission",
