@@ -83,7 +83,7 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    let savedLanguage = localStorage.getItem("language");
+    let savedLanguage = localStorage.getItem("i18nextLng");
     if (!savedLanguage) {
       savedLanguage = "vi";
       Cookies.set("i18next", savedLanguage);
