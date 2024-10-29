@@ -86,17 +86,14 @@ const LoginPage = () => {
     let savedLanguage = localStorage.getItem("i18nextLng");
     if (!savedLanguage) {
       savedLanguage = "vi";
-      Cookies.set("i18next", savedLanguage);
     }
     setLanguage(savedLanguage);
-    //localStorage.setItem("language", savedLanguage);
     Cookies.set("i18next", savedLanguage);
     updatePageTitle(savedLanguage);
   }, []);
 
   const handleChangeLanguage = (selectedLanguage: string) => {
     setLanguage(selectedLanguage);
-    //localStorage.setItem("language", selectedLanguage);
     Cookies.set("i18next", selectedLanguage);
     updatePageTitle(selectedLanguage);
     setIsOpen(false);
