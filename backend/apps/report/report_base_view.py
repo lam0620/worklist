@@ -1,5 +1,7 @@
 import logging
 
+from library.constant import error_codes as ec
+
 from apps.report.models import Report
 from apps.report.utils import  get_image_link,get_image_field_str
 from third_parties.contribution.api_view import CustomAPIView
@@ -16,7 +18,7 @@ class ReportBaseView(CustomAPIView):
                 return self.cus_response_empty_data('REPORT')
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG('SYSTEM_ERR', str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         return self.get_report_json(request, report)
     
@@ -62,6 +64,7 @@ class ReportBaseView(CustomAPIView):
             'study_iuid': report.study_iuid,
             'findings': report.findings,
             'conclusion': report.conclusion,
+            'imaging_scan_type':report.imaging_scan_type,
             'status': report.status,
             'created_time':created_time,
             'radiologist': {

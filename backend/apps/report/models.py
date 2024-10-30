@@ -155,6 +155,9 @@ class Report(BaseModels):
     findings = models.TextField(verbose_name='findings', blank=True, null=True)
     conclusion = models.TextField( verbose_name='conclusion', blank=True, null=True)
 
+    # Ky thuat chup
+    imaging_scan_type = models.TextField(verbose_name='imaging scan type', blank=True, null=True)
+
     objects = ObjectManager()
 
     def __str__(self):

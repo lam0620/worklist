@@ -22,9 +22,6 @@ from apps.report.models import (
     Doctor, Report, ReportTemplate, User, Procedure,
 )
 
-from apps.report.utils import  get_image_field_str,get_username
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -75,7 +72,7 @@ class ReportView(ReportBaseView):
                     
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         # Get latest report
         page = self.paginate_queryset(data)
@@ -124,6 +121,8 @@ class ReportView(ReportBaseView):
                     study_iuid=data['study_iuid'],
                     findings=data['findings'],
                     conclusion=data['conclusion'],
+                    imaging_scan_type=data['imaging_scan_type'],
+
                     status=data['status'],
                    
                     radiologist = Doctor.objects.get(pk=data['radiologist_id']),
@@ -149,7 +148,14 @@ class ReportView(ReportBaseView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            code = ec.E_SYSTEM
+            msg = str(e)
+
+            if 'duplicate key value' in str(e):
+                code = ec.E_RECORD_EXISTS
+                msg = 'The report already exists. '+str(e)
+
+            return self.response_NG(code, msg)
     
 
 class ReportDetailView(ReportBaseView):
@@ -220,7 +226,7 @@ class ReportDetailView(ReportBaseView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
 
     @swagger_auto_schema(
         operation_summary='Delete the report by Id',
@@ -261,7 +267,7 @@ class ReportDetailView(ReportBaseView):
             instance.save()
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         return self.cus_response_deleted()
         
@@ -309,7 +315,7 @@ class ReportTemplateView(CustomAPIView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         return self.response_success(data=data)
     
@@ -358,7 +364,7 @@ class ReportTemplateView(CustomAPIView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))     
+            return self.response_NG(ec.E_SYSTEM, str(e))     
         
 
 class ReportTemplateDetailView(CustomAPIView):
@@ -425,7 +431,7 @@ class ReportTemplateDetailView(CustomAPIView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
     def _get_report_template_by_id(self, pk):
         try:
@@ -434,7 +440,7 @@ class ReportTemplateDetailView(CustomAPIView):
                 return self.cus_response_empty_data('REPORT')
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG('SYSTEM_ERR', str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         data = {'id': item.id,
                     'name':item.name,

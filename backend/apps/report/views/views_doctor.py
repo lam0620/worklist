@@ -80,7 +80,7 @@ class DoctorView(DoctorBaseView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         # return self.response_success(data=data)
         page = self.paginate_queryset(data)
@@ -137,7 +137,7 @@ class DoctorView(DoctorBaseView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))       
+            return self.response_NG(ec.E_SYSTEM, str(e))       
   
     @swagger_auto_schema(
         operation_summary="Activate/Deactivate doctors",
@@ -232,7 +232,7 @@ class DoctorDetailView(DoctorBaseView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
 
     @swagger_auto_schema(
         operation_summary='Activate/Deactivate the doctor',
@@ -277,4 +277,4 @@ class DoctorDetailView(DoctorBaseView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))        
+            return self.response_NG(ec.E_SYSTEM, str(e))        

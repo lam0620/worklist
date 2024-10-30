@@ -72,7 +72,7 @@ class PatientView(PatientBaseView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         # return self.response_success(data=data)
         page = self.paginate_queryset(data)
@@ -145,5 +145,5 @@ class PatientDetailView(PatientBaseView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
 

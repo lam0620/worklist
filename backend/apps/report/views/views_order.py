@@ -58,7 +58,7 @@ class OrderView(OrderBaseView):
         # Get modality from query params: /?accession=XX   
         accession=request.query_params.get('accession')
         # if accession =='':
-        #     return self.response_item_NG(ec.SYSTEM_ERR, 'accession', "Accession number is empty")
+        #     return self.response_item_NG(ec.E_SYSTEM, 'accession', "Accession number is empty")
     
         procedure_prefetch = Prefetch(
             'procedure_set',
@@ -80,7 +80,7 @@ class OrderView(OrderBaseView):
 
         if accession:
             if len(orders_data) > 1:
-                return self.response_NG(ec.SYSTEM_ERR, "Return value is more than one record. Data is incorrect!")
+                return self.response_NG(ec.E_SYSTEM, "Return value is more than one record. Data is incorrect!")
             elif len(orders_data) == 0:
                 return self.cus_response_empty_data(ec.REPORT)
             else:
@@ -149,7 +149,7 @@ class OrderDetail(OrderBaseView):
         
 #         except Exception as e:
 #             logger.error(e, exc_info=True)
-#             return self.response_NG(ec.SYSTEM_ERR, str(e))
+#             return self.response_NG(ec.E_SYSTEM, str(e))
         
 #         order_data = {
 #             'accession_no': order.accession_no,

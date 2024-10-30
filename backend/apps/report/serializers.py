@@ -141,6 +141,8 @@ class CreateReportSerializers(serializers.Serializer):
     study_iuid = serializers.CharField(required=True)
     findings = serializers.CharField(required=True)
     conclusion = serializers.CharField(required=True)
+    imaging_scan_type = serializers.CharField(required=False, allow_blank=True)
+
     status = serializers.CharField(required=True)
     
     radiologist_id = serializers.CharField(required=True)
@@ -165,6 +167,8 @@ class CreateReportSerializers(serializers.Serializer):
 class UpdateReportSerializers(serializers.Serializer):
     findings = serializers.CharField(required=True)
     conclusion = serializers.CharField(required=True)
+    imaging_scan_type = serializers.CharField(required=False, allow_blank=True)
+
     status = serializers.CharField(required=True)
     
     # radiologist_id = serializers.CharField(required=True)
