@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 from apps.report.views import (
     ReportTemplateDetailView, ReportTemplateView, ReportView, ReportDetailView,
     OrderView,OrderDetail, DoctorView,DoctorDetailView,
-    PatientView,PatientDetailView,
+    PatientView,PatientDetailView,ScanProtocolView,ScanProtocolDetailView,
     StatsViewSet
 )
 from apps.report.views import (
@@ -60,6 +60,12 @@ urlpatterns = [
     path('report-templates', ReportTemplateView.as_view(), name='ReportTemplate'),
     path('report-templates/<uuid:pk>', ReportTemplateDetailView.as_view(), name='ReportTemplate Detail'),
     # report-templates?modality=xx aslo existing in the pattern /report-templates
+
+    
+    #Scan protocol
+    path('scan-protocols', ScanProtocolView.as_view(), name='scan-protocol'),
+    path('scan-protocols/<uuid:pk>', ScanProtocolDetailView.as_view(), name='scan-protocol Detail'),
+    # scan-protocols?modality=xx aslo existing in the pattern /scan-protocols
 ]
 
 router = DefaultRouter()

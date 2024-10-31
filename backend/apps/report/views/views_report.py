@@ -121,7 +121,7 @@ class ReportView(ReportBaseView):
                     study_iuid=data['study_iuid'],
                     findings=data['findings'],
                     conclusion=data['conclusion'],
-                    imaging_scan_type=data['imaging_scan_type'],
+                    scan_protocol=data['scan_protocol'],
 
                     status=data['status'],
                    

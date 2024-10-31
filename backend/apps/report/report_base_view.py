@@ -64,7 +64,7 @@ class ReportBaseView(CustomAPIView):
             'study_iuid': report.study_iuid,
             'findings': report.findings,
             'conclusion': report.conclusion,
-            'imaging_scan_type':report.imaging_scan_type,
+            'scan_protocol':report.scan_protocol,
             'status': report.status,
             'created_time':created_time,
             'radiologist': {

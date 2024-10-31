@@ -141,7 +141,7 @@ class CreateReportSerializers(serializers.Serializer):
     study_iuid = serializers.CharField(required=True)
     findings = serializers.CharField(required=True)
     conclusion = serializers.CharField(required=True)
-    imaging_scan_type = serializers.CharField(required=False, allow_blank=True)
+    scan_protocol = serializers.CharField(required=False, allow_blank=True)
 
     status = serializers.CharField(required=True)
     
@@ -167,7 +167,7 @@ class CreateReportSerializers(serializers.Serializer):
 class UpdateReportSerializers(serializers.Serializer):
     findings = serializers.CharField(required=True)
     conclusion = serializers.CharField(required=True)
-    imaging_scan_type = serializers.CharField(required=False, allow_blank=True)
+    scan_protocol = serializers.CharField(required=False, allow_blank=True)
 
     status = serializers.CharField(required=True)
     
@@ -352,6 +352,27 @@ class UpdateReportTemplateSerializers(serializers.Serializer):
     findings = serializers.CharField(required=True)
     conclusion = serializers.CharField(required=True)
 
+class CreateScanProtocolSerializers(serializers.Serializer):
+    name = serializers.CharField(required=True)
+    regular = serializers.CharField(required=True)
+    by_medicine = serializers.CharField(required=False)
+    by_disease = serializers.CharField(required=False)
+
+    modality = serializers.CharField(required=True)
+
+    def validate_modality(self, value): # noqa
+        if not is_valid_modality_type(value):
+            raise serializers.ValidationError({'code': ec.INVALID, 
+                                               'item': 'modality',
+                                               'detail':"'"+ value+"' is invalid"})
+        return value
+    
+    
+class UpdateScanProtocolSerializers(serializers.Serializer):
+    regular = serializers.CharField(required=True)
+    by_medicine = serializers.CharField(required=False)
+    by_disease = serializers.CharField(required=False)
+    
 class StatsSerializers(serializers.Serializer):
     type = serializers.CharField(required=False)
     year = serializers.CharField(required=False)
