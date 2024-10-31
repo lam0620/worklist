@@ -1,0 +1,134 @@
+[
+    {
+      "model": "report.ScanProtocol",
+      "pk": "ce4e8e96-656d-4920-a723-95d5436df513",
+      "fields": {
+        "name": "Sọ não",
+        "regular": "3D Ax T1 MP-RAGE <br>Ax T2 FAIR FS<br>Ax T2 PROPELLER<br>Ax DWI B-1000<br>3D Ax SWAN<br>3D Ax TOF",
+        "by_medicine": "Sag Vibe 3D T1FS CM<br>Ax T1FS CM<br>Sag Vibe 3D T1 CM<br>Ax T1 CM<br>TWIST<br>MRA & MRV<br>Cor T1FS CM",
+        "by_disease": "Sag T1W SPACE<br>Ax CISS 3D<br>Cor T2W Oblique 3mm<br>DTI<br>Cor TIRM 3mm",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "d3bf1a98-1b85-493d-afdf-f101e44d1188",
+      "fields": {
+        "name": "Cột sống cổ",
+        "regular": "Sag T2 FSE<br>Sag T1 FSE<br>Sag FSE STIR<br>COR T2 FSE STIR<br>Ax T2* MERGE",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM",
+        "by_disease": "",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "9621ae43-f560-43aa-9352-62b05e1c40df",
+      "fields": {
+        "name": "Cột sống thắt lưng",
+        "regular": "COR T2 FSE STIR<br>Sag T2 FSE<br>Sag T1 FSE<br>Sag T2 FSE STIR<br>Ax T2 FSE<br>",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM",
+        "by_disease": "",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "9bff65a5-4cbd-49e6-b0a4-31cdafa51fcd",
+      "fields": {
+        "name": "Cột sống ngực",
+        "regular": "Sag T1W<br>Sag T2W<br>Sag TIRM<br>Ax T2W",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM<br>",
+        "by_disease": "",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "c5488ffd-549b-4121-9016-04d1c5c01169",
+      "fields": {
+        "name": "Khớp cùng chậu / cột sống dính khớp",
+        "regular": "Cor oblique T1W <br>Cor oblique T2 TIRM<br>Ax oblique T2 TIRM<br>Sag T1W <br>Sag T2 TIRM <br>",
+        "by_medicine": "Cor T1FS CM <br>Ax T1FS CM <br>Sag T1FS CM<br>",
+        "by_disease": "",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "8414eb4b-43f5-4936-9320-c5f1d6a4aeeb",
+      "fields": {
+        "name": "Khớp Vai",
+        "regular": "Ax T2 FS<br>Cor T2 FS<br>Sag T2 FS<br>Sag T1W<br>Ax Pd FS <br>Cor Pd FS<br>",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM<br>",
+        "by_disease": "",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "012705ed-68f9-4a5f-b6b5-ddabd30e92bd",
+      "fields": {
+        "name": "Khớp Khuỷu",
+        "regular": "Ax T2FS<br>Cor T2FS<br>Cor PdFS<br>Sag PdFS<br>Cor T1W<br>",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM<br>",
+        "by_disease": "Cor DES <br>Sag T1W<br>",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "ce4e8e96-656d-4920-a723-95d5436df513",
+      "fields": {
+        "name": "Khớp Cổ Tay",
+        "regular": "Ax T2FS<br>Cor T2FS<br>Cor PdFS<br>Sag PdFS<br>Cor T1W<br>",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM<br>",
+        "by_disease": "Cor DES <br>Sag T1W<br>",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "2fbd2d51-a419-44d2-b8fb-33bc0420ff07",
+      "fields": {
+        "name": "Khớp Gối",
+        "regular": "Ax T2FS<br>Cor T2FS<br>Cor PdFS<br>Sag PdFS<br>Cor T1W<br>",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM<br>",
+        "by_disease": "Cor DES <br>Sag T1W<br>",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "2432795e-340f-4025-9e42-732ab08346b7",
+      "fields": {
+        "name": "Khớp Cổ Chân ",
+        "regular": "Sag T2W<br>Sag PdFS<br>Cor T2 tse FS<br>Cor Pd tse FS<br>Ax Pd tse FS <br>Ax T2 tse FS<br>",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM<br>",
+        "by_disease": "3D DESS<br>",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "a7af3af3-72b9-4977-ba2b-85901aa73323",
+      "fields": {
+        "name": "Bàn Chân",
+        "regular": "Ax T2FS<br>Cor T2FS<br>Sag T2FS <br>Ax T1W<br>Cor Pd<br>Sag Pd FS<br>",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM<br>",
+        "by_disease": "",
+        "modality": "MR"
+      }
+    },
+    {
+      "model": "report.ScanProtocol",
+      "pk": "c1ca5390-7a7a-4383-89d1-2cc7b4fea5bd",
+      "fields": {
+        "name": "U / Viêm của xương và mô mềm",
+        "regular": "Ax T2FS<br>Cor T2FS<br>Sag T2FS <br>Cor T1W<br>",
+        "by_medicine": "Ax T1FS CM<br>Sag T1FS CM<br>Cor T1FS CM<br>",
+        "by_disease": "",
+        "modality": "MR"
+      }
+    }    
+  ]
