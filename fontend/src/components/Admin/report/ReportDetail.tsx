@@ -11,7 +11,6 @@ interface Props {
 const ReportDetail: React.FC<Props> = ({ report }) => {
   const { t } = useTranslation("reportManagement");
   const componentRef = useRef<HTMLDivElement>(null);
-
   return (
     <div className="flex flex-col items-center justify-center min-h-8 px-4">
       <div className="bg-white rounded shadow-md w-full max-w-4xl">
@@ -21,11 +20,8 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
               { label: t("Accession Number"), value: report?.accession_no },
               {
                 label: t("Procedure"),
-                value: `${"["}${report?.procedure.code}${"]"} ${
-                  report?.procedure.name
-                }`,
+                value: `[${report?.procedure.code}] ${report?.procedure.name}`,
               },
-
               { label: t("Patient ID"), value: report?.patient.pid },
               { label: t("Patient Name"), value: report?.patient.fullname },
               { label: t("DOB"), value: formatDate(report?.patient.dob) },
@@ -33,10 +29,19 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
                 label: t("Gender"),
                 value: getGenderLabel(report?.patient.gender),
               },
-
               {
                 label: t("Radiologist"),
                 value: `${report?.radiologist.title} ${report?.radiologist.fullname}`,
+              },
+              {
+                label: t("Protocol"),
+                value: (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: report?.scan_protocol || "",
+                    }}
+                  />
+                ),
               },
               {
                 label: t("Findings"),
@@ -62,7 +67,6 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
                   </div>
                 ),
               },
-
               { label: t("Created time"), value: report?.created_time },
               {
                 label: t("View Image"),
@@ -83,7 +87,7 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
                   {field.label}
                 </label>
                 <div className="flex-1 border rounded p-3 bg-gray-50 ml-4">
-                  {field.value}
+                  {typeof field.value === "string" ? field.value : field.value}
                 </div>
               </div>
             ))}

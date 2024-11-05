@@ -102,7 +102,7 @@ const ReportList = ({
                 }}
               ></div>
               <div className="w-1/12 text-center">
-                {report.radiologist.fullname}
+                {report.radiologist.title} {report.radiologist.fullname}
               </div>
               <div className="w-1/12 text-center">{report.created_time}</div>
               <div className="w-1/12 text-center">
