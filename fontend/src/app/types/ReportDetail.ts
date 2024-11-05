@@ -2,6 +2,7 @@ export interface ReportDetailProps {
     id : string;
     accession_no : string;
     study_iuid : string;
+    scan_protocol: string;
     findings : string;
     conclusion : string;
     status : string;
