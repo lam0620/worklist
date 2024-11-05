@@ -79,6 +79,7 @@ class OrderBaseView(CustomAPIView):
                 'study_iuid': report.study_iuid,
                 'findings': report.findings,
                 'conclusion': report.conclusion,
+                'scan_protocol':report.scan_protocol,
                 'status': report.status,
                 'created_time':created_time,
                 'radiologist': {

@@ -155,6 +155,9 @@ class Report(BaseModels):
     findings = models.TextField(verbose_name='findings', blank=True, null=True)
     conclusion = models.TextField( verbose_name='conclusion', blank=True, null=True)
 
+    # Ky thuat chup
+    scan_protocol = models.TextField(verbose_name='scan protocol', blank=True, null=True)
+
     objects = ObjectManager()
 
     def __str__(self):
@@ -163,6 +166,7 @@ class Report(BaseModels):
     class Meta:
         db_table = 'c_report'
         verbose_name = 'Report'
+        ordering = ('-created_at',)
         # couple unique
         # unique_together = ('accession_no', 'procedure', 'delete_flag=false',)
         constraints = [
@@ -209,6 +213,30 @@ class ReportTemplate(BaseModels):
         ordering = ('name',)
         permissions = ()
 
+
+class ScanProtocol(BaseModels):
+    name = models.CharField(verbose_name='name', max_length=200, blank=False, null=False)
+    # Thuong qui
+    regular = models.TextField(verbose_name='regular', blank=False, null=False)
+    # Co thuoc
+    by_medicine = models.TextField( verbose_name='by medicine', blank=True, null=True)
+    # Theo benh
+    by_disease = models.TextField(verbose_name='by disease', blank=True, null=True)
+
+    # depend on modality??
+    modality = models.CharField(verbose_name='modality', max_length=5, blank=False, null=False)
+
+    objects = ObjectManager()
+
+    def __str__(self):
+        return self.id
+
+    class Meta:
+        db_table = 'c_scan_protocol'
+        verbose_name = 'Scan protocol'
+        default_permissions = ()
+        ordering = ('name',)
+        permissions = ()
 
 class IntegrationApp(BaseModels):
     name = models.CharField(verbose_name='name', max_length=100, blank=False, null=False)
