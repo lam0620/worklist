@@ -23,7 +23,7 @@ const DocterListPage = () => {
   }>({});
 
   const router = useRouter();
-  const [activeFilter, setActiveFilter] = useState("");
+  const [activeFilter, setActiveFilter] = useState("true");
 
   const { t } = useTranslation("doctorManagement");
   useEffect(() => {
@@ -155,6 +155,7 @@ const DocterListPage = () => {
               <select
                 className="mb-4 p-2 border rounded"
                 onChange={handleActiveChange}
+                defaultValue="true"
               >
                 <option value="all">{t("All")}</option>
                 <option value="true">{t("Active")}</option>
