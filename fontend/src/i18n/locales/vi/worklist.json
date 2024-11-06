@@ -20,5 +20,15 @@
     "Status": "Trạng thái",
     "Created_time": "Ngày chụp",
     "Produce": "Dịch vụ",
-    "Quantity Image": "Số lượng hình ảnh"
+    "Quantity Image": "Số lượng hình ảnh",
+    "Ordering Physician" : "Bác sĩ chỉ định",
+    "Reading Physician": "Bác sĩ đọc ảnh",
+    "Related Studies": "Các ca liên quan",
+    "DOB" :"Ngày sinh",
+    "Radiologist":"Bác sĩ đọc ảnh",
+    "Findings":"Mô tả",
+    "Conclusion":"Kết luận",
+    "Report Information":"Kết quả",
+    "Order Information":"Chỉ định",
+    "Patient Information":"Thông tin bệnh nhân"
 }

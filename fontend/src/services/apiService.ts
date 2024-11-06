@@ -244,3 +244,7 @@ export const fetchWorklist = async (params: { [key: string]: any } = {}) => {
     .join('&');
   return axios.get(`http://192.168.201.46:3001/api/data?${queryString}`);
 };
+
+export const fetchRelatedStudies = async (id :string) => { //test API
+  return axios.get(`http://192.168.201.46:3001/api/relatedStudies/${id}`);
+};

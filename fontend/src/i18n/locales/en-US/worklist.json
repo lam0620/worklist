@@ -20,5 +20,8 @@
     "Status":"Status",
     "Created_time":"Created_time",
     "Produce":"Produce",
-    "Quantity Image":"Quantity Image"
+    "Quantity Image":"Quantity Image",
+    "Ordering Physician" : "Ordering Physician",
+    "Reading Physician": "Reading Physician",
+    "Related Studies":"Related Studies"
 }

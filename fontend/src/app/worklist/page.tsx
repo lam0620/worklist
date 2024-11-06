@@ -8,11 +8,11 @@ import { WorkList } from "@/app/types/WorkList";
 import { toast } from "react-toastify";
 import logo from "../../../public/images/org_logo.png";
 import Image from "next/image";
-import "./.css";
+import "./worklist.css";
 import * as Avatar from "@radix-ui/react-avatar";
 import "react-datepicker/dist/react-datepicker.css";
-import WorklistList from "@/components/worklist/worklistList";
-import DetailInfor from "@/components/worklist/detailInfor";
+import WorklistList from "@/components/worklist/WorklistList";
+import DetailInfor from "@/components/worklist/DetailInfor";
 
 const Worklist = () => {
   const API_TEST11 = process.env.NEXT_PUBLIC_API_TEST;
@@ -225,7 +225,7 @@ const Worklist = () => {
       <div className="flex flex-1 backgroundcolor overflow-y-hidden">
         {/* left panel  */}
         {!collapsed && (
-          <div className="body-left inbox-left w-64 transition-all duration-300 ease-in-out h-screen border-r-4 border-color-col md:static absolute left-0 z-50">
+          <div className="body-left inboxlist w-56 transition-all duration-300 ease-in-out h-screen border-r-4 border-color-col md:static absolute left-0 z-50">
             <div className="">
               {!collapsed && (
                 <div className="">
@@ -252,11 +252,11 @@ const Worklist = () => {
                           stroke-width="2"
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          className="lucide lucide-arrow-left-from-line"
+                          className="lucide lucide-align-justify"
                         >
-                          <path d="m9 6-6 6 6 6" />
-                          <path d="M3 12h14" />
-                          <path d="M21 19V5" />
+                          <path d="M3 12h18" />
+                          <path d="M3 18h18" />
+                          <path d="M3 6h18" />
                         </svg>
                       )}
                     </button>
@@ -367,53 +367,46 @@ const Worklist = () => {
             </div>
           </div>
         )}
-        {collapsed && (
-          <div className="relative">
-            <button
-              className="toggle-button backgroundcolor-box text-white absolute"
-              onClick={toggleSidebar}
-              title={t("Mở rộng")}
-            >
-              {collapsed ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-arrow-right-from-line"
-                >
-                  <path d="M3 5v14" />
-                  <path d="M21 12H7" />
-                  <path d="m15 18 6-6-6-6" />
-                </svg>
-              ) : (
-                ""
-              )}
-            </button>
-          </div>
-        )}
-
         {/* right panel  */}
-        <div className="flex-1 backgroundcolor">
+        <div className="w-full backgroundcolor">
           {!isAdvancedSearch && (
-            <div className="flex flex-col px-9 pb-1 mb-1 md:flex-row justify-between items-start md:items-center pt-1 backgroundcolor-box">
-              <div className="w-full md:w-auto mb-2 md:mb-0">
+            <div className="flex flex-col pr-9 pl-2 pb-1 mb-1 md:flex-row justify-between items-center pt-1 backgroundcolor-box">
+              <div className="w-full md:w-1/4 mb-2 md:mb-0 flex items-center">
+                {collapsed && (
+                  <div className="flex items-center mr-2">
+                    <button
+                      className="toggle-button backgroundcolor-box text-white flex justify-center items-center"
+                      onClick={toggleSidebar}
+                      title={t("Mở rộng")}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-align-justify"
+                      >
+                        <path d="M3 12h18" />
+                        <path d="M3 18h18" />
+                        <path d="M3 6h18" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
                 <input
                   type="text"
                   placeholder={t("Quick search ...")}
                   onChange={handleSearchChange}
-                  // className="borderfind shared-border w-full md:w-auto text-sm rounded-lg"
-                  className="mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-3/5 py-2 px-3 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                  className="transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-3/5 py-2 px-3 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                 />
-
                 <button
                   onClick={toggleAdvancedSearch}
-                  className="text-red-400 underline ml-1 md:ml-2 text-sm"
+                  className="text-red-400 underline ml-1 md:ml-2 text-sm whitespace-nowrap"
                 >
                   {t("Advanced search")}
                 </button>
@@ -454,11 +447,36 @@ const Worklist = () => {
               </div>
             </div>
           )}
-
           {isAdvancedSearch && (
-            <div className="advanced-search inbox p-1 mb-1 rounded md:p-4">
-              <div className="flex flex-col md:flex-row mr-2 px-4 w-full md:space-x-4">
-                <div className="flex items-center justify-center md:flex-col md:flex-grow text-white">
+            <div className="advanced-search inbox p-1 mb-1 rounded md:p-3">
+              <div className="flex flex-col md:flex-row w-full md:space-x-4">
+                {collapsed && (
+                  <div className="flex items-center">
+                    <button
+                      className="toggle-button backgroundcolor-box text-white flex justify-center items-center"
+                      onClick={toggleSidebar}
+                      title={t("Mở rộng")}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-align-justify"
+                      >
+                        <path d="M3 12h18" />
+                        <path d="M3 18h18" />
+                        <path d="M3 6h18" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2 text-white">
                   <label className="w-1/3 md:w-full text-white md:text-center text-sm">
                     {t("PID")}
                   </label>
@@ -520,9 +538,13 @@ const Worklist = () => {
               </div>
             </div>
           )}
-          <WorklistList worklist={workList} onSelectPID={handlePIDSelect} />
+          <WorklistList
+            worklist={workList}
+            onSelectPID={handlePIDSelect}
+            t={t}
+          />
         </div>
-        {selectedPID && <DetailInfor pid={selectedPID} />}
+        {selectedPID && <DetailInfor pid={selectedPID} t={t} />}
       </div>
     </div>
   );

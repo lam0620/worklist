@@ -1,24 +1,21 @@
 "use client";
 import { WorkList } from "@/app/types/WorkList";
-import { useTranslation } from "@/i18n";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import RelatedSession from "./RelatedSession";
 interface WorklistProps {
   worklist: WorkList[];
   onSelectPID: (PID: string) => void;
+  t: (key: string) => string;
 }
-const WorklistList = ({ worklist, onSelectPID }: WorklistProps) => {
-  const [t, setT] = useState(() => (key: string) => key);
-  useEffect(() => {
-    const loadTranslation = async () => {
-      const { t } = await useTranslation("worklist");
-      setT(() => t);
-    };
-    loadTranslation();
-  }, []);
+const WorklistList = ({ worklist, onSelectPID, t }: WorklistProps) => {
+  const [selectedItem, setSelectedItem] = useState("");
+  const handleItemSelect = (id: string) => {
+    setSelectedItem(id);
+  };
 
   return (
-    <div>
-      <div className="grid grid-cols-3 md:grid-cols-8 inbox rounded-t border-b bordervalue p-4">
+    <div className="h-full">
+      <div className="whitespace-nowrap grid grid-cols-3 md:grid-cols-8 inbox rounded-t border-b bordervalue px-4 py-2">
         <div className="font-semibold text-center ml-[-10px] hidden md:block">
           {t("Status")}
         </div>
@@ -42,18 +39,21 @@ const WorklistList = ({ worklist, onSelectPID }: WorklistProps) => {
           {t("Quantity Image")}
         </div>
       </div>
-      <div className="overflow-y-auto max-height-desktop">
+      <div className="scrollbar h-3/4 md:h-1/2">
         {worklist.length > 0 ? (
           <ul>
             {worklist.map((item) => (
               <li
                 key={item.id}
-                className="grid grid-cols-3 md:grid-cols-8 items-center p-4 border-b bordervalue inboxlist hover-purple"
+                className="grid grid-cols-3 md:grid-cols-8 items-center px-4 py-4 border-b bordervalue inboxlist hover-purple"
               >
                 <div className="text-center hidden md:block">{item.status}</div>
                 <div
-                  className="text-center"
-                  onClick={() => onSelectPID(item.patient.pid)}
+                  className="text-center cursor-pointer"
+                  onClick={() => {
+                    handleItemSelect(item.patient.pid);
+                    onSelectPID(item.patient.pid);
+                  }}
                 >
                   {item.patient.pid}
                 </div>
@@ -81,7 +81,7 @@ const WorklistList = ({ worklist, onSelectPID }: WorklistProps) => {
             ))}
           </ul>
         ) : (
-          <div className="flex flex-col items-center justify-center pt-48">
+          <div className="flex flex-col items-center pt-44 md:pt-44">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="111"
@@ -111,6 +111,9 @@ const WorklistList = ({ worklist, onSelectPID }: WorklistProps) => {
             <span className="text-white">No data available</span>
           </div>
         )}
+      </div>
+      <div className=" md:block hidden h-3/4">
+        <RelatedSession pid={selectedItem} t={t} />
       </div>
     </div>
   );

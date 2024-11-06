@@ -20,5 +20,8 @@
     "Status": "ステータス",
     "Created_time": "作成日時",
     "Produce": "製造",
-    "Quantity Image": "画像数"
+    "Quantity Image": "画像数",
+    "Ordering Physician": "発注医師",
+    "Reading Physician": "読影医師",
+    "Related Studies":"関連研究"
 }
