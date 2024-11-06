@@ -109,22 +109,26 @@ const UserList = ({
 
   return (
     <div className="flex flex-col min-h-screen w-full">
-      <div className="flex items-center justify-between p-2 border-b bg-gray-100 text-center">
-        <div className="w-1/12 font-semibold "></div>
-        <div className="w-3/12 font-semibold">{t("Full Name")}</div>
-        <div className="w-3/12 font-semibold">Email</div>
+      <div className="flex items-center justify-between p-2 border-b bg-gray-100 text-center text-xs md:text-base">
+        <div className="w-1/12 font-semibold md:block hidden"></div>
+        <div className="w-3/12 font-semibold ">{t("Full Name")}</div>
+        <div className="w-3/12 font-semibold md:block hidden">Email</div>
         <div className="w-2/12 font-semibold">{t("Role")}</div>
-        <div className="w-2/12 font-semibold">{t("Last Login")}</div>
-        <div className="w-2/12 font-semibold">{t("Date Created")}</div>
+        <div className="w-2/12 font-semibold md:block hidden">
+          {t("Last Login")}
+        </div>
+        <div className="w-2/12 font-semibold md:block hidden">
+          {t("Date Created")}
+        </div>
         <div className="w-1/12 font-semibold"></div>
       </div>
-      <ul className="flex-grow text-center">
+      <ul className="flex-grow text-center text-xs md:text-base">
         {users.map((user) => (
           <li
             key={user.id}
             className="flex items-center justify-between p-2 border-b"
           >
-            <div className="w-1/12">
+            <div className="w-1/12 md:block hidden">
               {hasDeletePermission && !isRootOrIntegUser(user) && (
                 <Checkbox
                   checked={!!selectedUsers[user.id]}
@@ -136,12 +140,12 @@ const UserList = ({
               )}
             </div>
             <div
-              className="flex w-3/12 cursor-pointer justify-start pl-10"
+              className="flex w-3/12 cursor-pointer justify-center md:justify-start md:pl-10"
               onClick={() => onSelectUser(user.id)}
             >
-              <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800">
+              <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800 md:block hidden">
                 <Avatar.Image
-                  className="w-full h-full rounded-full"
+                  className="w-full h-full rounded-full "
                   src=""
                   alt="User avatar"
                 />
@@ -152,14 +156,16 @@ const UserList = ({
                   {`${user.first_name.charAt(0)}${user.last_name.charAt(0)}`}
                 </Avatar.Fallback>
               </Avatar.Root>
-              <div className="ml-4">
+              <div className="md:ml-4">
                 <div>
                   {user.last_name} {user.first_name}
                 </div>
               </div>
             </div>
-            <div className="w-3/12 text-sm text-gray-500">{user.email}</div>
-            <div className="w-2/12 flex flex-wrap gap-1 justify-center">
+            <div className="w-3/12 text-sm text-gray-500 md:block hidden">
+              {user.email}
+            </div>
+            <div className="w-2/12 flex flex-wrap gap-1 justify-center ml-3 md:ml-0">
               {Array.isArray(user.roles) &&
                 user.roles.map((role) => (
                   <span
@@ -170,7 +176,7 @@ const UserList = ({
                   </span>
                 ))}
             </div>
-            <div className="w-2/12 text-sm text-gray-500">
+            <div className="w-2/12 text-sm text-gray-500 md:block hidden">
               {!user.last_login ||
               user.last_login === "null" ||
               user.last_login === ""
@@ -184,10 +190,10 @@ const UserList = ({
                   })}
             </div>
 
-            <div className="w-2/12 text-sm text-gray-500">
+            <div className="w-2/12 text-sm text-gray-500 md:block hidden">
               {new Date(user.created_at).toLocaleDateString()}
             </div>
-            <div className="w-1/12">
+            <div className="w-1/12 mr-5 md:mr-0">
               {hasPermissionResetPassword && (
                 <button
                   className="text-blue-500"

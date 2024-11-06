@@ -95,7 +95,7 @@ const UserListPage = () => {
   return (
     <AppLayout name={t("Users")}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
-        <div className="w-full">
+        <div className="w-full text-xs md:text-base">
           <div className="flex justify-between items-center mb-4">
             <div className="flex gap-2 relative">
               <button
@@ -105,18 +105,20 @@ const UserListPage = () => {
                 {t("Home")}
               </button>
               {hasDeleteUserPermission && (
-                <DeleteUserButton
-                  isMany={true}
-                  userIds={Object.keys(selectedUsers).filter(
-                    (userId) => selectedUsers[userId]
-                  )}
-                  onUserDeleted={() => fetchUsers(1, searchQuery)}
-                  isDisabled={
-                    Object.keys(selectedUsers).filter(
+                <div className="md:block hidden">
+                  <DeleteUserButton
+                    isMany={true}
+                    userIds={Object.keys(selectedUsers).filter(
                       (userId) => selectedUsers[userId]
-                    ).length === 0
-                  }
-                />
+                    )}
+                    onUserDeleted={() => fetchUsers(1, searchQuery)}
+                    isDisabled={
+                      Object.keys(selectedUsers).filter(
+                        (userId) => selectedUsers[userId]
+                      ).length === 0
+                    }
+                  />
+                </div>
               )}
               {hasAddUserPermission && (
                 <CreateUserButton

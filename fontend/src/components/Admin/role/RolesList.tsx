@@ -4,6 +4,7 @@ import { Checkbox } from "@radix-ui/themes";
 import { RoleDetailProps } from "@/app/types/RoleDetail";
 import { useTranslation } from "../../../i18n/client";
 import { useState, useEffect } from "react";
+import "../../../app/worklist/worklist.css";
 
 interface RolesListProps {
   roles: RoleDetailProps[];
@@ -52,20 +53,24 @@ const RolesList = ({
 
   return (
     <div className="flex flex-col min-h-screen w-full">
-      <div className="flex items-center justify-between p-2 border-b bg-gray-100">
-        <div className="w-1/12 font-semibold"></div>
-        <div className="w-2/12 font-semibold">{t("Name")}</div>
-        <div className="w-6/12 font-semibold">{t("Permissions")}</div>
-        <div className="w-3/12 font-semibold">{t("Date Created")}</div>
+      <div className="flex items-center justify-between p-2 border-b bg-gray-100 text-xs md:text-base">
+        <div className="w-1/12 font-semibold md:block hidden"></div>
+        <div className="w-2/12 font-semibold flex justify-center md:justify-start">
+          {t("Name")}
+        </div>
+        <div className="w-6/12 font-semibold flex ">{t("Permissions")}</div>
+        <div className="w-3/12 font-semibold md:block hidden">
+          {t("Date Created")}
+        </div>
       </div>
       {hasViewPermission && (
-        <ul className="flex-grow">
+        <ul className="flex-grow text-xs md:text-base">
           {roles.map((role) => (
             <li
               key={role.id}
-              className="flex items-center justify-between p-2 border-b mb-2"
+              className="flex items-center md:justify-between py-2 pl-2 border-b mb-2"
             >
-              <div className="w-1/12">
+              <div className="w-1/12 md:block hidden">
                 <div className="flex items-center justify-center">
                   {hasDeletePermission && !isIntegRole(role) && (
                     <Checkbox
@@ -85,17 +90,17 @@ const RolesList = ({
               >
                 {role.name}
               </div>
-              <div className="w-6/12 flex flex-wrap gap-1">
+              <div className="ml-10 md:ml-0 md:w-6/12 flex flex-wrap gap-1 justify-center md:justify-start">
                 {role.permissions?.map((permission) => (
                   <span
                     key={permission.id}
-                    className="px-2 py-1 text-xs font-semibold text-white bg-green-500 rounded-full"
+                    className="px-2 py-1 text-small md:text-base font-semibold text-white bg-green-500 rounded-full"
                   >
                     {permission.name}
                   </span>
                 ))}
               </div>
-              <div className="w-3/12 text-sm text-gray-500">
+              <div className="w-3/12 text-sm text-gray-500 md:block hidden">
                 {new Date(role.created_at).toLocaleDateString()}
               </div>
             </li>

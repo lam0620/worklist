@@ -32,7 +32,7 @@ const RoleDetail = ({ role }: Props) => {
                 role.permissions.map((permission) => (
                   <span
                     key={permission.id}
-                    className="bg-blue-500 text-white rounded-full px-3 py-1 text-sm"
+                    className="bg-blue-500 text-white rounded-full px-3 py-1 text-xs md:text-base"
                   >
                     {permission.name}
                   </span>

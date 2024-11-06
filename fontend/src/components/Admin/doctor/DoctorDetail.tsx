@@ -70,8 +70,12 @@ const DoctorDetail = ({ doctor }: Props) => {
           {[
             { label: t("Username"), value: doctor?.username },
             { label: t("Doctor's code"), value: doctor?.doctor_no },
-            { label: t("Full name"), value: doctor?.fullname },
-            { label: t("Title"), value: doctor?.title },
+            {
+              label: t("Full name"),
+              value: `${doctor?.title} ${doctor?.fullname}`,
+            },
+
+            // { label: t("Title"), value: doctor?.title },
             { label: t("Gender"), value: getGenderLabel(doctor?.gender) },
             {
               label: t("Type"),

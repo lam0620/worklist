@@ -117,7 +117,7 @@ const RolesPage = () => {
   return (
     <AppLayout name={t("Roles")}>
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
-        <div className="w-full">
+        <div className="w-full text-xs md:text-base">
           <div className="flex justify-between items-center mb-4">
             <div className="flex gap-2 relative">
               <button
@@ -127,18 +127,20 @@ const RolesPage = () => {
                 {t("Home")}
               </button>
               {hasDeleteRolePermission && (
-                <DeleteRoleButtons
-                  isMany={true}
-                  roleIds={Object.keys(selectedRoles).filter(
-                    (roleId) => selectedRoles[roleId]
-                  )}
-                  onRoleDeleted={handleRoleDelete}
-                  isDisabled={
-                    Object.keys(selectedRoles).filter(
+                <div className="md:block hidden">
+                  <DeleteRoleButtons
+                    isMany={true}
+                    roleIds={Object.keys(selectedRoles).filter(
                       (roleId) => selectedRoles[roleId]
-                    ).length === 0
-                  }
-                />
+                    )}
+                    onRoleDeleted={handleRoleDelete}
+                    isDisabled={
+                      Object.keys(selectedRoles).filter(
+                        (roleId) => selectedRoles[roleId]
+                      ).length === 0
+                    }
+                  />
+                </div>
               )}
               {hasAddRolePermission && (
                 <CreateRoleButton onCreate={handleRoleCreate} user={user} />

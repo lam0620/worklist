@@ -55,17 +55,17 @@ const UserDetailPage = () => {
     user?.is_superuser;
   return (
     <AppLayout name={t("User Detail")}>
-      <div className="relative flex flex-col items-center min-h-screen p-4">
-        <div className="w-full max-w-2xl text-center">
+      <div className="relative flex flex-col items-center min-h-screen py-4 md:p-4">
+        <div className="w-full max-w-2xl text-center text-xs md:text-base">
           <div className="absolute left-4 top-4">
             <button
-              className="bg-gray-400 rounded px-4 py-2 text-white"
+              className="bg-gray-400 rounded px-2 py-2 text-white"
               onClick={() => router.push("/admin/users")}
             >
               {t("Back to user list")}
             </button>
             <button
-              className="bg-gray-400 rounded px-4 py-2 text-white ml-4"
+              className="bg-gray-400 rounded px-2 py-2 text-white ml-4"
               onClick={() => router.push("/home")}
             >
               {t("Home")}
@@ -74,8 +74,8 @@ const UserDetailPage = () => {
 
           {user && (
             <div
-              className="top-4 right-4 absolute flex items-center space-x-4"
-              style={{ right: "100px" }}
+              className="top-4 right-4 justify-end md:absolute flex md:items-center space-x-4"
+              // style={{ right: "100px" }}
             >
               {hasDeletePermission && (
                 <DeleteUserButton

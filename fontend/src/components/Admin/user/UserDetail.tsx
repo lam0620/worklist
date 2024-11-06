@@ -13,11 +13,11 @@ const UserDetail = ({ user }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-8 px-4">
       <div className="bg-white p-10 rounded shadow-md w-full max-w-md">
-        <form className="space-y-6">
+        <form className="space-y-6 text-xs md:text-base">
           <div className="flex items-center">
             <label className="w-1/3 font-medium">{t("Full Name")}</label>
             <div className="border rounded p-3 bg-gray-50 w-2/3">
-              {user?.last_name} {user?.first_name} 
+              {user?.last_name} {user?.first_name}
             </div>
           </div>
           <div className="flex items-center">

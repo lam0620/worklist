@@ -94,3 +94,6 @@
     overflow-y: auto;
   }
 
+.text-small{
+    font-size: 10px;
+}
