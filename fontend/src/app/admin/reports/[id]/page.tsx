@@ -46,9 +46,9 @@ const ReportDetalPage = () => {
 
   return (
     <AppLayout name={t("Report Detail")}>
-      <div className="relative flex flex-col items-center min-h-screen p-4">
-        <div className="w-full max-w-2xl text-center">
-          <div className="absolute left-4 top-4">
+      <div className="relative flex flex-col items-center min-h-screen px-4 md:p-4">
+        <div className="w-full max-w-2xl text-center text-sm md:text-base">
+          <div className="md:absolute left-4 top-4">
             <button
               className="bg-gray-400 rounded px-4 py-2 text-white"
               onClick={() => router.push("/admin/reports")}

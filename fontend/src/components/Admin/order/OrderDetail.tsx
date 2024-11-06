@@ -16,7 +16,7 @@ const OrderDetail = ({ order }: Props) => {
 
   return (
     <div className="flex flex-col items-start justify-center min-h-8 px-4">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+      <div className="bg-white px-8 py-2 md:p-8 rounded shadow-md w-full max-w-md">
         <form className="space-y-6">
           {[
             { label: t("Accession Number"), value: order?.accession_no },

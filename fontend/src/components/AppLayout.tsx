@@ -40,7 +40,7 @@ const AppLayout = ({ children, name }: AppLayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="flex justify-between z-50">
-        <h1 className="text-2xl font-bold ml-5">
+        <h1 className="text-lg md:text-2xl font-bold ml-5">
           {name}{" "}
           {name == t("Statistics") && (
             <>
@@ -59,7 +59,7 @@ const AppLayout = ({ children, name }: AppLayoutProps) => {
           />
         )}
       </header>
-      <main className="flex-grow p-4">{children}</main>
+      <main className="flex-grow px-4 md:p-4">{children}</main>
     </div>
   );
 };

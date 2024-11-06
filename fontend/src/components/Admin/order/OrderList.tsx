@@ -43,24 +43,30 @@ const OrdersList = ({
 
   return (
     <div className="flex flex-col min-h-screen w-full">
-      <div className="flex items-center justify-between p-2 border-b bg-gray-100">
-        <div className="w-1/12 font-semibold text-center"></div>
-        <div className="w-1/12 font-semibold text-center">
+      <div className="flex items-center justify-between p-1 border-b bg-gray-100">
+        <div className="w-1/12 font-semibold text-center md:block hidden"></div>
+        <div className="w-1/12 font-semibold text-center text-xs md:text-base whitespace-nowrap">
           {t("Accession Number")}
         </div>
-        <div className="w-2/12 font-semibold text-center">
+        <div className="w-2/12 font-semibold text-center md:block hidden">
           {t("Request Phys")}
         </div>
-        <div className="w-1/12 font-semibold text-center">{t("PID")}</div>
-        <div className="w-2/12 font-semibold text-center">
+        <div className="w-1/12 font-semibold text-center md:block hidden">
+          {t("PID")}
+        </div>
+        <div className="w-2/12 font-semibold text-center text-xs md:text-base">
           {t("Patient Name")}
         </div>
-        <div className="w-1/12 font-semibold text-center">{t("Modality")}</div>
-        <div className="w-2/12 font-semibold text-center">
+        <div className="w-1/12 font-semibold text-center md:block hidden">
+          {t("Modality")}
+        </div>
+        <div className="w-2/12 font-semibold text-center text-xs md:text-base">
           {t("Created Time")}
         </div>
-        <div className="w-1/12 font-semibold text-center">{t("Procedure")}</div>
-        <div className="w-1/12 font-semibold text-center">
+        <div className="w-1/12 font-semibold text-center text-xs md:text-base whitespace-nowrap mr-2 md:mr-0">
+          {t("Procedure")}
+        </div>
+        <div className="w-1/12 font-semibold text-center text-xs md:text-base">
           {t("Report Status")}
         </div>
       </div>
@@ -69,9 +75,9 @@ const OrdersList = ({
           {orders.map((order) => (
             <li
               key={order.id}
-              className="flex items-center justify-between p-2 border-b"
+              className="flex items-center justify-between ml-2 md:ml-0 py-2 md:p-2 border-b"
             >
-              <div className="w-1/12 text-center">
+              <div className="w-1/12 text-center md:block hidden">
                 <div className="flex items-center justify-center">
                   {hasDeletePermission && (
                     <Checkbox
@@ -88,31 +94,31 @@ const OrdersList = ({
                 </div>
               </div>
               <div
-                className="w-1/12 cursor-pointer text-center"
+                className="w-1/12 cursor-pointer text-center text-xs md:text-base"
                 onClick={() => onSelectOrder(order.id)}
               >
                 {order.accession_no}
               </div>
-              <div className="w-2/12 flex flex-wrap gap-1 justify-center">
+              <div className="w-2/12 flex flex-wrap gap-1 justify-center hidden md:flex">
                 {order.referring_phys_name}
               </div>
-              <div className="w-1/12 flex flex-wrap gap-1 justify-center">
+              <div className="w-1/12 flex flex-wrap gap-1 justify-center hidden md:flex">
                 {order.patient.pid}
               </div>
-              <div className="w-2/12 flex flex-wrap gap-1 justify-center">
+              <div className="w-2/12 flex flex-wrap gap-1 justify-center text-xs md:text-base ml-4 md:ml-0">
                 {order.patient.fullname}
               </div>
-              <div className="w-1/12 flex flex-wrap gap-1 justify-center">
+              <div className="w-1/12 flex flex-wrap gap-1 justify-center hidden md:flex">
                 {order.modality_type}
               </div>
-              <div className="w-2/12 flex flex-wrap gap-1 justify-center">
+              <div className="w-2/12 flex flex-wrap gap-1 justify-center text-xs md:text-base ml-2 md:ml-0">
                 {order.created_time}
               </div>
-              <div className="w-2/12 text-center">
+              <div className="w-1/3 text-center text-xs md:text-base md:w-2/12">
                 {order.procedures?.map((procedure, index) => (
                   <div
                     key={procedure.proc_id}
-                    className={`grid grid-cols-2 gap-4 border-b border-gray-300 ${
+                    className={`grid grid-cols-2 border-b border-gray-300 ${
                       index === (order.procedures?.length ?? 0) - 1
                         ? "border-b-0"
                         : ""

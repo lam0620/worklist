@@ -38,27 +38,29 @@ const ReportList = ({
   return (
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex items-center justify-between p-4 border-b bg-gray-100">
-        <div className="w-1/12 font-semibold text-center">
+        <div className="w-1.5/12 md:w-1/12 font-semibold text-center text-xs md:text-base">
           {t("Accession Number")}
         </div>
-        <div className="w-1/12 font-semibold text-center">{t("Procedure")}</div>
-        <div className="w-1/12 font-semibold text-center">
+        <div className="w-1/12 font-semibold text-center md:block hidden">
+          {t("Procedure")}
+        </div>
+        <div className="w-1/12 font-semibold text-center md:block hidden">
           {t("Patient ID")}
         </div>
-        <div className="w-2/12 font-semibold text-center">
+        <div className="w-2/12 md:w-2/12 font-semibold text-center text-xs md:text-base">
           {t("Patient Name")}
         </div>
-        <div className="w-2/12 font-semibold text-center">{t("Findings")}</div>
+        {/* <div className="w-2/12 font-semibold text-center">{t("Findings")}</div>
         <div className="w-2/12 font-semibold text-center">
           {t("Conclusions")}
-        </div>
-        <div className="w-1/12 font-semibold text-center">
+        </div> */}
+        <div className="w-2/12 md:w-1/12 font-semibold text-center text-xs md:text-base">
           {t("Radiologist")}
         </div>
-        <div className="w-1/12 font-semibold text-center">
+        <div className="w-2/12 md:w-1/12 font-semibold text-center text-xs md:text-base">
           {t("Created Time")}
         </div>
-        <div className="w-1/12 font-semibold text-center">
+        <div className="w-1/12 font-semibold text-center md:block hidden">
           {t("View Image")}
         </div>
       </div>
@@ -71,41 +73,29 @@ const ReportList = ({
               className="flex items-center justify-between p-4 border-b gap-x-4"
             >
               <div
-                className="w-1/12 text-center cursor-pointer"
+                className="w-1.5/12 md:w-1/12 text-center cursor-pointer text-xs md:text-base"
                 onClick={() => onSelectReport(report.id)}
               >
                 {report.accession_no}
               </div>
-              <div className="w-1/12 text-center">
+              <div className="w-1/12 text-center hidden md:flex">
                 {"["}
                 {report.procedure.code}
                 {"]"} {report.procedure.name}
               </div>
-              <div className="w-1/12 text-center">{report.patient.pid}</div>
-              <div className="w-2/12 text-center">
+              <div className="w-1/12 text-center justify-center hidden md:flex">
+                {report.patient.pid}
+              </div>
+              <div className="w-2/12 md:w-2/12 text-center text-xs md:text-base">
                 {report.patient.fullname}
               </div>
-              <div
-                className="w-2/12 text-center px-5"
-                dangerouslySetInnerHTML={{
-                  __html:
-                    report.findings.substring(0, 30) +
-                    (report.findings.length > 30 ? "..." : ""),
-                }}
-              ></div>
-              <div
-                className="w-2/12 text-center px-5"
-                dangerouslySetInnerHTML={{
-                  __html:
-                    report.conclusion.substring(0, 30) +
-                    (report.conclusion.length > 30 ? "..." : ""),
-                }}
-              ></div>
-              <div className="w-1/12 text-center">
+              <div className="w-2/12 md:w-1/12 text-center text-xs md:text-base">
                 {report.radiologist.title} {report.radiologist.fullname}
               </div>
-              <div className="w-1/12 text-center">{report.created_time}</div>
-              <div className="w-1/12 text-center">
+              <div className="w-1/12 text-center text-xs md:text-base mr-5 md:mr-0">
+                {report.created_time}
+              </div>
+              <div className="w-1/12 text-center justify-center hidden md:flex">
                 <a
                   href={report.image_link}
                   target="_blank"

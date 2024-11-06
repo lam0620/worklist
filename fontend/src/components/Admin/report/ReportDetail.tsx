@@ -13,7 +13,7 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
   const componentRef = useRef<HTMLDivElement>(null);
   return (
     <div className="flex flex-col items-center justify-center min-h-8 px-4">
-      <div className="bg-white rounded shadow-md w-full max-w-4xl">
+      <div className="bg-white px-8 py-2 md:p-8 rounded shadow-md w-full max-w-md">
         <div ref={componentRef}>
           <form className="space-y-6">
             {[
@@ -43,30 +43,30 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
                   />
                 ),
               },
-              {
-                label: t("Findings"),
-                value: (
-                  <div style={{ textAlign: "justify" }}>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: report?.findings || "",
-                      }}
-                    />
-                  </div>
-                ),
-              },
-              {
-                label: t("Conclusion"),
-                value: (
-                  <div style={{ textAlign: "justify" }}>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: report?.conclusion || "",
-                      }}
-                    />
-                  </div>
-                ),
-              },
+              // {
+              //   label: t("Findings"),
+              //   value: (
+              //     <div style={{ textAlign: "justify" }}>
+              //       <div
+              //         dangerouslySetInnerHTML={{
+              //           __html: report?.findings || "",
+              //         }}
+              //       />
+              //     </div>
+              //   ),
+              // },
+              // {
+              //   label: t("Conclusion"),
+              //   value: (
+              //     <div style={{ textAlign: "justify" }}>
+              //       <div
+              //         dangerouslySetInnerHTML={{
+              //           __html: report?.conclusion || "",
+              //         }}
+              //       />
+              //     </div>
+              //   ),
+              // },
               { label: t("Created time"), value: report?.created_time },
               {
                 label: t("View Image"),
