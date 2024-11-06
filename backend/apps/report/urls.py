@@ -4,9 +4,9 @@ from rest_framework import routers
 from rest_framework.routers import DefaultRouter
 
 from apps.report.views import (
-    ReportTemplateDetailView, ReportTemplateView, ReportView, ReportById,
+    ReportTemplateDetailView, ReportTemplateView, ReportView, ReportDetailView,
     OrderView,OrderDetail, DoctorView,DoctorDetailView,
-    PatientView,PatientDetailView,
+    PatientView,PatientDetailView,ScanProtocolView,ScanProtocolDetailView,
     StatsViewSet
 )
 from apps.report.views import (
@@ -41,7 +41,7 @@ urlpatterns = [
 
     # Report
     path('reports', ReportView.as_view(), name='Report'),
-    path('reports/<uuid:pk>', ReportById.as_view(), name='Report Detail by Id'),
+    path('reports/<uuid:pk>', ReportDetailView.as_view(), name='Report Detail by Id'),
     # path('reports/<accession_no>/<procedure_code>', ReportByACNProcedure.as_view(), name='Report Detail by AccessionNumber and procedure code'),
     # reports?study_iuid=xxx also existing. pattern /reports
 
@@ -60,6 +60,12 @@ urlpatterns = [
     path('report-templates', ReportTemplateView.as_view(), name='ReportTemplate'),
     path('report-templates/<uuid:pk>', ReportTemplateDetailView.as_view(), name='ReportTemplate Detail'),
     # report-templates?modality=xx aslo existing in the pattern /report-templates
+
+    
+    #Scan protocol
+    path('scan-protocols', ScanProtocolView.as_view(), name='scan-protocol'),
+    path('scan-protocols/<uuid:pk>', ScanProtocolDetailView.as_view(), name='scan-protocol Detail'),
+    # scan-protocols?modality=xx aslo existing in the pattern /scan-protocols
 ]
 
 router = DefaultRouter()

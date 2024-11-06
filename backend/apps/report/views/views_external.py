@@ -139,7 +139,14 @@ class External_OrderView(OrderBaseView):
 
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            code = ec.E_SYSTEM
+            msg = str(e)
+
+            if 'duplicate key value' in str(e):
+                code = ec.E_RECORD_EXISTS
+                msg = 'The order already exists'
+
+            return self.response_NG(code, msg)
     
     """
     Delete the order - For HIS(1)
@@ -203,7 +210,7 @@ class External_OrderView(OrderBaseView):
             instance.save()
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         return self.cus_response_deleted()
     
@@ -258,7 +265,7 @@ class External_ReportByACNProcedure(ReportBaseView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         if len(order.procedure_list) <= 0:
             return self.cus_response_empty_data(ec.REPORT)
@@ -328,7 +335,7 @@ class External_ReportById(ReportBaseView):
             instance.save()
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         return self.cus_response_deleted()
     
@@ -387,7 +394,7 @@ class External_ImageLinkView(CustomAPIView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         return self.response_success(data=data)     
 
@@ -443,5 +450,5 @@ class External_ImageLinkByACNProcedure(CustomAPIView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))    
+            return self.response_NG(ec.E_SYSTEM, str(e))    
        

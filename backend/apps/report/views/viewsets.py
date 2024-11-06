@@ -84,7 +84,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
                     values('referring_phys__doctor_no','referring_phys__fullname', 'count').\
                     order_by("referring_phys__doctor_no")
             else:
-                return self.response_NG(ec.SYSTEM_ERR, "type is invalid. Value must be one of ['today','1week','1month']")
+                return self.response_NG(ec.E_SYSTEM, "type is invalid. Value must be one of ['today','1week','1month']")
         
 
            #doctors = Doctor.objects.select_related('referring_phys__id').filter(delete_flag=False, created_at__date=date.today())
@@ -99,7 +99,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
         
     @swagger_auto_schema(
@@ -143,7 +143,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
 
 
     @swagger_auto_schema(
@@ -193,7 +193,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
                     values('radiologist__doctor_no','radiologist__fullname', 'count').\
                     order_by("radiologist__doctor_no")
             else:
-                return self.response_NG(ec.SYSTEM_ERR, "type is invalid. Value must be one of ['today','1week','1month']")
+                return self.response_NG(ec.E_SYSTEM, "type is invalid. Value must be one of ['today','1week','1month']")
         
 
            #doctors = Doctor.objects.select_related('radiologist__id').filter(delete_flag=False, created_at__date=date.today())
@@ -208,7 +208,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
     @swagger_auto_schema(
         operation_summary='Get reports by year',
@@ -252,7 +252,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
         
 
     @swagger_auto_schema(
@@ -303,7 +303,7 @@ class StatsViewSet(viewsets.ModelViewSet, CustomAPIView):
         
         except Exception as e:
             logger.error(e, exc_info=True)
-            return self.response_NG(ec.SYSTEM_ERR, str(e))
+            return self.response_NG(ec.E_SYSTEM, str(e))
 
 
     def _dictfetchall(self, cursor):
