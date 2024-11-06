@@ -10,7 +10,6 @@ import logo from "../../../public/images/org_logo.png";
 import Image from "next/image";
 import "./worklist.css";
 import * as Avatar from "@radix-ui/react-avatar";
-import "react-datepicker/dist/react-datepicker.css";
 import WorklistList from "@/components/worklist/WorklistList";
 import DetailInfor from "@/components/worklist/DetailInfor";
 
