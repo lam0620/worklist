@@ -12,6 +12,7 @@ import "./worklist.css";
 import * as Avatar from "@radix-ui/react-avatar";
 import WorklistList from "@/components/worklist/WorklistList";
 import DetailInfor from "@/components/worklist/DetailInfor";
+import UserAvatar from "../../components/Avatar";
 
 const Worklist = () => {
   const API_TEST11 = process.env.NEXT_PUBLIC_API_TEST;
@@ -211,14 +212,23 @@ const Worklist = () => {
       <header className="w-full flex justify-between items-center bg-top text-white p-1">
         <Image src={logo} className="max-w-16 ml-5" alt="logo" />
         <div className="mr-5">
-          <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800 cursor-pointer">
+          {/* <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800 cursor-pointer">
             <Avatar.Image
               className="w-full h-full rounded-full"
               src=""
               alt="User avatar"
             />
             <Avatar.Fallback className="flex items-center justify-center w-full h-full rounded-full text-white"></Avatar.Fallback>
-          </Avatar.Root>
+          </Avatar.Root> */}
+          <div className="z-50 text-black">
+            {user && (
+              <UserAvatar
+                firstName={user.first_name}
+                lastName={user.last_name}
+                avatarColor={user.avatar_color}
+              />
+            )}
+          </div>
         </div>
       </header>
       <div className="flex flex-1 backgroundcolor overflow-y-hidden">

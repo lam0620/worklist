@@ -64,7 +64,9 @@
 .hover-purple:hover {
     background-color: rgba(41, 27, 104, 255);
 }
-
+.purple-selectedrow{
+    background-color: rgba(41, 27, 104, 255);
+}
 .border-color-col {
     border-color: #001b28;
 }

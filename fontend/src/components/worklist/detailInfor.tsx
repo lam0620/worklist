@@ -114,7 +114,7 @@ const DetailInfor = ({ pid, t }: DetailInforProps) => {
           <div className="mb-1 flex flex-row justify-between">
             <div className="mr-4 flex flex-col items-center whitespace-nowrap">
               <span className=" w-full text-left  font-semibold">
-                {t("ACN")}
+                {t("Accession No")}
               </span>
             </div>
             <div className="flex flex-col">

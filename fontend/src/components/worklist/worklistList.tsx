@@ -9,6 +9,15 @@ interface WorklistProps {
 }
 const WorklistList = ({ worklist, onSelectPID, t }: WorklistProps) => {
   const [selectedItem, setSelectedItem] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const handleSelectedRow = (pid: any) => {
+    setSelectedRow(pid);
+    handleItemSelect(pid);
+    onSelectPID(pid);
+    setSelectedRow(selectedRow === pid ? null : pid);
+  };
+
   const handleItemSelect = (id: string) => {
     setSelectedItem(id);
   };
@@ -45,18 +54,15 @@ const WorklistList = ({ worklist, onSelectPID, t }: WorklistProps) => {
             {worklist.map((item) => (
               <li
                 key={item.id}
-                className="grid grid-cols-3 md:grid-cols-8 items-center px-4 py-4 border-b bordervalue inboxlist hover-purple"
+                className={`grid grid-cols-3 md:grid-cols-8 items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
+                  selectedRow === item.patient.pid ? "purple-selectedrow" : ""
+                }`}
+                onClick={() => {
+                  handleSelectedRow(item.patient.pid);
+                }}
               >
                 <div className="text-center hidden md:block">{item.status}</div>
-                <div
-                  className="text-center cursor-pointer"
-                  onClick={() => {
-                    handleItemSelect(item.patient.pid);
-                    onSelectPID(item.patient.pid);
-                  }}
-                >
-                  {item.patient.pid}
-                </div>
+                <div className="text-center">{item.patient.pid}</div>
                 <div className="text-center">{item.patient.fullname}</div>
                 <div className="text-center">{item.accession_no}</div>
                 <div className="text-center hidden md:block">

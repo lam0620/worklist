@@ -14,6 +14,14 @@ const RelatedSession = ({ pid, t }: DetailInforProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [relatedStudies, setRelatedStudies] = useState<RelatedStudies[]>([]);
   const [selectedItem, setSelectedItem] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const handleSelectedRow = (id: any) => {
+    setSelectedRow(id);
+    handleItemSelect(id);
+    setSelectedRow(selectedRow === id ? null : id);
+  };
+
   const handleItemSelect = (id: string) => {
     setSelectedItem(id);
   };
@@ -104,9 +112,11 @@ const RelatedSession = ({ pid, t }: DetailInforProps) => {
               {relatedStudies.map((item) => (
                 <li
                   key={item.id}
-                  className=" mt-1 bordervalue inboxlist hover-purple cursor-pointer"
+                  className={` mt-1 bordervalue inboxlist hover-purple cursor-pointer ${
+                    selectedRow === item.id ? "purple-selectedrow" : ""
+                  }`}
                   onClick={() => {
-                    handleItemSelect(item.id);
+                    handleSelectedRow(item.id);
                   }}
                 >
                   <div className="flex flex-row py-2 whitespace-nowrap">
