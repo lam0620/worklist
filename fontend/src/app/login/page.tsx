@@ -103,12 +103,10 @@ const LoginPage = () => {
     switch (lang) {
       case "en-US":
         return "gb";
-      case "vi":
-        return "vn";
       case "ja-JP":
         return "jp";
       default:
-        return "gb";
+        return "vn";
     }
   };
   const updatePageTitle = (lang: string) => {
@@ -242,9 +240,9 @@ const LoginPage = () => {
                 />
                 {language === "en-US"
                   ? "English"
-                  : language === "vi"
-                  ? "Tiếng Việt"
-                  : "日本語"}
+                  : language === "ja-JP"
+                  ? "日本語"
+                  : "Tiếng Việt"}
               </button>
               {isOpen && (
                 <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-gray-700 ring-1 ring-black ring-opacity-5 z-50">

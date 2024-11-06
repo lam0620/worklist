@@ -114,7 +114,7 @@ const WorklistList = ({ worklist, onSelectPID, t }: WorklistProps) => {
                 <path d="M66.282 66.282 81.29 81.29"></path>
               </g>
             </svg>
-            <span className="text-white">No data available</span>
+            <span className="text-white">{t("No data available")}</span>
           </div>
         )}
       </div>
