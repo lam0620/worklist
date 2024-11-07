@@ -40,6 +40,12 @@ const Worklist = () => {
   const [searchToDate, setSearchToDate] = useState("");
   const [collapsed, setCollapsed] = useState(false);
   const [selectedPID, setSelectedPID] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     //use for expand or collapse if pc or phone (left panel)
@@ -76,9 +82,9 @@ const Worklist = () => {
 
   useEffect(() => {
     if (user) {
-      fetchWorkList(searchQuery).then((r) => r);
+      fetchWorkList(currentPage, searchQuery).then((r) => r);
     }
-  }, [user, searchQuery]);
+  }, [user, searchQuery, currentPage]);
 
   useEffect(() => {
     handleSearch();
@@ -93,11 +99,14 @@ const Worklist = () => {
     searchToDate,
   ]);
 
-  const fetchWorkList = async (query: string) => {
+  const fetchWorkList = async (page: number, query: string) => {
     try {
-      const response = await fetchWorklist({ search: query });
+      const response = await fetchWorklist({ page, search: query });
       console.log(response);
-      setWorkList(response?.data);
+      setWorkList(response?.data.data);
+      setTotalPages(
+        Math.ceil(response.data?.count / response?.data?.page_size)
+      );
     } catch (error: any) {
       if (error.response?.status === 403) {
         toast.error(t("You don't have permission to view worklist"));
@@ -123,7 +132,7 @@ const Worklist = () => {
     });
     fetch(`${API_TEST11}/data?${searchParams}`)
       .then((response) => response.json())
-      .then((data) => setWorkList(data))
+      .then((data) => setWorkList(data.data))
       .catch((error) => console.error("Error:", error));
   };
   const debounce = (func: Function, wait: number) => {
@@ -549,8 +558,12 @@ const Worklist = () => {
           )}
           <WorklistList
             worklist={workList}
+            onRefresh={fetchWorkList}
             onSelectPID={handlePIDSelect}
             t={t}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
           />
         </div>
         {selectedPID && <DetailInfor pid={selectedPID} t={t} />}

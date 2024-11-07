@@ -97,3 +97,21 @@
 .text-small{
     font-size: 10px;
 }
+.svg-disabled { 
+    pointer-events: none; 
+    opacity: 0.2; 
+}
+.btn-red-square {
+    background-color: #fe615a; 
+    border:none; 
+    border-radius: 8px;
+    padding: 1px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 30px;
+    height: 30px;
+}
+.btn-disable {
+    background-color: #0a0a18;
+}
