@@ -43,30 +43,30 @@ const ReportDetail: React.FC<Props> = ({ report }) => {
                   />
                 ),
               },
-              // {
-              //   label: t("Findings"),
-              //   value: (
-              //     <div style={{ textAlign: "justify" }}>
-              //       <div
-              //         dangerouslySetInnerHTML={{
-              //           __html: report?.findings || "",
-              //         }}
-              //       />
-              //     </div>
-              //   ),
-              // },
-              // {
-              //   label: t("Conclusion"),
-              //   value: (
-              //     <div style={{ textAlign: "justify" }}>
-              //       <div
-              //         dangerouslySetInnerHTML={{
-              //           __html: report?.conclusion || "",
-              //         }}
-              //       />
-              //     </div>
-              //   ),
-              // },
+              {
+                label: t("Findings"),
+                value: (
+                  <div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: report?.findings || "",
+                      }}
+                    />
+                  </div>
+                ),
+              },
+              {
+                label: t("Conclusion"),
+                value: (
+                  <div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: report?.conclusion || "",
+                      }}
+                    />
+                  </div>
+                ),
+              },
               { label: t("Created time"), value: report?.created_time },
               {
                 label: t("View Image"),
