@@ -72,7 +72,7 @@ class OrderView(OrderBaseView):
                 return self.cus_response_403(per_code.VIEW_ORDER)
 
         # Get modality from query params: /?accession_no=XX   
-        accession=request.query_params.get('accession_no')
+        # accession=request.query_params.get('accession_no')
         # if accession =='':
         #     return self.response_item_NG(ec.E_SYSTEM, 'accession', "Accession number is empty")
     
@@ -94,16 +94,16 @@ class OrderView(OrderBaseView):
         
         orders_data = [self.get_pure_order_json(order) for order in queryset]
 
-        if accession:
-            if len(orders_data) > 1:
-                return self.response_NG(ec.E_SYSTEM, "Return value is more than one record. Data is incorrect!")
-            elif len(orders_data) == 0:
-                return self.cus_response_empty_data(ec.REPORT)
-            else:
-                return self.response_success(data=orders_data[0])
-        else:    
-            page = self.paginate_queryset(orders_data)
-            return self.get_paginated_response(page)
+        # if accession:
+        #     if len(orders_data) > 1:
+        #         return self.response_NG(ec.E_SYSTEM, "Return value is more than one record. Data is incorrect!")
+        #     elif len(orders_data) == 0:
+        #         return self.cus_response_empty_data(ec.REPORT)
+        #     else:
+        #         return self.response_success(data=orders_data[0])
+        # else:    
+        page = self.paginate_queryset(orders_data)
+        return self.get_paginated_response(page)
    
 class OrderDetail(OrderBaseView):
     queryset = User.objects.all()
