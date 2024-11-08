@@ -24,7 +24,7 @@ Study detail view
 class StudyDetailView(CustomAPIView):
     """
     Get a study
-    ?accession=xxx
+    ?accession_no=xxx
     """
 
     # queryset = User.objects.all()
@@ -43,14 +43,17 @@ class StudyDetailView(CustomAPIView):
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.VIEW_ORDER)
 
-        # Get accession from query params: /?accession=XX   
-        accession=request.query_params.get('accession')
+        # Get accession from query params: /?accession_no=XX   
+        accession_no=request.query_params.get('accession_no')
 
         data= {}
         try:
             # Get pacsdb.study by accession_no
             with connections["pacs_db"].cursor() as cursor:
-                cursor.execute("select study_iuid from study where accession_no=%s",[accession])
+                sql = """select s.accession_no, s.study_iuid , s.created_time, sqa.num_series , sqa.num_instances  from study s 
+                            left join study_query_attrs sqa on s.pk =sqa.study_fk 
+                            where s.accession_no =%s"""
+                cursor.execute(sql,[accession_no])
                 results = cursor.fetchall()
 
                 if results is None or len(results) <= 0:
@@ -58,7 +61,11 @@ class StudyDetailView(CustomAPIView):
                 
                 # if results is not None:
                 data= [{
-                    'study_iuid':item[0]
+                    'accession_no':item[0],
+                    'study_iuid':item[1],
+                    'created_time':item[2],
+                    'num_series':item[3],
+                    'num_instances':item[4]
                 } for item in results]
         
         except Exception as e:

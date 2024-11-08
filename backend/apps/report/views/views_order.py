@@ -29,11 +29,13 @@ class OrderFilter(filters.FilterSet):
     # /orders?created_at_after=2024-10-20 00:00&created_at_before=2024-10-21 23:59
     created_at = filters.DateTimeFromToRangeFilter()
     # Search like '%xxxx'
-    patient__fullname = filters.CharFilter(field_name='patient__fullname', lookup_expr='endswith')
+    patient_name = filters.CharFilter(field_name='patient__fullname', lookup_expr='endswith')
+    patient_pid = filters.CharFilter(field_name='patient__pid')
+    # accession_no = filters.CharFilter(field_name='accession_no')
 
     class Meta:
         model = Order
-        fields = ['accession_no', 'patient__fullname', 'patient__pid','created_at']
+        fields = ['accession_no', 'patient_name', 'patient_pid','created_at']
 
 """
 Order class
@@ -58,7 +60,7 @@ class OrderView(OrderBaseView):
     @swagger_auto_schema(
         operation_summary='Get orders',
         operation_description='Get orders',
-        query_serializer= ser.GetOrderSerializers,
+        # query_serializer= ser.GetOrderSerializers,
         tags=[swagger_tags.REPORT_ORDER],
     )
     def get(self, request, *args, **kwargs):
@@ -69,8 +71,8 @@ class OrderView(OrderBaseView):
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.VIEW_ORDER)
 
-        # Get modality from query params: /?accession=XX   
-        accession=request.query_params.get('accession')
+        # Get modality from query params: /?accession_no=XX   
+        accession=request.query_params.get('accession_no')
         # if accession =='':
         #     return self.response_item_NG(ec.E_SYSTEM, 'accession', "Accession number is empty")
     

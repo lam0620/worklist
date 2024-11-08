@@ -67,7 +67,7 @@ urlpatterns = [
     path('scan-protocols/<uuid:pk>', ScanProtocolDetailView.as_view(), name='scan-protocol Detail'),
     # scan-protocols?modality=xx aslo existing in the pattern /scan-protocols
 
-    #Study. /studies?accession=xxx
+    #Study. /studies?accession_no=xxx
     path('studies', StudyDetailView.as_view(), name='study detail'),
 ]
 
