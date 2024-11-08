@@ -322,6 +322,9 @@ class ADectivateDoctorListSerializer(serializers.Serializer):
 class GetImageLinkSerializers(serializers.Serializer):
     accession = serializers.CharField(required=True)
 
+class GetStudySerializers(serializers.Serializer):
+    accession = serializers.CharField(required=False)
+
 class GetReportTemplateSerializers(serializers.Serializer):
     modality = serializers.CharField(required=True)
 

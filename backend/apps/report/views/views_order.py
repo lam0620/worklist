@@ -1,5 +1,6 @@
 import logging
 
+from django_filters import rest_framework as filters
 from django.db import transaction,connections
 from drf_yasg.utils import swagger_auto_schema
 
@@ -20,23 +21,36 @@ from apps.report.models import (
     User, Order,Procedure
 )
 
-from apps.report.utils import  get_image_field_str,get_username
 
 logger = logging.getLogger(__name__)
+
+class OrderFilter(filters.FilterSet):
+    # For search range date (created_at_after, created_at_before)
+    # /orders?created_at_after=2024-10-20 00:00&created_at_before=2024-10-21 23:59
+    created_at = filters.DateTimeFromToRangeFilter()
+    # Search like '%xxxx'
+    patient__fullname = filters.CharFilter(field_name='patient__fullname', lookup_expr='endswith')
+
+    class Meta:
+        model = Order
+        fields = ['accession_no', 'patient__fullname', 'patient__pid','created_at']
 
 """
 Order class
 """
 class OrderView(OrderBaseView):
-    queryset = User.objects.all()
+    queryset = Order.objects.all()
     # Call overwrite here to skip authenticate or don't call request.user
     # uncomment if no need to check permission 
     # authentication_classes = ()
     
     # for search box (?search=xxx). which you want to search. 
-    search_fields = ['accession_no', 'patient__fullname']
+    search_fields = ['accession_no', 'patient__fullname', 'patient__pid']
     # for query string (?type=xxx)
-    #filter_fields = ['type', 'user_id', 'is_active']
+    # View attributes renamed: filter_fields => filterset_fields
+    # https://django-filter.readthedocs.io/en/stable/guide/migration.html
+    #filterset_fields = ['accession_no', 'patient__fullname', 'patient__pid','created_at']
+    filterset_class = OrderFilter
 
     """
     Get list of order
@@ -68,10 +82,10 @@ class OrderView(OrderBaseView):
 
         # Search by accession
         try:
-            if accession:
-                queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch).filter(accession_no=accession, delete_flag=False))
-            else:
-                queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
+            # if accession:
+            #     queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch).filter(accession_no=accession, delete_flag=False))
+            # else:
+            queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
         
         except Order.DoesNotExist:
             return self.cus_response_empty_data(ec.REPORT)
