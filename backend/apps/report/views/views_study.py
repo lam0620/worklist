@@ -28,7 +28,7 @@ class StudyDetailView(CustomAPIView):
     """
 
     # queryset = User.objects.all()
-    authentication_classes = ()
+    #authentication_classes = ()
 
     @swagger_auto_schema(
         operation_summary='Get study detail',
