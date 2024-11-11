@@ -169,10 +169,13 @@ class WorklistView(OrderBaseView):
         df_merged['created_time'] = df_merged['created_time'].dt.strftime('%d/%m/%Y %H:%M')
         df_merged['study_created_time'] = df_merged['study_created_time'].dt.strftime('%d/%m/%Y %H:%M')
 
+        # Applying the condition to update status = 'IM' if current = SC and exists study_iuid
+        df_merged["proc_status"] = np.where((df_merged["proc_status"] == 'SC') & (df_merged["study_iuid"].isnull() == False), 'IM', df_merged["proc_status"])
+
         # Add df_duplciate_order to df_merged and replace NaN to ''
         df_merged = df_merged.replace([np.nan, -np.inf, pd.NaT], '')
 
-        print(df_merged['study_created_time'])
+        #print(df_merged['study_created_time'])
         # Convert dataframe to json to add to response
         return df_merged.to_dict(orient = 'records')        
 
