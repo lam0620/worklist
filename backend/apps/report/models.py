@@ -129,8 +129,17 @@ class Procedure(BaseModels):
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
     procedure_type = models.ForeignKey(ProcedureType, on_delete=models.DO_NOTHING)
 
+    # SC (Schedule) => Wait to take image
+    # IM: Image is stored
+    # IP (Inprogess)  => Reporting
+    # CM (Completed) => Reported
+    status = models.CharField(verbose_name='status', max_length=2, blank=True, null=True)
+
     # Procedure of which study_iuid
     study_iuid = models.CharField(verbose_name='study instance uid', max_length=100, blank=True, null=True)
+    study_time = models.DateTimeField(verbose_name='study time', blank=True, null=True)
+    study_num_instances = models.IntegerField(verbose_name='number of instances', blank=True, null=True)
+    
 
     objects = ObjectManager()
 
