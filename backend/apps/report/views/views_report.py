@@ -249,7 +249,7 @@ class ReportDetailView(ReportBaseView):
 
 class ReportByProcedureId(ReportBaseView):
     queryset = User.objects.all()
-    authentication_classes = ()
+    #authentication_classes = ()
 
     """
     Get a report
