@@ -101,15 +101,16 @@ class WorklistView(OrderBaseView):
 
         # SC, IP, CM, IM
         status=request.query_params.get('status')
+        procedure_prefetch = None
 
+        # If status is passed in query_params
         if status:
             list_status = status.split(',')
+            queryset = Procedure.objects.select_related('procedure_type').filter(status__in=list_status)
+            
+            if queryset.exists():
+                procedure_prefetch = Prefetch('procedure_set',queryset = queryset,to_attr='procedure_list')
 
-            procedure_prefetch = Prefetch(
-                'procedure_set',
-                queryset=Procedure.objects.select_related('procedure_type').filter(status__in=list_status),
-                to_attr='procedure_list'
-            )
         else:    
             procedure_prefetch = Prefetch(
                 'procedure_set',
@@ -119,6 +120,9 @@ class WorklistView(OrderBaseView):
 
         # Search by accession
         #try:
+        if not procedure_prefetch:
+            return self.cus_response_empty_data()
+        
         queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
         
         # except Order.DoesNotExist:
@@ -160,20 +164,21 @@ class WorklistView(OrderBaseView):
             # No raise exception here
             logger.warning(e, exc_info=True)
 
-        # Convert queryset to json, merge df_study to and to json
-        df_merged = self._merge(queryset, df_study)
-        # Search status = SC or IM. Do this because the status in procedure table is not latest data
+        # Convert queryset to json, merge df_study to df_merged
+        df_merged = self._merge_df(queryset, df_study)
+
+        # Search status = SC or IM in df. Do this because the status in procedure table is not latest data
         if status and (status == 'SC' or status == 'IM'):
             df_merged = df_merged[df_merged['proc_status'] == status]
 
-        # Convert to json
+        # Convert to json to response
         orders_data = df_merged.to_dict(orient = 'records')    
   
         page = self.paginate_queryset(orders_data)
         return self.get_paginated_response(page)
     
 
-    def _merge(self, queryset, df_study):
+    def _merge_df(self, queryset, df_study):
         orders_json = []
 
         # First, convert queryset to json to be able to get procedure data

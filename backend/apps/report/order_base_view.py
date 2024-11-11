@@ -99,8 +99,8 @@ class OrderBaseView(CustomAPIView):
         report = None
         try:
             report=Report.objects.get(procedure_id=proc_id, delete_flag = False)
-        except Report.DoesNotExist:
-            logger.warning("Report not exist", exc_info=False)
+        #except Report.DoesNotExist:
+            #logger.warning("Report not exist", exc_info=False)
 
         except Exception as e:
             logger.error(e)
