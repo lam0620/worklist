@@ -3,7 +3,7 @@
     "Failed to fetch worklist": "Không thể tải danh sách worklist",
     "Modality": "Thiết bị",
     "All": "Tất cả",
-    "Pending": "Chờ chụp",
+    "Scheduled": "Chờ chụp",
     "Unread": "Chưa đọc",
     "Reading": "Đang đọc",
     "Approved": "Đã duyệt",
@@ -19,7 +19,7 @@
     "Back Quick Search": "Quay lại tìm kiếm nhanh",
     "Status": "Trạng thái",
     "Created_time": "Ngày chụp",
-    "Produce": "Dịch vụ",
+    "Procedure": "Dịch vụ",
     "Quantity Image": "Số lượng hình ảnh",
     "Ordering Physician" : "Bác sĩ chỉ định",
     "Reading Physician": "Bác sĩ đọc ảnh",
@@ -31,5 +31,10 @@
     "Report Information":"Kết quả",
     "Order Information":"Chỉ định",
     "Patient Information":"Thông tin bệnh nhân",
-    "No data available":"Không có dữ liệu"
+    "No data available":"Không có dữ liệu",
+    "Print": "In KQ",
+    "View image": "Xem ảnh",
+    "View report": "Xem KQ",
+    "Report": "Trả KQ",
+    "Refresh": "Làm mới"
 }

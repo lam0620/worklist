@@ -1,11 +1,15 @@
 "use client";
 import { WorkList } from "@/app/types/WorkList";
-import { use, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import RelatedSession from "./RelatedSession";
-import { fetchReportById } from "@/services/apiService";
+import * as Constants from "./Constants";
+import { fetchReportByProcId } from "@/services/apiService";
+import ReactToPrint from "react-to-print";
+import DetailInfor from "./DetailInfor";
+
 interface WorklistProps {
   worklist: WorkList[];
-  onSelectPID: (PID: string) => void;
+  onSelectProcID: (PID: string) => void;
   t: (key: string) => string;
   onRefresh: (page: number, query: string) => void;
   totalPages: number;
@@ -14,7 +18,7 @@ interface WorklistProps {
 }
 const WorklistList = ({
   worklist,
-  onSelectPID,
+  onSelectProcID,
   t,
   onRefresh,
   totalPages,
@@ -23,55 +27,62 @@ const WorklistList = ({
 }: WorklistProps) => {
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedRow, setSelectedRow] = useState("");
-  const [reportCheck, setReportCheck] = useState(Boolean);
-  const [linkImage, setLinkImage] = useState("");
+  const [reportCheck, setReportCheck] = useState(false);
+  const [viewerCheck, setViewerCheck] = useState(false);
+  // const [linkImage, setLinkImage] = useState("");
+  let linkImage: string;
+  const [patientName, setPatientName] = useState("");
+  const [acn, setAcn] = useState("");
+  const [study_iuid, setStudyIuid] = useState("");
+  const [status, setStatus] = useState("");
+  const componentRef = useRef<HTMLDivElement>(null);
 
-  const handleSelectedRow = (pid: any) => {
-    setSelectedRow(pid);
-    handleItemSelect(pid);
-    onSelectPID(pid);
-    setSelectedRow(selectedRow === pid ? null : pid);
+  const API_BASE_URL = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL;
+
+  const handleSelectedRowPid = (pid: any) => {
+    setSelectedItem(pid);
   };
+  // const handleSelectedRowACN = (acn: any) => {
+  //   setSelectedRow(acn);
+  // };
 
-  const handleItemSelect = (id: string) => {
-    setSelectedItem(id);
-  };
-
-  const checkReportSelectedRow = async (id: any) => {
-    //check button viewer, report by report id
+  const checkSelectedRow = async (id: any) => {
     try {
-      const response = await fetchReportById(id);
+      const response = await fetchReportByProcId(id);
       if (response.status === 200 && response.data?.data.image_link) {
-        setLinkImage(response.data?.data.image_link);
-        setReportCheck(true);
-      } else {
-        setReportCheck(false);
+        // setLinkImage(response.data?.data.image_link);
+      }
+      if (response.status === 200 && response.data?.data.id) {
+        setAcn(response.data?.data.accession_no);
+        const studyIuid = response.data?.data.study_iuid;
+        const procStudyIuid = response.data?.data.proc_study_iuid;
+        setStudyIuid(procStudyIuid ? procStudyIuid : studyIuid);
       }
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
-        setReportCheck(false);
-        console.error("Report not found");
+        console.error("Error");
       } else {
         console.error("An error occurred:", error);
       }
     }
+    onSelectProcID(id);
+    setSelectedRow(id);
   };
   let viewerWindow: Window | null = null;
   let reportWindow: Window | null = null;
 
-  const handleViewerButton = () => {
-    if (!viewerWindow || viewerWindow.closed) {
-      viewerWindow = window.open(linkImage, "viewerWindow");
-    } else {
-      viewerWindow.focus();
-    }
-  };
-
   const handleReportButton = () => {
-    const reportLink =
-      "http://192.168.201.46:3000/report?StudyInstanceUIDs=2.25.138033689927558170645655251560996505939&acn=578358"; // test link
+    const reportLink = `${API_BASE_URL}/report?StudyInstanceUIDs=${study_iuid}&acn=${acn}`;
     if (!reportWindow || reportWindow.closed) {
       reportWindow = window.open(reportLink, "reportWindow");
+    } else {
+      reportWindow.focus();
+    }
+  };
+  const handleViewerButton = () => {
+    const viewerLink = `${API_BASE_URL}/viewer?StudyInstanceUIDs=${study_iuid}`;
+    if (!reportWindow || reportWindow.closed) {
+      reportWindow = window.open(viewerLink, "reportWindow");
     } else {
       reportWindow.focus();
     }
@@ -85,6 +96,11 @@ const WorklistList = ({
       onPageChange(page);
     }
   };
+  const handleCheckStatus = (status: any) => {
+    setStatus(status);
+    setViewerCheck(Constants.checkViewStatus(status));
+    setReportCheck(Constants.checkReportStatus(status));
+  };
 
   return (
     <div className="h-full">
@@ -92,48 +108,49 @@ const WorklistList = ({
         <div className="justify-between flex-row flex w-full">
           <div className="flex flex-row">
             <button
-              title={t("Viewer")}
-              className={`btn-red-square mx-2 ${
-                selectedRow && reportCheck ? "" : "btn-disable"
+              title={t("View Image")}
+              className={`btn-red-square1 mx-2  ${
+                selectedRow && viewerCheck ? "" : "btn-disable"
               }`}
+              onClick={handleViewerButton}
+              disabled={!viewerCheck}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
-                viewBox="0 0 24 24ds"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                onClick={handleViewerButton}
-                className={`lucide lucide-eye ${
-                  selectedRow && reportCheck ? "" : "svg-disabled"
+                className={`lucide lucide-eye  ${
+                  selectedRow && viewerCheck ? "" : "svg-disabled"
                 }`}
               >
                 <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
+              <div className="text-[12px] ml-1">{t("Viewer")}</div>
             </button>
             <button
               title={t("Report")}
               className={`btn-red-square mx-2 ${
                 selectedRow && reportCheck ? "" : "btn-disable"
               }`}
+              onClick={handleReportButton}
+              disabled={!reportCheck}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
-                viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                onClick={handleReportButton}
-                className={`lucide lucide-file-text ${
+                className={`lucide lucide-file-text  ${
                   selectedRow && reportCheck ? "" : "svg-disabled"
                 }`}
               >
@@ -143,19 +160,57 @@ const WorklistList = ({
                 <path d="M16 13H8" />
                 <path d="M16 17H8" />
               </svg>
+              <div className="text-[12px] ml-1">
+                {status === "CM" ? t("View Report") : t("Report")}
+              </div>
             </button>
-            <button title={t("Refresh")} className="btn-red-square mx-2">
+            <ReactToPrint
+              trigger={() => (
+                <button
+                  title={t("Print")}
+                  className={`btn-red-square mx-2 ${
+                    selectedRow && status === "CM" ? "" : "btn-disable"
+                  }`}
+                  disabled={status !== "CM"}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{ fill: "none" }}
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`lucide lucide-printer ${
+                      selectedRow && status === "CM" ? "" : "svg-disabled"
+                    }`}
+                  >
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                    <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                    <rect x="6" y="14" width="12" height="8" rx="1" />
+                  </svg>
+                  <div className="text-[12px] ml-1">{t("Print")}</div>
+                </button>
+              )}
+              content={() => componentRef.current}
+            />
+            <button
+              title={t("Refresh")}
+              className="btn-red-square1 mx-2"
+              onClick={handleRefreshButton}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
-                viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                onClick={handleRefreshButton}
                 className="lucide lucide-refresh-cw"
               >
                 <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
@@ -163,6 +218,7 @@ const WorklistList = ({
                 <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
                 <path d="M8 16H3v5" />
               </svg>
+              <div className="text-[12px] ml-1">{t("Refresh")}</div>
             </button>
           </div>
           <div>
@@ -216,29 +272,33 @@ const WorklistList = ({
           {t("Modality")}
         </div>
         <div className="font-semibold text-center ml-[-20px] hidden md:block">
-          {t("Produce")}
+          {t("Procedure")}
         </div>
         <div className="font-semibold text-center ml-[-20px] hidden md:block">
           {t("Quantity Image")}
         </div>
       </div>
-      <div className="scrollbar h-3/4 md:h-1/2">
+      <div className="scrollbar overflow-y-auto h-3/4 md:h-1/2">
         {worklist.length > 0 ? (
           <ul>
             {worklist.map((item) => (
               <li
                 key={item.id}
                 className={`grid grid-cols-3 md:grid-cols-8 items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
-                  selectedRow === item.patient.pid ? "purple-selectedrow" : ""
+                  selectedRow === item.proc_id ? "purple-selectedrow" : ""
                 }`}
                 onClick={() => {
-                  handleSelectedRow(item.patient.pid);
-                  checkReportSelectedRow(item.id);
+                  checkSelectedRow(item.proc_id);
+                  handleSelectedRowPid(item.pat_pid);
+                  setPatientName(item.pat_fullname);
+                  handleCheckStatus(item.proc_status);
                 }}
               >
-                <div className="text-center hidden md:block">{item.status}</div>
-                <div className="text-center">{item.patient.pid}</div>
-                <div className="text-center">{item.patient.fullname}</div>
+                <div className="text-center hidden md:block">
+                  {Constants.getStatusName(item.proc_status)}
+                </div>
+                <div className="text-center">{item.pat_pid}</div>
+                <div className="text-center">{item.pat_fullname}</div>
                 <div className="text-center">{item.accession_no}</div>
                 <div className="text-center hidden md:block">
                   {new Date(item.created_time).toLocaleDateString()}
@@ -247,16 +307,10 @@ const WorklistList = ({
                   {item.modality_type}
                 </div>
                 <div className="text-center hidden md:block">
-                  {item.procedure?.map((procedure) => (
-                    <div key={procedure.proc_id}>
-                      <span>{procedure.name}</span>
-                    </div>
-                  ))}
+                  {item.proc_name}
                 </div>
                 <div className="text-center hidden md:block">
-                  {item.procedure.map((procedure) => (
-                    <span key={procedure.proc_id}>{procedure.count_image}</span>
-                  ))}
+                  {item.num_instances}
                 </div>
               </li>
             ))}
@@ -294,8 +348,16 @@ const WorklistList = ({
         )}
       </div>
       <div className=" md:block hidden h-3/4">
-        <RelatedSession pid={selectedItem} t={t} />
+        <RelatedSession
+          pid={selectedItem}
+          patientName={patientName}
+          t={t}
+          onSelectProcID={onSelectProcID}
+        />
       </div>
+      {/* <div ref={componentRef}>
+        {selectedRow && <DetailInfor proc_id={selectedRow} t={t} />}
+      </div> */}
     </div>
   );
 };

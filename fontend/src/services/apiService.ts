@@ -242,9 +242,14 @@ export const fetchWorklist = async (params: { [key: string]: any } = {}) => {
   const queryString = Object.keys(params)
     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
     .join('&');
-  return axios.get(`http://192.168.201.46:3001/api/data?${queryString}`);
+  return axios.get(`${API_BASE_URL}/worklists?${queryString}`);
 };
 
 export const fetchRelatedStudies = async (id :string) => { //test API
-  return axios.get(`http://192.168.201.46:3001/api/relatedStudies/${id}`);
+  return axios.get(`${API_BASE_URL}/orders?patient_pid=${id}`);
 };
+
+
+export const fetchReportByProcId = async (id: string) => {
+  return axios.get(`${API_BASE_URL}/reports/procedures/${id}`);
+}
