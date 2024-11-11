@@ -82,12 +82,15 @@ class WorklistView(OrderBaseView):
         )
 
         # Search by accession
-        try:
-            queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
+        #try:
+        queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
         
-        except Order.DoesNotExist:
+        # except Order.DoesNotExist:
+        #     return self.cus_response_empty_data()
+
+        if not queryset.exists():
             return self.cus_response_empty_data()
-    
+            
         data= {}
         # Init a Empty dataframe
         df_study = pd.DataFrame({'accession_no':[],
@@ -152,15 +155,24 @@ class WorklistView(OrderBaseView):
         df_merged = df_new_order.merge(df_study, how='left', on='accession_no')
 
         # Add df_duplciate_order to df_merged and replace NaN to ''
-        df_merged = pd.concat([df_merged, df_duplciate_order]).replace([np.nan, -np.inf], '')
-        
+        df_merged = pd.concat([df_merged, df_duplciate_order])#.replace([np.nan, -np.inf, pd.NaT], '')
+        #print(df_merged['study_created_time'])
         # Format datetime to sort
-        df_merged['created_time'] = pd.to_datetime(df_merged['created_time'], format='%d/%m/%Y %H:%M')
+        df_merged['created_time'] = pd.to_datetime(df_merged['created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
+        df_merged['study_created_time'] = pd.to_datetime(df_merged['study_created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
         #print(df_merged.dtypes)
         # Sort latest created_time first
         df_merged = df_merged.sort_values(by=['created_time'], ascending = False)
 
-        #print(df_merged)
+       
+        # change the datetime format
+        df_merged['created_time'] = df_merged['created_time'].dt.strftime('%d/%m/%Y %H:%M')
+        df_merged['study_created_time'] = df_merged['study_created_time'].dt.strftime('%d/%m/%Y %H:%M')
+
+        # Add df_duplciate_order to df_merged and replace NaN to ''
+        df_merged = df_merged.replace([np.nan, -np.inf, pd.NaT], '')
+
+        print(df_merged['study_created_time'])
         # Convert dataframe to json to add to response
         return df_merged.to_dict(orient = 'records')        
 
