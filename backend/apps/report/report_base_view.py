@@ -9,11 +9,15 @@ from third_parties.contribution.api_view import CustomAPIView
 logger = logging.getLogger(__name__)
 
 class ReportBaseView(CustomAPIView):    
-    def get_report_by_id(self, request, pk):
+    def get_report_by_id(self, request, pk=None, proc_id = None):
         try:
             # id=kwargs['id']
             # Get report by id and status != 'X' (deleted)
-            report = Report.objects.filter(pk=pk).exclude(status='X').first()
+            if pk:
+                report = Report.objects.filter(pk=pk).exclude(status='X').first()
+            elif proc_id:
+                report = Report.objects.filter(procedure=proc_id).exclude(status='X').first()
+
             if report is None:
                 return self.cus_response_empty_data('REPORT')
         except Exception as e:

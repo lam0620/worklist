@@ -324,6 +324,8 @@ class GetImageLinkSerializers(serializers.Serializer):
 
 class GetStudySerializers(serializers.Serializer):
     accession_no = serializers.CharField(required=False)
+    # pass it if would like to update the Procedure table with this key id
+    proc_id = serializers.CharField(required=False)
 
 class GetReportTemplateSerializers(serializers.Serializer):
     modality = serializers.CharField(required=True)

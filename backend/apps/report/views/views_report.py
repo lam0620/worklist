@@ -109,7 +109,7 @@ class ReportView(ReportBaseView):
         try:
             with transaction.atomic():
                 procedure = None
-                # Check if 'procedure_id' is not exist
+                # Check if 'procedure_id' exists
                 if 'procedure_id' in data and data['procedure_id']:
                     procedure = Procedure.objects.get(pk=data['procedure_id'])
                 
@@ -136,6 +136,11 @@ class ReportView(ReportBaseView):
 
                 # Update study_iuid to procedure
                 procedure.study_iuid = data['study_iuid']
+                if data['status'] == 'D':
+                    procedure.status = 'IP' #Ingrogess
+                else:   
+                    procedure.status = 'CM' # Completed - reported
+
                 procedure.updated_at = timezone.now()
                 procedure.updated_by = updatedBy
                 procedure.save()
@@ -219,7 +224,20 @@ class ReportDetailView(ReportBaseView):
                 report.updated_by = updatedBy
                 report.updated_at = timezone.now()
                 report.save()
-                
+
+                # Update study data for procdure
+                proc = report.procedure
+                if data['status'] == 'D':
+                    proc.status = 'IP' #Ingrogess
+                else:
+                    proc.status = 'CM' # Completed - reported
+
+                proc.updated_by = "3e3d4643-afc8-4926-98d5-fbef871ff887" # Admin user
+                proc.updated_at = timezone.now()
+                proc.save()                    
+
+                logger.info('Updated the Procedure table with id: %s',proc.id)
+
                 #return self.cus_response_updated()
             # Get latest report
             return self.get_report_by_id(request, report.id)
@@ -228,48 +246,30 @@ class ReportDetailView(ReportBaseView):
             logger.error(e, exc_info=True)
             return self.response_NG(ec.E_SYSTEM, str(e))
 
+
+class ReportByProcedureId(ReportBaseView):
+    queryset = User.objects.all()
+    authentication_classes = ()
+
+    """
+    Get a report
+    kwargs = accession_no and procedure_code
+    """
     @swagger_auto_schema(
-        operation_summary='Delete the report by Id',
-        operation_description='Delete the report by Id',
+        operation_summary='Report Detail By Procdure Id',
+        operation_description='Report Detail By Procdure Id',
         tags=[swagger_tags.REPORT],
     )
-
-    def delete(self, request, *args, **kwargs):
-        """
-        Delete the report.
-        If deleting from UI, updated_by is login user
-        If deleting from integration app, updated_by is HIS user.
-        """
-        updatedBy = None
-        # Get and check version to secure or not
+    def get(self, request, *args, **kwargs):
         if request.META.get('HTTP_X_API_VERSION') != "X":  
             user = request.user
-            is_per = CheckPermission(per_code.DELETE_REPORT, user.id).check()
+            is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
             if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.DELETE_REPORT) 
-            updatedBy = user.id     
+                return self.cus_response_403(per_code.VIEW_REPORT)
 
-        try:
-            instance = Report.objects.get(**kwargs, delete_flag=False)
-            if not instance:
-                return self.cus_response_empty_data(type=ec.REPORT)
-
-            if not updatedBy:
-                updatedBy = instance.radiologist.id
-
-            # Delete status, flag
-            instance.delete_flag = True
-            instance.status = 'X'
-            # this uid is created first in \shared\data\integration_app.json
-            instance.updated_by = updatedBy
-            instance.updated_at=timezone.now()
-
-            instance.save()
-        except Exception as e:
-            logger.error(e, exc_info=True)
-            return self.response_NG(ec.E_SYSTEM, str(e))
-        
-        return self.cus_response_deleted()
+                # Get latest report        
+        return self.get_report_by_id(request, proc_id=kwargs['proc_id'])
+   
         
     
 """

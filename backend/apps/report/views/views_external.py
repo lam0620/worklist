@@ -130,7 +130,8 @@ class External_OrderView(OrderBaseView):
                 for item in procs_list:
                     proce_list.append(Procedure(
                         order=order_new,
-                        procedure_type=item
+                        procedure_type=item,
+                        status='SC' # Schedule
                     ))
                 Procedure.objects.bulk_create(proce_list)
 
