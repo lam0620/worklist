@@ -1,11 +1,10 @@
 "use client";
 import { WorkList } from "@/app/types/WorkList";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import RelatedSession from "./RelatedSession";
 import * as Constants from "./Constants";
 import { fetchReportByProcId } from "@/services/apiService";
 import ReactToPrint from "react-to-print";
-import DetailInfor from "./DetailInfor";
 
 interface WorklistProps {
   worklist: WorkList[];
@@ -30,7 +29,6 @@ const WorklistList = ({
   const [reportCheck, setReportCheck] = useState(false);
   const [viewerCheck, setViewerCheck] = useState(false);
   // const [linkImage, setLinkImage] = useState("");
-  let linkImage: string;
   const [patientName, setPatientName] = useState("");
   const [acn, setAcn] = useState("");
   const [study_iuid, setStudyIuid] = useState("");
@@ -81,10 +79,10 @@ const WorklistList = ({
   };
   const handleViewerButton = () => {
     const viewerLink = `${API_BASE_URL}/viewer?StudyInstanceUIDs=${study_iuid}`;
-    if (!reportWindow || reportWindow.closed) {
-      reportWindow = window.open(viewerLink, "reportWindow");
+    if (!viewerWindow || viewerWindow.closed) {
+      viewerWindow = window.open(viewerLink, "reportWindow");
     } else {
-      reportWindow.focus();
+      viewerWindow.focus();
     }
   };
 
