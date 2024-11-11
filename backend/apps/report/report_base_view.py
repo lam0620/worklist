@@ -50,6 +50,8 @@ class ReportBaseView(CustomAPIView):
 
             procedure_json = {
                 'proc_id':procedure.id,
+                'status':procedure.status,
+                'study_iuid':procedure.study_iuid,
                 'code':procedure.procedure_type.code,
                 'name':procedure.procedure_type.name
             }
@@ -82,7 +84,7 @@ class ReportBaseView(CustomAPIView):
             'procedure': procedure_json,
             'image_link': get_image_link(request, report.study_iuid)
         }
-        #return data
+
         return data
 
 
