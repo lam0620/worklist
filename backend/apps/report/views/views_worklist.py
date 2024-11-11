@@ -27,6 +27,25 @@ from apps.report.utils import  get_image_field_str
 
 logger = logging.getLogger(__name__)
 
+import django_filters
+import operator
+from django.db.models import Q
+from functools import reduce
+
+class ListFilterField(django_filters.Filter):
+    ''' This is a custom FilterField to enable a behavior like:
+    ?log=taco,sandwich,burrito,ramen ...
+    '''
+    def filter(self, queryset, value):
+        # If no value is passed, just return the initial queryset
+        if not value:
+            return queryset
+        list_values = value.split(',') # Split the incoming query string by comma
+        # Return a queryset filtered for every value in the list like 'taco OR burrito OR...'
+        # Change operator.or_ to operator._and to apply all filters like 'taco AND burrito AND...'
+        #return queryset.filter(reduce(operator.or_, (Q(**{f'{self.field_name}__contains':x.strip()}) for x in list_values)))
+        return queryset.filter(reduce(operator.or_, (Q(**{f'{self.field_name}__iexact':x.strip()}) for x in list_values)))
+    
 class OrderFilter(filters.FilterSet):
     # For search range date (created_at_after, created_at_before)
     # /orders?created_at_after=2024-10-20 00:00&created_at_before=2024-10-21 23:59
@@ -36,9 +55,13 @@ class OrderFilter(filters.FilterSet):
     patient_pid = filters.CharFilter(field_name='patient__pid')
     # accession_no = filters.CharFilter(field_name='accession_no')
 
+    patient_pid = filters.CharFilter(field_name='patient__pid')
+
+    modality_type = ListFilterField(field_name='modality_type')
+
     class Meta:
         model = Order
-        fields = ['accession_no', 'patient_name', 'patient_pid','created_at']
+        fields = ['accession_no','patient_name','modality_type','patient_pid','created_at']
 
 """
 Order class
@@ -51,6 +74,7 @@ class WorklistView(OrderBaseView):
     
     # for search box (?search=xxx). which you want to search. 
     search_fields = ['accession_no', 'patient__fullname', 'patient__pid']
+
     # for query string (?type=xxx)
     # View attributes renamed: filter_fields => filterset_fields
     # https://django-filter.readthedocs.io/en/stable/guide/migration.html
@@ -75,11 +99,23 @@ class WorklistView(OrderBaseView):
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.VIEW_ORDER)
 
-        procedure_prefetch = Prefetch(
-            'procedure_set',
-            queryset=Procedure.objects.select_related('procedure_type'),
-            to_attr='procedure_list'
-        )
+        # SC, IP, CM, IM
+        status=request.query_params.get('status')
+
+        if status:
+            list_status = status.split(',')
+
+            procedure_prefetch = Prefetch(
+                'procedure_set',
+                queryset=Procedure.objects.select_related('procedure_type').filter(status__in=list_status),
+                to_attr='procedure_list'
+            )
+        else:    
+            procedure_prefetch = Prefetch(
+                'procedure_set',
+                queryset=Procedure.objects.select_related('procedure_type'),
+                to_attr='procedure_list'
+            )
 
         # Search by accession
         #try:
@@ -125,13 +161,19 @@ class WorklistView(OrderBaseView):
             logger.warning(e, exc_info=True)
 
         # Convert queryset to json, merge df_study to and to json
-        orders_data = self._merge_n2_json(queryset, df_study)
+        df_merged = self._merge(queryset, df_study)
+        # Search status = SC or IM. Do this because the status in procedure table is not latest data
+        if status and (status == 'SC' or status == 'IM'):
+            df_merged = df_merged[df_merged['proc_status'] == status]
+
+        # Convert to json
+        orders_data = df_merged.to_dict(orient = 'records')    
   
         page = self.paginate_queryset(orders_data)
         return self.get_paginated_response(page)
     
 
-    def _merge_n2_json(self, queryset, df_study):
+    def _merge(self, queryset, df_study):
         orders_json = []
 
         # First, convert queryset to json to be able to get procedure data
@@ -173,11 +215,11 @@ class WorklistView(OrderBaseView):
         df_merged["proc_status"] = np.where((df_merged["proc_status"] == 'SC') & (df_merged["study_iuid"].isnull() == False), 'IM', df_merged["proc_status"])
 
         # Add df_duplciate_order to df_merged and replace NaN to ''
-        df_merged = df_merged.replace([np.nan, -np.inf, pd.NaT], '')
+        return df_merged.replace([np.nan, -np.inf, pd.NaT], '')
 
         #print(df_merged['study_created_time'])
         # Convert dataframe to json to add to response
-        return df_merged.to_dict(orient = 'records')        
+        #return df_merged.to_dict(orient = 'records')        
 
     # """
     # Get list of worklist
