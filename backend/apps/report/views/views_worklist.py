@@ -55,8 +55,6 @@ class OrderFilter(filters.FilterSet):
     patient_pid = filters.CharFilter(field_name='patient__pid')
     # accession_no = filters.CharFilter(field_name='accession_no')
 
-    patient_pid = filters.CharFilter(field_name='patient__pid')
-
     modality_type = ListFilterField(field_name='modality_type')
 
     class Meta:
