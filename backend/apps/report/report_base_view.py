@@ -46,7 +46,8 @@ class ReportBaseView(CustomAPIView):
         # Make sure report.procedure exist
         if report.procedure:
             procedure = report.procedure
-            patient = report.procedure.order.patient
+            order = procedure.order
+            patient = order.patient
 
             procedure_json = {
                 'proc_id':procedure.id,
@@ -60,7 +61,10 @@ class ReportBaseView(CustomAPIView):
                     'pid':patient.pid,
                     'fullname':patient.fullname,
                     'gender':patient.gender,
-                    'dob':patient.dob
+                    'dob':patient.dob,
+                    'tel':patient.tel,
+                    'address':patient.address,
+                    'insurance_no':patient.insurance_no
             }
 
         created_time = report.created_at.strftime('%d/%m/%Y %H:%M')
@@ -73,6 +77,10 @@ class ReportBaseView(CustomAPIView):
             'scan_protocol':report.scan_protocol,
             'status': report.status,
             'created_time':created_time,
+            'clinical_diagnosis': order.clinical_diagnosis,  
+
+            'referring_phys_code': order.referring_phys.doctor_no,
+            'referring_phys_name': order.referring_phys.fullname,         
             'radiologist': {
                 "id":report.radiologist.id,
                 'doctor_no':report.radiologist.doctor_no,

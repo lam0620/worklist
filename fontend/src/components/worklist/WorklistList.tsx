@@ -1,27 +1,5 @@
 "use client";
 import { WorkList } from "@/app/types/WorkList";
-<<<<<<< HEAD
-import { useState } from "react";
-import RelatedSession from "./RelatedSession";
-interface WorklistProps {
-  worklist: WorkList[];
-  onSelectPID: (PID: string) => void;
-  t: (key: string) => string;
-}
-const WorklistList = ({ worklist, onSelectPID, t }: WorklistProps) => {
-  const [selectedItem, setSelectedItem] = useState("");
-  const [selectedRow, setSelectedRow] = useState(null);
-
-  const handleSelectedRow = (pid: any) => {
-    setSelectedRow(pid);
-    handleItemSelect(pid);
-    onSelectPID(pid);
-    setSelectedRow(selectedRow === pid ? null : pid);
-  };
-
-  const handleItemSelect = (id: string) => {
-    setSelectedItem(id);
-=======
 import { useRef, useState } from "react";
 import RelatedSession from "./RelatedSession";
 import * as Constants from "./Constants";
@@ -120,13 +98,10 @@ const WorklistList = ({
     setStatus(status);
     setViewerCheck(Constants.checkViewStatus(status));
     setReportCheck(Constants.checkReportStatus(status));
->>>>>>> dev_worklist
   };
 
   return (
     <div className="h-full">
-<<<<<<< HEAD
-=======
       <div className="flex md:flex-grow my-1 text-white px-4 py-2 backgroundcolor-box">
         <div className="justify-between flex-row flex w-full">
           <div className="flex flex-row">
@@ -277,7 +252,6 @@ const WorklistList = ({
           </div>
         </div>
       </div>
->>>>>>> dev_worklist
       <div className="whitespace-nowrap grid grid-cols-3 md:grid-cols-8 inbox rounded-t border-b bordervalue px-4 py-2">
         <div className="font-semibold text-center ml-[-10px] hidden md:block">
           {t("Status")}
@@ -290,27 +264,13 @@ const WorklistList = ({
           {t("Accession No")}
         </div>
         <div className="font-semibold text-center ml-[-10px] hidden md:block">
-<<<<<<< HEAD
-          {t("Created_time")}
-        </div>
-=======
           {t("Order Date")}
         </div>
        
->>>>>>> dev_worklist
         <div className="font-semibold text-center ml-[-15px] hidden md:block">
           {t("Modality")}
         </div>
         <div className="font-semibold text-center ml-[-20px] hidden md:block">
-<<<<<<< HEAD
-          {t("Produce")}
-        </div>
-        <div className="font-semibold text-center ml-[-20px] hidden md:block">
-          {t("Quantity Image")}
-        </div>
-      </div>
-      <div className="scrollbar h-3/4 md:h-1/2">
-=======
           {t("Procedure")}
         </div>
               
@@ -319,24 +279,12 @@ const WorklistList = ({
         </div>
       </div>
       <div className="scrollbar overflow-y-auto h-3/4 md:h-1/2">
->>>>>>> dev_worklist
         {worklist.length > 0 ? (
           <ul>
             {worklist.map((item) => (
               <li
                 key={item.id}
                 className={`grid grid-cols-3 md:grid-cols-8 items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
-<<<<<<< HEAD
-                  selectedRow === item.patient.pid ? "purple-selectedrow" : ""
-                }`}
-                onClick={() => {
-                  handleSelectedRow(item.patient.pid);
-                }}
-              >
-                <div className="text-center hidden md:block">{item.status}</div>
-                <div className="text-center">{item.patient.pid}</div>
-                <div className="text-center">{item.patient.fullname}</div>
-=======
                   selectedRow === item.proc_id ? "purple-selectedrow" : ""
                 }`}
                 onClick={() => {
@@ -351,7 +299,6 @@ const WorklistList = ({
                 </div>
                 <div className="text-center">{item.pat_pid}</div>
                 <div className="text-center">{item.pat_fullname}</div>
->>>>>>> dev_worklist
                 <div className="text-center">{item.accession_no}</div>
                 <div className="text-center hidden md:block">
                   {new Date(item.created_time).toLocaleDateString()}
@@ -360,23 +307,10 @@ const WorklistList = ({
                   {item.modality_type}
                 </div>
                 <div className="text-center hidden md:block">
-<<<<<<< HEAD
-                  {item.procedure?.map((procedure) => (
-                    <div key={procedure.proc_id}>
-                      <span>{procedure.name}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="text-center hidden md:block">
-                  {item.procedure.map((procedure) => (
-                    <span key={procedure.proc_id}>{procedure.count_image}</span>
-                  ))}
-=======
                   {item.proc_name}
                 </div>
                 <div className="text-center hidden md:block">
                   {item.num_instances}
->>>>>>> dev_worklist
                 </div>
               </li>
             ))}
@@ -414,10 +348,6 @@ const WorklistList = ({
         )}
       </div>
       <div className=" md:block hidden h-3/4">
-<<<<<<< HEAD
-        <RelatedSession pid={selectedItem} t={t} />
-      </div>
-=======
         <RelatedSession
           pid={selectedItem}
           patientName={patientName}
@@ -428,7 +358,6 @@ const WorklistList = ({
       {/* <div ref={componentRef}>
         {selectedRow && <DetailInfor proc_id={selectedRow} t={t} />}
       </div> */}
->>>>>>> dev_worklist
     </div>
   );
 };
