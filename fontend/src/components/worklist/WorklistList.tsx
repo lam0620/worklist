@@ -107,7 +107,7 @@ const WorklistList = ({
           <div className="flex flex-row">
             <button
               title={t("View Image")}
-              className={`btn-red-square1 mx-2  ${
+              className={`btn-red-square mx-2  ${
                 selectedRow && viewerCheck ? "" : "btn-disable"
               }`}
               onClick={handleViewerButton}
@@ -122,14 +122,14 @@ const WorklistList = ({
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`lucide lucide-eye  ${
+                className={`lucide lucide-eye ml-2  ${
                   selectedRow && viewerCheck ? "" : "svg-disabled"
                 }`}
               >
                 <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
-              <div className="text-[12px] ml-1">{t("Viewer")}</div>
+              <div className="text-[12px] px-2">{t("View Image")}</div>
             </button>
             <button
               title={t("Report")}
@@ -148,7 +148,7 @@ const WorklistList = ({
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`lucide lucide-file-text  ${
+                className={`lucide lucide-file-text ml-2  ${
                   selectedRow && reportCheck ? "" : "svg-disabled"
                 }`}
               >
@@ -158,7 +158,7 @@ const WorklistList = ({
                 <path d="M16 13H8" />
                 <path d="M16 17H8" />
               </svg>
-              <div className="text-[12px] ml-1">
+              <div className="text-[12px] px-2">
                 {status === "CM" ? t("View Report") : t("Report")}
               </div>
             </button>
@@ -182,7 +182,7 @@ const WorklistList = ({
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`lucide lucide-printer ${
+                    className={`lucide lucide-printer ml-2 ${
                       selectedRow && status === "CM" ? "" : "svg-disabled"
                     }`}
                   >
@@ -190,14 +190,14 @@ const WorklistList = ({
                     <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
                     <rect x="6" y="14" width="12" height="8" rx="1" />
                   </svg>
-                  <div className="text-[12px] ml-1">{t("Print")}</div>
+                  <div className="text-[12px] px-2">{t("Print")}</div>
                 </button>
               )}
               content={() => componentRef.current}
             />
             <button
               title={t("Refresh")}
-              className="btn-red-square1 mx-2"
+              className="btn-red-square mx-2"
               onClick={handleRefreshButton}
             >
               <svg
@@ -209,14 +209,14 @@ const WorklistList = ({
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-refresh-cw"
+                className="lucide lucide-refresh-cw ml-2"
               >
                 <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
                 <path d="M21 3v5h-5" />
                 <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
                 <path d="M8 16H3v5" />
               </svg>
-              <div className="text-[12px] ml-1">{t("Refresh")}</div>
+              <div className="text-[12px] px-2">{t("Refresh")}</div>
             </button>
           </div>
           <div>
@@ -264,16 +264,18 @@ const WorklistList = ({
           {t("Accession No")}
         </div>
         <div className="font-semibold text-center ml-[-10px] hidden md:block">
-          {t("Created_time")}
+          {t("Order Date")}
         </div>
+       
         <div className="font-semibold text-center ml-[-15px] hidden md:block">
           {t("Modality")}
         </div>
         <div className="font-semibold text-center ml-[-20px] hidden md:block">
           {t("Procedure")}
         </div>
+              
         <div className="font-semibold text-center ml-[-20px] hidden md:block">
-          {t("Quantity Image")}
+          {t("Instances")}
         </div>
       </div>
       <div className="scrollbar overflow-y-auto h-3/4 md:h-1/2">
@@ -293,7 +295,7 @@ const WorklistList = ({
                 }}
               >
                 <div className="text-center hidden md:block">
-                  {Constants.getStatusName(item.proc_status)}
+                  {t(Constants.getStatusName(item.proc_status))}
                 </div>
                 <div className="text-center">{item.pat_pid}</div>
                 <div className="text-center">{item.pat_fullname}</div>

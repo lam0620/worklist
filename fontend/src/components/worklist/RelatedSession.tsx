@@ -73,16 +73,16 @@ const RelatedSession = ({
             {t("Procedure")}
           </div>
           <div className="w-1/12 font-semibold text-center hidden md:block">
-            {t("Created_time")}
+            {t("Order Date")}
           </div>
           <div className="w-2/12 font-semibold text-center">
             {t("Modality")}
           </div>
           <div className="w-2/12 font-semibold text-center">
-            {t("Ordering Physician")}
+            {t("Referring Physician")}
           </div>
           <div className="w-2/12 font-semibold text-center">
-            {t("Reading Physician")}
+            {t("Radiologist")}
           </div>
         </div>
       </div>
@@ -105,9 +105,9 @@ const RelatedSession = ({
                 >
                   <div className="flex flex-row py-2 whitespace-nowrap">
                     <div className="mx-2 w-1/12 font-semibold text-center hidden md:block">
-                      {Constants.getStatusName(
+                      {t(Constants.getStatusName(
                         item.procedures?.map((procedure) => procedure.status)
-                      )}
+                      ))}
                     </div>
                     <div className="w-1/12 font-semibold text-center hidden md:block">
                       {item.patient.pid}

@@ -15,7 +15,7 @@ import UserAvatar from "../../components/Avatar";
 
 const Worklist = () => {
   const router = useRouter();
-  router.push("/worklist");
+  // router.push("/worklist");
   const { user } = useUser();
   const [t, setT] = useState(() => (key: string) => key);
   useEffect(() => {
@@ -23,6 +23,7 @@ const Worklist = () => {
       const { t } = await useTranslation("worklist");
       setT(() => t);
     };
+    router.push("/worklist");
     loadTranslation();
   }, []);
   const [searchQuery, setSearchQuery] = useState("");
@@ -281,7 +282,7 @@ const Worklist = () => {
                     <button
                       className="toggle-button backgroundcolor-box px-2 py-1 text-white"
                       onClick={toggleSidebar}
-                      title={t("Thu gọn")}
+                      title={t("Collapse")}
                     >
                       {collapsed ? (
                         ""
@@ -383,7 +384,7 @@ const Worklist = () => {
                         checked={selectedStatuses.includes("IM")}
                         onChange={handleCheckboxStatus}
                       />
-                      {t("No report")}
+                      {t("Unreported")}
                     </li>
                     <li>
                       <input
@@ -461,7 +462,7 @@ const Worklist = () => {
                     className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
                     onClick={handleFilterToday}
                   >
-                    Today
+                    {t('Today')}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
@@ -469,7 +470,7 @@ const Worklist = () => {
                     className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
                     onClick={handleFilterYesterday}
                   >
-                    Yesterday
+                    {t('Yesterday')}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
@@ -477,7 +478,7 @@ const Worklist = () => {
                     className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
                     onClick={handleFilterLast7Days}
                   >
-                    7 days
+                    {t('7 days')}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
@@ -485,7 +486,7 @@ const Worklist = () => {
                     className="button px-2 py-1 rounded w-full md:w-auto text-sm hover-purple"
                     onClick={handleFilterAll}
                   >
-                    All
+                    {t('All')}
                   </button>
                 </div>
               </div>
@@ -499,7 +500,7 @@ const Worklist = () => {
                     <button
                       className="toggle-button backgroundcolor-box text-white flex justify-center items-center"
                       onClick={toggleSidebar}
-                      title={t("Mở rộng")}
+                      title={t("Expand")}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

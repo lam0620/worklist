@@ -1,12 +1,13 @@
 export const getStatusName = (status) => {
     const statusMap = {
       SC: "Scheduled",
-      IM: "No Report",
+      IM: "Unreported",
       IP: "Reporting",
       CM: "Reported",
     };
     return statusMap[status] || "";
   };
+  
   
 
 export const checkViewStatus = (status) => {

@@ -22,3 +22,12 @@ export const formatDate = (dateString: any) => {
   const day = dateString.slice(6, 8);
   return `${day}-${month}-${year}`;
 };
+
+export const getReportStatusName = (status: string) => {
+  const statusMap = {
+    D: "Draft",
+    F: "Approved",
+    C: "Approved"
+  };
+  return statusMap[status] || "";
+};

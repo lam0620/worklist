@@ -18,11 +18,11 @@
     "To":"To",
     "Back Quick Search":"Back Quick Search",
     "Status":"Status",
-    "Created_time":"Created_time",
+    "Study Date":"Study Date",
     "Procedure":"Procedure",
     "Quantity Image":"Quantity Image",
-    "Ordering Physician" : "Ordering Physician",
-    "Reading Physician": "Reading Physician",
+    "Referring Physician" : "Referring Physician",
+    "Radiologist": "Radiologist",
     "Related Studies":"Related Studies",
     "No data available":"No data available"
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchReportByProcId } from "@/services/apiService";
 import { ReportDetailByProcID } from "@/app/types/ReportDetailByProcID";
 import { toast } from "react-toastify";
-import { formatDate } from "@/utils/utils";
+import { formatDate,getReportStatusName } from "@/utils/utils";
 interface DetailInforProps {
   proc_id: string;
   t: (key: string) => string;
@@ -201,7 +201,7 @@ const DetailInfor = ({ proc_id, t }: DetailInforProps) => {
                 <div className="mb-1 flex flex-row justify-between">
                   <div className="mr-4 flex flex-col items-center whitespace-nowrap">
                     <span className="w-full text-left font-semibold">
-                      {t("Ordering Physician")}
+                      {t("Referring Physician")}
                     </span>
                   </div>
                   <div className="flex flex-col">
@@ -223,7 +223,7 @@ const DetailInfor = ({ proc_id, t }: DetailInforProps) => {
                       {t("Status")}
                     </span>
                   </div>
-                  <div className="flex flex-col">{report?.status}</div>
+                  <div className="flex flex-col">{t(getReportStatusName(report?.status))}</div>
                 </div>
 
                 <div className="mt-1 flex flex-row justify-between">
@@ -277,7 +277,7 @@ const DetailInfor = ({ proc_id, t }: DetailInforProps) => {
                 </svg>
               </button>
               <div className="justify-center items-center text-center text-white">
-                {t("No Report Yet!")}
+                {t("No report yet")}
               </div>
             </div>
           )}
