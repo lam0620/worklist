@@ -5,6 +5,8 @@ import RelatedSession from "./RelatedSession";
 import * as Constants from "./Constants";
 import { fetchReportByProcId } from "@/services/apiService";
 import ReactToPrint from "react-to-print";
+import PdfComponent from "./PdfComponent";
+import { ReportDetailProps } from "@/app/types/ReportDetail";
 
 interface WorklistProps {
   worklist: WorkList[];
@@ -14,6 +16,8 @@ interface WorklistProps {
   totalPages: number;
   onPageChange: (page: number) => void;
   currentPage: number;
+  reportInf: ReportDetailProps;
+  numRecord: number;
 }
 const WorklistList = ({
   worklist,
@@ -23,16 +27,19 @@ const WorklistList = ({
   totalPages,
   onPageChange,
   currentPage,
+  reportInf,
+  numRecord,
 }: WorklistProps) => {
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedRow, setSelectedRow] = useState("");
   const [reportCheck, setReportCheck] = useState(false);
   const [viewerCheck, setViewerCheck] = useState(false);
-  // const [linkImage, setLinkImage] = useState("");
-  const [patientName, setPatientName] = useState("");
-  const [acn, setAcn] = useState("");
-  const [study_iuid, setStudyIuid] = useState("");
-  const [status, setStatus] = useState("");
+  const [patientInf, setPatientInf] = useState({
+    patientName: "",
+    acn: "",
+    study_iuid: "",
+    status: "",
+  });
   const componentRef = useRef<HTMLDivElement>(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL;
@@ -40,21 +47,23 @@ const WorklistList = ({
   const handleSelectedRowPid = (pid: any) => {
     setSelectedItem(pid);
   };
-  // const handleSelectedRowACN = (acn: any) => {
-  //   setSelectedRow(acn);
-  // };
 
   const checkSelectedRow = async (id: any) => {
     try {
       const response = await fetchReportByProcId(id);
       if (response.status === 200 && response.data?.data.image_link) {
-        // setLinkImage(response.data?.data.image_link);
       }
       if (response.status === 200 && response.data?.data.id) {
-        setAcn(response.data?.data.accession_no);
+        setPatientInf((prev) => ({
+          ...prev,
+          acn: response.data?.data.accession_no,
+        }));
         const studyIuid = response.data?.data.study_iuid;
         const procStudyIuid = response.data?.data.proc_study_iuid;
-        setStudyIuid(procStudyIuid ? procStudyIuid : studyIuid);
+        setPatientInf((prev) => ({
+          ...prev,
+          study_iuid: procStudyIuid ? procStudyIuid : studyIuid,
+        }));
       }
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
@@ -70,7 +79,7 @@ const WorklistList = ({
   let reportWindow: Window | null = null;
 
   const handleReportButton = () => {
-    const reportLink = `${API_BASE_URL}/report?StudyInstanceUIDs=${study_iuid}&acn=${acn}`;
+    const reportLink = `${API_BASE_URL}/report?StudyInstanceUIDs=${patientInf.study_iuid}&acn=${patientInf.acn}`;
     if (!reportWindow || reportWindow.closed) {
       reportWindow = window.open(reportLink, "reportWindow");
     } else {
@@ -78,7 +87,7 @@ const WorklistList = ({
     }
   };
   const handleViewerButton = () => {
-    const viewerLink = `${API_BASE_URL}/viewer?StudyInstanceUIDs=${study_iuid}`;
+    const viewerLink = `${API_BASE_URL}/viewer?StudyInstanceUIDs=${patientInf.study_iuid}`;
     if (!viewerWindow || viewerWindow.closed) {
       viewerWindow = window.open(viewerLink, "reportWindow");
     } else {
@@ -95,7 +104,7 @@ const WorklistList = ({
     }
   };
   const handleCheckStatus = (status: any) => {
-    setStatus(status);
+    setPatientInf((prev) => ({ ...prev, status: status }));
     setViewerCheck(Constants.checkViewStatus(status));
     setReportCheck(Constants.checkReportStatus(status));
   };
@@ -103,63 +112,71 @@ const WorklistList = ({
   return (
     <div className="h-full">
       <div className="flex md:flex-grow my-1 text-white px-4 py-2 backgroundcolor-box">
-        <div className="justify-between flex-row flex w-full">
-          <div className="flex flex-row">
+        <div className="justify-between flex-col md:flex-row flex w-full">
+          <div className="flex flex-row whitespace-nowrap">
             <button
               title={t("View Image")}
-              className={`btn-red-square mx-2  ${
-                selectedRow && viewerCheck ? "" : "btn-disable"
+              className={`btn-red-square mx-2   ${
+                selectedRow && viewerCheck
+                  ? ""
+                  : "btn-disable cursor-not-allowed"
               }`}
               onClick={handleViewerButton}
               disabled={!viewerCheck}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
+                width="21"
                 height="24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`lucide lucide-eye ml-2  ${
+                className={`lucide lucide-eye ml-0  ${
                   selectedRow && viewerCheck ? "" : "svg-disabled"
                 }`}
               >
-                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-                <circle cx="12" cy="12" r="3" />
+                <g transform="scale(0.8, 0.8) translate(3, 3)">
+                  <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                  <circle cx="12" cy="12" r="3" />
+                </g>
               </svg>
               <div className="text-[12px] px-2">{t("View Image")}</div>
             </button>
             <button
               title={t("Report")}
               className={`btn-red-square mx-2 ${
-                selectedRow && reportCheck ? "" : "btn-disable"
+                selectedRow && reportCheck
+                  ? ""
+                  : "btn-disable cursor-not-allowed"
               }`}
               onClick={handleReportButton}
               disabled={!reportCheck}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
+                width="19"
                 height="24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`lucide lucide-file-text ml-2  ${
+                className={`lucide lucide-file-text  ${
                   selectedRow && reportCheck ? "" : "svg-disabled"
                 }`}
               >
-                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                <path d="M10 9H8" />
-                <path d="M16 13H8" />
-                <path d="M16 17H8" />
+                <g transform="scale(0.8, 0.8) translate(3, 3)">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M10 9H8" />
+                  <path d="M16 13H8" />
+                  <path d="M16 17H8" />
+                </g>
               </svg>
               <div className="text-[12px] px-2">
-                {status === "CM" ? t("View Report") : t("Report")}
+                {patientInf.status === "CM" ? t("View Report") : t("Report")}
               </div>
             </button>
             <ReactToPrint
@@ -167,14 +184,16 @@ const WorklistList = ({
                 <button
                   title={t("Print")}
                   className={`btn-red-square mx-2 ${
-                    selectedRow && status === "CM" ? "" : "btn-disable"
+                    selectedRow && patientInf.status === "CM"
+                      ? ""
+                      : "btn-disable cursor-not-allowed"
                   }`}
-                  disabled={status !== "CM"}
+                  disabled={patientInf.status !== "CM"}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     style={{ fill: "none" }}
-                    width="24"
+                    width="22"
                     height="24"
                     viewBox="0 0 24 24"
                     fill="none"
@@ -182,13 +201,17 @@ const WorklistList = ({
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`lucide lucide-printer ml-2 ${
-                      selectedRow && status === "CM" ? "" : "svg-disabled"
+                    className={`lucide lucide-printer ${
+                      selectedRow && patientInf.status === "CM"
+                        ? ""
+                        : "svg-disabled"
                     }`}
                   >
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                    <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
-                    <rect x="6" y="14" width="12" height="8" rx="1" />
+                    <g transform="scale(0.8, 0.8) translate(3, 3)">
+                      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                      <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                      <rect x="6" y="14" width="12" height="8" rx="1" />
+                    </g>
                   </svg>
                   <div className="text-[12px] px-2">{t("Print")}</div>
                 </button>
@@ -202,31 +225,40 @@ const WorklistList = ({
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
+                width="20"
                 height="24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="lucide lucide-refresh-cw ml-2"
+                className="lucide lucide-refresh-cw"
               >
-                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-                <path d="M21 3v5h-5" />
-                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-                <path d="M8 16H3v5" />
+                <g transform="scale(0.8, 0.8) translate(3, 3)">
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                  <path d="M21 3v5h-5" />
+                  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                  <path d="M8 16H3v5" />
+                </g>
               </svg>
               <div className="text-[12px] px-2">{t("Refresh")}</div>
             </button>
           </div>
-          <div>
+          <div className="mt-3 md:mt-0">
             {totalPages > 1 && (
-              <div className="sticky">
+              <div className="sticky flex flex-row justify-center md:justify-end md:mr-5 mr-0">
+                <div className="flex items-center mr-3">
+                  <span>
+                    {numRecord} {t(numRecord > 1 ? "records" : "record")}
+                  </span>
+                </div>
                 <div className="flex justify-center text-sm">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-2 py-1 mx-1 button disabled:opacity-30"
+                    className={`px-2 py-1 mx-1 button disabled:opacity-30 ${
+                      currentPage === 1 ? "purple-selectedrow" : ""
+                    }`}
                   >
                     {t("Previous")}
                   </button>
@@ -234,7 +266,9 @@ const WorklistList = ({
                     <button
                       key={index}
                       onClick={() => handlePageChange(index + 1)}
-                      className={`px-3 py-1 mx-1  button `}
+                      className={`px-3 py-1 mx-1 button ${
+                        currentPage === index + 1 ? "purple-selectedrow" : ""
+                      }`}
                     >
                       {index + 1}
                     </button>
@@ -242,7 +276,9 @@ const WorklistList = ({
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="px-2 py-1 mx-1 button disabled:opacity-30"
+                    className={`px-2 py-1 mx-1 button disabled:opacity-30 ${
+                      currentPage === totalPages ? "purple-selectedrow" : ""
+                    }`}
                   >
                     {t("Next")}
                   </button>
@@ -266,14 +302,14 @@ const WorklistList = ({
         <div className="font-semibold text-center ml-[-10px] hidden md:block">
           {t("Order Date")}
         </div>
-       
+
         <div className="font-semibold text-center ml-[-15px] hidden md:block">
           {t("Modality")}
         </div>
         <div className="font-semibold text-center ml-[-20px] hidden md:block">
           {t("Procedure")}
         </div>
-              
+
         <div className="font-semibold text-center ml-[-20px] hidden md:block">
           {t("Instances")}
         </div>
@@ -283,14 +319,17 @@ const WorklistList = ({
           <ul>
             {worklist.map((item) => (
               <li
-                key={item.id}
+                key={`${item.id}-${item.proc_id}`} // make sure key is not duplicate, because item.id can have 2 in db
                 className={`grid grid-cols-3 md:grid-cols-8 items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
                   selectedRow === item.proc_id ? "purple-selectedrow" : ""
                 }`}
                 onClick={() => {
                   checkSelectedRow(item.proc_id);
                   handleSelectedRowPid(item.pat_pid);
-                  setPatientName(item.pat_fullname);
+                  setPatientInf((prev) => ({
+                    ...prev,
+                    patientName: item.pat_fullname,
+                  }));
                   handleCheckStatus(item.proc_status);
                 }}
               >
@@ -301,8 +340,9 @@ const WorklistList = ({
                 <div className="text-center">{item.pat_fullname}</div>
                 <div className="text-center">{item.accession_no}</div>
                 <div className="text-center hidden md:block">
-                  {new Date(item.created_time).toLocaleDateString()}
+                  {item.created_time.split(" ")[0]}
                 </div>
+
                 <div className="text-center hidden md:block">
                   {item.modality_type}
                 </div>
@@ -350,14 +390,14 @@ const WorklistList = ({
       <div className=" md:block hidden h-3/4">
         <RelatedSession
           pid={selectedItem}
-          patientName={patientName}
+          patientName={patientInf.patientName}
           t={t}
           onSelectProcID={onSelectProcID}
         />
       </div>
-      {/* <div ref={componentRef}>
-        {selectedRow && <DetailInfor proc_id={selectedRow} t={t} />}
-      </div> */}
+      <div style={{ display: "none" }}>
+        <PdfComponent ref={componentRef} reportInf={reportInf} />
+      </div>
     </div>
   );
 };

@@ -4,7 +4,6 @@ import { fetchRelatedStudies } from "@/services/apiService";
 import { OrderDetailProps } from "@/app/types/OrderDetail";
 import { toast } from "react-toastify";
 import "../../app/worklist/worklist.css";
-import DetailInfor from "@/components/worklist/DetailInfor";
 import * as Constants from "./Constants";
 interface DetailInforProps {
   pid: string;
@@ -54,10 +53,11 @@ const RelatedSession = ({
     }
   };
   return (
-    <div className="h-full bottom-0 mt-2 border-t-4 border-color-col">
+    <div className="h-full bottom-0 mt-2 border-t-4 border-color-col text-sm">
       <div className="flex justify-between items-center backgroundcolor-box px-2 py-2">
         <div className="text-blue-300 text-base">
-          {t("Related Studies")} : {patientName}
+          {t("Related Studies")} {"(BN:"} {patientName}
+          {")"}
         </div>
       </div>
       <div className="mt-1">
@@ -99,15 +99,16 @@ const RelatedSession = ({
                       : ""
                   }`}
                   onClick={() => {
-                    //handleSelectedRow(item.id);
                     handleProcIDSelect(procedure.proc_id);
                   }}
                 >
-                  <div className="flex flex-row py-2 whitespace-nowrap">
+                  <div className="flex flex-row py-2 ">
                     <div className="mx-2 w-1/12 font-semibold text-center hidden md:block">
-                      {t(Constants.getStatusName(
-                        item.procedures?.map((procedure) => procedure.status)
-                      ))}
+                      {t(
+                        Constants.getStatusName(
+                          item.procedures?.map((procedure) => procedure.status)
+                        )
+                      )}
                     </div>
                     <div className="w-1/12 font-semibold text-center hidden md:block">
                       {item.patient.pid}
@@ -119,7 +120,7 @@ const RelatedSession = ({
                       <span>{procedure.name}</span>
                     </div>
                     <div className="w-1/12 font-semibold text-center hidden md:block">
-                      {item.created_time}
+                      {item.created_time.split(" ")[0]}
                     </div>
                     <div className="w-2/12 font-semibold text-center">
                       {item.modality_type}
@@ -139,7 +140,6 @@ const RelatedSession = ({
           </ul>
         )}
       </div>
-      {selectedProcID && <DetailInfor proc_id={selectedProcID} t={t} />}
     </div>
   );
 };

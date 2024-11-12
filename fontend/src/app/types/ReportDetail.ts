@@ -7,6 +7,10 @@ export interface ReportDetailProps {
     conclusion : string;
     status : string;
     created_time : string;
+    clinical_diagnosis: string;
+    referring_phys_code: string;
+    referring_phys_name: string;
+    modality_type: string;
     radiologist : {
         id : string;
         doctor_no : string;
@@ -25,6 +29,9 @@ export interface ReportDetailProps {
         fullname :string;
         gender : string;
         dob: string;
+        tel: string;
+        address: string;
+        insurance_no:string;
     }
 
 }

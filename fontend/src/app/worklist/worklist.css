@@ -103,13 +103,13 @@
 .btn-red-square {
     background-color: #fe615a; 
     border:none; 
-    border-radius: 8px;
+    border-radius: 0.25em;
     padding: 1px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
     /* width: 100px; */
-    height: 30px;
+    height: 32px;
 }
 
 .btn-disable {

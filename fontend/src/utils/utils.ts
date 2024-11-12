@@ -23,8 +23,8 @@ export const formatDate = (dateString: any) => {
   return `${day}-${month}-${year}`;
 };
 
-export const getReportStatusName = (status: string) => {
-  const statusMap = {
+export const getReportStatusName = (status: string): string => {
+  const statusMap: { [key: string]: string } = {
     D: "Draft",
     F: "Approved",
     C: "Approved"

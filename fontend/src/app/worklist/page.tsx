@@ -26,71 +26,79 @@ const Worklist = () => {
     router.push("/worklist");
     loadTranslation();
   }, []);
-  const [searchQuery, setSearchQuery] = useState("");
+
   const [workList, setWorkList] = useState<WorkList[]>([]);
-  const [initialWorkList, setInitialWorkList] = useState<WorkList[]>([]);
+  const [numRecord, setNumRecord] = useState(Number);
   const [isAdvancedSearch, setAdvancedSearch] = useState(false);
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
-  const [searchPid, setSearchPid] = useState("");
-  const [searchFullName, setSearchFullName] = useState("");
-  const [searchAcn, setSearchAcn] = useState("");
-  const [searchFromDate, setSearchFromDate] = useState("");
-  const [searchToDate, setSearchToDate] = useState("");
+  const [searchParams, setSearchParams] = useState({
+    pid: "",
+    fullName: "",
+    acn: "",
+    fromDate: "",
+    toDate: "",
+    selectedStatuses: [] as string[],
+    selectedDevices: [] as string[],
+    searchQuery: "",
+  });
   const [collapsed, setCollapsed] = useState(false);
   const [selectedProcID, setSelectedProcID] = useState("");
+  const [reportInf, setReportInf] = useState<any>();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedButtonDay, setSelectedButtonDay] = useState<string>("All");
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
   useEffect(() => {
-    //use for expand or collapse if pc or phone (left panel)
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setCollapsed(true);
-      } else {
-        setCollapsed(false);
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        if (window.innerWidth < 768) {
+          setCollapsed(true);
+        } else {
+          setCollapsed(false);
+        }
+      };
+      handleResize();
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }
   }, []);
 
   useEffect(() => {
     if (user) {
-      fetchWorkList(currentPage, searchQuery).then((r) => r);
+      fetchWorkList(currentPage, searchParams.searchQuery).then((r) => r);
     }
-  }, [user, searchQuery, currentPage]);
+  }, [user, searchParams.searchQuery, currentPage]);
 
   useEffect(() => {
     if (user) {
       handleSearch();
     }
   }, [
-    selectedDate,
-    searchPid,
-    searchFullName,
-    searchAcn,
-    searchFromDate,
-    searchToDate,
-    selectedDevices,
-    selectedStatuses,
+    searchParams.pid,
+    searchParams.fullName,
+    searchParams.acn,
+    searchParams.fromDate,
+    searchParams.toDate,
+    searchParams.selectedDevices,
+    searchParams.selectedStatuses,
   ]);
+
+  useEffect(() => {
+    if (isAdvancedSearch) {
+      handleFilterToday();
+    }
+  }, [isAdvancedSearch]);
 
   const fetchWorkList = async (page: number, query: string) => {
     try {
       const response = await fetchWorklist({ page, search: query });
       setWorkList(response?.data.data);
-      setInitialWorkList(response?.data.data);
+      setNumRecord(response?.data?.count);
       setTotalPages(
         Math.ceil(response.data?.count / response?.data?.page_size)
       );
@@ -106,24 +114,26 @@ const Worklist = () => {
   };
 
   const handleSearch = async () => {
-    const searchParams = new URLSearchParams({
-      modality_type: selectedDevices.join(","),
-      status: selectedStatuses.join(","),
-      patient_name: searchFullName,
-      accession_no: searchAcn,
-      patient_pid: searchPid,
-      created_at_after: searchFromDate,
-      created_at_before: searchToDate,
+    const search = new URLSearchParams({
+      modality_type: searchParams.selectedDevices.join(","),
+      status: searchParams.selectedStatuses.join(","),
+      patient_name: searchParams.fullName,
+      accession_no: searchParams.acn,
+      patient_pid: searchParams.pid,
+      created_at_after: searchParams.fromDate,
+      created_at_before: searchParams.toDate,
     });
 
-    const params = Object.fromEntries(searchParams.entries());
+    const params = Object.fromEntries(search.entries());
 
     try {
       const response = await fetchWorklist(params);
       if (response.status === 200 && response.data?.result?.status === "OK") {
         setWorkList(response?.data.data);
+        setNumRecord(response?.data?.count);
       } else {
         setWorkList([]);
+        setNumRecord(0);
       }
     } catch (error) {
       console.error("Error fetching orders list:", error);
@@ -136,13 +146,15 @@ const Worklist = () => {
 
   const toggleAdvancedSearch = () => {
     setAdvancedSearch(!isAdvancedSearch);
-    setSearchQuery("");
-    setSearchPid("");
-    setSearchFullName("");
-    setSearchAcn("");
-    setSearchFromDate("");
-    setSearchToDate("");
-    setSelectedDate("");
+    setSearchParams((prev) => ({
+      ...prev,
+      acn: "",
+      pid: "",
+      fullName: "",
+      fromDate: "",
+      toDate: "",
+      searchQuery: "",
+    }));
   };
 
   const debounce = (func: Function, wait: number) => {
@@ -155,7 +167,7 @@ const Worklist = () => {
 
   const debouncedSearch = useCallback(
     debounce((query: string) => {
-      setSearchQuery(query);
+      setSearchParams((prev) => ({ ...prev, searchQuery: query }));
     }, 1000),
     []
   );
@@ -165,82 +177,145 @@ const Worklist = () => {
 
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    stateUpdater: React.Dispatch<React.SetStateAction<string[]>>
+    filterKey: "selectedStatuses" | "selectedDevices"
   ) => {
     const { value, checked } = event.target;
-    stateUpdater((prev) =>
-      value === "All"
-        ? checked
-          ? ["All"]
-          : []
-        : checked
-        ? prev.filter((item) => item !== "All").concat(value)
-        : prev.filter((item) => item !== value)
-    );
+    setSearchParams((prev) => ({
+      ...prev,
+      [filterKey]:
+        value === ""
+          ? checked
+            ? [""]
+            : [""]
+          : checked
+          ? prev[filterKey].filter((item) => item !== "").concat(value)
+          : prev[filterKey].filter((item) => item !== value),
+    }));
   };
 
   const handleCheckboxModality = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    handleCheckboxChange(event, setSelectedDevices);
+    handleCheckboxChange(event, "selectedDevices");
   };
 
   const handleCheckboxStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleCheckboxChange(event, setSelectedStatuses);
+    handleCheckboxChange(event, "selectedStatuses");
   };
 
-  const handleFilterByDate = (startDate: Date, endDate: Date) => {
-    const filteredItems = initialWorkList.filter((item) => {
-      const createdDate = new Date(item.created_time);
-      return createdDate >= startDate && createdDate <= endDate;
-    });
-    setWorkList(filteredItems);
-  };
+  // useEffect(() => {
+  //   const today = new Date();
+  //   today.setHours(0, 0, 0, 0); // Start of today
+  //   const endOfDay = new Date(today);
+  //   endOfDay.setHours(23, 59, 59, 999); // End of today
+
+  //   setSearchParams((prev) => ({
+  //     ...prev,
+  //     toDate: endOfDay.toISOString(),
+  //   }));
+  //   const yesterday = new Date();
+  //   yesterday.setDate(yesterday.getDate() - 1);
+  //   yesterday.setHours(0, 0, 0, 0); // Start of yesterday
+  //   setSearchParams((prev) => ({
+  //     ...prev,
+  //     fromDate: yesterday.toISOString(),
+  //   }));
+  //   setSelectedButtonDay("Today");
+  // }, []);
+
   const handleFilterToday = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    handleFilterByDate(today, tomorrow);
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    setSearchParams((prev) => ({
+      ...prev,
+      fromDate: today.toISOString(),
+      toDate: endOfDay.toISOString(),
+    }));
   };
+
   const handleFilterYesterday = () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     yesterday.setHours(0, 0, 0, 0);
-    const today = new Date(yesterday);
-    today.setDate(yesterday.getDate() + 1);
-    handleFilterByDate(yesterday, today);
+    const endOfYesterday = new Date(yesterday);
+    endOfYesterday.setHours(23, 59, 59, 999);
+
+    setSearchParams((prev) => ({
+      ...prev,
+      fromDate: yesterday.toISOString(),
+      toDate: endOfYesterday.toISOString(),
+    }));
+    setSelectedButtonDay("Yesterday");
   };
+
   const handleFilterLast7Days = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const last7Days = new Date(today);
-    last7Days.setDate(today.getDate() - 7);
-    handleFilterByDate(last7Days, today);
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    setSearchParams((prev) => ({
+      ...prev,
+      fromDate: sevenDaysAgo.toISOString(),
+      toDate: today.toISOString(),
+    }));
+    setSelectedButtonDay("7 days");
   };
   const handleFilterAll = () => {
-    setWorkList(initialWorkList);
+    setSearchParams((prev) => ({
+      ...prev,
+      fromDate: "",
+      toDate: "",
+    }));
+    setSelectedButtonDay("All");
   };
+
   const handlesearchPid = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchPid(event.target.value);
+    const { value } = event.target;
+    setSearchParams((prev) => ({ ...prev, pid: value }));
   };
 
   const handlesearchFullName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchFullName(event.target.value);
+    const { value } = event.target;
+    setSearchParams((prev) => ({ ...prev, fullName: value }));
   };
 
   const handlesearchAcn = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchAcn(event.target.value);
+    const { value } = event.target;
+    setSearchParams((prev) => ({ ...prev, acn: value }));
   };
+
   const handlesearchFromDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchFromDate(event.target.value);
+    const { value } = event.target;
+    setSearchParams((prev) => ({ ...prev, fromDate: `${value} 00:00` }));
   };
+
   const handlesearchToDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchToDate(event.target.value);
+    const { value } = event.target;
+    setSearchParams((prev) => ({ ...prev, toDate: `${value} 23:59` }));
+  };
+
+  const handleClearSearchParams = () => {
+    setSearchParams((prev) => ({
+      ...prev,
+      pid: "",
+      fullName: "",
+      acn: "",
+      fromDate: "",
+      toDate: "",
+      searchQuery: "",
+    }));
   };
 
   const handleProcIDSelect = (ProcID: string) => {
     setSelectedProcID(ProcID);
+  };
+  const handleReportInf = (reportInf: any) => {
+    setReportInf(reportInf);
   };
 
   return (
@@ -248,14 +323,6 @@ const Worklist = () => {
       <header className="w-full flex justify-between items-center bg-top text-white p-1">
         <Image src={logo} className="max-w-16 ml-5" alt="logo" />
         <div className="mr-5">
-          {/* <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800 cursor-pointer">
-            <Avatar.Image
-              className="w-full h-full rounded-full"
-              src=""
-              alt="User avatar"
-            />
-            <Avatar.Fallback className="flex items-center justify-center w-full h-full rounded-full text-white"></Avatar.Fallback>
-          </Avatar.Root> */}
           <div className="z-50 text-black">
             {user && (
               <UserAvatar
@@ -289,19 +356,21 @@ const Worklist = () => {
                       ) : (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-align-justify"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          className="text-primary-active"
                         >
-                          <path d="M3 12h18" />
-                          <path d="M3 18h18" />
-                          <path d="M3 6h18" />
+                          <g fill="none" fill-rule="evenodd">
+                            <path d="M20 0H0v20h20z"></path>
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="1.5"
+                              d="M17 10.406H7.166M11.235 6.337l-4.069 4.07 4.07 4.068M3.758 14.475V6.337"
+                            ></path>
+                          </g>
                         </svg>
                       )}
                     </button>
@@ -310,9 +379,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
-                        value="All"
-                        checked={selectedDevices.includes("All")}
+                        className="custom-checkbox cursor-pointer"
+                        value=""
+                        checked={searchParams.selectedDevices.includes("")}
                         onChange={handleCheckboxModality}
                       />
                       {t("All")}
@@ -320,9 +389,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
+                        className="custom-checkbox cursor-pointer"
                         value="MR"
-                        checked={selectedDevices.includes("MR")}
+                        checked={searchParams.selectedDevices.includes("MR")}
                         onChange={handleCheckboxModality}
                       />
                       MR
@@ -330,9 +399,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
+                        className="custom-checkbox cursor-pointer"
                         value="CT"
-                        checked={selectedDevices.includes("CT")}
+                        checked={searchParams.selectedDevices.includes("CT")}
                         onChange={handleCheckboxModality}
                       />
                       CT
@@ -340,9 +409,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
+                        className="custom-checkbox cursor-pointer"
                         value="X-Ray"
-                        checked={selectedDevices.includes("X-Ray")}
+                        checked={searchParams.selectedDevices.includes("X-Ray")}
                         onChange={handleCheckboxModality}
                       />
                       X-Ray
@@ -359,9 +428,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
-                        value="All"
-                        checked={selectedStatuses.includes("All")}
+                        className="custom-checkbox cursor-pointer"
+                        value=""
+                        checked={searchParams.selectedStatuses.includes("")}
                         onChange={handleCheckboxStatus}
                       />
                       {t("All")}
@@ -369,9 +438,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
+                        className="custom-checkbox cursor-pointer"
                         value="SC"
-                        checked={selectedStatuses.includes("SC")}
+                        checked={searchParams.selectedStatuses.includes("SC")}
                         onChange={handleCheckboxStatus}
                       />
                       {t("Scheduled")}
@@ -379,9 +448,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
+                        className="custom-checkbox cursor-pointer"
                         value="IM"
-                        checked={selectedStatuses.includes("IM")}
+                        checked={searchParams.selectedStatuses.includes("IM")}
                         onChange={handleCheckboxStatus}
                       />
                       {t("Unreported")}
@@ -389,9 +458,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
+                        className="custom-checkbox cursor-pointer"
                         value="IP"
-                        checked={selectedStatuses.includes("IP")}
+                        checked={searchParams.selectedStatuses.includes("IP")}
                         onChange={handleCheckboxStatus}
                       />
                       {t("Reporting")}
@@ -399,9 +468,9 @@ const Worklist = () => {
                     <li>
                       <input
                         type="checkbox"
-                        className="custom-checkbox"
+                        className="custom-checkbox cursor-pointer"
                         value="CM"
-                        checked={selectedStatuses.includes("CM")}
+                        checked={searchParams.selectedStatuses.includes("CM")}
                         onChange={handleCheckboxStatus}
                       />
                       {t("Reported")}
@@ -426,19 +495,21 @@ const Worklist = () => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-align-justify"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        className="text-primary-active"
                       >
-                        <path d="M3 12h18" />
-                        <path d="M3 18h18" />
-                        <path d="M3 6h18" />
+                        <g fill="none" fill-rule="evenodd">
+                          <path d="M0 0h20v20H0z"></path>
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M3 10.406h9.834M8.765 6.337l4.069 4.07-4.07 4.068M16.242 14.475V6.337"
+                          ></path>
+                        </g>
                       </svg>
                     </button>
                   </div>
@@ -459,34 +530,44 @@ const Worklist = () => {
               <div className="w-full md:w-auto flex flex-wrap">
                 <div className="w-1/2 md:w-auto p-1">
                   <button
-                    className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
+                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
+                      selectedButtonDay === "Today" ? "purple-selectedrow" : ""
+                    }`}
                     onClick={handleFilterToday}
                   >
-                    {t('Today')}
+                    {t("Today")}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
                   <button
-                    className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
+                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
+                      selectedButtonDay === "Yesterday"
+                        ? "purple-selectedrow"
+                        : ""
+                    }`}
                     onClick={handleFilterYesterday}
                   >
-                    {t('Yesterday')}
+                    {t("Yesterday")}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
                   <button
-                    className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
+                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
+                      selectedButtonDay === "7 days" ? "purple-selectedrow" : ""
+                    }`}
                     onClick={handleFilterLast7Days}
                   >
-                    {t('7 days')}
+                    {t("7 days")}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
                   <button
-                    className="button px-2 py-1 rounded w-full md:w-auto text-sm hover-purple"
+                    className={`button px-2 py-1 rounded w-full md:w-auto text-sm hover-purple ${
+                      selectedButtonDay === "All" ? "purple-selectedrow" : ""
+                    }`}
                     onClick={handleFilterAll}
                   >
-                    {t('All')}
+                    {t("All")}
                   </button>
                 </div>
               </div>
@@ -528,6 +609,7 @@ const Worklist = () => {
                   <input
                     type="text"
                     className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    value={searchParams.pid}
                     onChange={handlesearchPid}
                   />
                 </div>
@@ -538,6 +620,7 @@ const Worklist = () => {
                   <input
                     type="text"
                     className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    value={searchParams.fullName}
                     onChange={handlesearchFullName}
                   />
                 </div>
@@ -548,6 +631,7 @@ const Worklist = () => {
                   <input
                     type="text"
                     className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    value={searchParams.acn}
                     onChange={handlesearchAcn}
                   />
                 </div>
@@ -559,6 +643,7 @@ const Worklist = () => {
                     type="date"
                     placeholder="mm/dd/yyyy"
                     className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    value={searchParams.fromDate.split(" ")[0]}
                     onChange={handlesearchFromDate}
                   />
                 </div>
@@ -569,8 +654,33 @@ const Worklist = () => {
                   <input
                     type="date"
                     className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    value={searchParams.toDate.split(" ")[0]}
                     onChange={handlesearchToDate}
                   />
+                </div>
+
+                <div className="justify-center items-end flex">
+                  <button
+                    className="btn-red-square"
+                    onClick={handleClearSearchParams}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      className="lucide lucide-delete"
+                    >
+                      <path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z" />
+                      <path d="m12 9 6 6" />
+                      <path d="m18 9-6 6" />
+                    </svg>
+                    <div className="text-[12px] px-1">{t("Clear")}</div>
+                  </button>
                 </div>
                 <div className="flex justify-center md:flex-col md:flex-grow px-2">
                   <button
@@ -591,9 +701,17 @@ const Worklist = () => {
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}
+            reportInf={reportInf}
+            numRecord={numRecord}
           />
         </div>
-        {selectedProcID && <DetailInfor proc_id={selectedProcID} t={t} />}
+        {selectedProcID && (
+          <DetailInfor
+            reportInf={handleReportInf}
+            proc_id={selectedProcID}
+            t={t}
+          />
+        )}
       </div>
     </div>
   );
