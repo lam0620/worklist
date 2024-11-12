@@ -9,15 +9,13 @@ import { toast } from "react-toastify";
 import logo from "../../../public/images/org_logo.png";
 import Image from "next/image";
 import "./worklist.css";
-import * as Avatar from "@radix-ui/react-avatar";
 import WorklistList from "@/components/worklist/WorklistList";
 import DetailInfor from "@/components/worklist/DetailInfor";
 import UserAvatar from "../../components/Avatar";
 
 const Worklist = () => {
-  const API_TEST11 = process.env.NEXT_PUBLIC_API_TEST;
   const router = useRouter();
-  router.push("/worklist");
+  // router.push("/worklist");
   const { user } = useUser();
   const [t, setT] = useState(() => (key: string) => key);
   useEffect(() => {
@@ -25,10 +23,12 @@ const Worklist = () => {
       const { t } = await useTranslation("worklist");
       setT(() => t);
     };
+    router.push("/worklist");
     loadTranslation();
   }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [workList, setWorkList] = useState<WorkList[]>([]);
+  const [initialWorkList, setInitialWorkList] = useState<WorkList[]>([]);
   const [isAdvancedSearch, setAdvancedSearch] = useState(false);
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState("");
@@ -39,7 +39,13 @@ const Worklist = () => {
   const [searchFromDate, setSearchFromDate] = useState("");
   const [searchToDate, setSearchToDate] = useState("");
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedPID, setSelectedPID] = useState("");
+  const [selectedProcID, setSelectedProcID] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     //use for expand or collapse if pc or phone (left panel)
@@ -59,6 +65,71 @@ const Worklist = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      fetchWorkList(currentPage, searchQuery).then((r) => r);
+    }
+  }, [user, searchQuery, currentPage]);
+
+  useEffect(() => {
+    if (user) {
+      handleSearch();
+    }
+  }, [
+    selectedDate,
+    searchPid,
+    searchFullName,
+    searchAcn,
+    searchFromDate,
+    searchToDate,
+    selectedDevices,
+    selectedStatuses,
+  ]);
+
+  const fetchWorkList = async (page: number, query: string) => {
+    try {
+      const response = await fetchWorklist({ page, search: query });
+      setWorkList(response?.data.data);
+      setInitialWorkList(response?.data.data);
+      setTotalPages(
+        Math.ceil(response.data?.count / response?.data?.page_size)
+      );
+    } catch (error: any) {
+      if (error.response?.status === 403) {
+        toast.error(t("You don't have permission to view worklist"));
+        //router.back();
+      } else {
+        toast.error(t("Failed to fetch worklist"));
+        //router.back();
+      }
+    }
+  };
+
+  const handleSearch = async () => {
+    const searchParams = new URLSearchParams({
+      modality_type: selectedDevices.join(","),
+      status: selectedStatuses.join(","),
+      patient_name: searchFullName,
+      accession_no: searchAcn,
+      patient_pid: searchPid,
+      created_at_after: searchFromDate,
+      created_at_before: searchToDate,
+    });
+
+    const params = Object.fromEntries(searchParams.entries());
+
+    try {
+      const response = await fetchWorklist(params);
+      if (response.status === 200 && response.data?.result?.status === "OK") {
+        setWorkList(response?.data.data);
+      } else {
+        setWorkList([]);
+      }
+    } catch (error) {
+      console.error("Error fetching orders list:", error);
+    }
+  };
+
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
@@ -74,58 +145,6 @@ const Worklist = () => {
     setSelectedDate("");
   };
 
-  useEffect(() => {
-    if (user) {
-      fetchWorkList(searchQuery).then((r) => r);
-    }
-  }, [user, searchQuery]);
-
-  useEffect(() => {
-    handleSearch();
-  }, [
-    selectedDate,
-    selectedDevices,
-    selectedStatuses,
-    searchPid,
-    searchFullName,
-    searchAcn,
-    searchFromDate,
-    searchToDate,
-  ]);
-
-  const fetchWorkList = async (query: string) => {
-    try {
-      const response = await fetchWorklist({ search: query });
-      console.log(response);
-      setWorkList(response?.data);
-    } catch (error: any) {
-      if (error.response?.status === 403) {
-        toast.error(t("You don't have permission to view worklist"));
-        //router.back();
-      } else {
-        toast.error(t("Failed to fetch worklist"));
-        //router.back();
-      }
-    }
-  };
-  const handleSearch = () => {
-    const searchDevice = selectedDevices.join(",");
-    const searchStatus = selectedStatuses.join(",");
-    const searchParams = new URLSearchParams({
-      devices: searchDevice,
-      status: searchStatus,
-      date: selectedDate,
-      acn: searchAcn,
-      pid: searchPid,
-      fullname: searchFullName,
-      from_date: searchFromDate,
-      to_date: searchToDate,
-    });
-    fetch(`${API_TEST11}/data?${searchParams}`)
-      .then((response) => response.json())
-      .then((data) => setWorkList(data))
-      .catch((error) => console.error("Error:", error));
-  };
   const debounce = (func: Function, wait: number) => {
     let timeout: ReturnType<typeof setTimeout>;
     return (...args: any[]) => {
@@ -150,12 +169,12 @@ const Worklist = () => {
   ) => {
     const { value, checked } = event.target;
     stateUpdater((prev) =>
-      value === "all"
+      value === "All"
         ? checked
-          ? ["all"]
+          ? ["All"]
           : []
         : checked
-        ? prev.filter((item) => item !== "all").concat(value)
+        ? prev.filter((item) => item !== "All").concat(value)
         : prev.filter((item) => item !== value)
     );
   };
@@ -170,20 +189,37 @@ const Worklist = () => {
     handleCheckboxChange(event, setSelectedStatuses);
   };
 
-  const handleButtonToday = () => {
-    setSelectedDate("today");
+  const handleFilterByDate = (startDate: Date, endDate: Date) => {
+    const filteredItems = initialWorkList.filter((item) => {
+      const createdDate = new Date(item.created_time);
+      return createdDate >= startDate && createdDate <= endDate;
+    });
+    setWorkList(filteredItems);
   };
-
-  const handleButtonYesterday = () => {
-    setSelectedDate("yesterday");
+  const handleFilterToday = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    handleFilterByDate(today, tomorrow);
   };
-
-  const handleButtonWeek = () => {
-    setSelectedDate("7days");
+  const handleFilterYesterday = () => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
+    const today = new Date(yesterday);
+    today.setDate(yesterday.getDate() + 1);
+    handleFilterByDate(yesterday, today);
   };
-
-  const handleButtonAllday = () => {
-    setSelectedDate("");
+  const handleFilterLast7Days = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const last7Days = new Date(today);
+    last7Days.setDate(today.getDate() - 7);
+    handleFilterByDate(last7Days, today);
+  };
+  const handleFilterAll = () => {
+    setWorkList(initialWorkList);
   };
   const handlesearchPid = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchPid(event.target.value);
@@ -203,8 +239,8 @@ const Worklist = () => {
     setSearchToDate(event.target.value);
   };
 
-  const handlePIDSelect = (PID: string) => {
-    setSelectedPID(PID);
+  const handleProcIDSelect = (ProcID: string) => {
+    setSelectedProcID(ProcID);
   };
 
   return (
@@ -246,7 +282,7 @@ const Worklist = () => {
                     <button
                       className="toggle-button backgroundcolor-box px-2 py-1 text-white"
                       onClick={toggleSidebar}
-                      title={t("Thu gọn")}
+                      title={t("Collapse")}
                     >
                       {collapsed ? (
                         ""
@@ -275,8 +311,8 @@ const Worklist = () => {
                       <input
                         type="checkbox"
                         className="custom-checkbox"
-                        value="all"
-                        checked={selectedDevices.includes("all")}
+                        value="All"
+                        checked={selectedDevices.includes("All")}
                         onChange={handleCheckboxModality}
                       />
                       {t("All")}
@@ -324,8 +360,8 @@ const Worklist = () => {
                       <input
                         type="checkbox"
                         className="custom-checkbox"
-                        value="all"
-                        checked={selectedStatuses.includes("all")}
+                        value="All"
+                        checked={selectedStatuses.includes("All")}
                         onChange={handleCheckboxStatus}
                       />
                       {t("All")}
@@ -334,41 +370,41 @@ const Worklist = () => {
                       <input
                         type="checkbox"
                         className="custom-checkbox"
-                        value="P"
-                        checked={selectedStatuses.includes("P")}
+                        value="SC"
+                        checked={selectedStatuses.includes("SC")}
                         onChange={handleCheckboxStatus}
                       />
-                      {t("Pending")}
+                      {t("Scheduled")}
                     </li>
                     <li>
                       <input
                         type="checkbox"
                         className="custom-checkbox"
-                        value="Unread"
-                        checked={selectedStatuses.includes("Unread")}
+                        value="IM"
+                        checked={selectedStatuses.includes("IM")}
                         onChange={handleCheckboxStatus}
                       />
-                      {t("Unread")}
+                      {t("Unreported")}
                     </li>
                     <li>
                       <input
                         type="checkbox"
                         className="custom-checkbox"
-                        value="D"
-                        checked={selectedStatuses.includes("D")}
+                        value="IP"
+                        checked={selectedStatuses.includes("IP")}
                         onChange={handleCheckboxStatus}
                       />
-                      {t("Reading")}
+                      {t("Reporting")}
                     </li>
                     <li>
                       <input
                         type="checkbox"
                         className="custom-checkbox"
-                        value="F"
-                        checked={selectedStatuses.includes("F")}
+                        value="CM"
+                        checked={selectedStatuses.includes("CM")}
                         onChange={handleCheckboxStatus}
                       />
-                      {t("Approved")}
+                      {t("Reported")}
                     </li>
                   </ul>
                 </div>
@@ -424,33 +460,33 @@ const Worklist = () => {
                 <div className="w-1/2 md:w-auto p-1">
                   <button
                     className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
-                    onClick={handleButtonToday}
+                    onClick={handleFilterToday}
                   >
-                    {t("Today")}
+                    {t('Today')}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
                   <button
                     className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
-                    onClick={handleButtonYesterday}
+                    onClick={handleFilterYesterday}
                   >
-                    {t("Yesterday")}
+                    {t('Yesterday')}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
                   <button
                     className="button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple"
-                    onClick={handleButtonWeek}
+                    onClick={handleFilterLast7Days}
                   >
-                    {t("7 days")}
+                    {t('7 days')}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
                   <button
                     className="button px-2 py-1 rounded w-full md:w-auto text-sm hover-purple"
-                    onClick={handleButtonAllday}
+                    onClick={handleFilterAll}
                   >
-                    {t("All")}
+                    {t('All')}
                   </button>
                 </div>
               </div>
@@ -464,7 +500,7 @@ const Worklist = () => {
                     <button
                       className="toggle-button backgroundcolor-box text-white flex justify-center items-center"
                       onClick={toggleSidebar}
-                      title={t("Mở rộng")}
+                      title={t("Expand")}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -549,11 +585,15 @@ const Worklist = () => {
           )}
           <WorklistList
             worklist={workList}
-            onSelectPID={handlePIDSelect}
+            onRefresh={fetchWorkList}
+            onSelectProcID={handleProcIDSelect}
             t={t}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
           />
         </div>
-        {selectedPID && <DetailInfor pid={selectedPID} t={t} />}
+        {selectedProcID && <DetailInfor proc_id={selectedProcID} t={t} />}
       </div>
     </div>
   );

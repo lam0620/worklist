@@ -22,6 +22,7 @@ export interface OrderDetailProps{
         proc_id : string;
         study_iuid : string;
         code : string;
+        status : string;
         name : string;
         report : {
             id : string;

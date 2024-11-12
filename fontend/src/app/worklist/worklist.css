@@ -91,9 +91,43 @@
 }
 .scrollbar {
     scrollbar-color: #173239 transparent;
-    overflow-y: auto;
   }
 
 .text-small{
     font-size: 10px;
 }
+.svg-disabled { 
+    pointer-events: none; 
+    opacity: 0.2; 
+}
+.btn-red-square {
+    background-color: #fe615a; 
+    border:none; 
+    border-radius: 8px;
+    padding: 1px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    /* width: 100px; */
+    height: 30px;
+}
+
+.btn-disable {
+    background-color: #0a0a18;
+}
+.scroll-container {
+    overflow-x: auto;
+  }
+  
+  .header-row, .data-row {
+    display: flex;
+    min-width: 1600px; /* Điều chỉnh kích thước này phù hợp với số cột của bạn */
+  }
+  
+  .inbox div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+    
