@@ -101,6 +101,7 @@ class WorklistView(OrderBaseView):
         status=request.query_params.get('status')
         procedure_prefetch = None
 
+        # TODO: Nếu search status in procedure trả về empty (order có) thì lỗi
         # If status is passed in query_params
         if status:
             list_status = status.split(',')
@@ -128,7 +129,9 @@ class WorklistView(OrderBaseView):
 
         if not queryset.exists():
             return self.cus_response_empty_data()
-            
+
+        self.log_queryset(queryset)
+
         data= {}
         # Init a Empty dataframe
         df_study = pd.DataFrame({'accession_no':[],
@@ -321,4 +324,14 @@ class WorklistView(OrderBaseView):
 
         return order_data
     
+
+    def log_queryset(self, queryset):
+        orders_json = []
+
+        # First, convert queryset to json to be able to get procedure data
+        for order in queryset:
+            for worklist in self._get_worklist_json(order):
+                orders_json.append(worklist)      
+
+        logger.info(orders_json)  
 
