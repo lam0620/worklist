@@ -12,46 +12,24 @@ import "./worklist.css";
 import WorklistList from "@/components/worklist/WorklistList";
 import DetailInfor from "@/components/worklist/DetailInfor";
 import UserAvatar from "../../components/Avatar";
+import withLoading from "@/components/withLoading";
 
 const Worklist = () => {
   const router = useRouter();
   // router.push("/worklist");
   const { user } = useUser();
   const [t, setT] = useState(() => (key: string) => key);
+
   useEffect(() => {
     const loadTranslation = async () => {
       const { t } = await useTranslation("worklist");
       setT(() => t);
     };
-    router.push("/worklist");
     loadTranslation();
-  }, []);
-
-  const [workList, setWorkList] = useState<WorkList[]>([]);
-  const [numRecord, setNumRecord] = useState(Number);
-  const [isAdvancedSearch, setAdvancedSearch] = useState(false);
-  const [searchParams, setSearchParams] = useState({
-    pid: "",
-    fullName: "",
-    acn: "",
-    fromDate: "",
-    toDate: "",
-    selectedStatuses: [] as string[],
-    selectedDevices: [] as string[],
-    searchQuery: "",
-  });
-  const [collapsed, setCollapsed] = useState(false);
-  const [selectedProcID, setSelectedProcID] = useState("");
-  const [reportInf, setReportInf] = useState<any>();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [selectedButtonDay, setSelectedButtonDay] = useState<string>("All");
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  useEffect(() => {
+    if (user) {
+      router.push("/worklist");
+    }
+    //to hidden or apprear left panel based on pc or moblie
     if (typeof window !== "undefined") {
       const handleResize = () => {
         if (window.innerWidth < 768) {
@@ -67,14 +45,56 @@ const Worklist = () => {
       };
     }
   }, []);
+  const [workList, setWorkList] = useState<WorkList[]>([]);
+  const [numRecord, setNumRecord] = useState(Number); //to show quantity of record (... số ca)
+  const [isAdvancedSearch, setAdvancedSearch] = useState(false);
+  const [searchParams, setSearchParams] = useState({
+    pid: "",
+    fullName: "",
+    acn: "",
+    fromDate: "",
+    toDate: "",
+    selectedStatuses: [] as string[],
+    selectedDevices: [] as string[],
+    searchQuery: "",
+  });
+  const [collapsed, setCollapsed] = useState(false);
+  const [selectedProcID, setSelectedProcID] = useState(""); // get proc_id for fetch report information
+  const [reportInf, setReportInf] = useState<any>(); // to get data for print pdf
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectedButtonDay, setSelectedButtonDay] = useState<string>("All");
+  const [collapsedDetail, setCollapseDetail] = useState(false); //flexible width of the right panel when open or close detail panel
+
+  const CollapseDetail = () => {
+    setCollapseDetail(!collapsedDetail);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
-    if (user) {
+    // quick search
+    if (user && !isAdvancedSearch) {
       fetchWorkList(currentPage, searchParams.searchQuery).then((r) => r);
     }
-  }, [user, searchParams.searchQuery, currentPage]);
+  }, [searchParams.searchQuery, currentPage]);
 
   useEffect(() => {
+    //get init data today and yesterday when first come
+    if (user !== undefined) {
+      //check here to get exactly user (beacause user can be undefined -> router.push("/login"))
+      if (user) {
+        handleFilterInitData();
+      } else {
+        router.push("/login");
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    //advance search
     if (user) {
       handleSearch();
     }
@@ -89,8 +109,9 @@ const Worklist = () => {
   ]);
 
   useEffect(() => {
+    // set data is yesterday and today when open advance searh.
     if (isAdvancedSearch) {
-      handleFilterToday();
+      handleFilterInitData();
     }
   }, [isAdvancedSearch]);
 
@@ -114,7 +135,8 @@ const Worklist = () => {
   };
 
   const handleSearch = async () => {
-    const search = new URLSearchParams({
+    //for advance search
+    const searchParamsObj = {
       modality_type: searchParams.selectedDevices.join(","),
       status: searchParams.selectedStatuses.join(","),
       patient_name: searchParams.fullName,
@@ -122,8 +144,14 @@ const Worklist = () => {
       patient_pid: searchParams.pid,
       created_at_after: searchParams.fromDate,
       created_at_before: searchParams.toDate,
-    });
+    };
 
+    // Filter out empty values
+    const filteredParams = Object.fromEntries(
+      Object.entries(searchParamsObj).filter(([key, value]) => value)
+    );
+
+    const search = new URLSearchParams(filteredParams);
     const params = Object.fromEntries(search.entries());
 
     try {
@@ -131,6 +159,9 @@ const Worklist = () => {
       if (response.status === 200 && response.data?.result?.status === "OK") {
         setWorkList(response?.data.data);
         setNumRecord(response?.data?.count);
+        setTotalPages(
+          Math.ceil(response.data?.count / response?.data?.page_size)
+        );
       } else {
         setWorkList([]);
         setNumRecord(0);
@@ -145,16 +176,26 @@ const Worklist = () => {
   };
 
   const toggleAdvancedSearch = () => {
+    // set search data empty when changing mode search
+
+    if (searchParams.searchQuery) {
+      setSearchParams((prev) => ({
+        ...prev,
+        searchQuery: "",
+      }));
+    }
+    if (isAdvancedSearch) {
+      setSearchParams((prev) => ({
+        ...prev,
+        acn: "",
+        pid: "",
+        fullName: "",
+        fromDate: "",
+        toDate: "",
+      }));
+      setSelectedButtonDay("All");
+    }
     setAdvancedSearch(!isAdvancedSearch);
-    setSearchParams((prev) => ({
-      ...prev,
-      acn: "",
-      pid: "",
-      fullName: "",
-      fromDate: "",
-      toDate: "",
-      searchQuery: "",
-    }));
   };
 
   const debounce = (func: Function, wait: number) => {
@@ -176,6 +217,7 @@ const Worklist = () => {
   };
 
   const handleCheckboxChange = (
+    //left panel: choose "all" -> disable others checkbox and vice versa
     event: React.ChangeEvent<HTMLInputElement>,
     filterKey: "selectedStatuses" | "selectedDevices"
   ) => {
@@ -203,37 +245,33 @@ const Worklist = () => {
     handleCheckboxChange(event, "selectedStatuses");
   };
 
-  // useEffect(() => {
-  //   const today = new Date();
-  //   today.setHours(0, 0, 0, 0); // Start of today
-  //   const endOfDay = new Date(today);
-  //   endOfDay.setHours(23, 59, 59, 999); // End of today
-
-  //   setSearchParams((prev) => ({
-  //     ...prev,
-  //     toDate: endOfDay.toISOString(),
-  //   }));
-  //   const yesterday = new Date();
-  //   yesterday.setDate(yesterday.getDate() - 1);
-  //   yesterday.setHours(0, 0, 0, 0); // Start of yesterday
-  //   setSearchParams((prev) => ({
-  //     ...prev,
-  //     fromDate: yesterday.toISOString(),
-  //   }));
-  //   setSelectedButtonDay("Today");
-  // }, []);
+  const handleFilterInitData = () => {
+    //get init data (yesterday, today) when come first or open advance search
+    const fromDate = new Date();
+    fromDate.setDate(fromDate.getDate() - 1);
+    fromDate.setHours(0, 0, 0, 0);
+    const toDate = new Date();
+    toDate.setHours(23, 59, 59, 999);
+    setSearchParams((prev) => ({
+      ...prev,
+      fromDate: fromDate.toISOString(),
+      toDate: toDate.toISOString(),
+    }));
+    setSelectedButtonDay("Today");
+  };
 
   const handleFilterToday = () => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setHours(0, 0);
     const endOfDay = new Date(today);
-    endOfDay.setHours(23, 59, 59, 999);
+    endOfDay.setHours(23, 59);
 
     setSearchParams((prev) => ({
       ...prev,
       fromDate: today.toISOString(),
       toDate: endOfDay.toISOString(),
     }));
+    setSelectedButtonDay("Today");
   };
 
   const handleFilterYesterday = () => {
@@ -300,6 +338,7 @@ const Worklist = () => {
   };
 
   const handleClearSearchParams = () => {
+    //advance search: button clear data
     setSearchParams((prev) => ({
       ...prev,
       pid: "",
@@ -318,10 +357,26 @@ const Worklist = () => {
     setReportInf(reportInf);
   };
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL;
+
+  const linkStudyList = `${API_BASE_URL}`;
+
   return (
     <div className="flex flex-col h-screen text-sm md:text-base">
       <header className="w-full flex justify-between items-center bg-top text-white p-1">
-        <Image src={logo} className="max-w-16 ml-5" alt="logo" />
+        <div className="justify-start flex">
+          <Image src={logo} className="max-w-16 ml-5" alt="logo" />
+          <p className="flex items-center justify-center ml-7 bold">
+            {t("Worklist |")}
+          </p>
+          <a
+            href={linkStudyList}
+            className="flex items-center justify-center ml-1 text-red-400 underline text-xs md:text-sm"
+          >
+            {t("Study List")}
+          </a>
+        </div>
+
         <div className="mr-5">
           <div className="z-50 text-black">
             {user && (
@@ -334,10 +389,10 @@ const Worklist = () => {
           </div>
         </div>
       </header>
-      <div className="flex flex-1 backgroundcolor overflow-y-hidden">
+      <div className="md:flex md:flex-1 md:h-screen backgroundcolor overflow-y-hidden">
         {/* left panel  */}
         {!collapsed && (
-          <div className="body-left inboxlist w-56 transition-all duration-300 ease-in-out h-screen border-r-4 border-color-col md:static absolute left-0 z-50">
+          <div className="w-56 body-left inboxlist transition-all duration-300 ease-in-out h-screen border-r-4 border-color-col md:static absolute left-0 z-50">
             <div className="">
               {!collapsed && (
                 <div className="">
@@ -361,13 +416,13 @@ const Worklist = () => {
                           viewBox="0 0 20 20"
                           className="text-primary-active"
                         >
-                          <g fill="none" fill-rule="evenodd">
+                          <g fill="none" fillRule="evenodd">
                             <path d="M20 0H0v20h20z"></path>
                             <path
                               stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="1.5"
                               d="M17 10.406H7.166M11.235 6.337l-4.069 4.07 4.07 4.068M3.758 14.475V6.337"
                             ></path>
                           </g>
@@ -482,7 +537,15 @@ const Worklist = () => {
           </div>
         )}
         {/* right panel  */}
-        <div className="w-full backgroundcolor">
+        <div
+          className={`backgroundcolor ${
+            collapsed && !collapsedDetail
+              ? "w-full"
+              : collapsedDetail
+              ? "w-full md:w-[75%]"
+              : "w-full md:w-[88%]"
+          }`}
+        >
           {!isAdvancedSearch && (
             <div className="flex flex-col pr-9 pl-2 pb-1 mb-1 md:flex-row justify-between items-center pt-1 backgroundcolor-box">
               <div className="w-full md:w-1/4 mb-2 md:mb-0 flex items-center">
@@ -500,13 +563,13 @@ const Worklist = () => {
                         viewBox="0 0 20 20"
                         className="text-primary-active"
                       >
-                        <g fill="none" fill-rule="evenodd">
+                        <g fill="none" fillRule="evenodd">
                           <path d="M0 0h20v20H0z"></path>
                           <path
                             stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
                             d="M3 10.406h9.834M8.765 6.337l4.069 4.07-4.07 4.068M16.242 14.475V6.337"
                           ></path>
                         </g>
@@ -574,8 +637,8 @@ const Worklist = () => {
             </div>
           )}
           {isAdvancedSearch && (
-            <div className="advanced-search inbox p-1 mb-1 rounded md:p-3">
-              <div className="flex flex-col md:flex-row w-full md:space-x-4">
+            <div className="advanced-search inbox p-1 mb-1 rounded md:py-1 md:px-2">
+              <div className="flex flex-col md:flex-row w-full">
                 {collapsed && (
                   <div className="flex items-center">
                     <button
@@ -602,66 +665,65 @@ const Worklist = () => {
                     </button>
                   </div>
                 )}
-                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2 text-white">
+                <div className="flex items-center justify-center md:flex-col md:flex-grow md:px-0 px-2 text-white">
                   <label className="w-1/3 md:w-full text-white md:text-center text-sm">
                     {t("PID")}
                   </label>
                   <input
                     type="text"
-                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                     value={searchParams.pid}
                     onChange={handlesearchPid}
                   />
                 </div>
-                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2">
+                <div className="flex items-center justify-center md:flex-col md:flex-grow md:px-0 px-2">
                   <label className="w-1/3 md:w-full text-white md:text-center text-sm">
                     {t("Patient Name")}
                   </label>
                   <input
                     type="text"
-                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                     value={searchParams.fullName}
                     onChange={handlesearchFullName}
                   />
                 </div>
-                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2">
+                <div className="flex items-center justify-center md:flex-col md:flex-grow md:px-0 px-2">
                   <label className="w-1/3 md:w-full text-white md:text-center text-sm">
                     {t("Accession No")}
                   </label>
                   <input
                     type="text"
-                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                     value={searchParams.acn}
                     onChange={handlesearchAcn}
                   />
                 </div>
-                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2">
+                <div className="flex items-center justify-center md:flex-col md:flex-grow md:px-0 px-2">
                   <label className="w-1/3 md:w-full text-white md:text-center text-sm">
                     {t("From")}
                   </label>
                   <input
                     type="date"
-                    placeholder="mm/dd/yyyy"
-                    className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                     value={searchParams.fromDate.split(" ")[0]}
                     onChange={handlesearchFromDate}
                   />
                 </div>
-                <div className="flex items-center justify-center md:flex-col md:flex-grow px-2">
+                <div className="flex items-center justify-center md:flex-col md:flex-grow md:px-0 px-2">
                   <label className="w-1/3 md:w-full text-white md:text-center text-sm">
                     {t("To")}
                   </label>
                   <input
                     type="date"
-                    className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                     value={searchParams.toDate.split(" ")[0]}
                     onChange={handlesearchToDate}
                   />
                 </div>
 
-                <div className="justify-center items-end flex">
+                <div className="justify-center items-end flex mt-2 md:mt-0 md:mb-1">
                   <button
-                    className="btn-red-square"
+                    className="btn-red-square btn-clear"
                     onClick={handleClearSearchParams}
                   >
                     <svg
@@ -670,14 +732,16 @@ const Worklist = () => {
                       height="24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       className="lucide lucide-delete"
                     >
-                      <path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z" />
-                      <path d="m12 9 6 6" />
-                      <path d="m18 9-6 6" />
+                      <g transform="scale(0.8, 0.8) translate(3, 3)">
+                        <path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z" />
+                        <path d="m12 9 6 6" />
+                        <path d="m18 9-6 6" />
+                      </g>
                     </svg>
                     <div className="text-[12px] px-1">{t("Clear")}</div>
                   </button>
@@ -710,6 +774,7 @@ const Worklist = () => {
             reportInf={handleReportInf}
             proc_id={selectedProcID}
             t={t}
+            setCollapseDetail={CollapseDetail}
           />
         )}
       </div>
@@ -717,4 +782,4 @@ const Worklist = () => {
   );
 };
 
-export default Worklist;
+export default withLoading(Worklist);

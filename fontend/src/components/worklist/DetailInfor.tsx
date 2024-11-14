@@ -7,9 +7,15 @@ interface DetailInforProps {
   proc_id: string;
   t: (key: string) => string;
   reportInf: (report: ReportDetailProps) => void;
+  setCollapseDetail: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DetailInfor = ({ proc_id, t, reportInf }: DetailInforProps) => {
+const DetailInfor = ({
+  proc_id,
+  t,
+  reportInf,
+  setCollapseDetail,
+}: DetailInforProps) => {
   const emptyReport = {
     id: "",
     accession_no: "",
@@ -42,6 +48,10 @@ const DetailInfor = ({ proc_id, t, reportInf }: DetailInforProps) => {
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
+
+  useEffect(() => {
+    setCollapseDetail(collapsed);
+  }, [collapsed]);
 
   useEffect(() => {
     if (proc_id) {
@@ -85,7 +95,6 @@ const DetailInfor = ({ proc_id, t, reportInf }: DetailInforProps) => {
             onClick={toggleSidebar}
             title={t("Mở rộng")}
           >
-            {" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -93,13 +102,13 @@ const DetailInfor = ({ proc_id, t, reportInf }: DetailInforProps) => {
               viewBox="0 0 20 20"
               className="text-primary-active"
             >
-              <g fill="none" fill-rule="evenodd">
+              <g fill="none" fillRule="evenodd">
                 <path d="M20 0H0v20h20z"></path>
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.5"
                   d="M17 10.406H7.166M11.235 6.337l-4.069 4.07 4.07 4.068M3.758 14.475V6.337"
                 ></path>
               </g>
@@ -127,13 +136,13 @@ const DetailInfor = ({ proc_id, t, reportInf }: DetailInforProps) => {
                       viewBox="0 0 20 20"
                       className="text-primary-active"
                     >
-                      <g fill="none" fill-rule="evenodd">
+                      <g fill="none" fillRule="evenodd">
                         <path d="M0 0h20v20H0z"></path>
                         <path
                           stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="1.5"
                           d="M3 10.406h9.834M8.765 6.337l4.069 4.07-4.07 4.068M16.242 14.475V6.337"
                         ></path>
                       </g>
@@ -310,13 +319,13 @@ const DetailInfor = ({ proc_id, t, reportInf }: DetailInforProps) => {
                   viewBox="0 0 20 20"
                   className="text-primary-active"
                 >
-                  <g fill="none" fill-rule="evenodd">
+                  <g fill="none" fillRule="evenodd">
                     <path d="M0 0h20v20H0z"></path>
                     <path
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.5"
                       d="M3 10.406h9.834M8.765 6.337l4.069 4.07-4.07 4.068M16.242 14.475V6.337"
                     ></path>
                   </g>

@@ -4,7 +4,7 @@ import { fetchRelatedStudies } from "@/services/apiService";
 import { OrderDetailProps } from "@/app/types/OrderDetail";
 import { toast } from "react-toastify";
 import "../../app/worklist/worklist.css";
-import * as Constants from "./Constants";
+import * as Util from "@/utils/utils";
 interface DetailInforProps {
   pid: string;
   patientName: string;
@@ -19,17 +19,10 @@ const RelatedSession = ({
   onSelectProcID,
 }: DetailInforProps) => {
   const [relatedStudies, setRelatedStudies] = useState<OrderDetailProps[]>([]);
-  //const [selectedItem, setSelectedItem] = useState("");
   const [selectedRow, setSelectedRow] = useState("");
-  const [selectedProcID, setSelectedProcID] = useState("");
-
-  // const handleSelectedRow = (id: any) => {
-  //   setSelectedItem(id);
-  // };
 
   const handleProcIDSelect = (ProcID: string) => {
     onSelectProcID(ProcID);
-    setSelectedProcID(ProcID);
     setSelectedRow(ProcID);
   };
 
@@ -54,10 +47,9 @@ const RelatedSession = ({
   };
   return (
     <div className="h-full bottom-0 mt-2 border-t-4 border-color-col text-sm">
-      <div className="flex justify-between items-center backgroundcolor-box px-2 py-2">
+      <div className="flex justify-between items-center backgroundcolor-box px-2 py-1">
         <div className="text-blue-300 text-base">
-          {t("Related Studies")} {"(BN:"} {patientName}
-          {")"}
+          {t("Related Studies")} {"("} {t("PN")} {":"} {patientName} {")"}
         </div>
       </div>
       <div className="mt-1">
@@ -66,27 +58,27 @@ const RelatedSession = ({
           <div className="w-1/12 font-semibold text-center hidden md:block">
             {t("PID")}
           </div>
-          <div className="w-1/12 font-semibold text-center hidden md:block">
+          <div className="w-2/12 font-semibold text-center hidden md:block">
             {t("Accession No")}
-          </div>
-          <div className="w-2/12 font-semibold text-center">
-            {t("Procedure")}
           </div>
           <div className="w-1/12 font-semibold text-center hidden md:block">
             {t("Order Date")}
           </div>
-          <div className="w-2/12 font-semibold text-center">
+          <div className="w-1/12 font-semibold text-center">
+            {t("Study Date")}
+          </div>
+          <div className="w-1/12 font-semibold text-center">
             {t("Modality")}
+          </div>
+          <div className="w-3/12 font-semibold text-center">
+            {t("Procedure")}
           </div>
           <div className="w-2/12 font-semibold text-center">
             {t("Referring Physician")}
           </div>
-          <div className="w-2/12 font-semibold text-center">
-            {t("Radiologist")}
-          </div>
         </div>
       </div>
-      <div className="scrollbar overflow-y-auto h-1/3">
+      <div className="scrollbar overflow-y-auto h-[29%]">
         {relatedStudies.length > 0 && (
           <ul>
             {relatedStudies.flatMap((item) =>
@@ -103,36 +95,39 @@ const RelatedSession = ({
                   }}
                 >
                   <div className="flex flex-row py-2 ">
-                    <div className="mx-2 w-1/12 font-semibold text-center hidden md:block">
-                      {t(
-                        Constants.getStatusName(
-                          item.procedures?.map((procedure) => procedure.status)
-                        )
-                      )}
+                    <div className="mx-1 w-1/12 font-semibold text-center hidden md:block">
+                      {t(Util.getStatusName(procedure.status))}
                     </div>
                     <div className="w-1/12 font-semibold text-center hidden md:block">
                       {item.patient.pid}
                     </div>
-                    <div className="w-1/12 font-semibold text-center hidden md:block">
+                    <div className="w-2/12 font-semibold text-center hidden md:block">
                       {item.accession_no}
-                    </div>
-                    <div className="w-2/12 font-semibold text-center">
-                      <span>{procedure.name}</span>
                     </div>
                     <div className="w-1/12 font-semibold text-center hidden md:block">
                       {item.created_time.split(" ")[0]}
                     </div>
-                    <div className="w-2/12 font-semibold text-center">
+                    <div className="w-1/12 font-semibold text-center">
+                      <span>
+                        {procedure.report.created_time
+                          ? procedure.report.created_time.split(" ")[0]
+                          : ""}
+                      </span>
+                    </div>
+                    <div className="w-1/12 font-semibold text-center">
                       {item.modality_type}
+                    </div>
+                    <div className="w-3/12 font-semibold text-center">
+                      <span>{procedure.name}</span>
                     </div>
                     <div className="w-2/12 font-semibold text-center">
                       {item.referring_phys_name}
                     </div>
-                    <div className="w-2/12 font-semibold text-center">
+                    {/* <div className="w-2/12 font-semibold text-center">
                       {procedure.report.radiologist && (
                         <span>{procedure.report.radiologist.fullname}</span>
                       )}
-                    </div>
+                    </div> */}
                   </div>
                 </li>
               ))

@@ -35,5 +35,9 @@ export const PERMISSIONS = {
 
     VIEW_PATIENT : "view_patient",
     EDIT_PATIENT : "edit_patient",
+
+    VIEW_IMAGE : "view_image",
+    
+    PRINT_REPORT : "print_report",
 };
 

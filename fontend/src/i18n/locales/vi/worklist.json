@@ -50,5 +50,7 @@
     "Scan Protocol":"Kỹ thuật",
     "records":"ca",
     "record":"ca",
-    "Report Date": "Ngày tạo"
+    "Report Date": "Ngày tạo",
+    "PN": "BN",
+    "Study List" : "Danh sách ca chụp"
 }

@@ -4,8 +4,7 @@ import JsBarcode from "jsbarcode";
 import QRCode from "qrcode.react";
 import logo from "../../../public/images/org_logo.png";
 import "./PdfComponent.css";
-import Utils from "./utils";
-import Constants from "./Constants";
+import * as Util from "@/utils/utils";
 import Image from "next/image";
 interface BarcodeProps {
   value: string;
@@ -56,17 +55,17 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
       //return `@page {size: A4}`;
     };
 
-    useEffect(() => {
-      // const fetchSign = async () => {
-      //   const response = await import(`../../assets/signs/${reportData.radiologist.sign}`);
-      //   setSign(response.default);
-      // };
-      // fetchSign();
+    // useEffect(() => {
+    //   const fetchSign = async () => {
+    //     const response = await import(`../../assets/signs/${reportInf.radiologist.sign}`);
+    //     setSign(response.default);
+    //   };
+    //   fetchSign();
 
-      // signs are uploaded to /media/signs/... (define in nginx)
-      // sign = signs/xxx.yyy
-      setSign(Constants.USER_MNG_URL + reportInf?.radiologist.sign);
-    }, [sign]);
+    //   //signs are uploaded to /media/signs/... (define in nginx)
+    //   //sign = signs/xxx.yyy
+    //   setSign(Util.getImageUrl + reportInf?.radiologist.sign);
+    // }, [sign]);
 
     return (
       <>
@@ -90,8 +89,7 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
           </div>
           <div className="title-barcode border">
             <h1 className="title">
-              PHIẾU KẾT QUẢ{" "}
-              {Utils.getFullModalityType(reportInf?.modality_type)}
+              PHIẾU KẾT QUẢ {Util.getFullModalityType(reportInf?.modality_type)}
             </h1>
             <div className="mr-2 border text-center">
               <div className="barcode">
@@ -115,13 +113,13 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
               <p>
                 Năm sinh:
                 <span className="font-semibold">
-                  {Utils.formatDate(reportInf?.patient.dob)}
+                  {Util.formatDate(reportInf?.patient.dob)}
                 </span>
               </p>
               <p>
                 Giới tính:
                 <span className="font-semibold">
-                  {Utils.getFullGender_vn(reportInf?.patient.gender)}
+                  {Util.getFullGender_vn(reportInf?.patient.gender)}
                 </span>
               </p>
             </div>

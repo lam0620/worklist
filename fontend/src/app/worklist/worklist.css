@@ -111,9 +111,13 @@
     /* width: 100px; */
     height: 32px;
 }
+.btn-clear{
+    height: 27px;
+}
 
 .btn-disable {
-    background-color: #0a0a18;
+    background-color: #595656;
+    color: rgb(172 168 168);
 }
 .scroll-container {
     overflow-x: auto;
@@ -129,5 +133,3 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
-    
