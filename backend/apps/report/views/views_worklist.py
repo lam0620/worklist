@@ -86,7 +86,6 @@ class WorklistView(OrderBaseView):
     @swagger_auto_schema(
         operation_summary='Get worklists',
         operation_description='Get worklists',
-        # query_serializer= ser.GetOrderSerializers,
         tags=[swagger_tags.REPORT_ORDER],
     )
     def get(self, request, *args, **kwargs):
@@ -99,38 +98,25 @@ class WorklistView(OrderBaseView):
 
         # SC, IP, CM, IM
         status=request.query_params.get('status')
-        procedure_prefetch = None
+        list_accession_no = [] # for query in pacs.study
+        queryset = None
 
-        # TODO: Nếu search status in procedure trả về empty (order có) thì lỗi
-        # If status is passed in query_params
+        # If status is passed in query_params, search in the Procedure
         if status:
             list_status = status.split(',')
-            queryset = Procedure.objects.select_related('procedure_type').filter(status__in=list_status)
-            
-            if queryset.exists():
-                procedure_prefetch = Prefetch('procedure_set',queryset = queryset,to_attr='procedure_list')
-
+            queryset = Procedure.objects.select_related('procedure_type', 'order').filter(status__in=list_status)
+         
         else:    
             procedure_prefetch = Prefetch(
                 'procedure_set',
                 queryset=Procedure.objects.select_related('procedure_type'),
                 to_attr='procedure_list'
             )
+            queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
 
-        # Search by accession
-        #try:
-        if not procedure_prefetch:
-            return self.cus_response_empty_data()
-        
-        queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
-        
-        # except Order.DoesNotExist:
-        #     return self.cus_response_empty_data()
 
         if not queryset.exists():
             return self.cus_response_empty_data()
-
-        self.log_queryset(queryset)
 
         data= {}
         # Init a Empty dataframe
@@ -146,7 +132,11 @@ class WorklistView(OrderBaseView):
 
         # Get study data from pacs database
         try:
-            list_accession_no = [order.accession_no for order in queryset]
+            if status:
+                list_accession_no = [proc.order.accession_no for proc in queryset]
+            else:
+                list_accession_no = [order.accession_no for order in queryset]
+                
             # Get pacsdb.study by accession_no
             with connections["pacs_db"].cursor() as cursor:
                 sql = """select s.accession_no, s.study_iuid, s.created_time as study_created_time, sqa.num_series, sqa.num_instances,study_desc 
@@ -166,7 +156,7 @@ class WorklistView(OrderBaseView):
             logger.warning(e, exc_info=True)
 
         # Convert queryset to json, merge df_study to df_merged
-        df_merged = self._merge_df(queryset, df_study)
+        df_merged = self._merge_df(queryset, df_study, status)
 
         # Search status = SC or IM in df. Do this because the status in procedure table is not latest data
         if status and (status == 'SC' or status == 'IM'):
@@ -179,13 +169,16 @@ class WorklistView(OrderBaseView):
         return self.get_paginated_response(page)
     
 
-    def _merge_df(self, queryset, df_study):
+    def _merge_df(self, queryset, df_study, status):
         orders_json = []
 
         # First, convert queryset to json to be able to get procedure data
-        for order in queryset:
-            for worklist in self._get_worklist_json(order):
-                orders_json.append(worklist)
+        if status:
+            orders_json = self._get_worklist_json_1level(queryset)
+        else:
+            for order in queryset:
+                for worklist in self._get_worklist_json(order):
+                    orders_json.append(worklist)
 
       
         # Convert json to dataframe
@@ -207,6 +200,8 @@ class WorklistView(OrderBaseView):
         #print(df_merged['study_created_time'])
         # Format datetime to sort
         df_merged['created_time'] = pd.to_datetime(df_merged['created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
+       
+        # study_created_time is got from pacs.study
         df_merged['study_created_time'] = pd.to_datetime(df_merged['study_created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
         #print(df_merged.dtypes)
         # Sort latest created_time first
@@ -223,76 +218,6 @@ class WorklistView(OrderBaseView):
         # Add df_duplciate_order to df_merged and replace NaN to ''
         return df_merged.replace([np.nan, -np.inf, pd.NaT], '')
 
-        #print(df_merged['study_created_time'])
-        # Convert dataframe to json to add to response
-        #return df_merged.to_dict(orient = 'records')        
-
-    # """
-    # Get list of worklist
-    # """
-    # @swagger_auto_schema(
-    #     operation_summary='Get worklists',
-    #     operation_description='Get worklists',
-    #     # query_serializer= ser.GetOrderSerializers,
-    #     tags=[swagger_tags.REPORT_ORDER],
-    # )
-    # def get1(self, request, *args, **kwargs):
-    #     # Get and check version to secure or not
-    #     if request.META.get('HTTP_X_API_VERSION') != "X":  
-    #         user = request.user
-    #         is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
-    #         if not is_per and not user.is_superuser:
-    #             return self.cus_response_403(per_code.VIEW_ORDER)
-
-    #     procedure_prefetch = Prefetch(
-    #         'procedure_set',
-    #         queryset=Procedure.objects.select_related('procedure_type'),
-    #         to_attr='procedure_list'
-    #     )
-
-    #     # Search by accession
-    #     try:
-    #         queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
-        
-    #     except Order.DoesNotExist:
-    #         return self.cus_response_empty_data()
-    
-    #     data= {}
-
-    #     # Convert Django's Queryset into a Pandas DataFrame
-    #     df_order_dataframe = pd.DataFrame.from_records(queryset.values())
-    #     df_study = pd.DataFrame({'accession_no':[]}) # Empty dataframe
-
-    #     # try:
-    #     #     list_accession_no = [order.accession_no for order in queryset]
-    #     #     # Get pacsdb.study by accession_no
-    #     #     with connections["pacs_db"].cursor() as cursor:
-    #     #         sql = """select s.accession_no, s.study_iuid , s.created_time, sqa.num_series, sqa.num_instances,study_desc 
-    #     #                     from study s 
-    #     #                     left join study_query_attrs sqa on s.pk =sqa.study_fk 
-    #     #                     where s.accession_no in %s"""
-    #     #         cursor.execute(sql,[tuple(list_accession_no)])
-    #     #         results = cursor.fetchall()
-
-    #     #         # Convert Django's fetchall() result into a Pandas DataFrame
-    #     #         column_names = [desc[0] for desc in cursor.description]
-    #     #         study_dataframe = pd.DataFrame(results, columns = column_names)
-
-
-    #     # except Exception as e:
-    #     #     logger.warning(e, exc_info=True)
-
-    #     # Merge study_dataframe to order_dataframe
-    #     df_merged = order_dataframe.merge(study_dataframe, how='left')
-
-        
-    #     #orders_data = [self.get_pure_order_json(order) for order in queryset]
-    #     orders_data = df_merged.to_dict(orient = 'records')
-
-  
-    #     page = self.paginate_queryset(orders_data)
-    #     return self.get_paginated_response(page)
-    
 
     def _get_worklist_json(self, order):
         order_data = [{
@@ -323,7 +248,39 @@ class WorklistView(OrderBaseView):
         } for proc in order.procedure_list]        
 
         return order_data
-    
+
+    def _get_worklist_json_1level(self, queryset):
+        """
+        queryset is list of the procedure
+        """
+        order_data = [{
+            'id': proc.id,
+            'accession_no': proc.order.accession_no,
+            'referring_phys_code': proc.order.referring_phys.doctor_no,
+            'referring_phys_name': proc.order.referring_phys.fullname,
+            'clinical_diagnosis': proc.order.clinical_diagnosis,
+            # 'proc_time': proc.proc_time,
+            'created_time':proc.order.created_at.strftime('%d/%m/%Y %H:%M'),
+            'modality_type': proc.order.modality_type,
+            
+            'pat_pid':proc.order.patient.pid,
+            'pat_fullname':proc.order.patient.fullname,
+            'pat_gender':proc.order.patient.gender,
+            'pat_dob':proc.order.patient.dob,
+            'pat_tel':proc.order.patient.tel,
+            'pat_address':proc.order.patient.address,
+            'pat_insurance_no':proc.order.patient.insurance_no,
+
+            'proc_id': proc.id,
+            'proc_code': proc.procedure_type.code, 
+            'proc_name': proc.procedure_type.name,
+
+            'proc_study_iuid':proc.study_iuid,
+            'proc_status':proc.status
+                
+        } for proc in queryset]        
+
+        return order_data   
 
     def log_queryset(self, queryset):
         orders_json = []
