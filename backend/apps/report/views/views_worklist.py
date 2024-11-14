@@ -104,7 +104,23 @@ class WorklistView(OrderBaseView):
         # If status is passed in query_params, search in the Procedure
         if status:
             list_status = status.split(',')
-            queryset = Procedure.objects.select_related('procedure_type', 'order').filter(status__in=list_status)
+            # Search in procedure first
+            queryset = Procedure.objects.filter(status__in=list_status)
+
+            if not queryset.exists():
+                return self.cus_response_empty_data()
+        
+            # Get order id from procedure
+            order_ids = [proc.order.id for proc in queryset]
+
+            procedure_prefetch = Prefetch(
+                'procedure_set',
+                queryset=Procedure.objects.select_related('procedure_type'),
+                to_attr='procedure_list'
+            )
+            # Search based on filter and order_ids (call filter() have to be before prefetch_related)
+            queryset = self.filter_queryset(Order.objects.filter(pk__in=order_ids).prefetch_related(procedure_prefetch))            
+            
          
         else:    
             procedure_prefetch = Prefetch(
@@ -132,10 +148,10 @@ class WorklistView(OrderBaseView):
 
         # Get study data from pacs database
         try:
-            if status:
-                list_accession_no = [proc.order.accession_no for proc in queryset]
-            else:
-                list_accession_no = [order.accession_no for order in queryset]
+            # if status:
+            #     list_accession_no = [proc.order.accession_no for proc in queryset]
+            # else:
+            list_accession_no = [order.accession_no for order in queryset]
                 
             # Get pacsdb.study by accession_no
             with connections["pacs_db"].cursor() as cursor:
@@ -173,12 +189,12 @@ class WorklistView(OrderBaseView):
         orders_json = []
 
         # First, convert queryset to json to be able to get procedure data
-        if status:
-            orders_json = self._get_worklist_json_1level(queryset)
-        else:
-            for order in queryset:
-                for worklist in self._get_worklist_json(order):
-                    orders_json.append(worklist)
+        # if status:
+        #     orders_json = self._get_worklist_json_1level(queryset)
+        # else:
+        for order in queryset:
+            for worklist in self._get_worklist_json(order):
+                orders_json.append(worklist)
 
       
         # Convert json to dataframe
