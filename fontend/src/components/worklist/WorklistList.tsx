@@ -1,19 +1,25 @@
 "use client";
 import { WorkList } from "@/app/types/WorkList";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RelatedSession from "./RelatedSession";
-import * as Constants from "./Constants";
 import { fetchReportByProcId } from "@/services/apiService";
 import ReactToPrint from "react-to-print";
+import PdfComponent from "./PdfComponent";
+import { ReportDetailProps } from "@/app/types/ReportDetail";
+import { PERMISSIONS } from "@/utils/constant";
+import { useUser } from "@/context/UserContext";
+import * as Util from "@/utils/utils";
 
 interface WorklistProps {
   worklist: WorkList[];
   onSelectProcID: (PID: string) => void;
   t: (key: string) => string;
-  onRefresh: (page: number, query: string) => void;
+  onRefresh: (page: number, query: string, onReFresh: any) => void;
   totalPages: number;
   onPageChange: (page: number) => void;
   currentPage: number;
+  reportInf: ReportDetailProps;
+  numRecord: number;
 }
 const WorklistList = ({
   worklist,
@@ -23,38 +29,45 @@ const WorklistList = ({
   totalPages,
   onPageChange,
   currentPage,
+  reportInf,
+  numRecord,
 }: WorklistProps) => {
+  const { user } = useUser();
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedRow, setSelectedRow] = useState("");
-  const [reportCheck, setReportCheck] = useState(false);
-  const [viewerCheck, setViewerCheck] = useState(false);
-  // const [linkImage, setLinkImage] = useState("");
-  const [patientName, setPatientName] = useState("");
-  const [acn, setAcn] = useState("");
-  const [study_iuid, setStudyIuid] = useState("");
-  const [status, setStatus] = useState("");
+  const [reportCheck, setReportCheck] = useState(false); // to check the row has report?
+  const [viewerCheck, setViewerCheck] = useState(false); // to check the row has image?
+  const [patientInf, setPatientInf] = useState({
+    patientName: "",
+    acn: "",
+    study_iuid: "",
+    status: "",
+  });
   const componentRef = useRef<HTMLDivElement>(null);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL;
 
   const handleSelectedRowPid = (pid: any) => {
+    //get pid to fetch related session
     setSelectedItem(pid);
   };
-  // const handleSelectedRowACN = (acn: any) => {
-  //   setSelectedRow(acn);
-  // };
 
   const checkSelectedRow = async (id: any) => {
     try {
       const response = await fetchReportByProcId(id);
       if (response.status === 200 && response.data?.data.image_link) {
-        // setLinkImage(response.data?.data.image_link);
       }
       if (response.status === 200 && response.data?.data.id) {
-        setAcn(response.data?.data.accession_no);
+        setPatientInf((prev) => ({
+          ...prev,
+          acn: response.data?.data.accession_no,
+        }));
         const studyIuid = response.data?.data.study_iuid;
         const procStudyIuid = response.data?.data.proc_study_iuid;
-        setStudyIuid(procStudyIuid ? procStudyIuid : studyIuid);
+        setPatientInf((prev) => ({
+          ...prev,
+          study_iuid: procStudyIuid ? procStudyIuid : studyIuid, //priority to get proc_id, because in data have both
+        }));
       }
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
@@ -70,24 +83,48 @@ const WorklistList = ({
   let reportWindow: Window | null = null;
 
   const handleReportButton = () => {
-    const reportLink = `${API_BASE_URL}/report?StudyInstanceUIDs=${study_iuid}&acn=${acn}`;
+    const reportLink = `${API_BASE_URL}/report?StudyInstanceUIDs=${patientInf.study_iuid}&acn=${patientInf.acn}`;
     if (!reportWindow || reportWindow.closed) {
+      //handle no open new tab if this report screen exist (error)
       reportWindow = window.open(reportLink, "reportWindow");
     } else {
       reportWindow.focus();
     }
   };
+
   const handleViewerButton = () => {
-    const viewerLink = `${API_BASE_URL}/viewer?StudyInstanceUIDs=${study_iuid}`;
+    const viewerLink = `${API_BASE_URL}/viewer?StudyInstanceUIDs=${patientInf.study_iuid}`;
     if (!viewerWindow || viewerWindow.closed) {
-      viewerWindow = window.open(viewerLink, "reportWindow");
+      //handle no open new tab if this viewer screen exist (error)
+      viewerWindow = window.open(viewerLink, "viewerWindow");
     } else {
       viewerWindow.focus();
     }
   };
 
+  const handleDownloadButton = () => {
+    // Download
+    const hostname = "http://192.168.201.54:8080";
+    const baseUrl = `${hostname}/dcm4chee-arc/aets/DCM4CHEE/rs`;
+    //const hostname = window.location.origin;
+    //const baseUrl = `${hostname}/dicomweb/VHC/rs`;
+    const url = `${baseUrl}/studies/${patientInf.study_iuid}?accept=application/zip;transfer-syntax=*`;
+    //window.open(url, '_blank');
+    // create <a> element dynamically
+    let fileLink = document.createElement("a");
+    fileLink.href = url;
+
+    // suggest a name for the downloaded file
+    fileLink.download = `${patientInf.study_iuid}.zip`;
+    console.info(`Download... ${patientInf.study_iuid}`);
+    // simulate click
+    document.body.appendChild(fileLink);
+    fileLink.click();
+    document.body.removeChild(fileLink);
+  };
+
   const handleRefreshButton = () => {
-    onRefresh(1, "");
+    onRefresh(1, "", true);
   };
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -95,85 +132,152 @@ const WorklistList = ({
     }
   };
   const handleCheckStatus = (status: any) => {
-    setStatus(status);
-    setViewerCheck(Constants.checkViewStatus(status));
-    setReportCheck(Constants.checkReportStatus(status));
+    //check status when click a row
+    setPatientInf((prev) => ({ ...prev, status: status }));
+    setViewerCheck(Util.checkViewStatus(status));
+    setReportCheck(Util.checkReportStatus(status));
   };
+  const hasButtonViewerPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_IMAGE) || user?.is_superuser; // use this permission to view button and download button
 
+  const hasButtonReportPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_REPORT) || user?.is_superuser;
+
+  const hasButtonPrintPermission =
+    user?.permissions?.includes(PERMISSIONS.PRINT_REPORT) || user?.is_superuser;
   return (
-    <div className="h-full">
-      <div className="flex md:flex-grow my-1 text-white px-4 py-2 backgroundcolor-box">
-        <div className="justify-between flex-row flex w-full">
-          <div className="flex flex-row">
-            <button
-              title={t("View Image")}
-              className={`btn-red-square mx-2  ${
-                selectedRow && viewerCheck ? "" : "btn-disable"
-              }`}
-              onClick={handleViewerButton}
-              disabled={!viewerCheck}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={`lucide lucide-eye ml-2  ${
-                  selectedRow && viewerCheck ? "" : "svg-disabled"
-                }`}
-              >
-                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <div className="text-[12px] px-2">{t("View Image")}</div>
-            </button>
-            <button
-              title={t("Report")}
-              className={`btn-red-square mx-2 ${
-                selectedRow && reportCheck ? "" : "btn-disable"
-              }`}
-              onClick={handleReportButton}
-              disabled={!reportCheck}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={`lucide lucide-file-text ml-2  ${
-                  selectedRow && reportCheck ? "" : "svg-disabled"
-                }`}
-              >
-                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                <path d="M10 9H8" />
-                <path d="M16 13H8" />
-                <path d="M16 17H8" />
-              </svg>
-              <div className="text-[12px] px-2">
-                {status === "CM" ? t("View Report") : t("Report")}
-              </div>
-            </button>
-            <ReactToPrint
-              trigger={() => (
+    <div className="h-screen">
+      <div className="flex md:flex-grow my-1 text-white px-4 py-1.5 backgroundcolor-box">
+        <div className="justify-between flex-col md:flex-row flex w-full">
+          <div className="flex flex-col md:flex-row whitespace-nowrap">
+            <div className="flex flex-row mb-2 md:mb-0 justify-center md:justify-start">
+              {hasButtonViewerPermission && (
                 <button
-                  title={t("Print")}
-                  className={`btn-red-square mx-2 ${
-                    selectedRow && status === "CM" ? "" : "btn-disable"
+                  title={t("View Image")}
+                  className={`btn-red-square mx-2   ${
+                    selectedRow && viewerCheck
+                      ? ""
+                      : "btn-disable cursor-not-allowed"
                   }`}
-                  disabled={status !== "CM"}
+                  onClick={handleViewerButton}
+                  disabled={!viewerCheck}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    style={{ fill: "none" }}
+                    width="21"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`lucide lucide-eye ml-0  ${
+                      selectedRow && viewerCheck ? "" : "svg-disabled"
+                    }`}
+                  >
+                    <g transform="scale(0.8, 0.8) translate(3, 3)">
+                      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                      <circle cx="12" cy="12" r="3" />
+                    </g>
+                  </svg>
+                  <div className="text-[12px] px-2">{t("View Image")}</div>
+                </button>
+              )}
+              {hasButtonReportPermission && (
+                <button
+                  title={t("Report")}
+                  className={`btn-red-square mx-2 ${
+                    selectedRow && reportCheck
+                      ? ""
+                      : "btn-disable cursor-not-allowed"
+                  }`}
+                  onClick={handleReportButton}
+                  disabled={!reportCheck}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="19"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`lucide lucide-file-text  ${
+                      selectedRow && reportCheck ? "" : "svg-disabled"
+                    }`}
+                  >
+                    <g transform="scale(0.8, 0.8) translate(3, 3)">
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                      <path d="M10 9H8" />
+                      <path d="M16 13H8" />
+                      <path d="M16 17H8" />
+                    </g>
+                  </svg>
+                  <div className="text-[12px] px-2">
+                    {patientInf.status === "CM"
+                      ? t("View Report")
+                      : t("Report")}
+                  </div>
+                </button>
+              )}
+              {hasButtonPrintPermission && (
+                <ReactToPrint
+                  trigger={() => (
+                    <button
+                      title={t("Print")}
+                      className={`btn-red-square mx-2 ${
+                        selectedRow && patientInf.status === "CM"
+                          ? ""
+                          : "btn-disable cursor-not-allowed"
+                      }`}
+                      disabled={patientInf.status !== "CM"}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ fill: "none" }}
+                        width="22"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`lucide lucide-printer ${
+                          selectedRow && patientInf.status === "CM"
+                            ? ""
+                            : "svg-disabled"
+                        }`}
+                      >
+                        <g transform="scale(0.8, 0.8) translate(3, 3)">
+                          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                          <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                          <rect x="6" y="14" width="12" height="8" rx="1" />
+                        </g>
+                      </svg>
+                      <div className="text-[12px] px-2">{t("Print")}</div>
+                    </button>
+                  )}
+                  content={() => componentRef.current}
+                />
+              )}
+            </div>
+            <div className="md:ml-14 flex flex-row justify-center md:justify-start">
+              {hasButtonViewerPermission && (
+                <button
+                  title={t("Download")}
+                  className={`btn-red-square mx-2   ${
+                    selectedRow && viewerCheck
+                      ? ""
+                      : "btn-disable cursor-not-allowed"
+                  }`}
+                  onClick={handleDownloadButton}
+                  disabled={!viewerCheck}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
@@ -182,182 +286,225 @@ const WorklistList = ({
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`lucide lucide-printer ml-2 ${
-                      selectedRow && status === "CM" ? "" : "svg-disabled"
+                    style={{ fill: "none" }}
+                    className={`lucide lucide-download ml-0  ${
+                      selectedRow && viewerCheck ? "" : "svg-disabled"
                     }`}
                   >
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                    <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
-                    <rect x="6" y="14" width="12" height="8" rx="1" />
+                    <g transform="scale(0.8, 0.8) translate(3, 3)">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" x2="12" y1="15" y2="3" />
+                    </g>
                   </svg>
-                  <div className="text-[12px] px-2">{t("Print")}</div>
+                  <div className="text-[12px] px-2">{t("Download")}</div>
                 </button>
               )}
-              content={() => componentRef.current}
-            />
-            <button
-              title={t("Refresh")}
-              className="btn-red-square mx-2"
-              onClick={handleRefreshButton}
-            >
+              <button
+                title={t("Refresh")}
+                className="btn-red-square mx-2"
+                onClick={handleRefreshButton}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-refresh-cw"
+                >
+                  <g transform="scale(0.8, 0.8) translate(3, 3)">
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                    <path d="M21 3v5h-5" />
+                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                    <path d="M8 16H3v5" />
+                  </g>
+                </svg>
+                <div className="text-[12px] px-2">{t("Refresh")}</div>
+              </button>
+            </div>
+          </div>
+          <div className="mt-3 md:mt-0">
+            <div className="flex flex-row justify-center md:justify-end">
+              {numRecord > 0 && (
+                <div className="flex items-center mr-3">
+                  <span>
+                    {numRecord} {t(numRecord > 1 ? "records" : "record")}
+                  </span>
+                </div>
+              )}
+              {totalPages > 1 && (
+                <div className="sticky md:mr-5 mr-0">
+                  <div className="flex text-sm">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className={`px-2 py-1 mx-1 button disabled:opacity-30 ${
+                        currentPage === 1 ? "purple-selectedrow" : ""
+                      }`}
+                    >
+                      {t("Previous")}
+                    </button>
+                    {[...Array(totalPages)].map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handlePageChange(index + 1)}
+                        className={`px-3 py-1 mx-1 button ${
+                          currentPage === index + 1 ? "purple-selectedrow" : ""
+                        }`}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`px-2 py-1 mx-1 button disabled:opacity-30 ${
+                        currentPage === totalPages ? "purple-selectedrow" : ""
+                      }`}
+                    >
+                      {t("Next")}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="h-full md:h-[55%] scrollbar overflow-x-auto overflow-y-auto box-content">
+        <div className="md:w-[2000px] whitespace-nowrap flex flex-row inbox rounded-t border-b bordervalue px-4 py-1">
+          <div className="font-semibold text-center hidden md:block w-1/12">
+            {t("Status")}
+          </div>
+          <div className="font-semibold text-center w-1/3 md:w-1/12">
+            {t("PID")}
+          </div>
+          <div className="font-semibold text-center w-1/3 md:w-2/12">
+            {t("Patient Name")}
+          </div>
+          <div className="font-semibold text-center w-1/3 md:w-1/12">
+            {t("Accession No")}
+          </div>
+          <div className="font-semibold text-center  hidden md:block w-1/12">
+            {t("Order Date")}
+          </div>
+          <div className="font-semibold text-center hidden md:block w-1/12">
+            {t("Study Date")}
+          </div>
+          <div className="font-semibold text-center  hidden md:block w-1/12">
+            {t("Modality")}
+          </div>
+          <div className="font-semibold text-center  hidden md:block w-2/12">
+            {t("Procedure")}
+          </div>
+          <div className="font-semibold text-center  hidden md:block w-2/12">
+            {t("Referring Physician")}
+          </div>
+          <div className="font-semibold text-center  hidden md:block w-1/12">
+            {t("Instances")}
+          </div>
+        </div>
+        <div className="scrollbar overflow-auto h-3/4 md:h-[90%] md:w-[2000px]">
+          {worklist.length > 0 ? (
+            <ul>
+              {worklist.map((item) => (
+                <li
+                  key={`${item.id}-${item.proc_id}`} // make sure key is not duplicate, because item.id can have 2 in db
+                  className={`flex flex-row items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
+                    selectedRow === item.proc_id ? "purple-selectedrow" : ""
+                  }`}
+                  onClick={() => {
+                    checkSelectedRow(item.proc_id);
+                    handleSelectedRowPid(item.pat_pid);
+                    setPatientInf((prev) => ({
+                      ...prev,
+                      patientName: item.pat_fullname,
+                    }));
+                    handleCheckStatus(item.proc_status);
+                  }}
+                >
+                  <div className="text-center hidden md:block w-1/12">
+                    {t(Util.getStatusName(item.proc_status))}
+                  </div>
+                  <div className="text-center w-1/3 md:w-1/12">
+                    {item.pat_pid}
+                  </div>
+                  <div className="text-center w-1/3 md:w-2/12">
+                    {item.pat_fullname}
+                  </div>
+                  <div className="text-center w-1/3 md:w-1/12">
+                    {item.accession_no}
+                  </div>
+                  <div className="text-center hidden md:block w-1/12">
+                    {item.created_time.split(" ")[0]}
+                  </div>
+                  <div className="text-center hidden md:block w-1/12">
+                    {item.study_created_time.split(" ")[0]}
+                  </div>
+                  <div className="text-center hidden md:block w-1/12">
+                    {item.modality_type}
+                  </div>
+                  <div className="text-center hidden md:block w-2/12">
+                    {item.proc_name}
+                  </div>
+                  <div className="text-center hidden md:block w-2/12">
+                    {item.referring_phys_name}
+                  </div>
+                  <div className="text-center hidden md:block w-1/12">
+                    {item.num_instances}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="flex flex-col items-center pt-44 md:pt-44">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-refresh-cw ml-2"
+                width="111"
+                height="111"
+                viewBox="0 0 111 111"
+                className="mb-4"
               >
-                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-                <path d="M21 3v5h-5" />
-                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-                <path d="M8 16H3v5" />
+                <g
+                  fill="none"
+                  fillRule="evenodd"
+                  stroke="#3A3F99"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="3"
+                  transform="translate(2 2)"
+                >
+                  <circle
+                    cx="53.419"
+                    cy="53.419"
+                    r="53.419"
+                    fill="#06081D"
+                  ></circle>
+                  <circle cx="49.411" cy="49.411" r="23.862"></circle>
+                  <path d="M66.282 66.282 81.29 81.29"></path>
+                </g>
               </svg>
-              <div className="text-[12px] px-2">{t("Refresh")}</div>
-            </button>
-          </div>
-          <div>
-            {totalPages > 1 && (
-              <div className="sticky">
-                <div className="flex justify-center text-sm">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-2 py-1 mx-1 button disabled:opacity-30"
-                  >
-                    {t("Previous")}
-                  </button>
-                  {[...Array(totalPages)].map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handlePageChange(index + 1)}
-                      className={`px-3 py-1 mx-1  button `}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-2 py-1 mx-1 button disabled:opacity-30"
-                  >
-                    {t("Next")}
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+              <span className="text-white">{t("No data available")}</span>
+            </div>
+          )}
         </div>
       </div>
-      <div className="whitespace-nowrap grid grid-cols-3 md:grid-cols-8 inbox rounded-t border-b bordervalue px-4 py-2">
-        <div className="font-semibold text-center ml-[-10px] hidden md:block">
-          {t("Status")}
-        </div>
-        <div className="font-semibold text-center ml-[-10px]">{t("PID")}</div>
-        <div className="font-semibold text-center ml-[-10px]">
-          {t("Patient Name")}
-        </div>
-        <div className="font-semibold text-center ml-[-10px]">
-          {t("Accession No")}
-        </div>
-        <div className="font-semibold text-center ml-[-10px] hidden md:block">
-          {t("Order Date")}
-        </div>
-       
-        <div className="font-semibold text-center ml-[-15px] hidden md:block">
-          {t("Modality")}
-        </div>
-        <div className="font-semibold text-center ml-[-20px] hidden md:block">
-          {t("Procedure")}
-        </div>
-              
-        <div className="font-semibold text-center ml-[-20px] hidden md:block">
-          {t("Instances")}
-        </div>
-      </div>
-      <div className="scrollbar overflow-y-auto h-3/4 md:h-1/2">
-        {worklist.length > 0 ? (
-          <ul>
-            {worklist.map((item) => (
-              <li
-                key={item.id}
-                className={`grid grid-cols-3 md:grid-cols-8 items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
-                  selectedRow === item.proc_id ? "purple-selectedrow" : ""
-                }`}
-                onClick={() => {
-                  checkSelectedRow(item.proc_id);
-                  handleSelectedRowPid(item.pat_pid);
-                  setPatientName(item.pat_fullname);
-                  handleCheckStatus(item.proc_status);
-                }}
-              >
-                <div className="text-center hidden md:block">
-                  {t(Constants.getStatusName(item.proc_status))}
-                </div>
-                <div className="text-center">{item.pat_pid}</div>
-                <div className="text-center">{item.pat_fullname}</div>
-                <div className="text-center">{item.accession_no}</div>
-                <div className="text-center hidden md:block">
-                  {new Date(item.created_time).toLocaleDateString()}
-                </div>
-                <div className="text-center hidden md:block">
-                  {item.modality_type}
-                </div>
-                <div className="text-center hidden md:block">
-                  {item.proc_name}
-                </div>
-                <div className="text-center hidden md:block">
-                  {item.num_instances}
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="flex flex-col items-center pt-44 md:pt-44">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="111"
-              height="111"
-              viewBox="0 0 111 111"
-              className="mb-4"
-            >
-              <g
-                fill="none"
-                fillRule="evenodd"
-                stroke="#3A3F99"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="3"
-                transform="translate(2 2)"
-              >
-                <circle
-                  cx="53.419"
-                  cy="53.419"
-                  r="53.419"
-                  fill="#06081D"
-                ></circle>
-                <circle cx="49.411" cy="49.411" r="23.862"></circle>
-                <path d="M66.282 66.282 81.29 81.29"></path>
-              </g>
-            </svg>
-            <span className="text-white">{t("No data available")}</span>
-          </div>
-        )}
-      </div>
+
       <div className=" md:block hidden h-3/4">
         <RelatedSession
           pid={selectedItem}
-          patientName={patientName}
+          patientName={patientInf.patientName}
           t={t}
           onSelectProcID={onSelectProcID}
         />
       </div>
-      {/* <div ref={componentRef}>
-        {selectedRow && <DetailInfor proc_id={selectedRow} t={t} />}
-      </div> */}
+      <div style={{ display: "none" }}>
+        <PdfComponent ref={componentRef} reportInf={reportInf} />
+      </div>
     </div>
   );
 };
