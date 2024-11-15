@@ -14,7 +14,7 @@ interface WorklistProps {
   worklist: WorkList[];
   onSelectProcID: (PID: string) => void;
   t: (key: string) => string;
-  onRefresh: (page: number, query: string) => void;
+  onRefresh: (page: number, query: string, onReFresh: any) => void;
   totalPages: number;
   onPageChange: (page: number) => void;
   currentPage: number;
@@ -102,8 +102,29 @@ const WorklistList = ({
     }
   };
 
+  const handleDownloadButton = () => {
+    // Download
+    const hostname = "http://192.168.201.54:8080";
+    const baseUrl = `${hostname}/dcm4chee-arc/aets/DCM4CHEE/rs`;
+    //const hostname = window.location.origin;
+    //const baseUrl = `${hostname}/dicomweb/VHC/rs`;
+    const url = `${baseUrl}/studies/${patientInf.study_iuid}?accept=application/zip;transfer-syntax=*`;
+    //window.open(url, '_blank');
+    // create <a> element dynamically
+    let fileLink = document.createElement("a");
+    fileLink.href = url;
+
+    // suggest a name for the downloaded file
+    fileLink.download = `${patientInf.study_iuid}.zip`;
+    console.info(`Download... ${patientInf.study_iuid}`);
+    // simulate click
+    document.body.appendChild(fileLink);
+    fileLink.click();
+    document.body.removeChild(fileLink);
+  };
+
   const handleRefreshButton = () => {
-    onRefresh(1, "");
+    onRefresh(1, "", true);
   };
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -117,7 +138,7 @@ const WorklistList = ({
     setReportCheck(Util.checkReportStatus(status));
   };
   const hasButtonViewerPermission =
-    user?.permissions?.includes(PERMISSIONS.VIEW_IMAGE) || user?.is_superuser;
+    user?.permissions?.includes(PERMISSIONS.VIEW_IMAGE) || user?.is_superuser; // use this permission to view button and download button
 
   const hasButtonReportPermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_REPORT) || user?.is_superuser;
@@ -128,142 +149,183 @@ const WorklistList = ({
     <div className="h-screen">
       <div className="flex md:flex-grow my-1 text-white px-4 py-1.5 backgroundcolor-box">
         <div className="justify-between flex-col md:flex-row flex w-full">
-          <div className="flex flex-row whitespace-nowrap">
-            {hasButtonViewerPermission && (
-              <button
-                title={t("View Image")}
-                className={`btn-red-square mx-2   ${
-                  selectedRow && viewerCheck
-                    ? ""
-                    : "btn-disable cursor-not-allowed"
-                }`}
-                onClick={handleViewerButton}
-                disabled={!viewerCheck}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="21"
-                  height="24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`lucide lucide-eye ml-0  ${
-                    selectedRow && viewerCheck ? "" : "svg-disabled"
+          <div className="flex flex-col md:flex-row whitespace-nowrap">
+            <div className="flex flex-row mb-2 md:mb-0 justify-center md:justify-start">
+              {hasButtonViewerPermission && (
+                <button
+                  title={t("View Image")}
+                  className={`btn-red-square mx-2   ${
+                    selectedRow && viewerCheck
+                      ? ""
+                      : "btn-disable cursor-not-allowed"
                   }`}
+                  onClick={handleViewerButton}
+                  disabled={!viewerCheck}
                 >
-                  <g transform="scale(0.8, 0.8) translate(3, 3)">
-                    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
-                    <circle cx="12" cy="12" r="3" />
-                  </g>
-                </svg>
-                <div className="text-[12px] px-2">{t("View Image")}</div>
-              </button>
-            )}
-            {hasButtonReportPermission && (
-              <button
-                title={t("Report")}
-                className={`btn-red-square mx-2 ${
-                  selectedRow && reportCheck
-                    ? ""
-                    : "btn-disable cursor-not-allowed"
-                }`}
-                onClick={handleReportButton}
-                disabled={!reportCheck}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="19"
-                  height="24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className={`lucide lucide-file-text  ${
-                    selectedRow && reportCheck ? "" : "svg-disabled"
-                  }`}
-                >
-                  <g transform="scale(0.8, 0.8) translate(3, 3)">
-                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-                    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                    <path d="M10 9H8" />
-                    <path d="M16 13H8" />
-                    <path d="M16 17H8" />
-                  </g>
-                </svg>
-                <div className="text-[12px] px-2">
-                  {patientInf.status === "CM" ? t("View Report") : t("Report")}
-                </div>
-              </button>
-            )}
-            {hasButtonPrintPermission && (
-              <ReactToPrint
-                trigger={() => (
-                  <button
-                    title={t("Print")}
-                    className={`btn-red-square mx-2 ${
-                      selectedRow && patientInf.status === "CM"
-                        ? ""
-                        : "btn-disable cursor-not-allowed"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="21"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`lucide lucide-eye ml-0  ${
+                      selectedRow && viewerCheck ? "" : "svg-disabled"
                     }`}
-                    disabled={patientInf.status !== "CM"}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ fill: "none" }}
-                      width="22"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={`lucide lucide-printer ${
+                    <g transform="scale(0.8, 0.8) translate(3, 3)">
+                      <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                      <circle cx="12" cy="12" r="3" />
+                    </g>
+                  </svg>
+                  <div className="text-[12px] px-2">{t("View Image")}</div>
+                </button>
+              )}
+              {hasButtonReportPermission && (
+                <button
+                  title={t("Report")}
+                  className={`btn-red-square mx-2 ${
+                    selectedRow && reportCheck
+                      ? ""
+                      : "btn-disable cursor-not-allowed"
+                  }`}
+                  onClick={handleReportButton}
+                  disabled={!reportCheck}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="19"
+                    height="24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`lucide lucide-file-text  ${
+                      selectedRow && reportCheck ? "" : "svg-disabled"
+                    }`}
+                  >
+                    <g transform="scale(0.8, 0.8) translate(3, 3)">
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                      <path d="M10 9H8" />
+                      <path d="M16 13H8" />
+                      <path d="M16 17H8" />
+                    </g>
+                  </svg>
+                  <div className="text-[12px] px-2">
+                    {patientInf.status === "CM"
+                      ? t("View Report")
+                      : t("Report")}
+                  </div>
+                </button>
+              )}
+              {hasButtonPrintPermission && (
+                <ReactToPrint
+                  trigger={() => (
+                    <button
+                      title={t("Print")}
+                      className={`btn-red-square mx-2 ${
                         selectedRow && patientInf.status === "CM"
                           ? ""
-                          : "svg-disabled"
+                          : "btn-disable cursor-not-allowed"
                       }`}
+                      disabled={patientInf.status !== "CM"}
                     >
-                      <g transform="scale(0.8, 0.8) translate(3, 3)">
-                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                        <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
-                        <rect x="6" y="14" width="12" height="8" rx="1" />
-                      </g>
-                    </svg>
-                    <div className="text-[12px] px-2">{t("Print")}</div>
-                  </button>
-                )}
-                content={() => componentRef.current}
-              />
-            )}
-            <button
-              title={t("Refresh")}
-              className="btn-red-square mx-2"
-              onClick={handleRefreshButton}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-refresh-cw"
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ fill: "none" }}
+                        width="22"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`lucide lucide-printer ${
+                          selectedRow && patientInf.status === "CM"
+                            ? ""
+                            : "svg-disabled"
+                        }`}
+                      >
+                        <g transform="scale(0.8, 0.8) translate(3, 3)">
+                          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                          <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                          <rect x="6" y="14" width="12" height="8" rx="1" />
+                        </g>
+                      </svg>
+                      <div className="text-[12px] px-2">{t("Print")}</div>
+                    </button>
+                  )}
+                  content={() => componentRef.current}
+                />
+              )}
+            </div>
+            <div className="md:ml-14 flex flex-row justify-center md:justify-start">
+              {hasButtonViewerPermission && (
+                <button
+                  title={t("Download")}
+                  className={`btn-red-square mx-2   ${
+                    selectedRow && viewerCheck
+                      ? ""
+                      : "btn-disable cursor-not-allowed"
+                  }`}
+                  onClick={handleDownloadButton}
+                  disabled={!viewerCheck}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ fill: "none" }}
+                    className={`lucide lucide-download ml-0  ${
+                      selectedRow && viewerCheck ? "" : "svg-disabled"
+                    }`}
+                  >
+                    <g transform="scale(0.8, 0.8) translate(3, 3)">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" x2="12" y1="15" y2="3" />
+                    </g>
+                  </svg>
+                  <div className="text-[12px] px-2">{t("Download")}</div>
+                </button>
+              )}
+              <button
+                title={t("Refresh")}
+                className="btn-red-square mx-2"
+                onClick={handleRefreshButton}
               >
-                <g transform="scale(0.8, 0.8) translate(3, 3)">
-                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-                  <path d="M21 3v5h-5" />
-                  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-                  <path d="M8 16H3v5" />
-                </g>
-              </svg>
-              <div className="text-[12px] px-2">{t("Refresh")}</div>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-refresh-cw"
+                >
+                  <g transform="scale(0.8, 0.8) translate(3, 3)">
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                    <path d="M21 3v5h-5" />
+                    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+                    <path d="M8 16H3v5" />
+                  </g>
+                </svg>
+                <div className="text-[12px] px-2">{t("Refresh")}</div>
+              </button>
+            </div>
           </div>
           <div className="mt-3 md:mt-0">
             <div className="flex flex-row justify-center md:justify-end">

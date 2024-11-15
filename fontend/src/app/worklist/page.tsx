@@ -74,12 +74,7 @@ const Worklist = () => {
     setCurrentPage(page);
   };
 
-  useEffect(() => {
-    // quick search
-    if (user && !isAdvancedSearch) {
-      fetchWorkList(currentPage, searchParams.searchQuery).then((r) => r);
-    }
-  }, [searchParams.searchQuery, currentPage]);
+  const [loadFirst, setLoadFirst] = useState(false);
 
   useEffect(() => {
     //get init data today and yesterday when first come
@@ -87,6 +82,7 @@ const Worklist = () => {
       //check here to get exactly user (beacause user can be undefined -> router.push("/login"))
       if (user) {
         handleFilterInitData();
+        setLoadFirst(true);
       } else {
         router.push("/login");
       }
@@ -94,8 +90,15 @@ const Worklist = () => {
   }, [user]);
 
   useEffect(() => {
+    // quick search
+    if (user && !isAdvancedSearch && loadFirst) {
+      fetchWorkList(currentPage, searchParams.searchQuery, true).then((r) => r);
+    }
+  }, [searchParams.searchQuery, currentPage]);
+
+  useEffect(() => {
     //advance search
-    if (user) {
+    if (user && loadFirst) {
       handleSearch();
     }
   }, [
@@ -115,7 +118,7 @@ const Worklist = () => {
     }
   }, [isAdvancedSearch]);
 
-  const fetchWorkList = async (page: number, query: string) => {
+  const fetchWorkList = async (page: number, query: string, onReFresh: any) => {
     try {
       const response = await fetchWorklist({ page, search: query });
       setWorkList(response?.data.data);
@@ -131,6 +134,9 @@ const Worklist = () => {
         toast.error(t("Failed to fetch worklist"));
         //router.back();
       }
+    }
+    if (onReFresh) {
+      setSelectedButtonDay("All");
     }
   };
 
@@ -363,6 +369,7 @@ const Worklist = () => {
 
   return (
     <div className="flex flex-col h-screen text-sm md:text-base">
+      <title>Worklist</title>
       <header className="w-full flex justify-between items-center bg-top text-white p-1">
         <div className="justify-start flex">
           <Image src={logo} className="max-w-16 ml-5" alt="logo" />
@@ -547,8 +554,8 @@ const Worklist = () => {
           }`}
         >
           {!isAdvancedSearch && (
-            <div className="flex flex-col pr-9 pl-2 pb-1 mb-1 md:flex-row justify-between items-center pt-1 backgroundcolor-box">
-              <div className="w-full md:w-1/4 mb-2 md:mb-0 flex items-center">
+            <div className="flex flex-col md:pr-9 md:pl-2 md:pb-1 md:mb-1 md:flex-row md:justify-between items-center pt-1 backgroundcolor-box justify-center">
+              <div className="w-full md:w-1/4 md:mb-0 flex items-center">
                 {collapsed && (
                   <div className="flex items-center mr-2">
                     <button
@@ -648,19 +655,21 @@ const Worklist = () => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="lucide lucide-align-justify"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        className="text-primary-active"
                       >
-                        <path d="M3 12h18" />
-                        <path d="M3 18h18" />
-                        <path d="M3 6h18" />
+                        <g fill="none" fillRule="evenodd">
+                          <path d="M0 0h20v20H0z"></path>
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M3 10.406h9.834M8.765 6.337l4.069 4.07-4.07 4.068M16.242 14.475V6.337"
+                          ></path>
+                        </g>
                       </svg>
                     </button>
                   </div>
