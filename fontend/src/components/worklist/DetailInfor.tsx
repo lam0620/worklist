@@ -3,6 +3,8 @@ import { fetchReportByProcId } from "@/services/apiService";
 import { toast } from "react-toastify";
 import { formatDate, getReportStatusName } from "@/utils/utils";
 import { ReportDetailProps } from "@/app/types/ReportDetail";
+import { useUser } from "@/context/UserContext";
+import { PERMISSIONS } from "@/utils/constant";
 interface DetailInforProps {
   proc_id: string;
   t: (key: string) => string;
@@ -43,6 +45,7 @@ const DetailInfor = ({
     procedure: { proc_id: "", code: "", name: "" },
   };
 
+  const { user } = useUser();
   const [collapsed, setCollapsed] = useState(false);
   const [report, setReport] = useState<ReportDetailProps>();
   const toggleSidebar = () => {
@@ -75,7 +78,6 @@ const DetailInfor = ({
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
-        toast.error(t("You don't have permission to view report"));
         //router.back();
       } else {
         toast.error(error);
@@ -84,6 +86,9 @@ const DetailInfor = ({
       setReport(emptyReport);
     }
   };
+
+  const hasReportPermission =
+    user?.permissions?.includes(PERMISSIONS.VIEW_REPORT) || user?.is_superuser;
 
   return (
     <div className={`${collapsed ? "w-0" : "w-1/4"}`}>
@@ -331,8 +336,10 @@ const DetailInfor = ({
                   </g>
                 </svg>
               </button>
-              <div className="justify-center items-center text-center text-white">
-                {t("No report yet")}
+              <div className="justify-center items-center text-center text-white mx-5">
+                {!hasReportPermission
+                  ? t("You don't have permission to view report")
+                  : t("No report yet")}
               </div>
             </div>
           )}
