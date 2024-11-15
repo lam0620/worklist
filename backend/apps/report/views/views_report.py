@@ -247,6 +247,49 @@ class ReportDetailView(ReportBaseView):
             return self.response_NG(ec.E_SYSTEM, str(e))
 
 
+    @swagger_auto_schema(
+        operation_summary='Delete the report by Id',
+        operation_description='Delete the report by Id',
+        tags=[swagger_tags.REPORT],
+    )
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Delete the report.
+        If deleting from UI, updated_by is login user
+        If deleting from integration app, updated_by is HIS user.
+        """
+        updatedBy = None
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.DELETE_REPORT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.DELETE_REPORT) 
+            updatedBy = user.id     
+
+        try:
+            instance = Report.objects.get(**kwargs, delete_flag=False)
+            if not instance:
+                return self.cus_response_empty_data(type=ec.REPORT)
+
+            if not updatedBy:
+                updatedBy = instance.radiologist.id
+
+            # Delete status, flag
+            instance.delete_flag = True
+            instance.status = 'X'
+            # this uid is created first in \shared\data\integration_app.json
+            instance.updated_by = updatedBy
+            instance.updated_at=timezone.now()
+
+            instance.save()
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.E_SYSTEM, str(e))
+        
+        return self.cus_response_deleted()
+    
 class ReportByProcedureId(ReportBaseView):
     queryset = User.objects.all()
     #authentication_classes = ()
