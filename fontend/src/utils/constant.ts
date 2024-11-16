@@ -18,26 +18,32 @@ export const PERMISSIONS = {
     EDIT_CORE_PERMISSION : "edit_core_permission",
     DELETE_CORE_PERMISSION : "delete_core_permission",
 
+    LIST_DOCTOR  : "list_doctor",
     VIEW_DOCTOR : "view_doctor",
     ADD_DOCTOR : "add_doctor",
     EDIT_DOCTOR : "edit_doctor",
     DELETE_DOCTOR : "delete_doctor",
     ACTIVE_DOCTOR : "active_doctor",
 
-    VIEW_STATISTICS : "view_statistics",
-
+    LIST_ORDER : "list_order",
     VIEW_ORDER : "view_order",
     ADD_ORDER : "add_order",
     EDIT_ORDER : "edit_order",
     DELETE_ORDER : "delete_order",
 
-    VIEW_REPORT : "view_report",
-
+    LIST_PATIENT : "list_patient",
     VIEW_PATIENT : "view_patient",
+    ADD_PATIENT : 'add_patient',
     EDIT_PATIENT : "edit_patient",
 
     VIEW_IMAGE : "view_image",
-    
+    DOWNLOAD_IMAGE : "download_image",    
+
+    LIST_REPORT : "list_report",
+    VIEW_REPORT : "view_report",
+    ADD_REPORT : 'add_report',
     PRINT_REPORT : "print_report",
+
+    VIEW_STATISTICS : "view_statistics",
 };
 

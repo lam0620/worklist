@@ -56,19 +56,20 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
 
   const hasViewRolePermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_GROUP) || user?.is_superuser;
-  const hasViewOrderPermission =
-    user?.permissions?.includes(PERMISSIONS.VIEW_ORDER) || user?.is_superuser;
-  const hasViewReportPermission =
-    user?.permissions?.includes(PERMISSIONS.VIEW_REPORT) || user?.is_superuser;
-  const hasViewDoctorPermission =
-    user?.permissions?.includes(PERMISSIONS.VIEW_DOCTOR) || user?.is_superuser;
-  const hasViewPatientPermission =
-    user?.permissions?.includes(PERMISSIONS.VIEW_PATIENT) || user?.is_superuser;
+
+  const hasListOrderPermission =
+    user?.permissions?.includes(PERMISSIONS.LIST_ORDER) || user?.is_superuser;
+  const hasListReportPermission =
+    user?.permissions?.includes(PERMISSIONS.LIST_REPORT) || user?.is_superuser;
+  const hasListDoctorPermission =
+    user?.permissions?.includes(PERMISSIONS.LIST_DOCTOR) || user?.is_superuser;
+  const hasListPatientPermission =
+    user?.permissions?.includes(PERMISSIONS.LIST_PATIENT) || user?.is_superuser;
 
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <Avatar.Root className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-800 cursor-pointer">
+        <Avatar.Root className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-600 text-gray-800 cursor-pointer">
           <Avatar.Image
             className="w-full h-full rounded-full"
             src=""
@@ -119,10 +120,10 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Role management")}
           </DropdownMenu.Item>
         )}
-        {(hasViewDoctorPermission || hasViewPatientPermission) && (
+        {(hasListDoctorPermission || hasListPatientPermission) && (
           <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
         )}
-        {hasViewDoctorPermission && (
+        {hasListDoctorPermission && (
           <DropdownMenu.Item
             onSelect={handleDoctorManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
@@ -130,7 +131,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Doctor management")}
           </DropdownMenu.Item>
         )}
-        {hasViewPatientPermission && (
+        {hasListPatientPermission && (
           <DropdownMenu.Item
             onSelect={handlePatientManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
@@ -138,10 +139,10 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Patient management")}
           </DropdownMenu.Item>
         )}
-        {(hasViewOrderPermission || hasViewReportPermission) && (
+        {(hasListOrderPermission || hasListReportPermission) && (
           <DropdownMenu.Separator className="my-1 border-t border-gray-200" />
         )}
-        {hasViewOrderPermission && (
+        {hasListOrderPermission && (
           <DropdownMenu.Item
             onSelect={handleOrderManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"
@@ -149,7 +150,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
             {t("Order management")}
           </DropdownMenu.Item>
         )}
-        {hasViewReportPermission && (
+        {hasListReportPermission && (
           <DropdownMenu.Item
             onSelect={handleReportManagement}
             className="cursor-pointer p-2 hover:bg-gray-100 rounded"

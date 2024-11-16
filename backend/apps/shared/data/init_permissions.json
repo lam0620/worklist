@@ -116,7 +116,15 @@
             "tag": "permission"
         }
     },
- 
+    {
+        "model": "account.permission",
+        "pk": "1f7dc9af-d1b7-46b1-a122-5943471f42b6",
+        "fields": {
+            "code": "list_report",
+            "name": "List report",
+            "tag": "report"
+        }
+    }, 
     {
         "model": "account.permission",
         "pk": "e322a624-2b45-4fd9-9037-e6cae8a90557",
@@ -174,6 +182,15 @@
     },
     {
         "model": "account.permission",
+        "pk": "57f95235-98d5-472c-8107-3c549663a6da",
+        "fields": {
+            "code": "list_order",
+            "name": "List order",
+            "tag": "order"
+        }
+    },    
+    {
+        "model": "account.permission",
         "pk": "fa62e5fb-390a-4969-98ff-3c79cd3c5eef",
         "fields": {
             "code": "view_order",
@@ -199,6 +216,24 @@
             "tag": "order"
         }
     },
+    {
+        "model": "account.permission",
+        "pk": "0d40be52-7c1c-4d80-ad78-9d052c8f4a30",
+        "fields": {
+            "code": "download_image",
+            "name": "Download image",
+            "tag": "image"
+        }
+    },    
+    {
+        "model": "account.permission",
+        "pk": "90c0fcfb-2573-44c3-bc6a-1aa22445fd0d",
+        "fields": {
+            "code": "list_image",
+            "name": "List image",
+            "tag": "image"
+        }
+    },       
     {
         "model": "account.permission",
         "pk": "3b2a05ad-9faf-4ffe-bd84-4a312bb9c334",
@@ -245,7 +280,15 @@
             "tag": "report_template"
         }
     },
- 
+    {
+        "model": "account.permission",
+        "pk": "46d0be28-36e5-4fa8-8266-6a8d3e2e126d",
+        "fields": {
+            "code": "list_doctor",
+            "name": "List doctor",
+            "tag": "doctor"
+        }
+    }, 
     {
         "model": "account.permission",
         "pk": "12648dd2-4fe9-4dca-83c4-c64bc9d8ad65",
@@ -282,7 +325,15 @@
             "tag": "doctor"
         }
     },
-
+    {
+        "model": "account.permission",
+        "pk": "65f0199f-0bb5-400f-b2ee-0d00029660e3",
+        "fields": {
+            "code": "list_patient",
+            "name": "List patient",
+            "tag": "patient"
+        }
+    },
     {
         "model": "account.permission",
         "pk": "2a607af3-88f8-4c67-9dc9-9543d13b01af",
@@ -294,6 +345,15 @@
     },
     {
         "model": "account.permission",
+        "pk": "02c116bb-d2bb-475a-8879-f822c63bc3f5",
+        "fields": {
+            "code": "add_patient",
+            "name": "Add patient",
+            "tag": "patient"
+        }
+    },    
+    {
+        "model": "account.permission",
         "pk": "d0942123-53a7-4ff9-8870-8e2fb87c6524",
         "fields": {
             "code": "edit_patient",
@@ -301,7 +361,15 @@
             "tag": "patient"
         }
     },
-
+    {
+        "model": "account.permission",
+        "pk": "42194109-5827-499d-bec0-299164aecb3d",
+        "fields": {
+            "code": "delete_patient",
+            "name": "Delete patient",
+            "tag": "patient"
+        }
+    },
     {
         "model": "account.permission",
         "pk": "84a1fe06-0cba-487e-a059-4971288ce48a",

@@ -144,9 +144,9 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
               className="text-justify"
               dangerouslySetInnerHTML={{ __html: reportInf?.findings }}
             ></p>
-            <p className="mt-4 text-red-600">Kết luận:</p>
+            <p className="mt-4 text-red-600">KẾT LUẬN:</p>
             <p
-              className="text-justify"
+              className="text-justify font-semibold"
               dangerouslySetInnerHTML={{ __html: reportInf?.conclusion }}
             ></p>
           </div>
