@@ -158,7 +158,8 @@ class WorklistView(OrderBaseView):
                 sql = """select s.accession_no, s.study_iuid, s.created_time as study_created_time, sqa.num_series, sqa.num_instances,study_desc 
                             from study s 
                             left join study_query_attrs sqa on s.pk =sqa.study_fk 
-                            where s.accession_no in %s"""
+                            where s.accession_no in %s and spa.mods_in_study is not null
+                        """
                 
                 cursor.execute(sql,[tuple(list_accession_no)])
                 results = cursor.fetchall()
@@ -231,7 +232,7 @@ class WorklistView(OrderBaseView):
             df_merged['study_created_time'] = df_merged['study_created_time'].dt.strftime('%d/%m/%Y %H:%M')
         else:
             df_merged['study_created_time'] = ''
-            
+
         # Applying the condition to update status = 'IM' if current = SC and exists study_iuid
         df_merged["proc_status"] = np.where((df_merged["proc_status"] == 'SC') & (df_merged["study_iuid"].isnull() == False), 'IM', df_merged["proc_status"])
 

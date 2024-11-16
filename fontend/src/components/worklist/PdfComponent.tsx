@@ -105,19 +105,19 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
           <div className="patient-info">
             <div>
               <p>
-                Họ tên:
+                Họ tên:{' '}
                 <span className="font-semibold">
                   {reportInf?.patient.fullname}
                 </span>
               </p>
               <p>
-                Năm sinh:
+                Năm sinh:{' '}
                 <span className="font-semibold">
-                  {Util.formatDate(reportInf?.patient.dob)}
+                  {Util.formatYear(reportInf?.patient.dob)}
                 </span>
               </p>
               <p>
-                Giới tính:
+                Giới tính:{' '}
                 <span className="font-semibold">
                   {Util.getFullGender_vn(reportInf?.patient.gender)}
                 </span>
