@@ -217,8 +217,6 @@ class WorklistView(OrderBaseView):
         # Format datetime to sort
         df_merged['created_time'] = pd.to_datetime(df_merged['created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
        
-        # study_created_time is got from pacs.study
-        df_merged['study_created_time'] = pd.to_datetime(df_merged['study_created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
         #print(df_merged.dtypes)
         # Sort latest created_time first
         df_merged = df_merged.sort_values(by=['created_time'], ascending = False)
@@ -226,8 +224,14 @@ class WorklistView(OrderBaseView):
        
         # change the datetime format
         df_merged['created_time'] = df_merged['created_time'].dt.strftime('%d/%m/%Y %H:%M')
-        df_merged['study_created_time'] = df_merged['study_created_time'].dt.strftime('%d/%m/%Y %H:%M')
 
+        # study_created_time is got from pacs.study
+        if 'study_created_time' in df_merged.columns :
+            df_merged['study_created_time'] = pd.to_datetime(df_merged['study_created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
+            df_merged['study_created_time'] = df_merged['study_created_time'].dt.strftime('%d/%m/%Y %H:%M')
+        else:
+            df_merged['study_created_time'] = ''
+            
         # Applying the condition to update status = 'IM' if current = SC and exists study_iuid
         df_merged["proc_status"] = np.where((df_merged["proc_status"] == 'SC') & (df_merged["study_iuid"].isnull() == False), 'IM', df_merged["proc_status"])
 
