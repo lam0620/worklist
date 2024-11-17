@@ -158,7 +158,7 @@ class WorklistView(OrderBaseView):
                 sql = """select s.accession_no, s.study_iuid, s.created_time as study_created_time, sqa.num_series, sqa.num_instances,study_desc 
                             from study s 
                             left join study_query_attrs sqa on s.pk =sqa.study_fk 
-                            where s.accession_no in %s and spa.mods_in_study is not null
+                            where s.accession_no in %s and sqa.mods_in_study is not null
                         """
                 
                 cursor.execute(sql,[tuple(list_accession_no)])
