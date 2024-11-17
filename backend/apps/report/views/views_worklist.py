@@ -212,6 +212,7 @@ class WorklistView(OrderBaseView):
 
         # Merge df_study to df_new_order
         df_merged = df_new_order.merge(df_study, how='left', on='accession_no')
+        logger.debug('Number of rows after merged df_study: %s', len(df_merged))
 
         # Add df_duplciate_order to df_merged and replace NaN to ''
         df_merged = pd.concat([df_merged, df_duplciate_order])#.replace([np.nan, -np.inf, pd.NaT], '')
