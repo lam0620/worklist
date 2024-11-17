@@ -371,16 +371,16 @@ const Worklist = () => {
       <title>Worklist</title>
       <header className="w-full flex justify-between items-center bg-top text-white p-1">
         <div className="justify-start flex">
-          {/* <Image src={logo} className="w-8 h-8 mx-1 my-1" alt="logo" /> */}
-          <img src='../assets/custom_logo.png' className="w-8 h-8 mx-1 my-1" alt="logo" />
-          <p className="flex items-center justify-center ml-7 bold">
+          {/* <Image src={logo} className="w-8 h-8 mx-1 my-1 mr-4" alt="logo" /> */}
+          <img src='../assets/custom_logo.png' className="w-8 h-8 mx-1 my-1 mr-4" alt="logo" />
+          <p className="flex items-center justify-center ml-7">
             {t("Worklist |")}
           </p>
           <a
             href={linkStudyList}
-            className="flex items-center justify-center ml-1 text-red-400 underline text-xs md:text-sm"
+            className="flex items-center justify-center ml-1 text-red-400 underline"
           >
-            {t("Study List")}
+            {"Studylist"}
           </a>
         </div>
 

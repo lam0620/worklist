@@ -34,8 +34,8 @@ const AppLayout = ({ children, name }: AppLayoutProps) => {
   }
 
   const DicomUrl = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL
-    ? process.env.NEXT_PUBLIC_DICOM_VIEWER_URL
-    : "http://localhost:3000";
+    ? process.env.NEXT_PUBLIC_DICOM_VIEWER_URL + "/worklist"
+    : "http://localhost:3000/worklist";
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -46,7 +46,7 @@ const AppLayout = ({ children, name }: AppLayoutProps) => {
             <>
               <label>| </label>
               <Link href={DicomUrl} className="text-blue-500 cursor-pointer">
-                {t("Dicom Viewer")}
+                {t("Worklist")}
               </Link>
             </>
           )}
