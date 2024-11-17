@@ -155,7 +155,8 @@ class WorklistView(OrderBaseView):
 
             # Get pacsdb.study by accession_no
             with connections["pacs_db"].cursor() as cursor:
-                sql = """select s.accession_no, s.study_iuid, s.created_time as study_created_time, sqa.num_series, sqa.num_instances,study_desc 
+                # 1 study has many study_query_attrs, so add distinct
+                sql = """select distinct s.accession_no, s.study_iuid, s.created_time as study_created_time, sqa.num_series, sqa.num_instances,study_desc 
                             from study s 
                             left join study_query_attrs sqa on s.pk =sqa.study_fk 
                             where s.accession_no in %s and sqa.mods_in_study is not null
@@ -175,7 +176,7 @@ class WorklistView(OrderBaseView):
 
         # Convert queryset to json, merge df_study to df_merged
         df_merged = self._merge_df(queryset, df_study, status)
-        logger.debug('Number of rows after merging df_study: %s', len(df_merged))
+        #logger.debug('Number of rows after merging df_study: %s', len(df_merged))
 
         # Search status = SC or IM in df. Do this because the status in procedure table is not latest data
         if status and (status == 'SC' or status == 'IM'):
