@@ -371,7 +371,8 @@ const Worklist = () => {
       <title>Worklist</title>
       <header className="w-full flex justify-between items-center bg-top text-white p-1">
         <div className="justify-start flex">
-          <Image src={logo} className="w-8 h-8 mx-1 my-1" alt="logo" />
+          {/* <Image src={logo} className="w-8 h-8 mx-1 my-1" alt="logo" /> */}
+          <img src='../assets/custom_logo.png' className="w-8 h-8 mx-1 my-1" alt="logo" />
           <p className="flex items-center justify-center ml-7 bold">
             {t("Worklist |")}
           </p>

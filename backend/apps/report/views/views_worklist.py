@@ -130,6 +130,7 @@ class WorklistView(OrderBaseView):
             )
             queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
 
+        logger.info("Total rows worklist are: %s", len(queryset))
 
         if not queryset.exists():
             return self.cus_response_empty_data()
@@ -148,11 +149,10 @@ class WorklistView(OrderBaseView):
 
         # Get study data from pacs database
         try:
-            # if status:
-            #     list_accession_no = [proc.order.accession_no for proc in queryset]
-            # else:
             list_accession_no = [order.accession_no for order in queryset]
                 
+            logger.info('Query pacs.study by accession_no: %s', list_accession_no)
+
             # Get pacsdb.study by accession_no
             with connections["pacs_db"].cursor() as cursor:
                 sql = """select s.accession_no, s.study_iuid, s.created_time as study_created_time, sqa.num_series, sqa.num_instances,study_desc 
@@ -163,6 +163,7 @@ class WorklistView(OrderBaseView):
                 
                 cursor.execute(sql,[tuple(list_accession_no)])
                 results = cursor.fetchall()
+                logger.info("Total rows of pacs.study are:  %s", len(results))
 
                 # Convert Django's fetchall() result into a Pandas DataFrame
                 column_names = [desc[0] for desc in cursor.description]
@@ -190,9 +191,6 @@ class WorklistView(OrderBaseView):
         orders_json = []
 
         # First, convert queryset to json to be able to get procedure data
-        # if status:
-        #     orders_json = self._get_worklist_json_1level(queryset)
-        # else:
         for order in queryset:
             for worklist in self._get_worklist_json(order):
                 orders_json.append(worklist)
@@ -231,6 +229,7 @@ class WorklistView(OrderBaseView):
             df_merged['study_created_time'] = pd.to_datetime(df_merged['study_created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
             df_merged['study_created_time'] = df_merged['study_created_time'].dt.strftime('%d/%m/%Y %H:%M')
         else:
+            logger.warning('There no study_created_time in dataframe')
             df_merged['study_created_time'] = ''
 
         # Applying the condition to update status = 'IM' if current = SC and exists study_iuid
@@ -270,39 +269,7 @@ class WorklistView(OrderBaseView):
 
         return order_data
 
-    def _get_worklist_json_1level(self, queryset):
-        """
-        queryset is list of the procedure
-        """
-        order_data = [{
-            'id': proc.id,
-            'accession_no': proc.order.accession_no,
-            'referring_phys_code': proc.order.referring_phys.doctor_no,
-            'referring_phys_name': proc.order.referring_phys.fullname,
-            'clinical_diagnosis': proc.order.clinical_diagnosis,
-            # 'proc_time': proc.proc_time,
-            'created_time':proc.order.created_at.strftime('%d/%m/%Y %H:%M'),
-            'modality_type': proc.order.modality_type,
-            
-            'pat_pid':proc.order.patient.pid,
-            'pat_fullname':proc.order.patient.fullname,
-            'pat_gender':proc.order.patient.gender,
-            'pat_dob':proc.order.patient.dob,
-            'pat_tel':proc.order.patient.tel,
-            'pat_address':proc.order.patient.address,
-            'pat_insurance_no':proc.order.patient.insurance_no,
-
-            'proc_id': proc.id,
-            'proc_code': proc.procedure_type.code, 
-            'proc_name': proc.procedure_type.name,
-
-            'proc_study_iuid':proc.study_iuid,
-            'proc_status':proc.status
-                
-        } for proc in queryset]        
-
-        return order_data   
-
+ 
     def log_queryset(self, queryset):
         orders_json = []
 
