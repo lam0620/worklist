@@ -165,7 +165,7 @@ const WorklistList = ({
     user?.permissions?.includes(PERMISSIONS.PRINT_REPORT) || user?.is_superuser;
   return (
     <div className="h-screen">
-      <div className="flex md:flex-grow my-1 text-white px-4 py-1.5 backgroundcolor-box">
+      <div className="flex md:flex-grow my-1 text-white px-4 md:py-1.5 backgroundcolor-box">
         <div className="justify-between flex-col md:flex-row flex w-full">
           <div className="flex flex-col md:flex-row whitespace-nowrap">
             <div className="flex flex-row mb-2 md:mb-0 justify-center md:justify-start">
@@ -426,7 +426,7 @@ const WorklistList = ({
             {t("Instances")}
           </div>
         </div>
-        <div className="scrollbar overflow-auto h-3/4 md:h-[90%] md:w-[2000px]">
+        <div className="scrollbar overflow-y-auto md:overflow-auto h-1/2 md:h-[90%] md:w-[2000px]">
           {worklist.length > 0 ? (
             <ul>
               {worklist.map((item) => (

@@ -6,7 +6,7 @@ import { fetchWorklist } from "@/services/apiService";
 import { useUser } from "@/context/UserContext";
 import { WorkList } from "@/app/types/WorkList";
 import { toast } from "react-toastify";
-import logo from "../../../public/images/custom_logo.png";
+import logo from "../../../public/images/org_logo.png";
 import Image from "next/image";
 import "./worklist.css";
 import WorklistList from "@/components/worklist/WorklistList";
@@ -81,7 +81,7 @@ const Worklist = () => {
     if (user !== undefined) {
       //check here to get exactly user (beacause user can be undefined -> router.push("/login"))
       if (user) {
-        handleFilterInitData();
+        handleFilterToday();
         setLoadFirst(true);
       } else {
         router.push("/login");
@@ -90,11 +90,15 @@ const Worklist = () => {
   }, [user]);
 
   useEffect(() => {
-    // quick search
-    if (user && !isAdvancedSearch && loadFirst) {
+    if (user && loadFirst) {
       fetchWorkList(currentPage, searchParams.searchQuery, true).then((r) => r);
     }
-  }, [searchParams.searchQuery, currentPage]);
+  }, [
+    searchParams.searchQuery,
+    currentPage,
+    searchParams.selectedDevices,
+    searchParams.selectedStatuses,
+  ]);
 
   useEffect(() => {
     //advance search
@@ -107,20 +111,25 @@ const Worklist = () => {
     searchParams.acn,
     searchParams.fromDate,
     searchParams.toDate,
-    searchParams.selectedDevices,
-    searchParams.selectedStatuses,
+    // searchParams.selectedDevices,
+    // searchParams.selectedStatuses,
   ]);
 
   useEffect(() => {
     // set data is yesterday and today when open advance searh.
     if (isAdvancedSearch) {
-      handleFilterInitData();
+      handleFilterToday();
     }
   }, [isAdvancedSearch]);
 
   const fetchWorkList = async (page: number, query: string, onReFresh: any) => {
     try {
-      const response = await fetchWorklist({ page, search: query });
+      const response = await fetchWorklist({
+        page,
+        search: query,
+        modality_type: searchParams.selectedDevices.join(","),
+        status: searchParams.selectedStatuses.join(","),
+      });
       setWorkList(response?.data.data);
       setNumRecord(response?.data?.count);
       setTotalPages(
@@ -251,31 +260,26 @@ const Worklist = () => {
     handleCheckboxChange(event, "selectedStatuses");
   };
 
-  const handleFilterInitData = () => {
-    //get init data (yesterday, today) when come first or open advance search
-    const fromDate = new Date();
-    fromDate.setDate(fromDate.getDate() - 1);
-    fromDate.setHours(0, 0, 0, 0);
-    const toDate = new Date();
-    toDate.setHours(23, 59, 59, 999);
-    setSearchParams((prev) => ({
-      ...prev,
-      fromDate: fromDate.toISOString(),
-      toDate: toDate.toISOString(),
-    }));
-    setSelectedButtonDay("Today");
+  const formatDateToISOString = (date: any) => {
+    // to get local Datetime
+    const timezoneOffset = date.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(date - timezoneOffset)
+      .toISOString()
+      .slice(0, -1);
+    return localISOTime;
   };
 
   const handleFilterToday = () => {
     const today = new Date();
-    today.setHours(0, 0);
+    today.setHours(0, 0, 0, 0);
+
     const endOfDay = new Date(today);
-    endOfDay.setHours(23, 59);
+    endOfDay.setHours(23, 59, 59, 999);
 
     setSearchParams((prev) => ({
       ...prev,
-      fromDate: today.toISOString(),
-      toDate: endOfDay.toISOString(),
+      fromDate: formatDateToISOString(today),
+      toDate: formatDateToISOString(endOfDay),
     }));
     setSelectedButtonDay("Today");
   };
@@ -286,29 +290,27 @@ const Worklist = () => {
     yesterday.setHours(0, 0, 0, 0);
     const endOfYesterday = new Date(yesterday);
     endOfYesterday.setHours(23, 59, 59, 999);
-
     setSearchParams((prev) => ({
       ...prev,
-      fromDate: yesterday.toISOString(),
-      toDate: endOfYesterday.toISOString(),
+      fromDate: formatDateToISOString(yesterday),
+      toDate: formatDateToISOString(endOfYesterday),
     }));
     setSelectedButtonDay("Yesterday");
   };
-
   const handleFilterLast7Days = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(today.getDate() - 7);
     sevenDaysAgo.setHours(0, 0, 0, 0);
-
     setSearchParams((prev) => ({
       ...prev,
-      fromDate: sevenDaysAgo.toISOString(),
-      toDate: today.toISOString(),
+      fromDate: formatDateToISOString(sevenDaysAgo),
+      toDate: formatDateToISOString(today),
     }));
     setSelectedButtonDay("7 days");
   };
+
   const handleFilterAll = () => {
     setSearchParams((prev) => ({
       ...prev,
@@ -363,28 +365,28 @@ const Worklist = () => {
     setReportInf(reportInf);
   };
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL;
 
-  const linkStudyList = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL||'https://localhost:3000';
+  const linkStudyList = `${API_BASE_URL}`;
 
   return (
     <div className="flex flex-col h-screen text-sm md:text-base">
       <title>Worklist</title>
       <header className="w-full flex justify-between items-center bg-top text-white p-1">
         <div className="justify-start flex">
-          {/* <Image src={logo} className="w-8 h-8 mx-1 my-1 mr-4" alt="logo" /> */}
-          <img src='../assets/custom_logo.png' className="w-8 h-8 mx-1 my-1 mr-4" alt="logo" />
-          <p className="flex items-center justify-center ml-7">
+          <Image src={logo} className="max-w-6 max-h-8 ml-5" alt="logo" />
+          <p className="flex items-center justify-center ml-7 bold">
             {t("Worklist |")}
           </p>
           <a
             href={linkStudyList}
-            className="flex items-center justify-center ml-1 text-red-400 underline"
+            className="flex items-center justify-center ml-1 text-red-400 underline text-xs md:text-sm"
           >
-            {"Studylist"}
+            {t("Study List")}
           </a>
         </div>
 
-        <div className="mr-2">
+        <div className="mr-5">
           <div className="z-50 text-black">
             {user && (
               <UserAvatar
