@@ -9,17 +9,19 @@ import { ReportDetailProps } from "@/app/types/ReportDetail";
 import { PERMISSIONS } from "@/utils/constant";
 import { useUser } from "@/context/UserContext";
 import * as Util from "@/utils/utils";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface WorklistProps {
   worklist: WorkList[];
   onSelectProcID: (PID: string) => void;
   t: (key: string) => string;
-  onRefresh: (page: number, query: string, onReFresh: any) => void;
+  onRefresh: (page: number, query: string, onReFresh: boolean) => void;
   totalPages: number;
   onPageChange: (page: number) => void;
   currentPage: number;
   reportInf: ReportDetailProps;
   numRecord: number;
+  loading: boolean;
 }
 const WorklistList = ({
   worklist,
@@ -31,6 +33,7 @@ const WorklistList = ({
   currentPage,
   reportInf,
   numRecord,
+  loading,
 }: WorklistProps) => {
   const { user } = useUser();
   const [selectedItem, setSelectedItem] = useState("");
@@ -124,7 +127,7 @@ const WorklistList = ({
   };
 
   const handleRefreshButton = () => {
-    onRefresh(1, "", true);
+    onRefresh(1, "", false);
   };
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -426,90 +429,96 @@ const WorklistList = ({
             {t("Instances")}
           </div>
         </div>
-        <div className="scrollbar overflow-y-auto md:overflow-auto h-1/2 md:h-[90%] md:w-[2000px]">
-          {worklist.length > 0 ? (
-            <ul>
-              {worklist.map((item) => (
-                <li
-                  key={`${item.id}-${item.proc_id}`} // make sure key is not duplicate, because item.id can have 2 in db
-                  className={`flex flex-row items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
-                    selectedRow === item.proc_id ? "purple-selectedrow" : ""
-                  }`}
-                  onClick={() => {
-                    checkSelectedRow(item.proc_id);
-                    handleSelectedRowPid(item.pat_pid);
-                    setPatientInf((prev) => ({
-                      ...prev,
-                      patientName: item.pat_fullname,
-                    }));
-                    handleCheckStatus(item.proc_status);
-                  }}
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className="scrollbar overflow-y-auto md:overflow-auto h-1/2 md:h-[90%] md:w-[2000px]">
+            {worklist.length > 0 ? (
+              <ul>
+                {worklist.map((item) => (
+                  <li
+                    key={`${item.id}-${item.proc_id}`} // make sure key is not duplicate, because item.id can have 2 in db
+                    className={`flex flex-row items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
+                      selectedRow === item.proc_id ? "purple-selectedrow" : ""
+                    }`}
+                    onClick={() => {
+                      checkSelectedRow(item.proc_id);
+                      handleSelectedRowPid(item.pat_pid);
+                      setPatientInf((prev) => ({
+                        ...prev,
+                        patientName: item.pat_fullname,
+                      }));
+                      handleCheckStatus(item.proc_status);
+                    }}
+                  >
+                    <div className="text-center hidden md:block w-1/12">
+                      {t(Util.getStatusName(item.proc_status))}
+                    </div>
+                    <div className="text-center w-1/3 md:w-1/12">
+                      {item.pat_pid}
+                    </div>
+                    <div className="text-center w-1/3 md:w-2/12">
+                      {item.pat_fullname}
+                    </div>
+                    <div className="text-center w-1/3 md:w-1/12">
+                      {item.accession_no}
+                    </div>
+                    <div className="text-center hidden md:block w-1/12">
+                      {item.created_time.split(" ")[0]}
+                    </div>
+                    <div className="text-center hidden md:block w-1/12">
+                      {item.study_created_time.split(" ")[0]}
+                    </div>
+                    <div className="text-center hidden md:block w-1/12">
+                      {item.modality_type}
+                    </div>
+                    <div className="text-center hidden md:block w-2/12">
+                      {item.proc_name}
+                    </div>
+                    <div className="text-center hidden md:block w-2/12">
+                      {item.referring_phys_name}
+                    </div>
+                    <div className="text-center hidden md:block w-1/12">
+                      {item.num_instances}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="flex flex-col items-center pt-44 md:pt-44">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="111"
+                  height="111"
+                  viewBox="0 0 111 111"
+                  className="mb-4"
                 >
-                  <div className="text-center hidden md:block w-1/12">
-                    {t(Util.getStatusName(item.proc_status))}
-                  </div>
-                  <div className="text-center w-1/3 md:w-1/12">
-                    {item.pat_pid}
-                  </div>
-                  <div className="text-center w-1/3 md:w-2/12">
-                    {item.pat_fullname}
-                  </div>
-                  <div className="text-center w-1/3 md:w-1/12">
-                    {item.accession_no}
-                  </div>
-                  <div className="text-center hidden md:block w-1/12">
-                    {item.created_time.split(" ")[0]}
-                  </div>
-                  <div className="text-center hidden md:block w-1/12">
-                    {item.study_created_time.split(" ")[0]}
-                  </div>
-                  <div className="text-center hidden md:block w-1/12">
-                    {item.modality_type}
-                  </div>
-                  <div className="text-center hidden md:block w-2/12">
-                    {item.proc_name}
-                  </div>
-                  <div className="text-center hidden md:block w-2/12">
-                    {item.referring_phys_name}
-                  </div>
-                  <div className="text-center hidden md:block w-1/12">
-                    {item.num_instances}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="flex flex-col items-center pt-44 md:pt-44">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="111"
-                height="111"
-                viewBox="0 0 111 111"
-                className="mb-4"
-              >
-                <g
-                  fill="none"
-                  fillRule="evenodd"
-                  stroke="#3A3F99"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="3"
-                  transform="translate(2 2)"
-                >
-                  <circle
-                    cx="53.419"
-                    cy="53.419"
-                    r="53.419"
-                    fill="#06081D"
-                  ></circle>
-                  <circle cx="49.411" cy="49.411" r="23.862"></circle>
-                  <path d="M66.282 66.282 81.29 81.29"></path>
-                </g>
-              </svg>
-              <span className="text-white">{t("No data available")}</span>
-            </div>
-          )}
-        </div>
+                  <g
+                    fill="none"
+                    fillRule="evenodd"
+                    stroke="#3A3F99"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="3"
+                    transform="translate(2 2)"
+                  >
+                    <circle
+                      cx="53.419"
+                      cy="53.419"
+                      r="53.419"
+                      fill="#06081D"
+                    ></circle>
+                    <circle cx="49.411" cy="49.411" r="23.862"></circle>
+                    <path d="M66.282 66.282 81.29 81.29"></path>
+                  </g>
+                </svg>
+                <span className="text-white">{t("No data available")}</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className=" md:block hidden h-3/4">

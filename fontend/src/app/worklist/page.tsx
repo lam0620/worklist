@@ -65,6 +65,8 @@ const Worklist = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [selectedButtonDay, setSelectedButtonDay] = useState<string>("All");
   const [collapsedDetail, setCollapseDetail] = useState(false); //flexible width of the right panel when open or close detail panel
+  const [loadFirst, setLoadFirst] = useState(false);
+  const [loading, setLoading] = useState(false); //icon loading
 
   const CollapseDetail = () => {
     setCollapseDetail(!collapsedDetail);
@@ -73,8 +75,6 @@ const Worklist = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-
-  const [loadFirst, setLoadFirst] = useState(false);
 
   useEffect(() => {
     //get init data today and yesterday when first come
@@ -111,11 +111,12 @@ const Worklist = () => {
     searchParams.acn,
     searchParams.fromDate,
     searchParams.toDate,
-    // searchParams.selectedDevices,
-    // searchParams.selectedStatuses,
+    searchParams.selectedDevices,
+    searchParams.selectedStatuses,
   ]);
 
   const fetchWorkList = async (page: number, query: string, onReFresh: any) => {
+    setLoading(true);
     try {
       const response = await fetchWorklist({
         page,
@@ -123,19 +124,22 @@ const Worklist = () => {
         modality_type: searchParams.selectedDevices.join(","),
         status: searchParams.selectedStatuses.join(","),
       });
-      setWorkList(response?.data.data);
-      setNumRecord(response?.data?.count);
-      setTotalPages(
-        Math.ceil(response.data?.count / response?.data?.page_size)
-      );
+
+      if (response) {
+        setWorkList(response.data.data);
+        setNumRecord(response.data.count);
+        setTotalPages(Math.ceil(response.data.count / response.data.page_size));
+      } else {
+        console.log("a");
+      }
     } catch (error: any) {
       if (error.response?.status === 403) {
         toast.error(t("You don't have permission to view worklist"));
-        //router.back();
       } else {
         toast.error(t("Failed to fetch worklist"));
-        //router.back();
       }
+    } finally {
+      setLoading(false);
     }
     if (onReFresh) {
       setSelectedButtonDay("All");
@@ -161,7 +165,7 @@ const Worklist = () => {
 
     const search = new URLSearchParams(filteredParams);
     const params = Object.fromEntries(search.entries());
-
+    setLoading(true);
     try {
       const response = await fetchWorklist(params);
       if (response.status === 200 && response.data?.result?.status === "OK") {
@@ -176,6 +180,8 @@ const Worklist = () => {
       }
     } catch (error) {
       console.error("Error fetching orders list:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -350,13 +356,18 @@ const Worklist = () => {
       <title>Worklist</title>
       <header className="w-full flex justify-between items-center bg-top text-white p-1">
         <div className="justify-start flex">
-          <Image src={logo} className="max-w-6 max-h-8 ml-5" alt="logo" />
-          <p className="flex items-center justify-center ml-7 bold">
+          {/* <Image src={logo} className="w-8 h-8 mx-1 my-1 mr-4" alt="logo" /> */}
+          <img
+            src="../assets/custom_logo.png"
+            className="w-8 h-8 mx-1 my-1 mr-4"
+            alt="logo"
+          />
+          <p className="flex items-center justify-center ml-7">
             {t("Worklist |")}
           </p>
           <a
             href={linkStudyList}
-            className="flex items-center justify-center ml-1 text-red-400 underline text-xs md:text-sm"
+            className="flex items-center justify-center ml-1 text-red-400 underline"
           >
             {"Studylist"}
           </a>
@@ -754,6 +765,7 @@ const Worklist = () => {
             onPageChange={handlePageChange}
             reportInf={reportInf}
             numRecord={numRecord}
+            loading={loading}
           />
         </div>
         {selectedProcID && (
