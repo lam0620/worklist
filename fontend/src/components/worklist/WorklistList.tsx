@@ -137,6 +137,24 @@ const WorklistList = ({
     setViewerCheck(Util.checkViewStatus(status));
     setReportCheck(Util.checkReportStatus(status));
   };
+
+  const getVisiblePages = (currentPage: any, totalPages: any) => {
+    //make sure only show the maximum pagination is 5 not if totalPages > 5
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, currentPage + 2);
+    if (endPage - startPage < 4) {
+      if (startPage === 1) {
+        endPage = Math.min(startPage + 4, totalPages);
+      } else if (endPage === totalPages) {
+        startPage = Math.max(1, endPage - 4);
+      }
+    }
+    return Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i
+    );
+  };
+
   const hasButtonViewerPermission =
     user?.permissions?.includes(PERMISSIONS.VIEW_IMAGE) || user?.is_superuser; // use this permission to view button and download button
 
@@ -338,31 +356,31 @@ const WorklistList = ({
               )}
               {totalPages > 1 && (
                 <div className="sticky md:mr-5 mr-0">
-                  <div className="flex text-sm">
+                  <div className="flex text-xs md:text-sm">
                     <button
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={currentPage === 1}
-                      className={`px-2 py-1 mx-1 button disabled:opacity-30 ${
+                      className={`px-2 md:py-1 md:mx-1 button disabled:opacity-30 ${
                         currentPage === 1 ? "purple-selectedrow" : ""
                       }`}
                     >
                       {t("Previous")}
                     </button>
-                    {[...Array(totalPages)].map((_, index) => (
+                    {getVisiblePages(currentPage, totalPages).map((page) => (
                       <button
-                        key={index}
-                        onClick={() => handlePageChange(index + 1)}
-                        className={`px-3 py-1 mx-1 button ${
-                          currentPage === index + 1 ? "purple-selectedrow" : ""
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-3 py-1 md:mx-1 mx-0.5 button ${
+                          currentPage === page ? "purple-selectedrow" : ""
                         }`}
                       >
-                        {index + 1}
+                        {page}
                       </button>
                     ))}
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className={`px-2 py-1 mx-1 button disabled:opacity-30 ${
+                      className={`px-2 md:py-1 md:mx-1  button disabled:opacity-30 ${
                         currentPage === totalPages ? "purple-selectedrow" : ""
                       }`}
                     >
