@@ -322,6 +322,11 @@ class ADectivateDoctorListSerializer(serializers.Serializer):
 class GetImageLinkSerializers(serializers.Serializer):
     accession = serializers.CharField(required=True)
 
+class GetStudySerializers(serializers.Serializer):
+    accession_no = serializers.CharField(required=False)
+    # pass it if would like to update the Procedure table with this key id
+    proc_id = serializers.CharField(required=False)
+
 class GetReportTemplateSerializers(serializers.Serializer):
     modality = serializers.CharField(required=True)
 

@@ -108,6 +108,24 @@
             "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
         }
     },
+    {
+        "model": "account.RolePermission",
+        "pk": "ec7fdf60-d7a1-47f8-913f-d6663b02d1f6",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "90c0fcfb-2573-44c3-bc6a-1aa22445fd0d",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
+    {
+        "model": "account.RolePermission",
+        "pk": "fe670ed4-819c-419d-b5da-a3ca79aafe72",
+        "fields": {
+            "role_id": "032bd8b3-7145-4d21-9505-a5a16da67f23",
+            "permission_id": "0d40be52-7c1c-4d80-ad78-9d052c8f4a30",
+            "created_by":"b2ab7ae6-99f2-4101-9d16-02dd38934e7f"
+        }
+    },
 
     {
         "model": "account.RolePermission",

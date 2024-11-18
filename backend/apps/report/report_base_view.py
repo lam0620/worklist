@@ -9,11 +9,15 @@ from third_parties.contribution.api_view import CustomAPIView
 logger = logging.getLogger(__name__)
 
 class ReportBaseView(CustomAPIView):    
-    def get_report_by_id(self, request, pk):
+    def get_report_by_id(self, request, pk=None, proc_id = None):
         try:
             # id=kwargs['id']
             # Get report by id and status != 'X' (deleted)
-            report = Report.objects.filter(pk=pk).exclude(status='X').first()
+            if pk:
+                report = Report.objects.filter(pk=pk).exclude(status='X').first()
+            elif proc_id:
+                report = Report.objects.filter(procedure=proc_id).exclude(status='X').first()
+
             if report is None:
                 return self.cus_response_empty_data('REPORT')
         except Exception as e:
@@ -42,10 +46,13 @@ class ReportBaseView(CustomAPIView):
         # Make sure report.procedure exist
         if report.procedure:
             procedure = report.procedure
-            patient = report.procedure.order.patient
+            order = procedure.order
+            patient = order.patient
 
             procedure_json = {
                 'proc_id':procedure.id,
+                'status':procedure.status,
+                'study_iuid':procedure.study_iuid,
                 'code':procedure.procedure_type.code,
                 'name':procedure.procedure_type.name
             }
@@ -54,7 +61,10 @@ class ReportBaseView(CustomAPIView):
                     'pid':patient.pid,
                     'fullname':patient.fullname,
                     'gender':patient.gender,
-                    'dob':patient.dob
+                    'dob':patient.dob,
+                    'tel':patient.tel,
+                    'address':patient.address,
+                    'insurance_no':patient.insurance_no
             }
 
         created_time = report.created_at.strftime('%d/%m/%Y %H:%M')
@@ -67,6 +77,11 @@ class ReportBaseView(CustomAPIView):
             'scan_protocol':report.scan_protocol,
             'status': report.status,
             'created_time':created_time,
+            'clinical_diagnosis': order.clinical_diagnosis,  
+            'modality_type': order.modality_type,
+
+            'referring_phys_code': order.referring_phys.doctor_no,
+            'referring_phys_name': order.referring_phys.fullname,         
             'radiologist': {
                 "id":report.radiologist.id,
                 'doctor_no':report.radiologist.doctor_no,
@@ -78,7 +93,7 @@ class ReportBaseView(CustomAPIView):
             'procedure': procedure_json,
             'image_link': get_image_link(request, report.study_iuid)
         }
-        #return data
+
         return data
 
 

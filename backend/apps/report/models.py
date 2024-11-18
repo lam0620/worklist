@@ -129,8 +129,17 @@ class Procedure(BaseModels):
     order = models.ForeignKey(Order, on_delete=models.DO_NOTHING)
     procedure_type = models.ForeignKey(ProcedureType, on_delete=models.DO_NOTHING)
 
+    # SC (Schedule) => Wait to take image => is set when creating order (from HIS)
+    # IM: Image is stored => not is saved now. it is calculated and showed to worklist screen at view_worklist
+    # IP (Inprogess)  => Reporting => is set when creating report as Draft
+    # CM (Completed) => Reported => is set when approving report
+    status = models.CharField(verbose_name='status', max_length=2, blank=True, null=True)
+
     # Procedure of which study_iuid
     study_iuid = models.CharField(verbose_name='study instance uid', max_length=100, blank=True, null=True)
+    study_time = models.DateTimeField(verbose_name='study time', blank=True, null=True)
+    study_num_instances = models.IntegerField(verbose_name='number of instances', blank=True, null=True)
+    
 
     objects = ObjectManager()
 

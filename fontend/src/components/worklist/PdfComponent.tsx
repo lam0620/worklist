@@ -55,17 +55,17 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
       //return `@page {size: A4}`;
     };
 
-    // useEffect(() => {
-    //   const fetchSign = async () => {
-    //     const response = await import(`../../assets/signs/${reportInf.radiologist.sign}`);
-    //     setSign(response.default);
-    //   };
-    //   fetchSign();
+    useEffect(() => {
+      // const fetchSign = async () => {
+      //   const response = await import(`../../assets/signs/${reportInf.radiologist.sign}`);
+      //   setSign(response.default);
+      // };
+      // fetchSign();
 
-    //   //signs are uploaded to /media/signs/... (define in nginx)
-    //   //sign = signs/xxx.yyy
-    //   setSign(Util.getImageUrl + reportInf?.radiologist.sign);
-    // }, [sign]);
+      //signs are uploaded to /media/signs/... (define in nginx)
+      //sign = signs/xxx.yyy
+      setSign(process.env.NEXT_PUBLIC_DICOM_VIEWER_URL+ reportInf?.radiologist.sign);
+    }, [reportInf]);
 
     return (
       <>
@@ -74,7 +74,8 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
 
           {/* Header */}
           <div className="header">
-            <Image src={logo} alt="Logo" />
+            {/* <Image src={logo} alt="Logo" /> */}
+            <img src="/assets/images/org_logo.png" alt="Logo" />
             <div className="clinic-info mt-0">
               <h3 className="font-bold text-red-500">
                 {process.env.NEXT_PUBLIC_ORG_NAME}
@@ -105,19 +106,19 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
           <div className="patient-info">
             <div>
               <p>
-                Họ tên:
+                Họ tên:{' '}
                 <span className="font-semibold">
                   {reportInf?.patient.fullname}
                 </span>
               </p>
               <p>
-                Năm sinh:
+                Năm sinh:{' '}
                 <span className="font-semibold">
-                  {Util.formatDate(reportInf?.patient.dob)}
+                  {Util.formatYear(reportInf?.patient.dob)}
                 </span>
               </p>
               <p>
-                Giới tính:
+                Giới tính:{' '}
                 <span className="font-semibold">
                   {Util.getFullGender_vn(reportInf?.patient.gender)}
                 </span>
@@ -144,9 +145,9 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
               className="text-justify"
               dangerouslySetInnerHTML={{ __html: reportInf?.findings }}
             ></p>
-            <p className="mt-4 text-red-600">Kết luận:</p>
+            <p className="mt-4 text-red-600">KẾT LUẬN:</p>
             <p
-              className="text-justify"
+              className="text-justify font-semibold"
               dangerouslySetInnerHTML={{ __html: reportInf?.conclusion }}
             ></p>
           </div>
@@ -173,6 +174,7 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
                 <p className="font-semibold">Bác sĩ</p>
                 <div className="flex justify-center">
                   {/* <Image src={sign} alt="Sign" height="150" width="150" /> */}
+                  <img src={sign} alt="Sign" width="150" />
                 </div>
                 <p className="font-semibold">
                   {reportInf?.radiologist.title}.

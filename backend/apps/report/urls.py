@@ -4,9 +4,9 @@ from rest_framework import routers
 from rest_framework.routers import DefaultRouter
 
 from apps.report.views import (
-    ReportTemplateDetailView, ReportTemplateView, ReportView, ReportDetailView,
+    ReportTemplateDetailView, ReportTemplateView, ReportView, ReportDetailView,ReportByProcedureId,
     OrderView,OrderDetail, DoctorView,DoctorDetailView,
-    PatientView,PatientDetailView,ScanProtocolView,ScanProtocolDetailView,
+    PatientView,PatientDetailView,ScanProtocolView,ScanProtocolDetailView, StudyDetailView,WorklistView,
     StatsViewSet
 )
 from apps.report.views import (
@@ -42,6 +42,7 @@ urlpatterns = [
     # Report
     path('reports', ReportView.as_view(), name='Report'),
     path('reports/<uuid:pk>', ReportDetailView.as_view(), name='Report Detail by Id'),
+    path('reports/procedures/<uuid:proc_id>', ReportByProcedureId.as_view(), name='Report Detail by Proc_Id'),
     # path('reports/<accession_no>/<procedure_code>', ReportByACNProcedure.as_view(), name='Report Detail by AccessionNumber and procedure code'),
     # reports?study_iuid=xxx also existing. pattern /reports
 
@@ -66,6 +67,12 @@ urlpatterns = [
     path('scan-protocols', ScanProtocolView.as_view(), name='scan-protocol'),
     path('scan-protocols/<uuid:pk>', ScanProtocolDetailView.as_view(), name='scan-protocol Detail'),
     # scan-protocols?modality=xx aslo existing in the pattern /scan-protocols
+
+    #Study. /studies?accession_no=xxx
+    path('studies', StudyDetailView.as_view(), name='study detail'),
+
+    # Worklist
+    path('worklists', WorklistView.as_view(), name='Worklists')
 ]
 
 router = DefaultRouter()

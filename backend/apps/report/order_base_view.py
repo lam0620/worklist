@@ -56,6 +56,7 @@ class OrderBaseView(CustomAPIView):
             },
             'procedures': [{'proc_id': proc.id,
                             'study_iuid':proc.study_iuid,
+                            'status': proc.status,
                             'code': proc.procedure_type.code, 
                             'name': proc.procedure_type.name,
                             'report':self.get_order_report_json(proc.id)} for proc in order.procedure_list]
@@ -98,8 +99,8 @@ class OrderBaseView(CustomAPIView):
         report = None
         try:
             report=Report.objects.get(procedure_id=proc_id, delete_flag = False)
-        except Report.DoesNotExist:
-            logger.warning("Report not exist", exc_info=False)
+        #except Report.DoesNotExist:
+            #logger.warning("Report not exist", exc_info=False)
 
         except Exception as e:
             logger.error(e)

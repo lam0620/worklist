@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 
 from corsheaders.defaults import default_headers
+from logging.handlers import RotatingFileHandler
 
 from django.conf import settings
 
@@ -174,18 +175,27 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'his_integration.log',
-            'formatter': 'verbose'
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '../log/his_integration.log',
+            'maxBytes': 1024*1024*5,  # 5 MB
+            'backupCount': 5,
+            'formatter': 'standard',
         },
+
+        #'file': {
+        #    'level': 'DEBUG',
+        #    'class': 'logging.FileHandler',
+        #    'filename': '../log/his_integration.log',
+        #    'formatter': 'standard',
+        #},
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+            'formatter': 'standard'
         },
     },
     'formatters': {
-        'verbose': {
+        'standard': {
             'format': '{asctime} {levelname} {filename} {module} - {message}',
             'style': '{',
         },
@@ -194,12 +204,13 @@ LOGGING = {
     'loggers': {
        # notice the blank '', Usually you would put built in loggers like django or root here based on your needs
         '': {
-            'handlers': ['file'], #notice how file variable is called in handler which has been defined above
-            'level': 'INFO',
-            'propagate': True,
+            'level': 'DEBUG',
+            'propagate': False, # Avoid double logging because of root logger
+            'handlers': ['file', 'console'], #notice how file variable is called in handler which has been defined above
         },
         'django.db.backends': {
-            'level': 'INFO',
+            'level': 'DEBUG',
+            'propagate': False, # Avoid double logging because of root logger
             'handlers': ['file'],
         }        
     },
