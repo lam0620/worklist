@@ -115,13 +115,6 @@ const Worklist = () => {
     // searchParams.selectedStatuses,
   ]);
 
-  useEffect(() => {
-    // set data is yesterday and today when open advance searh.
-    if (isAdvancedSearch) {
-      handleFilterToday();
-    }
-  }, [isAdvancedSearch]);
-
   const fetchWorkList = async (page: number, query: string, onReFresh: any) => {
     try {
       const response = await fetchWorklist({
@@ -191,23 +184,7 @@ const Worklist = () => {
   };
 
   const toggleAdvancedSearch = () => {
-    // set search data empty when changing mode search
-
-    if (searchParams.searchQuery) {
-      setSearchParams((prev) => ({
-        ...prev,
-        searchQuery: "",
-      }));
-    }
     if (isAdvancedSearch) {
-      setSearchParams((prev) => ({
-        ...prev,
-        acn: "",
-        pid: "",
-        fullName: "",
-        fromDate: "",
-        toDate: "",
-      }));
       setSelectedButtonDay("All");
     }
     setAdvancedSearch(!isAdvancedSearch);
@@ -487,7 +464,7 @@ const Worklist = () => {
                   <div className="flex justify-between items-center backgroundcolor-box">
                     <span className="p-2">{t("Status")}</span>
                   </div>
-                  <ul className="p-4 backgroundcolor">
+                  <ul className="p-2 backgroundcolor">
                     <li>
                       <input
                         type="checkbox"
@@ -714,7 +691,7 @@ const Worklist = () => {
                   </label>
                   <input
                     type="date"
-                    className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    className="logo-cal h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                     value={searchParams.fromDate.split(" ")[0]}
                     onChange={handlesearchFromDate}
                   />
@@ -725,7 +702,7 @@ const Worklist = () => {
                   </label>
                   <input
                     type="date"
-                    className="h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
+                    className="logo-cal h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                     value={searchParams.toDate.split(" ")[0]}
                     onChange={handlesearchToDate}
                   />

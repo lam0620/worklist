@@ -100,6 +100,10 @@
     pointer-events: none; 
     opacity: 0.2; 
 }
+.logo-cal {
+    color-scheme: dark;
+}
+  
 .btn-red-square {
     background-color: #fe615a; 
     border:none; 
