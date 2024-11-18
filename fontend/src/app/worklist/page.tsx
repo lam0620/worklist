@@ -6,7 +6,7 @@ import { fetchWorklist } from "@/services/apiService";
 import { useUser } from "@/context/UserContext";
 import { WorkList } from "@/app/types/WorkList";
 import { toast } from "react-toastify";
-import logo from "../../../public/images/org_logo.png";
+import logo from "../../../public/images/custom_logo.png";
 import Image from "next/image";
 import "./worklist.css";
 import WorklistList from "@/components/worklist/WorklistList";
@@ -365,9 +365,8 @@ const Worklist = () => {
     setReportInf(reportInf);
   };
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL;
-
-  const linkStudyList = `${API_BASE_URL}`;
+  const linkStudyList =
+    process.env.NEXT_PUBLIC_DICOM_VIEWER_URL || "https://localhost:3000";
 
   return (
     <div className="flex flex-col h-screen text-sm md:text-base">
@@ -382,7 +381,7 @@ const Worklist = () => {
             href={linkStudyList}
             className="flex items-center justify-center ml-1 text-red-400 underline text-xs md:text-sm"
           >
-            {t("Study List")}
+            {"Studylist"}
           </a>
         </div>
 
