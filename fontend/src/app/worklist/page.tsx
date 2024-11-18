@@ -385,7 +385,7 @@ const Worklist = () => {
           </a>
         </div>
 
-        <div className="mr-5">
+        <div className="mr-2">
           <div className="z-50 text-black">
             {user && (
               <UserAvatar
