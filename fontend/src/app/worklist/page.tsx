@@ -282,7 +282,7 @@ const Worklist = () => {
   };
   const handleFilterLast7Days = () => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setHours(23, 59, 59, 999);
     const sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(today.getDate() - 7);
     sevenDaysAgo.setHours(0, 0, 0, 0);
