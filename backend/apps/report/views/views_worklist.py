@@ -20,10 +20,11 @@ from apps.account.permission import CheckPermission
 from apps.report.order_base_view import OrderBaseView
 from apps.report import serializers as ser
 from apps.report.models import (
-    User, Order,Procedure
+    Report, User, Order,Procedure
 )
 
 from apps.report.utils import  get_image_field_str
+from third_parties.contribution.api_view import CustomAPIView
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +87,7 @@ class WorklistView(OrderBaseView):
     @swagger_auto_schema(
         operation_summary='Get worklists',
         operation_description='Get worklists',
-        tags=[swagger_tags.REPORT_ORDER],
+        tags=[swagger_tags.WORKLIST],
     )
     def get(self, request, *args, **kwargs):
         # Get and check version to secure or not
@@ -257,7 +258,7 @@ class WorklistView(OrderBaseView):
             
             'pat_pid':order.patient.pid,
             'pat_fullname':order.patient.fullname,
-            'pat_gender':order.patient.gender,
+            'pat_gender':order.patient.gender if order.patient.gender else 'U',
             'pat_dob':order.patient.dob,
             'pat_tel':order.patient.tel,
             'pat_address':order.patient.address,
@@ -284,4 +285,106 @@ class WorklistView(OrderBaseView):
                 orders_json.append(worklist)      
 
         logger.info(orders_json)  
+
+class WorklistByProcedureId(CustomAPIView):
+    #queryset = User.objects.all()
+    #authentication_classes = ()
+
+    """
+    Get a report
+    kwargs = accession_no and procedure_code
+    """
+    @swagger_auto_schema(
+        operation_summary='Worklist Detail By Procdure Id',
+        operation_description='Worklist Detail By Procdure Id',
+        tags=[swagger_tags.WORKLIST],
+    )
+    def get(self, request, *args, **kwargs):
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_REPORT, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_REPORT)
+
+        try:
+            # select_related = list tables that related (foreignkey) with Procedure
+            # order__patient means join patient table too (patient in order table)
+            procedure = Procedure.objects.select_related('order','order__patient','order__referring_phys','procedure_type').get(**kwargs)
+
+            if procedure is None:
+                return self.cus_response_empty_data()
+            
+            order = procedure.order
+            patient = order.patient
+
+            # Empty data if this order has not report yet
+            report_json = {}
+            radiologist_json = {}
+            try:
+                report = Report.objects.select_related('radiologist').get(procedure=procedure.id)
+
+                report_json = {
+                    'id': report.id,
+                    'findings': report.findings,
+                    'conclusion': report.conclusion,
+                    'scan_protocol':report.scan_protocol,
+                    'status': report.status,
+                    'created_time':report.created_at.strftime('%d/%m/%Y %H:%M'),
+                }
+                radiologist_json = {
+                    "id":report.radiologist.id,
+                    'code':report.radiologist.doctor_no,
+                    'fullname':report.radiologist.fullname,
+                    'sign':get_image_field_str(report.radiologist.sign),
+                    'title':report.radiologist.title,
+                }
+            except Report.DoesNotExist:
+                # Do  nothing
+                pass   
+                       
+            procedure_json = {
+                'proc_id':procedure.id,
+                'status':procedure.status,
+                'study_iuid':procedure.study_iuid,
+                'code':procedure.procedure_type.code,
+                'name':procedure.procedure_type.name
+            }
+            patient_json = {
+                    'pid':patient.pid,
+                    'fullname':patient.fullname,
+                    'gender': patient.gender if patient.gender else 'U',
+                    'dob':patient.dob,
+                    'tel':patient.tel,
+                    'address':patient.address,
+                    'insurance_no':patient.insurance_no
+            }
+            
+
+            referring_phys = {
+                'code': order.referring_phys.doctor_no,
+                'fullname': order.referring_phys.fullname,   
+            }
+
+            # Return data
+            data = {
+                'accession_no': order.accession_no,
+                'modality_type': order.modality_type,
+                'clinical_diagnosis': order.clinical_diagnosis,  
+                'created_time':order.created_at.strftime('%d/%m/%Y %H:%M'),
+
+                'referring_phys':referring_phys,
+                'patient':patient_json,
+                'procedure': procedure_json,
+                'report':report_json,
+                'radiologist': radiologist_json
+        }
+        except Procedure.DoesNotExist:
+            return self.cus_response_empty_data()
+                                        
+        except Exception as e:
+            logger.error(e, exc_info=True)
+            return self.response_NG(ec.E_SYSTEM, str(e))
+        
+        return self.response_success(data=data)    
+   
 
