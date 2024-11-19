@@ -22,6 +22,7 @@ interface WorklistProps {
   reportInf: ReportDetailProps;
   numRecord: number;
   loading: boolean;
+  isAdvancedSearch: boolean;
 }
 const WorklistList = ({
   worklist,
@@ -34,6 +35,7 @@ const WorklistList = ({
   reportInf,
   numRecord,
   loading,
+  isAdvancedSearch,
 }: WorklistProps) => {
   const { user } = useUser();
   const [selectedItem, setSelectedItem] = useState("");
@@ -401,6 +403,7 @@ const WorklistList = ({
           <div className="font-semibold text-center hidden md:block w-1/12">
             {t("Status")}
           </div>
+          <div className="font-semibold text-center md:hidden block w-1/12"></div>
           <div className="font-semibold text-center w-1/3 md:w-1/12">
             {t("PID")}
           </div>
@@ -434,7 +437,11 @@ const WorklistList = ({
             <LoadingSpinner />
           </div>
         ) : (
-          <div className="scrollbar overflow-y-auto md:overflow-auto h-1/2 md:h-[90%] md:w-[2000px]">
+          <div
+            className={`scrollbar overflow-y-auto md:overflow-auto ${
+              isAdvancedSearch ? "h-1/2" : "h-2/3" //to responsive (scrollbar-y) the list when viewing mobile
+            } md:h-[90%] md:w-[2000px]`}
+          >
             {worklist.length > 0 ? (
               <ul>
                 {worklist.map((item) => (
@@ -455,6 +462,9 @@ const WorklistList = ({
                   >
                     <div className="text-center hidden md:block w-1/12">
                       {t(Util.getStatusName(item.proc_status))}
+                    </div>
+                    <div className="text-center md:hidden block w-1/12">
+                      {item.proc_status}
                     </div>
                     <div className="text-center w-1/3 md:w-1/12">
                       {item.pat_pid}

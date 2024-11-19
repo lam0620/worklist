@@ -766,6 +766,7 @@ const Worklist = () => {
             reportInf={reportInf}
             numRecord={numRecord}
             loading={loading}
+            isAdvancedSearch={isAdvancedSearch}
           />
         </div>
         {selectedProcID && (
