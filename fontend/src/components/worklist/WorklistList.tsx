@@ -399,18 +399,18 @@ const WorklistList = ({
         </div>
       </div>
       <div className="h-full md:h-[55%] scrollbar overflow-x-auto overflow-y-auto box-content">
-        <div className="md:w-[2000px] whitespace-nowrap flex flex-row inbox rounded-t border-b bordervalue px-4 py-1">
-          <div className="font-semibold text-center hidden md:block w-1/12">
+        <div className="md:w-[1800px] whitespace-nowrap flex flex-row inbox rounded-t border-b bordervalue p-1">
+          <div className="font-semibold text-center hidden md:block w-[6%]">
             {t("Status")}
           </div>
-          <div className="font-semibold text-center md:hidden block w-1/12"></div>
-          <div className="font-semibold text-center w-1/3 md:w-1/12">
+          <div className="font-semibold text-center md:hidden block w-[5%]"></div>
+          <div className="font-semibold text-center w-1/3 md:w-[6%]">
             {t("PID")}
           </div>
           <div className="font-semibold text-center w-1/3 md:w-2/12">
             {t("Patient Name")}
           </div>
-          <div className="font-semibold text-center w-1/3 md:w-1/12">
+          <div className="font-semibold text-center w-1/3 md:w-[6%]">
             {t("Accession No")}
           </div>
           <div className="font-semibold text-center  hidden md:block w-1/12">
@@ -419,16 +419,16 @@ const WorklistList = ({
           <div className="font-semibold text-center hidden md:block w-1/12">
             {t("Study Date")}
           </div>
-          <div className="font-semibold text-center  hidden md:block w-1/12">
+          <div className="font-semibold text-center  hidden md:block w-[6%]">
             {t("Modality")}
           </div>
-          <div className="font-semibold text-center  hidden md:block w-2/12">
+          <div className="font-semibold text-center  hidden md:block w-[20%]">
             {t("Procedure")}
           </div>
           <div className="font-semibold text-center  hidden md:block w-2/12">
             {t("Referring Physician")}
           </div>
-          <div className="font-semibold text-center  hidden md:block w-1/12">
+          <div className="font-semibold text-center  hidden md:block w-[3%]">
             {t("Instances")}
           </div>
         </div>
@@ -440,14 +440,14 @@ const WorklistList = ({
           <div
             className={`scrollbar overflow-y-auto md:overflow-auto ${
               isAdvancedSearch ? "h-1/2" : "h-2/3" //to responsive (scrollbar-y) the list when viewing mobile
-            } md:h-[90%] md:w-[2000px]`}
+            } md:h-[90%] md:w-[1800px]`}
           >
             {worklist.length > 0 ? (
               <ul>
                 {worklist.map((item) => (
                   <li
                     key={`${item.id}-${item.proc_id}`} // make sure key is not duplicate, because item.id can have 2 in db
-                    className={`flex flex-row items-center px-4 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
+                    className={`flex flex-row items-center px-1 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
                       selectedRow === item.proc_id ? "purple-selectedrow" : ""
                     }`}
                     onClick={() => {
@@ -460,19 +460,19 @@ const WorklistList = ({
                       handleCheckStatus(item.proc_status);
                     }}
                   >
-                    <div className="text-center hidden md:block w-1/12">
+                    <div className="text-center hidden md:block w-[6%]">
                       {t(Util.getStatusName(item.proc_status))}
                     </div>
-                    <div className="text-center md:hidden block w-1/12">
+                    <div className="text-center md:hidden block w-[5%]">
                       {item.proc_status}
                     </div>
-                    <div className="text-center w-1/3 md:w-1/12">
+                    <div className="text-center w-1/3 md:w-[6%]">
                       {item.pat_pid}
                     </div>
                     <div className="text-center w-1/3 md:w-2/12">
                       {item.pat_fullname}
                     </div>
-                    <div className="text-center w-1/3 md:w-1/12">
+                    <div className="text-center w-1/3 md:w-[6%]">
                       {item.accession_no}
                     </div>
                     <div className="text-center hidden md:block w-1/12">
@@ -481,16 +481,16 @@ const WorklistList = ({
                     <div className="text-center hidden md:block w-1/12">
                       {item.study_created_time.split(" ")[0]}
                     </div>
-                    <div className="text-center hidden md:block w-1/12">
+                    <div className="text-center hidden md:block w-[6%]">
                       {item.modality_type}
                     </div>
-                    <div className="text-center hidden md:block w-2/12">
+                    <div className="text-center hidden md:block w-[20%]">
                       {item.proc_name}
                     </div>
                     <div className="text-center hidden md:block w-2/12">
                       {item.referring_phys_name}
                     </div>
-                    <div className="text-center hidden md:block w-1/12">
+                    <div className="text-center hidden md:block w-[3%] ml-2">
                       {item.num_instances}
                     </div>
                   </li>
