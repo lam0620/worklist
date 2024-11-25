@@ -17,13 +17,13 @@ from library.constant import swagger_tags
 
 from apps.account.permission import CheckPermission
 
-from apps.report.order_base_view import OrderBaseView
+from apps.report.worklist_base_view import WorklistBaseView
 from apps.report import serializers as ser
 from apps.report.models import (
     Report, User, Order,Procedure
 )
 
-from apps.report.utils import  get_image_field_str
+
 from third_parties.contribution.api_view import CustomAPIView
 
 logger = logging.getLogger(__name__)
@@ -63,9 +63,9 @@ class OrderFilter(filters.FilterSet):
         fields = ['accession_no','patient_name','modality_type','patient_pid','created_at']
 
 """
-Order class
+Worklist class
 """
-class WorklistView(OrderBaseView):
+class WorklistView(WorklistBaseView):
     queryset = Order.objects.all()
     # Call overwrite here to skip authenticate or don't call request.user
     # uncomment if no need to check permission 
@@ -176,7 +176,7 @@ class WorklistView(OrderBaseView):
             logger.warning(e, exc_info=True)
 
         # Convert queryset to json, merge df_study to df_merged
-        df_merged = self._merge_df(queryset, df_study, status)
+        df_merged = self._merge_df(queryset, df_study)
         #logger.debug('Number of rows after merging df_study: %s', len(df_merged))
 
         # Search status = SC or IM in df. Do this because the status in procedure table is not latest data
@@ -190,103 +190,247 @@ class WorklistView(OrderBaseView):
         return self.get_paginated_response(page)
     
 
-    def _merge_df(self, queryset, df_study, status):
-        orders_json = []
+"""
+Worklist class
+"""
+class NewWorklistView(WorklistBaseView):
+    queryset = Order.objects.all()
+    # Call overwrite here to skip authenticate or don't call request.user
+    # uncomment if no need to check permission 
+    # authentication_classes = ()
+    
+    # for search box (?search=xxx). which you want to search. 
+    search_fields = ['accession_no', 'patient__fullname', 'patient__pid']
 
-        # First, convert queryset to json to be able to get procedure data
-        for order in queryset:
-            for worklist in self._get_worklist_json(order):
-                orders_json.append(worklist)
-
-      
-        # Convert json to dataframe
-        df_order = pd.DataFrame.from_records(orders_json)
-
-        # Don't merge study to orders if there are duplciated accession_no in orders
-        # Because we don't know which study match with which order??
-        
-        # Get rows duplicate accession_no
-        df_duplciate_order=df_order[df_order.duplicated(subset=['accession_no'],keep=False)]
-        logger.debug('Number of duplicated rows: %s', len(df_duplciate_order))
-        # Get new df by removing duplicated rows
-        df_new_order = df_order.drop_duplicates(subset=['accession_no'], keep=False) 
-        logger.debug('Number of rows after drop duplicated: %s', len(df_new_order))
-
-        # Merge df_study to df_new_order
-        df_merged = df_new_order.merge(df_study, how='left', on='accession_no')
-        logger.debug('Number of rows after merged df_study: %s', len(df_merged))
-
-        # Add df_duplciate_order to df_merged and replace NaN to ''
-        df_merged = pd.concat([df_merged, df_duplciate_order])#.replace([np.nan, -np.inf, pd.NaT], '')
-        #print(df_merged['study_created_time'])
-        # Format datetime to sort
-        df_merged['created_time'] = pd.to_datetime(df_merged['created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
-       
-        #print(df_merged.dtypes)
-        # Sort latest created_time first
-        df_merged = df_merged.sort_values(by=['created_time'], ascending = False)
-
-       
-        # change the datetime format
-        df_merged['created_time'] = df_merged['created_time'].dt.strftime('%d/%m/%Y %H:%M')
-
-        # study_created_time is got from pacs.study
-        if 'study_created_time' in df_merged.columns :
-            df_merged['study_created_time'] = pd.to_datetime(df_merged['study_created_time'], format='%d/%m/%Y %H:%M',errors='coerce')
-            df_merged['study_created_time'] = df_merged['study_created_time'].dt.strftime('%d/%m/%Y %H:%M')
-        else:
-            logger.warning('There no study_created_time in dataframe')
-            df_merged['study_created_time'] = ''
-
-        # Applying the condition to update status = 'IM' if current = SC and exists study_iuid
-        df_merged["proc_status"] = np.where((df_merged["proc_status"] == 'SC') & (df_merged["study_iuid"].isnull() == False), 'IM', df_merged["proc_status"])
-
-        # Add df_duplciate_order to df_merged and replace NaN to ''
-        return df_merged.replace([np.nan, -np.inf, pd.NaT], '')
+    # for query string (?type=xxx)
+    # View attributes renamed: filter_fields => filterset_fields
+    # https://django-filter.readthedocs.io/en/stable/guide/migration.html
+    #filterset_fields = ['accession_no', 'patient__fullname', 'patient__pid','created_at']
+    filterset_class = OrderFilter
 
 
-    def _get_worklist_json(self, order):
-        order_data = [{
-            'id': order.id,
-            'accession_no': order.accession_no,
-            'referring_phys_code': order.referring_phys.doctor_no,
-            'referring_phys_name': order.referring_phys.fullname,
-            'clinical_diagnosis': order.clinical_diagnosis,
-            # 'order_time': order.order_time,
-            'created_time':order.created_at.strftime('%d/%m/%Y %H:%M'),
-            'modality_type': order.modality_type,
-            
-            'pat_pid':order.patient.pid,
-            'pat_fullname':order.patient.fullname,
-            'pat_gender':order.patient.gender if order.patient.gender else 'U',
-            'pat_dob':order.patient.dob,
-            'pat_tel':order.patient.tel,
-            'pat_address':order.patient.address,
-            'pat_insurance_no':order.patient.insurance_no,
-
-            'proc_id': proc.id,
-            'proc_code': proc.procedure_type.code, 
-            'proc_name': proc.procedure_type.name,
-
-            'proc_study_iuid':proc.study_iuid,
-            'proc_status':proc.status
+    """
+    Get list of worklist
+    """
+    @swagger_auto_schema(
+        operation_summary='Get worklists',
+        operation_description='Get worklists',
+        tags=[swagger_tags.WORKLIST],
+    )
+    def get(self, request, *args, **kwargs):
+        """
+        Get list of worklist
+        - Search orders
+        - Search pacs.study
+        - Merge
+        """
                 
-        } for proc in order.procedure_list]        
+        # Get and check version to secure or not
+        if request.META.get('HTTP_X_API_VERSION') != "X":  
+            user = request.user
+            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+            if not is_per and not user.is_superuser:
+                return self.cus_response_403(per_code.VIEW_ORDER)
 
-        return order_data
+        # Search including studies that no order yet
+        is_include_no_order =request.query_params.get('is_include_no_order')
+        logger.info('Search by is_include_no_order?: %s', is_include_no_order)
 
- 
-    def log_queryset(self, queryset):
-        orders_json = []
+        if not is_include_no_order or is_include_no_order == '0':            
+            df_merged = self._get_worklists(request)
+        else:
+            df_merged = self._get_include_no_order(request)
 
-        # First, convert queryset to json to be able to get procedure data
-        for order in queryset:
-            for worklist in self._get_worklist_json(order):
-                orders_json.append(worklist)      
+        if len(df_merged) == 0:
+            return self.cus_response_empty_data()
+        
+        # Convert to json to response
+        orders_data = df_merged.to_dict(orient = 'records')    
+  
+        page = self.paginate_queryset(orders_data)
+        return self.get_paginated_response(page)
+    
 
-        logger.info(orders_json)  
+    def _get_worklists(self, request):
+        # SC, IP, CM, IM
+        status=request.query_params.get('status')
 
-class WorklistByProcedureId(CustomAPIView):
+        queryset = self._get_orders(status)
+
+        if not queryset.exists():
+            return pd.DataFrame() # empty df
+
+        data= {}
+        # Init a Empty dataframe
+        df_study = pd.DataFrame({'accession_no':[],
+                                 'study_iuid':[],
+                                 'study_time':[],
+                                 'num_series':[],
+                                 'num_instances':[]}) 
+        
+        df_study = self._get_studies(queryset, df_study)
+
+        # Convert queryset to json, merge df_study to df_merged
+        df_merged = self._merge_df(queryset, df_study)
+        #logger.debug('Number of rows after merging df_study: %s', len(df_merged))
+
+        # Search status = SC or IM in df. Do this because the status in procedure table is not latest data
+        if status and (status == 'SC' or status == 'IM'):
+            df_merged = df_merged[df_merged['proc_status'] == status]
+
+        return df_merged
+            
+    def _get_include_no_order(self, request):    
+        # Quick search
+        quick_search_val=request.query_params.get('search')
+
+        # Advanced search
+        accession_no=request.query_params.get('accession_no')
+        patient_name=request.query_params.get('patient_name')
+        patient_pid=request.query_params.get('patient_pid')
+        start_date=request.query_params.get('created_at_after') # from
+        end_date=request.query_params.get('created_at_before') # to
+        modality_type=request.query_params.get('modality_type')
+
+        # SC, IP, CM, IM
+        status=request.query_params.get('status')
+        queryset = None
+
+        logger.info('Quick Search?: %s', quick_search_val)
+
+        queryset = self._get_orders(status)
+
+        # Search by status but not found
+        if status and not queryset.exists():
+            return self.cus_response_empty_data()
+
+        data= {}
+        # Init a Empty dataframe
+        df_study = pd.DataFrame({'accession_no':[],
+                                 'study_iuid':[],
+                                 'study_time':[],
+                                 'num_series':[],
+                                 'num_instances':[],
+                                 'modality_type':[]
+                                 }) 
+        
+        # test dataframe
+        # df_study = pd.DataFrame({'accession_no':['202411102','202411101'],
+        #                         'study_time':['10/11/2024 13:59','10/11/2024 13:58']})
+
+        # Get study data from pacs database
+        try:
+            list_accession_no = [order.accession_no for order in queryset]
+                
+            logger.info('Query pacs.study by accession_no: %s', list_accession_no)
+
+            # Get pacsdb.study by accession_no
+            with connections["pacs_db"].cursor() as cursor:
+                
+                if status:
+                    # 1 study has many study_query_attrs, so add distinct
+                    sql = """select distinct s.accession_no, s.study_iuid, s.created_time as study_created_time, sqa.num_series, sqa.num_instances,study_desc 
+                                from study s 
+                                left join study_query_attrs sqa on s.pk =sqa.study_fk 
+                                where s.accession_no in %s and sqa.mods_in_study is not null
+                            """
+                    
+                    cursor.execute(sql,[tuple(list_accession_no)])
+
+                elif quick_search_val:
+                    # Do Quick Search by params
+                    # 1 study has many study_query_attrs, so add distinct
+                    sql = """select distinct st.accession_no, st.study_iuid, st.created_time as study_created_time, sqa.num_series, sqa.num_instances,st.study_desc 
+                            from study st 
+                            join patient pa on pa.pk=st.patient_fk 
+                            join patient_id pid on pa.pk=pid.patient_fk 
+                            join person_name pn on pn.pk=pa.pat_name_fk 
+                            left join study_query_attrs sqa on st.pk=sqa.study_fk 
+                            where (UPPER(pid.pat_id) like UPPER(%(pid)s)) 
+                                or (UPPER(pn.alphabetic_name) like UPPER(%(alp_name)s) or UPPER(pn.ideographic_name) like UPPER(%(ideo_name)s) or UPPER(pn.phonetic_name) like UPPER(%(ph_name)s)) 
+                                or UPPER(st.accession_no) like UPPER(%(acn)s) 
+                                or exists(select se.pk from series se where se.modality=%(modality)s and se.study_fk=st.pk)
+                                and sqa.mods_in_study is not null
+                                """
+                    kwargs = {
+                        'pid': '%'+quick_search_val+'%',
+                        'alp_name': '%'+quick_search_val+'%',
+                        'ideo_name': '%'+quick_search_val+'%',
+                        'ph_name': '%'+quick_search_val+'%',
+                        'acn': '%'+quick_search_val+'%',
+                        'modality': '%'+quick_search_val+'%',                                                
+                    }        
+                    cursor.execute(sql, kwargs)                    
+                else:    
+                    where = """
+                        where (pid.pat_id like %(pid)s or %(pid)s is null) 
+                        and ((pn.alphabetic_name like %(name)s or %(name)s is null) 
+                            or (pn.ideographic_name like %(name)s or %(name)s is null) 
+                            or (pn.phonetic_name like %(name)s or %(name)s is null))
+                        
+                        and (st.accession_no like %(acn)s  or %(acn)s is null) 
+                        and exists(select se.pk from series se 
+                                    where (se.modality=%(modality)s or %(modality)s is null) 
+                                    and se.study_fk=st.pk)
+                        and sqa.mods_in_study is not null
+                    """
+
+                    if start_date and end_date:
+                        where = where + "and st.study_date between %(start_date)s and %(end_date)s "
+                    elif start_date:
+                        where = where + "and st.study_date >= %(start_date)s "
+                    elif end_date:        
+                        where = where + "and st.study_date <= %(end_date)s "
+                    # Do Advanced Search by params
+                    # 1 study has many study_query_attrs, so add distinct
+                    sql = """select distinct st.accession_no, st.study_iuid, sqa.mods_in_study as modality_type,st.created_time as study_created_time, sqa.num_series, sqa.num_instances,st.study_desc 
+                            from study st 
+                            join patient pa on pa.pk=st.patient_fk 
+                            join patient_id pid on pa.pk=pid.patient_fk 
+                            join person_name pn on pn.pk=pa.pat_name_fk 
+                            left join study_query_attrs sqa on st.pk=sqa.study_fk 
+                            """
+                    sql = sql + where
+
+                    kwargs = {
+                        'pid': None if not patient_pid else '%'+patient_pid+'%',
+                        'name': None if not patient_name else '%'+patient_name+'%',
+                        #'ideo_name': '' if not patient_name else '%'+patient_name+'%',
+                        #'ph_name': '' if not patient_name else '%'+patient_name+'%',
+                        'acn': None if not accession_no else '%'+accession_no+'%',
+                        'modality': None if not modality_type else modality_type,    
+                        'start_date': None if not start_date else start_date,
+                        'end_date': None if not end_date else end_date,                                             
+                    }                    
+                    cursor.execute(sql, kwargs)
+
+                results = cursor.fetchall()
+                logger.info("Total rows of pacs.study are:  %s", len(results))
+
+                # Convert Django's fetchall() result into a Pandas DataFrame
+                column_names = [desc[0] for desc in cursor.description]
+                df_study = pd.DataFrame(results, columns = column_names)
+
+        except Exception as e:
+            # No raise exception here
+            logger.warning(e, exc_info=True)
+
+        # Convert queryset to json, merge df_study to df_merged
+        df_merged = self._merge_df(queryset, df_study)
+        #logger.debug('Number of rows after merging df_study: %s', len(df_merged))
+
+        # Search status = SC or IM in df. Do this because the status in procedure table is not latest data
+        if status and (status == 'SC' or status == 'IM'):
+            df_merged = df_merged[df_merged['proc_status'] == status]
+
+        # Convert to json to response
+        orders_data = df_merged.to_dict(orient = 'records')    
+  
+        page = self.paginate_queryset(orders_data)
+        return self.get_paginated_response(page) 
+
+
+class WorklistByProcedureId(WorklistBaseView):
     #queryset = User.objects.all()
     #authentication_classes = ()
 
@@ -306,85 +450,6 @@ class WorklistByProcedureId(CustomAPIView):
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.VIEW_REPORT)
 
-        try:
-            # select_related = list tables that related (foreignkey) with Procedure
-            # order__patient means join patient table too (patient in order table)
-            procedure = Procedure.objects.select_related('order','order__patient','order__referring_phys','procedure_type').get(**kwargs)
-
-            if procedure is None:
-                return self.cus_response_empty_data()
-            
-            order = procedure.order
-            patient = order.patient
-
-            # Empty data if this order has not report yet
-            report_json = {}
-            radiologist_json = {}
-            try:
-                report = Report.objects.select_related('radiologist').get(procedure=procedure.id)
-
-                report_json = {
-                    'id': report.id,
-                    'findings': report.findings,
-                    'conclusion': report.conclusion,
-                    'scan_protocol':report.scan_protocol,
-                    'status': report.status,
-                    'created_time':report.created_at.strftime('%d/%m/%Y %H:%M'),
-                }
-                radiologist_json = {
-                    "id":report.radiologist.id,
-                    'code':report.radiologist.doctor_no,
-                    'fullname':report.radiologist.fullname,
-                    'sign':get_image_field_str(report.radiologist.sign),
-                    'title':report.radiologist.title,
-                }
-            except Report.DoesNotExist:
-                # Do  nothing
-                pass   
-                       
-            procedure_json = {
-                'proc_id':procedure.id,
-                'status':procedure.status,
-                'study_iuid':procedure.study_iuid,
-                'code':procedure.procedure_type.code,
-                'name':procedure.procedure_type.name
-            }
-            patient_json = {
-                    'pid':patient.pid,
-                    'fullname':patient.fullname,
-                    'gender': patient.gender if patient.gender else 'U',
-                    'dob':patient.dob,
-                    'tel':patient.tel,
-                    'address':patient.address,
-                    'insurance_no':patient.insurance_no
-            }
-            
-
-            referring_phys = {
-                'code': order.referring_phys.doctor_no,
-                'fullname': order.referring_phys.fullname,   
-            }
-
-            # Return data
-            data = {
-                'accession_no': order.accession_no,
-                'modality_type': order.modality_type,
-                'clinical_diagnosis': order.clinical_diagnosis,  
-                'created_time':order.created_at.strftime('%d/%m/%Y %H:%M'),
-
-                'referring_phys':referring_phys,
-                'patient':patient_json,
-                'procedure': procedure_json,
-                'report':report_json,
-                'radiologist': radiologist_json
-        }
-        except Procedure.DoesNotExist:
-            return self.cus_response_empty_data()
-                                        
-        except Exception as e:
-            logger.error(e, exc_info=True)
-            return self.response_NG(ec.E_SYSTEM, str(e))
-        
-        return self.response_success(data=data)    
+        return self._get_worklist_by_procid(pk = kwargs['pk'])
    
 
