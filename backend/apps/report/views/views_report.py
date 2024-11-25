@@ -168,7 +168,7 @@ class ReportView(ReportBaseView, WorklistBaseView):
             return self.response_NG(code, msg)
     
 
-class ReportDetailView(ReportBaseView):
+class ReportDetailView(ReportBaseView, WorklistBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
