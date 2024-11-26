@@ -7,7 +7,7 @@ from apps.report.views import (
     ReportTemplateDetailView, ReportTemplateView, ReportView, ReportDetailView,ReportByProcedureId,
     OrderView,OrderDetail, DoctorView,DoctorDetailView,
     PatientView,PatientDetailView,ScanProtocolView,ScanProtocolDetailView, StudyDetailView,WorklistView,
-    StatsViewSet
+    NewWorklistView, WorklistByProcedureId, StatsViewSet
 )
 from apps.report.views import (
     External_ReportById, External_ReportByACNProcedure,
@@ -72,7 +72,9 @@ urlpatterns = [
     path('studies', StudyDetailView.as_view(), name='study detail'),
 
     # Worklist
-    path('worklists', WorklistView.as_view(), name='Worklists')
+    path('worklists', WorklistView.as_view(), name='Worklists'),
+    path('worklists-new', NewWorklistView.as_view(), name='Worklists'),
+    path('worklists/procedures/<uuid:pk>', WorklistByProcedureId.as_view(), name='Worklist Detail by Proc_Id')
 ]
 
 router = DefaultRouter()

@@ -38,6 +38,7 @@ class ReportBaseView(CustomAPIView):
     def get_pure_report_json(self, request, report):
         """
         Get pure report data in json for report item
+        Used at views_external, views_report: get detail report, create/udpate report
         """
                 
         procedure_json= {}

@@ -91,6 +91,7 @@ const WorklistList = ({
     onSelectProcID(item.proc_id);
     setSelectedRow(item.proc_id);
   };
+
   let viewerWindow: Window | null = null;
   let reportWindow: Window | null = null;
 

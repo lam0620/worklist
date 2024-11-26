@@ -36,7 +36,7 @@ venv.bak/
 
 .node_modules
 .next
-*.log
+*.log*
 media/
 
 # Add more

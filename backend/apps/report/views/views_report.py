@@ -17,6 +17,7 @@ from library.constant import swagger_tags
 from apps.account.permission import CheckPermission
 
 from apps.report.report_base_view import ReportBaseView
+from apps.report.worklist_base_view import WorklistBaseView
 from apps.report import serializers as ser
 from apps.report.models import (
     Doctor, Report, ReportTemplate, User, Procedure,
@@ -29,7 +30,7 @@ logger = logging.getLogger(__name__)
 """
 Report class
 """
-class ReportView(ReportBaseView):
+class ReportView(ReportBaseView, WorklistBaseView):
     queryset = Report.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -90,7 +91,8 @@ class ReportView(ReportBaseView):
     def post(self, request):
         updatedBy = None
         # Get and check version to secure or not
-        if request.META.get('HTTP_X_API_VERSION') != "X":  
+        api_version = request.META.get('HTTP_X_API_VERSION')
+        if api_version != "X":  
             user = request.user
             is_per = CheckPermission(per_code.ADD_REPORT, user.id).check()
             if not is_per and not user.is_superuser:
@@ -147,8 +149,11 @@ class ReportView(ReportBaseView):
 
                 #return self.cus_response_created()
                 # Get latest report
-                return self.get_report_by_id(request, report_new.id)
-                # return self.response_success(data=new_data)
+                if api_version == 'v2':
+                    # A new json structure
+                    return self._get_worklist_by_procid(pk = procedure.id)
+                else:
+                    return self.get_report_by_id(request, report_new.id)
             
 
         except Exception as e:
@@ -163,7 +168,7 @@ class ReportView(ReportBaseView):
             return self.response_NG(code, msg)
     
 
-class ReportDetailView(ReportBaseView):
+class ReportDetailView(ReportBaseView, WorklistBaseView):
     queryset = User.objects.all()
     # uncomment if no need to check permission 
     # authentication_classes = ()
@@ -197,7 +202,8 @@ class ReportDetailView(ReportBaseView):
     def put(self, request, *args, **kwargs):
         updatedBy = None
         # Get and check version to secure or not
-        if request.META.get('HTTP_X_API_VERSION') != "X":  
+        api_version = request.META.get('HTTP_X_API_VERSION')
+        if api_version != "X":  
             user = request.user
             is_per = CheckPermission(per_code.EDIT_REPORT, user.id).check()
             if not is_per and not user.is_superuser:
@@ -240,7 +246,11 @@ class ReportDetailView(ReportBaseView):
 
                 #return self.cus_response_updated()
             # Get latest report
-            return self.get_report_by_id(request, report.id)
+                if api_version == 'v2':
+                    # A new json structure
+                    return self._get_worklist_by_procid(pk = proc.id)
+                else:
+                    return self.get_report_by_id(request, report.id)
 
         except Exception as e:
             logger.error(e, exc_info=True)
