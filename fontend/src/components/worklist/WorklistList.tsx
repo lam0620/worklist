@@ -43,6 +43,7 @@ const WorklistList = ({
   const [reportCheck, setReportCheck] = useState(false); // to check the row has report?
   const [viewerCheck, setViewerCheck] = useState(false); // to check the row has image?
   const [patientInf, setPatientInf] = useState({
+    pid:"",
     patientName: "",
     acn: "",
     study_iuid: "",
@@ -52,23 +53,22 @@ const WorklistList = ({
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL;
 
-  const handleSelectedRowPid = (pid: any) => {
-    //get pid to fetch related session
-    setSelectedItem(pid);
-  };
-
-  const checkSelectedRow = async (id: any) => {
+  const checkSelectedRow = async (item: any) => {
     try {
-      const response = await fetchReportByProcId(id);
-      if (response.status === 200 && response.data?.data.image_link) {
-      }
+      setPatientInf((prev) => ({
+        ...prev,
+        pid: item.pat_pid,
+        patientName: item.pat_fullname,
+        acn: item.accession_no,
+        study_iuid: item.study_iuid,
+      }));
+
+      // Get report data  
+      const response = await fetchReportByProcId(item.proc_id);
       if (response.status === 200 && response.data?.data.id) {
-        setPatientInf((prev) => ({
-          ...prev,
-          acn: response.data?.data.accession_no,
-        }));
         const studyIuid = response.data?.data.study_iuid;
         const procStudyIuid = response.data?.data.proc_study_iuid;
+        // Update studyiud
         setPatientInf((prev) => ({
           ...prev,
           study_iuid: procStudyIuid ? procStudyIuid : studyIuid, //priority to get proc_id, because in data have both
@@ -81,9 +81,13 @@ const WorklistList = ({
         console.error("An error occurred:", error);
       }
     }
-    onSelectProcID(id);
-    setSelectedRow(id);
+    // handleSelectedRowPid(item.pat_pid);
+    handleCheckStatus(item.proc_status);
+
+    onSelectProcID(item.proc_id);
+    setSelectedRow(item.proc_id);
   };
+
   let viewerWindow: Window | null = null;
   let reportWindow: Window | null = null;
 
@@ -450,15 +454,7 @@ const WorklistList = ({
                     className={`flex flex-row items-center px-1 py-4 border-b bordervalue inboxlist hover-purple cursor-pointer ${
                       selectedRow === item.proc_id ? "purple-selectedrow" : ""
                     }`}
-                    onClick={() => {
-                      checkSelectedRow(item.proc_id);
-                      handleSelectedRowPid(item.pat_pid);
-                      setPatientInf((prev) => ({
-                        ...prev,
-                        patientName: item.pat_fullname,
-                      }));
-                      handleCheckStatus(item.proc_status);
-                    }}
+                    onClick={() => { checkSelectedRow(item); }}
                   >
                     <div className="text-center hidden md:block w-[6%]">
                       {t(Util.getStatusName(item.proc_status))}
@@ -533,7 +529,8 @@ const WorklistList = ({
 
       <div className=" md:block hidden h-3/4">
         <RelatedSession
-          pid={selectedItem}
+          // pid={selectedItem}
+          pid={patientInf.pid}
           patientName={patientInf.patientName}
           t={t}
           onSelectProcID={onSelectProcID}
