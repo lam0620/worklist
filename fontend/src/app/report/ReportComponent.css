@@ -1,0 +1,181 @@
+#findings .ck-editor__editable_inline {
+    min-height: 250px;
+  }
+  #conclusion .ck-editor__editable_inline {
+    min-height: 200px;
+  }
+  #scantype .ck-editor__editable_inline {
+    min-height: 80px;
+  }
+  
+  .bg-red-500 {
+    background-color: #fe615a;
+  }
+  
+  .border-red-400 {
+    border-color: rgb(248 113 113);
+  }
+  
+  .bg-blue-500 {
+    background-color: rgb(59 130 246);
+  }
+  
+  .border-blue-500 {
+    border-color: rgb(59 130 246);
+  }
+  .bg-secondary-dark {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  
+  /* Base styles */
+  
+  .body-left {
+    transition: all 0.3s ease-in-out;
+    background: black;
+    border-right: 1px solid black;
+    box-sizing: border-box;
+  }
+  
+  .body-right {
+    height: auto;
+  }
+  
+  @media (min-width: 1425px) {
+    .body-left {
+      height: auto;
+      width: 25%;
+    }
+  
+    .body-right {
+      margin-left: 15px;
+      width: 70%;
+    }
+  }
+  
+  @media (min-width: 940px) {
+    .body-left {
+      height: auto;
+      width: 300px;
+    }
+  
+    .body-right {
+      width: auto;
+    }
+  
+    .procedure {
+      justify-content: start;
+    }
+  
+    .reportTemplate {
+      justify-content: end;
+    }
+  }
+  
+  @media (max-width: 470px) {
+    .body {
+      display: block;
+    }
+  
+    .body-left {
+      width: 100%;
+      height: auto;
+    }
+  
+    .body-right {
+      width: 100%;
+    }
+  
+    .procedure {
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+  
+    .reportTemplate {
+      justify-content: space-between;
+    }
+  }
+  
+  .collapsed .body-left {
+    width: 0 !important;
+  }
+  
+  .collapsed .body-right {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+  
+  @media (min-width: 300px) and (max-width: 490px) {
+    .button-class {
+      padding: 2px;
+      font-size: 12px;
+    }
+  
+    .button-class svg {
+      width: 20px;
+      height: 20px;
+    }
+  
+    .procedure {
+      width: 100%;
+    }
+  
+    .reportTemplate {
+      width: 100%;
+    }
+  }
+  
+  /*css dialog box*/
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 10px;
+    outline: none;
+  }
+  
+  .modal h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .modal input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .modal input.error {
+    border-color: red;
+  }
+  
+  .modal button {
+    padding: 7px 14px;
+    margin-top: 15px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .pl-scan {
+    padding-left: 1.5rem;
+    width: 15.5rem;
+  }
+.text-primary-light{
+  font-size: 14px;
+}

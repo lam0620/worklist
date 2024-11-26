@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { fetchReportByProcId } from "@/services/apiService";
+import { fetchReportWorklist } from "@/services/apiService";
 import { toast } from "react-toastify";
 import { formatDate, getReportStatusName } from "@/utils/utils";
-import { ReportDetailProps } from "@/app/types/ReportDetail";
+import { ReportDetailWorklist } from "@/app/types/ReportDetailWorkList";
 import { useUser } from "@/context/UserContext";
 import { PERMISSIONS } from "@/utils/constant";
 import LoadingSpinner from "@/components/LoadingSpinner";
 interface DetailInforProps {
   proc_id: string;
   t: (key: string) => string;
-  reportInf: (report: ReportDetailProps) => void;
+  reportInf: (report: ReportDetailWorklist) => void;
   setCollapseDetail: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -20,20 +20,29 @@ const DetailInfor = ({
   setCollapseDetail,
 }: DetailInforProps) => {
   const emptyReport = {
-    id: "",
     accession_no: "",
     study_iuid: "",
-    findings: "",
-    conclusion: "",
-    scan_protocol: "",
-    status: "",
-    clinical_diagnosis: "",
-    referring_phys_code: "",
-    referring_phys_name: "",
     created_time: "",
-    image_link: "",
+    clinical_diagnosis: "",
     modality_type: "",
-    radiologist: { id: "", doctor_no: "", fullname: "", sign: "", title: "" },
+    referring_phys: {
+      code: "",
+      fullname: "",
+    },
+    radiologist: {
+      id: "",
+      code: "",
+      fullname: "",
+      sign: "",
+      title: "",
+    },
+    procedure: {
+      proc_id: "",
+      code: "",
+      name: "",
+      status: "",
+      study_iuid: "",
+    },
     patient: {
       pid: "",
       fullname: "",
@@ -43,12 +52,19 @@ const DetailInfor = ({
       address: "",
       insurance_no: "",
     },
-    procedure: { proc_id: "", code: "", name: "" },
+    report: {
+      id: "",
+      scan_protocol: "",
+      findings: "",
+      conclusion: "",
+      status: "",
+      created_time: "",
+    },
   };
 
   const { user } = useUser();
   const [collapsed, setCollapsed] = useState(false);
-  const [report, setReport] = useState<ReportDetailProps>();
+  const [report, setReport] = useState<ReportDetailWorklist>();
   const [loading, setLoading] = useState(false);
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -67,7 +83,7 @@ const DetailInfor = ({
   const fetchReport = async (id: string) => {
     setLoading(true);
     try {
-      const response = await fetchReportByProcId(id);
+      const response = await fetchReportWorklist(id);
       if (
         response.status === 200 &&
         response.data?.result?.status === "OK" &&
@@ -128,7 +144,7 @@ const DetailInfor = ({
       )}
       {!collapsed && (
         <div className="md:block hidden ohif-scrollbar scrollbar overflow-y-auto border-l-4 h-full border-color-col">
-          {report?.id ? (
+          {report?.accession_no ? (
             loading ? (
               <LoadingSpinner />
             ) : (
@@ -251,7 +267,7 @@ const DetailInfor = ({
                     </div>
                     <div className="flex flex-col">
                       <span className="pl-0 text-right">
-                        {report?.referring_phys_name}
+                        {report?.referring_phys.fullname}
                       </span>
                     </div>
                   </div>
@@ -271,10 +287,12 @@ const DetailInfor = ({
                     <div className="flex flex-col">
                       <span
                         className={
-                          report?.status === "D" ? "text-red-500" : "text-white"
+                          report?.report.status === "D"
+                            ? "text-red-500"
+                            : "text-white"
                         }
                       >
-                        {t(getReportStatusName(report?.status))}
+                        {t(getReportStatusName(report?.report.status))}
                       </span>
                     </div>
                   </div>
@@ -303,7 +321,7 @@ const DetailInfor = ({
                 <p
                   className="inboxlist p-1"
                   dangerouslySetInnerHTML={{
-                    __html: report?.scan_protocol || "",
+                    __html: report?.report.scan_protocol || "",
                   }}
                 ></p>
                 <div className="px-1 pt-1 text-blue-300 font-semibold text-base">
@@ -311,14 +329,18 @@ const DetailInfor = ({
                 </div>
                 <p
                   className="inboxlist p-1"
-                  dangerouslySetInnerHTML={{ __html: report?.findings || "" }}
+                  dangerouslySetInnerHTML={{
+                    __html: report?.report.findings || "",
+                  }}
                 ></p>
                 <div className="px-1 pt-1 text-blue-300 font-semibold text-base">
                   {t("Conclusion")}
                 </div>
                 <p
                   className="inboxlist p-1"
-                  dangerouslySetInnerHTML={{ __html: report?.conclusion || "" }}
+                  dangerouslySetInnerHTML={{
+                    __html: report?.report.conclusion || "",
+                  }}
                 ></p>
               </div>
             )

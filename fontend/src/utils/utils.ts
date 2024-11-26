@@ -1,3 +1,5 @@
+import { PERMISSIONS } from "./constant";
+
 export const getGenderLabel = (gender: string | undefined) => {
   const language = localStorage.getItem("i18nextLng");
 
@@ -75,6 +77,9 @@ export default {
   FINAL: 'F',
   CORRECTED: 'C',
 
+  FONT_SIZE: '14',
+  FONT_FAMILY: 'Arial',
+
   PERMISSION_VIEW_REPORT : "view_report",
   PERMISSION_ADD_REPORT : "add_report",
   PERMISSION_EDIT_REPORT : "edit_report",
@@ -110,7 +115,7 @@ export const getFullModalityType = (type : string) => {
   return fullType;
 }
 
-var html2text = function (html : string) {
+export const html2text = function (html : string) {
   var div = document.createElement('div');
   div.innerHTML = html;
   var text = div.innerText;
@@ -118,7 +123,7 @@ var html2text = function (html : string) {
   return text;
 };
 
-var isEmpty = (str : string) => {
+export const isEmpty = (str : string) => {
   //if (typeof str == 'undefined' || !str || str.length === 0 || str === "" || !/[^\s]/.test(str) || /^\s*$/.test(str) || str.replace(/\s/g,"") === "") {
   if (typeof str == 'undefined' || str === 'undefined' || str === 'null' || !str || str == "" || str == null) {
     return true;
@@ -126,11 +131,11 @@ var isEmpty = (str : string) => {
     return false;
   }
 };
-var isObjectEmpty = (obj: any) => {
+export const isObjectEmpty = (obj: any) => {
   return Object.keys(obj).length === 0 && obj.constructor === Object;
 };
 
-var getFullGender = (sexCode:string) => {
+export const getFullGender = (sexCode:string) => {
   let sex = 'Unknown';
   if (sexCode === 'M')
     sex = 'Male';
@@ -182,3 +187,104 @@ export const getImageUrl = (name:string) => {
   return new URL(name, import.meta.url).href;
 };
 
+export const isFinalReport = (status : any) => {
+  if (status == 'F' || status == 'C') {
+    return true;
+  }
+  return false;
+}
+
+export const isReportErrorEmpty = (obj :any) => {
+  // console.log(obj)
+  let isCorrect = (Object.keys(obj).length === 0 && obj.constructor === Object) ||
+    (obj.fatal === "" && obj.system === "" && obj.findings === "" && obj.conclusion === "" && obj.radiologist === "");
+
+  // console.log(isCorrect)
+  return isCorrect;
+}
+
+interface ReportError {
+  conclusion: string;
+  findings: string;
+  radiologist: string;
+  fatal: string;
+  system: string;
+  procedure:string;
+  scan_protocol:string;
+}
+
+export const initEmptyReportError = (): ReportError => {
+  let error: ReportError = {
+    conclusion: "",
+    findings: "",
+    radiologist: "",
+    fatal: "",
+    system: "",
+    procedure: "",
+    scan_protocol:"",
+  };
+
+  return error;
+}
+
+
+export const isSaveEnabled = (status :any, fatalErr :any) => {
+  if (!isEmpty(fatalErr) || ["F", "C"].includes(status)) {
+    return false;
+  }
+  return true;
+}
+
+export const isPrintEnabled = (status : any) => {
+  if (["F", "C"].includes(status)) {
+    return true;
+  }
+  return false;
+}
+
+export const isApproveEnabled = (status :any, fatalErr : any) => {
+  if (isEmpty(fatalErr) && ["", "D", undefined].includes(status)) {
+    return true;
+  }
+  return false;
+}
+
+export const isEditEnabled = (status : any) => {
+  if (["F", "C"].includes(status)) {
+    return true;
+  }
+  return false;
+}
+
+export const isEditorDisabled = (fatalErr :any, permission :any) => {
+  // If has error or no permission
+  if (!isEmpty(fatalErr) ||
+    (!isEmpty(permission) && !permission.includes(PERMISSIONS.ADD_REPORT))) {
+    return true;
+  }
+  return false;
+}
+
+export const getStatusFull = (status :any) => {
+  let statusText = "Not yet";
+  if (status === 'D') {
+    statusText = 'Draft';
+  } else if (status === 'F') {
+    statusText = 'Approved';
+  } else if (status === 'C') {
+    statusText = 'Approved';
+  }
+  return statusText;
+}
+
+export const getStatusStyle = (status : any) => {
+  let statusText = "text-gray-500";
+  if (status === 'D') {
+    statusText = 'text-blue-400';
+  } else if (status === 'F') {
+    statusText = 'text-green-500';
+  } else if (status === 'C') {
+    statusText = 'text-green-500';
+  }
+  return statusText;
+}

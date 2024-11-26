@@ -1,0 +1,18 @@
+/* styles.css */
+.primary-bg {
+    background-color: #fe615a;
+    --tw-bg-opacity: 1;
+    height: 30px;
+  }
+  
+  .secondary-bg {
+    background-color: #052b53;
+    height: 30px; /* Giả sử màu xanh tùy chỉnh */
+  }
+  
+  .disabled-bg {
+    background-color: #e0e0e0; /* Màu xám tùy chỉnh cho trường bị vô hiệu hóa */
+    color: #b0b0b0;
+    cursor: default;
+  }
+  

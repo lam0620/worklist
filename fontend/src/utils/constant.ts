@@ -43,6 +43,8 @@ export const PERMISSIONS = {
     VIEW_REPORT : "view_report",
     ADD_REPORT : 'add_report',
     PRINT_REPORT : "print_report",
+    DELETE_REPORT : "delete_report",
+    EDIT_REPORT:"edit_report",
 
     VIEW_STATISTICS : "view_statistics",
 };

@@ -13,6 +13,7 @@ import WorklistList from "@/components/worklist/WorklistList";
 import DetailInfor from "@/components/worklist/DetailInfor";
 import UserAvatar from "../../components/Avatar";
 import withLoading from "@/components/withLoading";
+import HeaderWorklist from "@/components/HeaderWorklist";
 
 const Worklist = () => {
   const router = useRouter();
@@ -354,14 +355,8 @@ const Worklist = () => {
   return (
     <div className="flex flex-col h-screen text-sm md:text-base">
       <title>Worklist</title>
-      <header className="w-full flex justify-between items-center bg-top text-white p-1">
-        <div className="justify-start flex">
-          {/* <Image src={logo} className="w-8 h-8 mx-1 my-1 mr-4" alt="logo" /> */}
-          <img
-            src="../assets/custom_logo.png"
-            className="w-8 h-8 mx-1 my-1 mr-4"
-            alt="logo"
-          />
+      <HeaderWorklist>
+        <div className="flex flex-row mt-2">
           <p className="flex items-center justify-center ml-7">
             {t("Worklist |")}
           </p>
@@ -372,19 +367,7 @@ const Worklist = () => {
             {"Studylist"}
           </a>
         </div>
-
-        <div className="mr-2">
-          <div className="z-50 text-black">
-            {user && (
-              <UserAvatar
-                firstName={user.first_name}
-                lastName={user.last_name}
-                avatarColor={user.avatar_color}
-              />
-            )}
-          </div>
-        </div>
-      </header>
+      </HeaderWorklist>
       <div className="md:flex md:flex-1 md:h-screen backgroundcolor overflow-y-hidden">
         {/* left panel  */}
         {!collapsed && (
