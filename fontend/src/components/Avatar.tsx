@@ -84,7 +84,7 @@ const UserAvatar = ({ firstName, lastName, avatarColor }: AvatarProps) => {
         </Avatar.Root>
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content className="bg-white rounded shadow-md p-2">
+      <DropdownMenu.Content className="bg-white rounded shadow-md p-2 z-[100]">
         <div className="flex flex-col items-center p-2">
           <span className="text-gray-800 font-bold">{`${firstName} ${lastName}`}</span>
         </div>

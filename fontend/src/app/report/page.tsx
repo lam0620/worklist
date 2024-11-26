@@ -39,6 +39,9 @@ import {
   SpecialCharacters,
   Underline,
   Undo,
+  RemoveFormat,
+  SourceEditing,
+  Clipboard,
 } from "ckeditor5";
 import {
   fetchRadiologists,
@@ -55,7 +58,7 @@ import "ckeditor5/ckeditor5.css";
 import PDFComponent from "./PDF/PdfComponent";
 
 const ReportComponent = () => {
-  const { t } = useTranslation("orthers");
+  const { t } = useTranslation("reportWorklist");
   // Create Document Component
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
@@ -68,33 +71,23 @@ const ReportComponent = () => {
   const editorProtocolRef = useRef<ClassicEditor | null>(null);
 
   const [isLayoutReady, setIsLayoutReady] = useState(false);
-
+  const FONT_SIZE = "14px";
+  const FONT_FAMILY = "Arial";
   const editorConfig = {
     toolbar: {
       items: [
+        "clipboard",
         "undo",
         "redo",
         "|",
         "selectAll",
         "|",
-        "heading",
-        "|",
-        "fontSize",
-        "fontFamily",
-        "fontColor",
-        "fontBackgroundColor",
-        "|",
         "bold",
         "italic",
         "underline",
+        "removeFormat",
         "|",
-        "specialCharacters",
-        "|",
-        "alignment",
-        "|",
-        "indent",
-        "outdent",
-        "|",
+        "sourceEditing",
         "accessibilityHelp",
       ],
       shouldNotGroupWhenFull: false,
@@ -107,8 +100,6 @@ const ReportComponent = () => {
       Essentials,
       FontBackgroundColor,
       FontColor,
-      FontFamily,
-      FontSize,
       GeneralHtmlSupport,
       // Heading,
       Indent,
@@ -116,25 +107,24 @@ const ReportComponent = () => {
       Italic,
       Paragraph,
       SelectAll,
-      SpecialCharacters,
       Underline,
       Undo,
-      WordCount,
+      // WordCount,
+      RemoveFormat,
+      SourceEditing,
+      Clipboard,
     ],
-    fontFamily: {
-      supportAllValues: true,
-    },
-    fontSize: {
-      options: [10, 12, 14, "default", 18, 20, 22],
-      supportAllValues: true,
-    },
+    // fontFamily: {
+    //   supportAllValues: true,
+    // },
+    // fontSize: {
+    //   options: [10, 12, 14, "default", 18, 20, 22],
+    //   supportAllValues: true,
+    // },
 
     htmlSupport: {
       allow: [
         {
-          name: /^.*$/,
-          styles: true,
-          attributes: true,
           classes: true,
         },
       ],
@@ -723,6 +713,7 @@ const ReportComponent = () => {
   };
   const onApprove = (event: any) => {
     // Format as font-family, font-size
+    window.scrollTo({ top: 0, behavior: "smooth" });
     formatEditorData();
 
     // Check error
@@ -736,6 +727,7 @@ const ReportComponent = () => {
   };
   const onSaveReport = (event: any) => {
     // Format as font-family, font-size
+    window.scrollTo({ top: 0, behavior: "smooth" });
     formatEditorData();
 
     // Check error
@@ -931,21 +923,17 @@ const ReportComponent = () => {
     if (editorProtocol) {
       // 'Select All' to change font
       editorProtocol.execute("selectAll");
-      editorProtocol.execute("fontFamily", { value: Utils.FONT_FAMILY });
-      editorProtocol.execute("fontSize", { value: Utils.FONT_SIZE });
+      editorProtocol.execute("removeFormat");
     }
 
     if (editorFindings) {
       editorFindings.execute("selectAll");
-      editorFindings.execute("fontFamily", { value: Utils.FONT_FAMILY });
-      editorFindings.execute("fontSize", { value: Utils.FONT_SIZE });
+      editorFindings.execute("removeFormat");
     }
 
     if (editorConclusion) {
       editorConclusion.execute("selectAll");
-      editorConclusion.execute("fontFamily", { value: Utils.FONT_FAMILY });
-      editorConclusion.execute("fontSize", { value: Utils.FONT_SIZE });
-
+      editorConclusion.execute("removeFormat");
       // if not bold now, set bold for conclusion
       // if (!editorConclusion.commands.get("bold").value) {
       //   editorConclusion.execute("bold");
@@ -1981,7 +1969,7 @@ const ReportComponent = () => {
                           config={editorConfig}
                           data={reportData.report.scan_protocol}
                           onChange={onChangeScanProtocol}
-                          className="h-30 w-full px-2"
+                          // className="h-30 w-full px-2"
                           disabled={Util.isEditorDisabled(
                             state.error.fatal,
                             user?.permissions
@@ -2075,7 +2063,7 @@ const ReportComponent = () => {
                   <div className="mt-2 flex flex-col">
                     <Typography
                       variant="subtitle"
-                      className="text-primary-light pl-0 text-left"
+                      className="text-primary-light pl-0 text-left font-semibold"
                     >
                       <div
                         className="conclusion"
