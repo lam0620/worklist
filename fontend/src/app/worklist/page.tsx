@@ -22,16 +22,19 @@ const Worklist = () => {
   const [t, setT] = useState(() => (key: string) => key);
 
   useEffect(() => {
+    // Load translation asynchronously
     const loadTranslation = async () => {
       const { t } = await useTranslation("worklist");
       setT(() => t);
     };
     loadTranslation();
+    // Redirect user if user is logged in
     if (user) {
       router.push("/worklist");
     }
-    //to hidden or apprear left panel based on pc or moblie
-    if (typeof window !== "undefined") {
+    // Check if running on client-side
+    const isClient = typeof window !== "undefined";
+    if (isClient) {
       const handleResize = () => {
         if (window.innerWidth < 768) {
           setCollapsed(true);
@@ -45,7 +48,7 @@ const Worklist = () => {
         window.removeEventListener("resize", handleResize);
       };
     }
-  }, []);
+  });
   const [workList, setWorkList] = useState<WorkList[]>([]);
   const [numRecord, setNumRecord] = useState(Number); //to show quantity of record (... số ca)
   const [isAdvancedSearch, setAdvancedSearch] = useState(false);

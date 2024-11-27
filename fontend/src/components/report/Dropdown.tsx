@@ -2,7 +2,6 @@ import React, { useEffect, useCallback, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import ReactDOM from "react-dom";
-
 import Typography from "./Typography";
 
 const borderStyle = "border-b last:border-b-0 border-secondary-main";
@@ -10,7 +9,7 @@ const borderStyle = "border-b last:border-b-0 border-secondary-main";
 interface DropdownItemProps {
   id: string;
   title: string;
-  icon?: string;
+  icon?: string | null; // Allow null to match PropTypes
   onClick: () => void;
 }
 
@@ -110,7 +109,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   useEffect(() => {
-    if (elementRef.current && dropdownRef.current) {
+    if (
+      typeof window !== "undefined" &&
+      elementRef.current &&
+      dropdownRef.current
+    ) {
       const triggerRect = elementRef.current.getBoundingClientRect();
       const dropdownRect = dropdownRef.current.getBoundingClientRect();
       let x, y;
@@ -134,47 +137,52 @@ const Dropdown: React.FC<DropdownProps> = ({
   }, [open, alignment]);
 
   const renderList = () => {
-    const portalElement = document.getElementById("react-portal");
+    if (typeof document !== "undefined") {
+      const portalElement = document.getElementById("react-portal");
 
-    const listElement = (
-      <div
-        className={classnames(
-          "top-100 border-secondary-main w-max-content absolute mt-2 transform rounded border bg-black shadow transition duration-300",
-          {
-            "right-0 origin-top-right": alignment === "right",
-            "left-0 origin-top-left": alignment === "left",
-          }
-        )}
-        ref={dropdownRef}
-        style={{
-          position: "absolute",
-          top: `${coords.y}px`,
-          left: open ? `${coords.x}px` : -999999,
-          zIndex: 9999,
-        }}
-        data-cy={`${id}-dropdown`}
-      >
-        {list.map((item, idx) => (
-          <DropdownItem
-            id={item.id}
-            title={item.title}
-            icon={item.icon}
-            onClick={item.onClick}
-            key={idx}
-          />
-        ))}
-      </div>
-    );
-    return portalElement
-      ? ReactDOM.createPortal(listElement, portalElement)
-      : null;
+      const listElement = (
+        <div
+          className={classnames(
+            "top-100 border-secondary-main w-max-content absolute mt-2 transform rounded border bg-black shadow transition duration-300",
+            {
+              "right-0 origin-top-right": alignment === "right",
+              "left-0 origin-top-left": alignment === "left",
+            }
+          )}
+          ref={dropdownRef}
+          style={{
+            position: "absolute",
+            top: `${coords.y}px`,
+            left: open ? `${coords.x}px` : -999999,
+            zIndex: 9999,
+          }}
+          data-cy={`${id}-dropdown`}
+        >
+          {list.map((item, idx) => (
+            <DropdownItem
+              id={item.id}
+              title={item.title}
+              icon={item.icon}
+              onClick={item.onClick}
+              key={idx}
+            />
+          ))}
+        </div>
+      );
+      return portalElement
+        ? ReactDOM.createPortal(listElement, portalElement)
+        : null;
+    }
+    return null;
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleClick);
+    if (typeof document !== "undefined") {
+      document.addEventListener("click", handleClick);
 
-    if (!open) {
-      document.removeEventListener("click", handleClick);
+      if (!open) {
+        document.removeEventListener("click", handleClick);
+      }
     }
   }, [open]);
 

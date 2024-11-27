@@ -1,16 +1,20 @@
 import React from "react";
 import classNames from "classnames";
-import PropTypes from "prop-types";
-
 import Typography from "../Typography";
+
 interface BodyProps {
-  text: any;
-  className: any;
+  text?: string;
+  className?: string;
 }
-const Body = ({ text, className }: BodyProps) => {
-  const theme = "bg-primary-dark";
+
+const Body: React.FC<BodyProps> = ({ text, className }) => {
+  const bodyClasses = classNames(
+    "relative flex-auto bg-primary-dark",
+    className
+  );
+
   return (
-    <div className={classNames("relative flex-auto", theme, className)}>
+    <div className={bodyClasses}>
       <Typography
         variant="inherit"
         color="initial"
@@ -20,11 +24,6 @@ const Body = ({ text, className }: BodyProps) => {
       </Typography>
     </div>
   );
-};
-
-Body.propTypes = {
-  text: PropTypes.string,
-  className: PropTypes.string,
 };
 
 export default Body;

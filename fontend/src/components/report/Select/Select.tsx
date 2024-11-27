@@ -105,7 +105,7 @@ const Select: React.FC<SelectProps> = ({
       placeholder={placeholder}
       options={options}
       blurInputOnSelect={true}
-      menuPortalTarget={document.body}
+      // menuPortalTarget={document.body}
       styles={{
         control: (base) => ({
           ...base,

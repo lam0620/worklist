@@ -135,7 +135,7 @@ Button.propTypes = {
   startIcon: PropTypes.node,
   endIcon: PropTypes.node,
   className: PropTypes.string,
-  style: PropTypes.shape({ fill: PropTypes.string }),
+  style: PropTypes.object,
   startIconTooltip: PropTypes.node,
   endIconTooltip: PropTypes.node,
   dataCY: PropTypes.string,

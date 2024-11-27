@@ -3,7 +3,6 @@ import { useTranslation } from "../../i18n/client";
 import React, { useState, useEffect, useRef } from "react";
 import "./ReportComponent.css";
 import ReactToPrint from "react-to-print";
-import { WordCount } from "ckeditor5";
 import Modal from "react-modal";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useSearchParams } from "next/navigation";
@@ -27,21 +26,18 @@ import {
   Essentials,
   FontBackgroundColor,
   FontColor,
-  FontFamily,
-  FontSize,
   GeneralHtmlSupport,
-  Heading,
   Indent,
   IndentBlock,
   Italic,
   Paragraph,
   SelectAll,
-  SpecialCharacters,
   Underline,
   Undo,
   RemoveFormat,
   SourceEditing,
   Clipboard,
+  CKEditorError,
 } from "ckeditor5";
 import {
   fetchRadiologists,
@@ -125,7 +121,7 @@ const ReportComponent = () => {
     htmlSupport: {
       allow: [
         {
-          classes: true,
+          // classes: Boolean,
         },
       ],
     },
@@ -188,7 +184,7 @@ const ReportComponent = () => {
       sign: "",
       id: "",
     },
-    resolve: () => {}, // Add this to resolve changing editor data when clicking Print Review
+    resolve: (value: unknown) => {},
   };
   const emptyError = {
     error: {
@@ -280,46 +276,6 @@ const ReportComponent = () => {
    * A doctor has a login user account(user_id)
    * @param userId
    */
-  const getDoctorByUserId = async (userId: any, isAdminOrSuperUser: any) => {
-    let error = state.error;
-    try {
-      const response = await fetchDoctorByUserId(userId);
-      const response_data = response?.data;
-
-      if (response_data.result.status == "NG") {
-        error.fatal = response_data.result.msg;
-        setState({ ...state, error: error });
-      } else if (response_data.data.length == 0) {
-        if (isAdminOrSuperUser) {
-          const info_msg = t("You login with administrator privileges");
-          setInfo(t(info_msg));
-        } else {
-          error.fatal = t(
-            "You are not set up as a radiologist yet. Please contact your administrator."
-          );
-        }
-        setState({ ...state, error: error });
-      } else {
-        let newList = [] as any;
-        const record = response_data.data[0];
-        newList.push({
-          value: record.id,
-          label:
-            (Util.isEmpty(record.title) ? "" : record.title) +
-            ". " +
-            record.fullname,
-        });
-        setRadiologistList(newList); // list = login doctor user
-        setSelectedRadiologist(newList[0]); // selected = login doctor user
-      }
-    } catch (err: any) {
-      const errMsg =
-        "Get doctor by user id failed. " + err.code + ": " + err.message;
-      console.log("ERROR: ", errMsg);
-      error.fatal = errMsg;
-      setState({ ...state, error: error });
-    }
-  };
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
@@ -360,14 +316,6 @@ const ReportComponent = () => {
       getScanProtocols(reportData.modality_type);
     }
   }, [reportData.modality_type]);
-
-  const ensureFields = (obj: any, template: any) => {
-    const result = { ...template };
-    for (const key in template) {
-      result[key] = obj[key] !== undefined ? obj[key] : template[key];
-    }
-    return result;
-  };
 
   const getOrder = async (proc_id: any) => {
     let error = { ...state.error };
@@ -572,12 +520,6 @@ const ReportComponent = () => {
   //   setErrors({ ...emptyError });
   // };
 
-  const onClearError = (event: any) => {
-    // Clear error
-    let error = Util.initEmptyReportError();
-    setState({ ...state, error: emptyError.error });
-  };
-
   const onEditReport = (event: any) => {
     // Update status and the sreen auto reload
     setReportData((reportData) => ({
@@ -683,7 +625,9 @@ const ReportComponent = () => {
 
   const onClose = (event: any) => {
     // Close the current tab
-    window.close();
+    if (typeof window !== "undefined") {
+      window.close();
+    }
   };
   const onCloseConfirm = () => {
     setIsConfirmShow(false);
@@ -713,7 +657,10 @@ const ReportComponent = () => {
   };
   const onApprove = (event: any) => {
     // Format as font-family, font-size
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     formatEditorData();
 
     // Check error
@@ -727,7 +674,10 @@ const ReportComponent = () => {
   };
   const onSaveReport = (event: any) => {
     // Format as font-family, font-size
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     formatEditorData();
 
     // Check error
@@ -907,7 +857,7 @@ const ReportComponent = () => {
   useEffect(() => {
     const { resolve } = reportData;
     if (resolve) {
-      resolve();
+      resolve(undefined);
     }
   }, [reportData]);
 
@@ -1119,39 +1069,41 @@ const ReportComponent = () => {
                 </div>
               </>
             )}
-          <ReactToPrint
-            trigger={() => (
-              <Button
-                className={"button-class"}
-                type={ButtonEnums.type.primary}
-                size={ButtonEnums.size.medium}
-                disabled={!reportData.accession_no}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ fill: "none" }}
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-printer"
+          {typeof window !== "undefined" && (
+            <ReactToPrint
+              trigger={() => (
+                <Button
+                  className={"button-class"}
+                  type={ButtonEnums.type.primary}
+                  size={ButtonEnums.size.medium}
+                  disabled={!reportData.accession_no}
                 >
-                  <g transform="scale(0.8, 0.8) translate(3, 3)">
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                    <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
-                    <rect x="6" y="14" width="12" height="8" rx="1" />
-                  </g>
-                </svg>
-                {t("Print Preview")}
-              </Button>
-            )}
-            content={() => componentRef.current}
-            onBeforeGetContent={handleOnBeforeGetContent}
-          />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{ fill: "none" }}
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-printer"
+                  >
+                    <g transform="scale(0.8, 0.8) translate(3, 3)">
+                      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                      <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                      <rect x="6" y="14" width="12" height="8" rx="1" />
+                    </g>
+                  </svg>
+                  {t("Print Preview")}
+                </Button>
+              )}
+              content={() => componentRef.current}
+              onBeforeGetContent={handleOnBeforeGetContent}
+            />
+          )}
           {reportData.accession_no && (
             <div style={{ display: "none" }}>
               <PDFComponent
@@ -1849,39 +1801,44 @@ const ReportComponent = () => {
                           </Button>
                         </div>
                       </div>
-                      <Modal
-                        isOpen={isDialogOpen}
-                        contentLabel="Create Report Template"
-                        className="bg-primary-dark modal"
-                        overlayClassName="overlay"
-                      >
-                        <h2 className="text-primary-light">
-                          {t("Create Report Template")}
-                        </h2>
-                        <input
-                          type="text"
-                          value={reportTemplateName}
-                          onChange={(e) => {
-                            setReportTemplateName(e.target.value);
-                          }}
-                          placeholder={
-                            errorMessage || t("Enter the report template name")
-                          }
-                          className={errorMessage ? "error rounded" : "rounded"}
-                        />
-                        <Button
-                          className="bg-customblue-30 hover:bg-customblue-50 active:bg-customblue-20 text-white transition duration-300 ease-in-out focus:outline-none"
-                          onClick={isCloseReportTemplate}
+                      {typeof window !== "undefined" && (
+                        <Modal
+                          isOpen={isDialogOpen}
+                          contentLabel="Create Report Template"
+                          className="bg-primary-dark modal"
+                          overlayClassName="overlay"
                         >
-                          {t("Cancel")}
-                        </Button>
-                        <Button
-                          className="bg-primary-main hover:bg-customblue-80 active:bg-customblue-40 text-white transition duration-300 ease-in-out focus:outline-none"
-                          onClick={onSaveReportTemplate}
-                        >
-                          {t("Save")}
-                        </Button>
-                      </Modal>
+                          <h2 className="text-primary-light">
+                            {t("Create Report Template")}
+                          </h2>
+                          <input
+                            type="text"
+                            value={reportTemplateName}
+                            onChange={(e) => {
+                              setReportTemplateName(e.target.value);
+                            }}
+                            placeholder={
+                              errorMessage ||
+                              t("Enter the report template name")
+                            }
+                            className={
+                              errorMessage ? "error rounded" : "rounded"
+                            }
+                          />
+                          <Button
+                            className="bg-customblue-30 hover:bg-customblue-50 active:bg-customblue-20 text-white transition duration-300 ease-in-out focus:outline-none"
+                            onClick={isCloseReportTemplate}
+                          >
+                            {t("Cancel")}
+                          </Button>
+                          <Button
+                            className="bg-primary-main hover:bg-customblue-80 active:bg-customblue-40 text-white transition duration-300 ease-in-out focus:outline-none"
+                            onClick={onSaveReportTemplate}
+                          >
+                            {t("Save")}
+                          </Button>
+                        </Modal>
+                      )}
                     </div>
                   </div>
                 )}
@@ -1963,7 +1920,8 @@ const ReportComponent = () => {
                 <div className="editor-container editor-container_classic-editor mt-2">
                   <div id="scantype" className="editor-container__editor">
                     {isLayoutReady &&
-                      !Util.isFinalReport(reportData.report.status) && (
+                      !Util.isFinalReport(reportData.report.status) &&
+                      typeof window !== "undefined" && (
                         <CKEditor
                           editor={ClassicEditor}
                           config={editorConfig}
@@ -2029,7 +1987,7 @@ const ReportComponent = () => {
                     <div className="editor-container__editor">
                       {/* Show report input form */}
                       <div ref={editorRef}>
-                        {isLayoutReady && (
+                        {isLayoutReady && typeof window !== "undefined" && (
                           <CKEditor
                             editor={ClassicEditor}
                             config={editorConfig}
@@ -2082,7 +2040,7 @@ const ReportComponent = () => {
                   >
                     <div className="editor-container__editor">
                       <div ref={editorRef}>
-                        {isLayoutReady && (
+                        {isLayoutReady && typeof window !== "undefined" && (
                           <CKEditor
                             editor={ClassicEditor}
                             config={editorConfig}

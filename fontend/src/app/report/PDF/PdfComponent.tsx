@@ -18,7 +18,7 @@ interface BarcodeProps {
 const Barcode: React.FC<BarcodeProps> = ({ value, format = "CODE128" }) => {
   const barcodeRef = useRef<SVGSVGElement | null>(null);
   const setBarcodeRef = (ref: SVGSVGElement | null) => {
-    if (ref) {
+    if (ref && typeof window !== "undefined") {
       JsBarcode(ref, value, { format });
       barcodeRef.current = ref;
     }
@@ -27,18 +27,17 @@ const Barcode: React.FC<BarcodeProps> = ({ value, format = "CODE128" }) => {
 };
 
 const today = new Date();
-const day = today.getDate().toString().padStart(2, "0"); // Định dạng ngày có 2 chữ số
-const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Định dạng tháng có 2 chữ số (lưu ý tháng bắt đầu từ 0)
+const day = today.getDate().toString().padStart(2, "0");
+const month = (today.getMonth() + 1).toString().padStart(2, "0");
 const year = today.getFullYear();
-
-const url = window.location.href;
-const imageUrl = url.replace("report", "viewer");
 
 const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
   (props, ref) => {
     const { reportData, templateData } = props;
 
     const [sign, setSign] = useState("");
+    const [imageUrl, setImageUrl] = useState<string>(""); // State for `imageUrl`
+
     const margin = "40px";
     const marginTop = "20px";
     const marginBottom = "10px";
@@ -46,17 +45,18 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
       return `@page { margin: ${marginTop} ${margin} ${marginBottom} ${margin} !important; }`;
     };
 
+    // Set the `sign` URL and handle `window.location` safely
     useEffect(() => {
-      // const fetchSign = async () => {
-      //   const response = await import(`../../assets/signs/${reportData.radiologist.sign}`);
-      //   setSign(response.default);
-      // };
-      // fetchSign();
-
-      // signs are uploaded to /media/signs/... (define in nginx)
-      // sign = signs/xxx.yyy
+      // Set the sign URL
       setSign(Utils.USER_MNG_URL + reportData.radiologist.sign);
-    }, [sign]);
+
+      // Handle `window.location` safely for SSR
+      if (typeof window !== "undefined") {
+        const url = window.location.href;
+        const replacedUrl = url.replace("report", "viewer");
+        setImageUrl(replacedUrl); // Set the transformed URL
+      }
+    }, [reportData]);
 
     return (
       <>
@@ -123,7 +123,7 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
               </p>
             </div>
             <p>Chẩn đoán: {reportData.clinical_diagnosis}</p>
-            {templateData.value != "0" && (
+            {templateData.value !== "0" && (
               <p>Bác sĩ chỉ định: {reportData.referring_phys.fullname}</p>
             )}
             <p className="text-red-600">
@@ -151,16 +151,18 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
           {/* Footer */}
           <div className="footer flex items-end justify-between">
             <div className="mb-0 border">
-              <QRCode
-                value={imageUrl}
-                className="mb-0"
-                imageSettings={{
-                  src: logo.src,
-                  excavate: true,
-                  height: 25,
-                  width: 25,
-                }}
-              />
+              {imageUrl && (
+                <QRCode
+                  value={imageUrl}
+                  className="mb-0"
+                  imageSettings={{
+                    src: logo.src,
+                    excavate: true,
+                    height: 25,
+                    width: 25,
+                  }}
+                />
+              )}
             </div>
             <div>
               <div className="mr-4 mb-0 border text-center">
@@ -169,7 +171,7 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
                 </p>
                 <p className="font-semibold">Bác sĩ</p>
                 <div className="flex justify-center">
-                  <img src={sign} alt="Sign" width="150" />
+                  {/* <img src={sign} alt="Sign" width="150" /> */}
                 </div>
                 <p className="font-semibold">
                   {reportData.radiologist.title}.
@@ -183,4 +185,5 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
     );
   }
 );
+
 export default PDFReportComponent;

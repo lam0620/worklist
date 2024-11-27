@@ -1,8 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import PropTypes from "prop-types";
-
-import Button, { ButtonEnums } from "../Button";
+import Button from "../Button";
 
 interface Action {
   id: string;
@@ -13,41 +11,38 @@ interface Action {
 }
 
 interface FooterProps {
-  actions: Action[];
-  className?: string;
-  onSubmit: ({
-    action,
-    value,
-    event,
-  }: {
+  actions?: Action[];
+  onSubmit: (params: {
     action: Action;
     value: any;
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>;
   }) => void;
-  value: any;
+  value?: any;
+  className?: string;
 }
 
 const Footer: React.FC<FooterProps> = ({
-  actions = [],
-  className,
-  onSubmit = () => {},
+  actions,
+  onSubmit,
   value,
+  className,
 }) => {
-  const flex = "flex items-center justify-end";
-  const padding = "pt-[20px]";
+  const footerClasses = classNames(
+    "flex items-center justify-end pt-[20px]",
+    className
+  );
 
   return (
-    <div className={classNames(flex, padding, className)}>
+    <div className={footerClasses}>
       {actions?.map((action, index) => {
         const isFirst = index === 0;
-
         const onClickHandler = (
           event: React.MouseEvent<HTMLButtonElement, MouseEvent>
         ) => onSubmit({ action, value, event });
 
         return (
           <Button
-            key={index}
+            key={action.id}
             name={action.text}
             className={classNames({ "ml-2": !isFirst }, action.classes)}
             type={action.type}
@@ -59,11 +54,6 @@ const Footer: React.FC<FooterProps> = ({
       })}
     </div>
   );
-};
-
-Footer.propTypes = {
-  className: PropTypes.string,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default Footer;

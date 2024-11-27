@@ -1,6 +1,5 @@
-import React, { useRef, FC } from "react";
+import React, { useRef, FC, ReactElement, MouseEvent } from "react";
 import classnames from "classnames";
-import PropTypes from "prop-types";
 
 const baseClasses =
   "text-center items-center justify-center transition duration-300 ease-in-out outline-none font-bold focus:outline-none";
@@ -11,12 +10,12 @@ const roundedClasses = {
   medium: "rounded-md",
   large: "rounded-lg",
   full: "rounded-full",
-};
+} as const;
 
 const disabledClasses = {
   true: "ohif-disabled",
   false: "",
-};
+} as const;
 
 const variantClasses = {
   text: {
@@ -52,7 +51,7 @@ const variantClasses = {
     white: "text-black hover:opacity-80 active:opacity-100 focus:opacity-80",
     black: "text-white hover:opacity-80 active:opacity-100 focus:opacity-80",
   },
-};
+} as const;
 
 const sizeClasses = {
   small: "py-2 px-2 text-base",
@@ -60,7 +59,8 @@ const sizeClasses = {
   large: "py-4 px-4 text-xl",
   initial: "",
   toolbar: "text-lg",
-};
+  toolbox: "w-[24px] h-[24px]",
+} as const;
 
 const iconSizeClasses = {
   small: "w-4 h-4",
@@ -68,23 +68,24 @@ const iconSizeClasses = {
   large: "w-6 h-6",
   toolbar: "w-[28px] h-[28px]",
   toolbox: "w-[24px] h-[24px]",
-};
+  initial: "",
+} as const;
 
 const fullWidthClasses = {
   true: "flex w-full",
   false: "inline-flex",
-};
+} as const;
 
 interface IconButtonProps {
-  children: React.ReactElement;
+  children: ReactElement;
   variant?: "text" | "outlined" | "contained";
-  color?: "default" | "primary" | "secondary" | "white" | "black" | "inherit";
+  color?: "default" | "primary" | "secondary" | "white" | "black";
   size?: "small" | "medium" | "large" | "initial" | "toolbar" | "toolbox";
   rounded?: "none" | "small" | "medium" | "large" | "full";
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
   fullWidth?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   id?: string;
   [key: string]: any;
@@ -106,9 +107,7 @@ const IconButton: FC<IconButtonProps> = ({
 }) => {
   const buttonElement = useRef<HTMLButtonElement>(null);
 
-  const handleOnClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
     if (buttonElement.current) {
       buttonElement.current.blur();
     }
@@ -118,15 +117,26 @@ const IconButton: FC<IconButtonProps> = ({
   const padding =
     size === "toolbar" ? "6px" : size === "toolbox" ? "4px" : undefined;
 
+  const variantClass =
+    variantClasses[variant]?.[color as keyof (typeof variantClasses)["text"]] ||
+    "";
+  const sizeClass = sizeClasses[size as keyof typeof sizeClasses] || "";
+  const iconSizeClass =
+    iconSizeClasses[size as keyof typeof iconSizeClasses] || "";
+  const fullWidthClass = fullWidth
+    ? fullWidthClasses.true
+    : fullWidthClasses.false;
+  const disabledClass = disabled ? disabledClasses.true : disabledClasses.false;
+
   return (
     <button
       className={classnames(
         baseClasses,
-        variantClasses[variant][color],
+        variantClass,
         roundedClasses[rounded],
-        sizeClasses[size],
-        fullWidthClasses[fullWidth],
-        disabledClasses[disabled],
+        sizeClass,
+        fullWidthClass,
+        disabledClass,
         className
       )}
       style={{ padding }}
@@ -135,40 +145,13 @@ const IconButton: FC<IconButtonProps> = ({
       type={type}
       data-cy={rest["data-cy"] ?? id}
       data-tool={rest["data-tool"]}
+      disabled={disabled}
     >
       {React.cloneElement(children, {
-        className: classnames(iconSizeClasses[size], "fill-current"),
+        className: classnames(iconSizeClass, "fill-current"),
       })}
     </button>
   );
-};
-
-IconButton.propTypes = {
-  children: PropTypes.element.isRequired,
-  size: PropTypes.oneOf([
-    "small",
-    "medium",
-    "large",
-    "initial",
-    "toolbar",
-    "toolbox",
-  ]),
-  rounded: PropTypes.oneOf(["none", "small", "medium", "large", "full"]),
-  variant: PropTypes.oneOf(["text", "outlined", "contained"]),
-  color: PropTypes.oneOf([
-    "default",
-    "primary",
-    "secondary",
-    "white",
-    "black",
-    "inherit",
-  ]),
-  fullWidth: PropTypes.bool,
-  disabled: PropTypes.bool,
-  type: PropTypes.string,
-  id: PropTypes.string,
-  className: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default IconButton;
