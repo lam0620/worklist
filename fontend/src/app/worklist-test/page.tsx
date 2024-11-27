@@ -167,7 +167,7 @@ const Worklist = () => {
     const params = Object.fromEntries(search.entries());
     setLoading(true);
     try {
-      const response = await fetchWorklist(params);
+      const response = await fetchWorklist_new(params);
       if (response.status === 200 && response.data?.result?.status === "OK") {
         setWorkList(response?.data.data);
         setNumRecord(response?.data?.count);
