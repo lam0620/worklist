@@ -46,8 +46,15 @@ const Worklist = () => {
     }
   }, []);
   const [workList, setWorkList] = useState<WorkList[]>([]);
-  const [numRecord, setNumRecord] = useState(Number); //to show quantity of record (... số ca)
-  const [isAdvancedSearch, setAdvancedSearch] = useState(false);
+
+  //to show quantity of record (... số ca)
+  const [numRecord, setNumRecord] = useState(Number); 
+
+  // true if switch to Advanced search and for show advanced search boxes
+  const [isAdvancedSearch, setAdvancedSearch] = useState(false); 
+
+  // true when click Today, Yesterday,...button
+  const [isDateButton, setDateButton] = useState(false); 
   const [searchParams, setSearchParams] = useState({
     pid: "",
     fullName: "",
@@ -65,14 +72,19 @@ const Worklist = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [selectedButtonDay, setSelectedButtonDay] = useState<string>("All");
   const [collapsedDetail, setCollapseDetail] = useState(false); //flexible width of the right panel when open or close detail panel
-  const [loadFirst, setLoadFirst] = useState(false);
+  // const [loadFirst, setLoadFirst] = useState(false);
   const [loading, setLoading] = useState(false); //icon loading
 
   const CollapseDetail = () => {
     setCollapseDetail(!collapsedDetail);
   };
 
+  /**
+   * When clicking page number
+   * @param page 
+   */
   const handlePageChange = (page: number) => {
+    setDateButton(true); // search for doing advanced search
     setCurrentPage(page);
   };
 
@@ -82,16 +94,26 @@ const Worklist = () => {
       //check here to get exactly user (beacause user can be undefined -> router.push("/login"))
       if (user) {
         handleFilterToday();
-        setLoadFirst(true);
+        // setLoadFirst(true);
       } else {
         router.push("/login");
       }
     }
   }, [user]);
 
+  /**
+   * Run at first time and 
+   * Quick search 
+   */
   useEffect(() => {
-    if (user && loadFirst) {
-      fetchWorkList(currentPage, searchParams.searchQuery, true).then((r) => r);
+    if (user && !isAdvancedSearch) {
+      const params = {
+        page:currentPage,
+        search: searchParams.searchQuery,
+        modality_type: searchParams.selectedDevices.join(","),
+        status: searchParams.selectedStatuses.join(","),
+      }      
+      getWorkLists(params, true).then((r) => r);
     }
   }, [
     searchParams.searchQuery,
@@ -100,12 +122,18 @@ const Worklist = () => {
     searchParams.selectedStatuses,
   ]);
 
+  /**
+   * Advanced search and
+   * Today, Yesterday,... change page number. based on searchParams.xxx changed
+   */
   useEffect(() => {
-    //advance search
-    if (user && loadFirst) {
-      handleSearch();
+    // Advanced search
+    if (user && (isAdvancedSearch || isDateButton)) {
+      handleAdvancedSearch();
+      setDateButton(false); // Reset to false (init time)
     }
   }, [
+    currentPage,
     searchParams.pid,
     searchParams.fullName,
     searchParams.acn,
@@ -115,15 +143,10 @@ const Worklist = () => {
     searchParams.selectedStatuses,
   ]);
 
-  const fetchWorkList = async (page: number, query: string, onReFresh: any) => {
+  const getWorkLists = async (params: any, onReFresh: any) => {
     setLoading(true);
     try {
-      const response = await fetchWorklist_new({
-        page,
-        search: query,
-        modality_type: searchParams.selectedDevices.join(","),
-        status: searchParams.selectedStatuses.join(","),
-      });
+      const response = await fetchWorklist_new(params);
 
       if (response) {
         setWorkList(response.data.data);
@@ -146,7 +169,7 @@ const Worklist = () => {
     }
   };
 
-  const handleSearch = async () => {
+  const handleAdvancedSearch = async () => {
     //for advance search
     const searchParamsObj = {
       modality_type: searchParams.selectedDevices.join(","),
@@ -165,35 +188,19 @@ const Worklist = () => {
 
     const search = new URLSearchParams(filteredParams);
     const params = Object.fromEntries(search.entries());
-    setLoading(true);
-    try {
-      const response = await fetchWorklist_new(params);
-      if (response.status === 200 && response.data?.result?.status === "OK") {
-        setWorkList(response?.data.data);
-        setNumRecord(response?.data?.count);
-        setTotalPages(
-          Math.ceil(response.data?.count / response?.data?.page_size)
-        );
-      } else {
-        setWorkList([]);
-        setNumRecord(0);
-      }
-    } catch (error) {
-      console.error("Error fetching orders list:", error);
-    } finally {
-      setLoading(false);
-    }
+
+    getWorkLists(params, false)
   };
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
 
-  const toggleAdvancedSearch = () => {
-    if (isAdvancedSearch) {
+  const toggleAdvancedSearch = (isAdv: boolean) => {
+    if (isAdv) {
       setSelectedButtonDay("All");
     }
-    setAdvancedSearch(!isAdvancedSearch);
+    setAdvancedSearch(isAdv);
   };
 
   const debounce = (func: Function, wait: number) => {
@@ -211,6 +218,9 @@ const Worklist = () => {
     []
   );
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Reset selected page number
+    setCurrentPage(1)   
+
     debouncedSearch(event.target.value);
   };
 
@@ -233,13 +243,25 @@ const Worklist = () => {
     }));
   };
 
+    /**
+   * When click Modalities check boxes (on left)
+   * @param event 
+   */
   const handleCheckboxModality = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    // Reset selected page number
+    setCurrentPage(1)    
     handleCheckboxChange(event, "selectedDevices");
   };
 
+  /**
+   * When click Status check boxes (on left)
+   * @param event 
+   */
   const handleCheckboxStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Reset selected page number
+    setCurrentPage(1)
     handleCheckboxChange(event, "selectedStatuses");
   };
 
@@ -264,6 +286,8 @@ const Worklist = () => {
       fromDate: formatDateToISOString(today),
       toDate: formatDateToISOString(endOfDay),
     }));
+
+    setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("Today");
   };
 
@@ -278,6 +302,8 @@ const Worklist = () => {
       fromDate: formatDateToISOString(yesterday),
       toDate: formatDateToISOString(endOfYesterday),
     }));
+
+    setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("Yesterday");
   };
   const handleFilterLast7Days = () => {
@@ -291,6 +317,8 @@ const Worklist = () => {
       fromDate: formatDateToISOString(sevenDaysAgo),
       toDate: formatDateToISOString(today),
     }));
+
+    setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("7 days");
   };
 
@@ -300,6 +328,8 @@ const Worklist = () => {
       fromDate: "",
       toDate: "",
     }));
+
+    setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("All");
   };
 
@@ -580,7 +610,7 @@ const Worklist = () => {
                   className="transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-3/5 py-2 px-3 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                 />
                 <button
-                  onClick={toggleAdvancedSearch}
+                  onClick={() => toggleAdvancedSearch(true)}
                   className="text-red-400 underline ml-1 md:ml-2 text-sm whitespace-nowrap"
                 >
                   {t("Advanced search")}
@@ -703,7 +733,7 @@ const Worklist = () => {
                   <input
                     type="date"
                     className="logo-cal h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
-                    value={searchParams.fromDate.split(" ")[0]}
+                    value={searchParams.fromDate.split("T")[0]}
                     onChange={handlesearchFromDate}
                   />
                 </div>
@@ -714,7 +744,7 @@ const Worklist = () => {
                   <input
                     type="date"
                     className="logo-cal h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
-                    value={searchParams.toDate.split(" ")[0]}
+                    value={searchParams.toDate.split("T")[0]}
                     onChange={handlesearchToDate}
                   />
                 </div>
@@ -746,7 +776,7 @@ const Worklist = () => {
                 </div>
                 <div className="flex justify-center md:flex-col md:flex-grow px-2">
                   <button
-                    onClick={toggleAdvancedSearch}
+                    onClick={() => toggleAdvancedSearch(false)}
                     className="text-red-400 underline mt-4 text-xs md:text-base"
                   >
                     {t("Back Quick Search")}
@@ -757,7 +787,7 @@ const Worklist = () => {
           )}
           <WorklistList
             worklist={workList}
-            onRefresh={fetchWorkList}
+            onRefresh={getWorkLists}
             onSelectProcID={handleProcIDSelect}
             t={t}
             currentPage={currentPage}

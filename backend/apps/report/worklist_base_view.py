@@ -343,7 +343,9 @@ class WorklistBaseView(CustomAPIView):
             logger.warning('There no study_created_time in dataframe')
             df_merged['study_created_time'] = ''
 
-        df_merged = df_merged.sort_values(by=['created_time','study_created_time'], ascending = False)
+        # Sort by order date
+        #df_merged = df_merged.sort_values(by=['created_time','study_created_time'], ascending = False)
+        df_merged = df_merged.sort_values(by=['created_time'], ascending = False)
 
         if 'proc_status' in df_merged.columns :
             # Applying the condition to update status = 'IM' if current = SC and exists study_iuid
