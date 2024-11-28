@@ -103,8 +103,9 @@ class WorklistView(WorklistBaseView):
         queryset = None
 
         # If status is passed in query_params, search in the Procedure
-        list_status = status.split(',')
+        
         if status:
+            list_status = status.split(',')
             # Search in procedure first
             queryset = Procedure.objects.filter(status__in=list_status)
 
@@ -183,8 +184,11 @@ class WorklistView(WorklistBaseView):
         # if status and (status == 'SC' or status == 'IM'):
         #     df_merged = df_merged[df_merged['proc_status'] == status]
         
-        # Filter status in list
-        df_merged = df_merged[df_merged['proc_status'].isin(list_status)]
+        if status:
+            list_status = status.split(',')
+            
+            # Filter status in list
+            df_merged = df_merged[df_merged['proc_status'].isin(list_status)]
 
         # Convert to json to response
         orders_data = df_merged.to_dict(orient = 'records')    

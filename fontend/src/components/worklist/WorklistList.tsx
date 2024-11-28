@@ -17,7 +17,7 @@ interface WorklistProps {
   t: (key: string) => string;
   onRefresh: (page: number, query: string, onReFresh: boolean) => void;
   totalPages: number;
-  onPageChange: (page: number) => void;
+  onPageChange: (page: number, isAdvancedSearch: boolean) => void;
   currentPage: number;
   reportInf: ReportDetailProps;
   numRecord: number;
@@ -137,7 +137,7 @@ const WorklistList = ({
   };
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      onPageChange(page);
+      onPageChange(page, isAdvancedSearch);
     }
   };
   const handleCheckStatus = (status: any) => {
@@ -327,7 +327,7 @@ const WorklistList = ({
                   <div className="text-[12px] px-2">{t("Download")}</div>
                 </button>
               )}
-              <button
+              {/* <button
                 title={t("Refresh")}
                 className="btn-red-square mx-2"
                 onClick={handleRefreshButton}
@@ -351,7 +351,7 @@ const WorklistList = ({
                   </g>
                 </svg>
                 <div className="text-[12px] px-2">{t("Refresh")}</div>
-              </button>
+              </button> */}
             </div>
           </div>
           <div className="mt-3 md:mt-0">
