@@ -2,7 +2,7 @@ import React, { useRef, FC } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import * as ButtonEnums from "./ButtonEnums";
-import "./style.css";
+import "../../../app/report/ReportComponent.css";
 
 const sizeClasses = {
   [ButtonEnums.size.small]: "h-[26px] text-[13px]",

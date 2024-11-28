@@ -1,11 +1,10 @@
 "use client";
 import { useTranslation } from "../../i18n/client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import "./ReportComponent.css";
 import ReactToPrint from "react-to-print";
 import Modal from "react-modal";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 import Utils from "../../utils/utils";
 import * as Util from "../../utils/utils";
 import Typography from "@/components/report/Typography";
@@ -17,31 +16,9 @@ import "../../app/worklist/worklist.css";
 import { useUser } from "@/context/UserContext";
 import { PERMISSIONS } from "@/utils/constant";
 import HeaderWorklist from "@/components/HeaderWorklist";
-import {
-  ClassicEditor,
-  AccessibilityHelp,
-  Alignment,
-  Autosave,
-  Bold,
-  Essentials,
-  FontBackgroundColor,
-  FontColor,
-  GeneralHtmlSupport,
-  Indent,
-  IndentBlock,
-  Italic,
-  Paragraph,
-  SelectAll,
-  Underline,
-  Undo,
-  RemoveFormat,
-  SourceEditing,
-  Clipboard,
-  CKEditorError,
-} from "ckeditor5";
+import { ClassicEditor } from "ckeditor5";
 import {
   fetchRadiologists,
-  fetchDoctorByUserId,
   createReport,
   updateReport,
   discardReport,
@@ -52,93 +29,36 @@ import {
 } from "@/services/apiService";
 import "ckeditor5/ckeditor5.css";
 import PDFComponent from "./PDF/PdfComponent";
-
+const DynamicCustomEditor = dynamic(
+  () => import("../../components/report/customEditor"),
+  { ssr: false }
+);
 const ReportComponent = () => {
   const { t } = useTranslation("reportWorklist");
   // Create Document Component
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const { user } = useUser();
+  const CustomEditor = useMemo(() => DynamicCustomEditor, []); //use useMemo to prevent CKE from re-loading when data changes
 
   // Reference to editor data (findings)
-
   const editorFindingsRef = useRef<ClassicEditor | null>(null);
   const editorConclusionRef = useRef<ClassicEditor | null>(null);
   const editorProtocolRef = useRef<ClassicEditor | null>(null);
-
   const [isLayoutReady, setIsLayoutReady] = useState(false);
-  const FONT_SIZE = "14px";
-  const FONT_FAMILY = "Arial";
-  const editorConfig = {
-    toolbar: {
-      items: [
-        "clipboard",
-        "undo",
-        "redo",
-        "|",
-        "selectAll",
-        "|",
-        "bold",
-        "italic",
-        "underline",
-        "removeFormat",
-        "|",
-        "sourceEditing",
-        "accessibilityHelp",
-      ],
-      shouldNotGroupWhenFull: false,
-    },
-    plugins: [
-      AccessibilityHelp,
-      Alignment,
-      Autosave,
-      Bold,
-      Essentials,
-      FontBackgroundColor,
-      FontColor,
-      GeneralHtmlSupport,
-      // Heading,
-      Indent,
-      IndentBlock,
-      Italic,
-      Paragraph,
-      SelectAll,
-      Underline,
-      Undo,
-      // WordCount,
-      RemoveFormat,
-      SourceEditing,
-      Clipboard,
-    ],
-    // fontFamily: {
-    //   supportAllValues: true,
-    // },
-    // fontSize: {
-    //   options: [10, 12, 14, "default", 18, 20, 22],
-    //   supportAllValues: true,
-    // },
+  const [study_iuid, setStudyIuid] = useState<string | null>(null);
+  const [proc_id, setProcId] = useState<string | null>(null);
+  const [accession_no, setAcn] = useState<string | null>(null);
 
-    htmlSupport: {
-      allow: [
-        {
-          // classes: Boolean,
-        },
-      ],
-    },
-    initialData: "",
-    placeholder: "Type or paste your content here!",
-  };
-
-  const searchParams = useSearchParams();
-  const accession_no = searchParams.get("acn")
-    ? searchParams.get("acn")
-    : "<None>";
-  const study_iuid = searchParams.get("StudyInstanceUIDs");
-  const proc_id = searchParams.get("procid");
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      setAcn(searchParams.get("acn"));
+      setStudyIuid(searchParams.get("StudyInstanceUIDs"));
+      setProcId(searchParams.get("procid"));
+    }
+  }, []);
   const componentRef = useRef<HTMLDivElement | null>(null);
-  const onBeforePrintResolve = useRef<(() => void) | null>(null);
-
   const emptyReportData = {
     accession_no: "",
     referring_phys: {
@@ -149,7 +69,6 @@ const ReportComponent = () => {
     created_time: "",
 
     modality_type: "",
-    // is_insurance_applied: false,
     patient: {
       pid: "",
       fullname: "",
@@ -176,7 +95,6 @@ const ReportComponent = () => {
       code: "",
       name: "",
     },
-    //accession_no: "",
     radiologist: {
       doctor_no: "",
       fullname: "",
@@ -280,31 +198,24 @@ const ReportComponent = () => {
     const fetchData = async () => {
       if (user) {
         // Get Order
-        await getOrder(proc_id);
-
+        await getReport(proc_id);
         // Get list of radiologists
         getRadiologists();
-
-        //Get Scan Type
-        //fetchScanType();
-
         try {
           // Get from .env
           let printTemplates = JSON.parse(
             process.env.NEXT_PUBLIC_ORG_PRINT_TEMPLATE_LIST ?? ""
           );
           setPrintTemplateList(printTemplates);
+
           setSelectedPrintTemplate(printTemplates[0]);
         } catch (e) {
           console.log("Get print template failed", e);
         }
-
         setIsLayoutReady(true);
       }
     };
-
     fetchData();
-
     return () => setIsLayoutReady(false);
   }, [user, proc_id, isDeleteConfirmShow]);
 
@@ -317,7 +228,7 @@ const ReportComponent = () => {
     }
   }, [reportData.modality_type]);
 
-  const getOrder = async (proc_id: any) => {
+  const getReport = async (proc_id: any) => {
     let error = { ...state.error };
 
     if (Util.isEmpty(proc_id)) {
@@ -325,7 +236,6 @@ const ReportComponent = () => {
       setState({ ...state, error });
       return;
     }
-
     try {
       const response = await fetchReportWorklist(proc_id);
       const response_data = response?.data;
@@ -337,7 +247,6 @@ const ReportComponent = () => {
         Util.isObjectEmpty(response_data.data) ||
         response_data.data.length === 0
       ) {
-        // setOrderData(emptyOrderData);
         setReportData(emptyReportData);
         error.fatal = t(
           "No appropriate Order found. Please contact your administrator and ensure HIS has already sent the order to PACS"
@@ -346,39 +255,28 @@ const ReportComponent = () => {
       } else {
         let proceList: any[] = [];
         const data = response_data.data;
-
-        if (
-          !Util.isObjectEmpty(data.procedure.proc_id) &&
-          data.procedure.study_iuid === study_iuid
-        ) {
-          let report = data;
-
-          report.report.status_origin = report.report.status;
-          setReportData(report);
-
-          if (report.procedure.proc_id) {
-            setSelectedProcedure({
-              value: report.procedure.proc_id,
-              label: report.procedure.name,
-            });
-          }
-
-          if (report.radiologist.id) {
-            const title = Util.isEmpty(report.radiologist.title)
-              ? ""
-              : report.radiologist.title;
-            setSelectedRadiologist({
-              value: report.radiologist.id,
-              label: title + ". " + report.radiologist.fullname,
-            });
-          }
-
-          proceList.push({
-            value: data.procedure.proc_id,
-            label: data.procedure.name,
+        let report = data;
+        report.report.status_origin = report.report.status;
+        setReportData(report);
+        if (report.procedure.proc_id) {
+          setSelectedProcedure({
+            value: report.procedure.proc_id,
+            label: report.procedure.name,
           });
         }
-
+        if (report.radiologist.id) {
+          const title = Util.isEmpty(report.radiologist.title)
+            ? ""
+            : report.radiologist.title;
+          setSelectedRadiologist({
+            value: report.radiologist.id,
+            label: title + ". " + report.radiologist.fullname,
+          });
+        }
+        proceList.push({
+          value: data.procedure.proc_id,
+          label: data.procedure.name,
+        });
         setProcedureList(proceList);
         if (Util.isEmpty(selectedProcedure.value) && proceList.length > 0) {
           setSelectedProcedure(proceList[0]);
@@ -403,7 +301,6 @@ const ReportComponent = () => {
         setState({ ...state, error: error });
       } else if (Util.isObjectEmpty(response_data.data)) {
         // Get data from image and set to
-        //setRadiologistList(response_data.data);
         error.fatal = t(
           "There is no any radiologist. Please contact your administrator."
         );
@@ -594,9 +491,7 @@ const ReportComponent = () => {
     try {
       // Call Rest API
       const response = await discardReport(reportId);
-
       const response_data = response.data;
-
       if (response_data.result.status == "NG") {
         error.system = response_data.result.msg;
         setState({ ...state, error: error });
@@ -660,12 +555,9 @@ const ReportComponent = () => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-
     formatEditorData();
-
     // Check error
     let isError = validate();
-
     // No error
     if (!isError) {
       setIsConfirmShow(true);
@@ -677,24 +569,19 @@ const ReportComponent = () => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-
     formatEditorData();
-
     // Check error
     let isError = validate();
-
     // Draft status
     if (!isError) {
       doReport(event, Utils.DRAFT);
     }
-
     //alert(state.workingItem.report);
     // Generate a HL7 msg
   };
 
   const doReport = async (event: any, status: string) => {
     setShowElement(true);
-
     // If no error (error = empty)
     if (Util.isEmpty(reportData.report.id)) {
       // Create a new report
@@ -884,10 +771,6 @@ const ReportComponent = () => {
     if (editorConclusion) {
       editorConclusion.execute("selectAll");
       editorConclusion.execute("removeFormat");
-      // if not bold now, set bold for conclusion
-      // if (!editorConclusion.commands.get("bold").value) {
-      //   editorConclusion.execute("bold");
-      // }
     }
 
     // Get editor data
@@ -1049,205 +932,226 @@ const ReportComponent = () => {
   };
   return (
     <>
-      <title>Report Detail</title>
+      <title>{t("Report Detail")}</title>
       <HeaderWorklist>
-        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 transform gap-2">
-          {Util.isPrintEnabled(reportData.report.status) &&
-            !Util.isObjectEmpty(printTemplateList) && (
-              <>
-                <div className="mt-1 whitespace-nowrap text-white">
-                  {t("Print template")}:{" "}
-                </div>
-                <div className="w-40 h-[30px]">
-                  <Select
-                    id="Test"
-                    isClearable={false}
-                    onChange={onChangePrintTemplateHandler}
-                    options={printTemplateList}
-                    value={selectedPrintTemplate}
-                  />
-                </div>
-              </>
-            )}
-          {typeof window !== "undefined" && (
-            <ReactToPrint
-              trigger={() => (
-                <Button
-                  className={"button-class"}
-                  type={ButtonEnums.type.primary}
-                  size={ButtonEnums.size.medium}
-                  disabled={!reportData.accession_no}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{ fill: "none" }}
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-printer"
-                  >
-                    <g transform="scale(0.8, 0.8) translate(3, 3)">
-                      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                      <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
-                      <rect x="6" y="14" width="12" height="8" rx="1" />
-                    </g>
-                  </svg>
-                  {t("Print Preview")}
-                </Button>
+        <div className="absolute text-color md:flex-row flex-col left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 transform gap-2">
+          <div className="flex flex-row justify-center">
+            {Util.isPrintEnabled(reportData.report.status) &&
+              !Util.isObjectEmpty(printTemplateList) && (
+                <>
+                  <div className="mt-1 whitespace-nowrap text-white">
+                    {t("Print template")}:{" "}
+                  </div>
+                  <div className="w-40 h-[30px]">
+                    <Select
+                      id="Test"
+                      isClearable={false}
+                      onChange={onChangePrintTemplateHandler}
+                      options={printTemplateList}
+                      value={selectedPrintTemplate}
+                    />
+                  </div>
+                </>
               )}
-              content={() => componentRef.current}
-              onBeforeGetContent={handleOnBeforeGetContent}
-            />
-          )}
-          {reportData.accession_no && (
-            <div style={{ display: "none" }}>
-              <PDFComponent
-                ref={componentRef}
-                reportData={reportData}
-                templateData={selectedPrintTemplate}
+          </div>
+          <div className="flex flex-row">
+            {typeof window !== "undefined" && (
+              <ReactToPrint
+                trigger={() => (
+                  <Button
+                    className={"button-class mr-2"}
+                    type={ButtonEnums.type.primary}
+                    size={ButtonEnums.size.medium}
+                    disabled={!reportData.accession_no}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{ fill: "none" }}
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-printer"
+                    >
+                      <g transform="scale(0.8, 0.8) translate(3, 3)">
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                        <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6" />
+                        <rect x="6" y="14" width="12" height="8" rx="1" />
+                      </g>
+                    </svg>
+                    {t("Print Preview")}
+                  </Button>
+                )}
+                content={() => componentRef.current}
+                onBeforeGetContent={handleOnBeforeGetContent}
               />
-            </div>
-          )}
-          {Util.isPrintEnabled(reportData.report.status) &&
-            !Util.isObjectEmpty(printTemplateList) && (
-              <>
-                {/* Edit final report permission */}
-                {hasEditReportPermission && (
-                  <Button
-                    className={"button-class text-[13px]"}
-                    type={ButtonEnums.type.primary}
-                    size={ButtonEnums.size.medium}
-                    // startIcon={
-
-                    // }
-                    onClick={onEditReport}
-                    disabled={!Util.isEditEnabled(reportData.report.status)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ fill: "none" }}
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-pencil"
-                    >
-                      <g transform="scale(0.8, 0.8) translate(3, 3)">
-                        <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-                        <path d="m15 5 4 4" />
-                      </g>
-                    </svg>
-                    {t("Edit")}
-                  </Button>
-                )}
-
-                {/* Delete final report permission */}
-                {hasDeleteReportPermission && (
-                  <Button
-                    className={"button-class text-[13px]"}
-                    type={ButtonEnums.type.primary}
-                    size={ButtonEnums.size.medium}
-                    // startIcon={
-
-                    // }
-                    onClick={onDiscardReport}
-                    disabled={!Util.isEditEnabled(reportData.report.status)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      style={{ fill: "none" }}
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="lucide lucide-trash-2"
-                    >
-                      <g transform="scale(0.8, 0.8) translate(3, 3)">
-                        <path d="M3 6h18" />
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                        <line x1="10" x2="10" y1="11" y2="17" />
-                        <line x1="14" x2="14" y1="11" y2="17" />
-                      </g>
-                    </svg>
-                    {t("Discard")}
-                  </Button>
-                )}
-              </>
             )}
-
-          {/* Icons: https://lucide.dev/icons */}
-          {/* Create as Draft and Approve report permission */}
-          {hasAddReportPermission &&
-            !Util.isPrintEnabled(reportData.report.status) && (
-              <>
-                <Button
-                  className={"button-class text-[13px]"}
-                  type={ButtonEnums.type.primary}
-                  size={ButtonEnums.size.medium}
-                  // startIcon={
-
-                  // }
-                  onClick={onApprove}
-                  style={{ fill: "none" }}
-                  disabled={
-                    !Util.isApproveEnabled(
-                      reportData.report.status,
-                      state.error.fatal
-                    )
-                  }
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{ fill: "none" }}
-                    className="lucide lucide-square-check-big"
-                  >
-                    <g transform="scale(0.8, 0.8) translate(3, 3)">
-                      {" "}
-                      <path d="m9 11 3 3L22 4" />
-                      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                    </g>
-                  </svg>
-                  {t("Approve")}
-                </Button>
-
-                {reportData.report.status_origin != "F" &&
-                  reportData.report.status_origin != "C" && (
+            {reportData.accession_no && (
+              <div style={{ display: "none" }}>
+                <PDFComponent
+                  ref={componentRef}
+                  reportData={reportData}
+                  templateData={selectedPrintTemplate}
+                />
+              </div>
+            )}
+            {Util.isPrintEnabled(reportData.report.status) &&
+              !Util.isObjectEmpty(printTemplateList) && (
+                <>
+                  {/* Edit final report permission */}
+                  {hasEditReportPermission && (
                     <Button
-                      className={"button-class text-[13px]"}
+                      className={"button-class mr-2"}
                       type={ButtonEnums.type.primary}
                       size={ButtonEnums.size.medium}
-                      // startIcon={
+                      onClick={onEditReport}
+                      disabled={!Util.isEditEnabled(reportData.report.status)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ fill: "none" }}
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-pencil"
+                      >
+                        <g transform="scale(0.8, 0.8) translate(3, 3)">
+                          <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                          <path d="m15 5 4 4" />
+                        </g>
+                      </svg>
+                      {t("Edit")}
+                    </Button>
+                  )}
 
-                      // }
-                      onClick={onSaveReport}
-                      disabled={
-                        !Util.isSaveEnabled(
-                          reportData.report.status,
-                          state.error.fatal
-                        )
-                      }
+                  {/* Delete final report permission */}
+                  {hasDeleteReportPermission && (
+                    <Button
+                      className={"button-class mr-2"}
+                      type={ButtonEnums.type.primary}
+                      size={ButtonEnums.size.medium}
+                      onClick={onDiscardReport}
+                      disabled={!Util.isEditEnabled(reportData.report.status)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        style={{ fill: "none" }}
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="lucide lucide-trash-2"
+                      >
+                        <g transform="scale(0.8, 0.8) translate(3, 3)">
+                          <path d="M3 6h18" />
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                          <line x1="10" x2="10" y1="11" y2="17" />
+                          <line x1="14" x2="14" y1="11" y2="17" />
+                        </g>
+                      </svg>
+                      {t("Discard")}
+                    </Button>
+                  )}
+                </>
+              )}
+
+            {/* Icons: https://lucide.dev/icons */}
+            {/* Create as Draft and Approve report permission */}
+            {hasAddReportPermission &&
+              !Util.isPrintEnabled(reportData.report.status) && (
+                <>
+                  <Button
+                    className={"button-class mr-2"}
+                    type={ButtonEnums.type.primary}
+                    size={ButtonEnums.size.medium}
+                    onClick={onApprove}
+                    style={{ fill: "none" }}
+                    disabled={
+                      !Util.isApproveEnabled(
+                        reportData.report.status,
+                        state.error.fatal
+                      )
+                    }
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ fill: "none" }}
+                      className="lucide lucide-square-check-big"
+                    >
+                      <g transform="scale(0.8, 0.8) translate(3, 3)">
+                        {" "}
+                        <path d="m9 11 3 3L22 4" />
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                      </g>
+                    </svg>
+                    {t("Approve")}
+                  </Button>
+
+                  {reportData.report.status_origin != "F" &&
+                    reportData.report.status_origin != "C" && (
+                      <Button
+                        className={"button-class mr-2"}
+                        type={ButtonEnums.type.primary}
+                        size={ButtonEnums.size.medium}
+                        onClick={onSaveReport}
+                        disabled={
+                          !Util.isSaveEnabled(
+                            reportData.report.status,
+                            state.error.fatal
+                          )
+                        }
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          style={{ fill: "none" }}
+                          className="lucide lucide-save"
+                        >
+                          <g transform="scale(0.8, 0.8) translate(3, 3)">
+                            <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                            <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
+                            <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+                          </g>
+                        </svg>
+                        {t("Save as Draft")}
+                      </Button>
+                    )}
+                  {reportData.report.status_origin !=
+                    reportData.report.status && (
+                    <Button
+                      className={"button-class mr-2"}
+                      type={ButtonEnums.type.primary}
+                      size={ButtonEnums.size.medium}
+                      onClick={onUndoEditReport}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1260,92 +1164,57 @@ const ReportComponent = () => {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         style={{ fill: "none" }}
-                        className="lucide lucide-save"
+                        className="lucide lucide-undo-2"
                       >
                         <g transform="scale(0.8, 0.8) translate(3, 3)">
-                          <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
-                          <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
-                          <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+                          <path d="M9 14 4 9l5-5" />
+                          <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
                         </g>
                       </svg>
-                      {t("Save as Draft")}
+                      {t("Undo")}
                     </Button>
                   )}
-                {reportData.report.status_origin !=
-                  reportData.report.status && (
-                  <Button
-                    className={"button-class text-[13px]"}
-                    type={ButtonEnums.type.primary}
-                    size={ButtonEnums.size.medium}
-                    // startIcon={
+                </>
+              )}
 
-                    // }
-                    onClick={onUndoEditReport}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      style={{ fill: "none" }}
-                      className="lucide lucide-undo-2"
-                    >
-                      <g transform="scale(0.8, 0.8) translate(3, 3)">
-                        <path d="M9 14 4 9l5-5" />
-                        <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
-                      </g>
-                    </svg>
-                    {t("Undo")}
-                  </Button>
-                )}
-              </>
-            )}
-
-          <Button
-            className={"button-class text-[13px]"}
-            type={ButtonEnums.type.secondary}
-            size={ButtonEnums.size.medium}
-            // startIcon={
-
-            // }
-            onClick={onClose}
-            style={{ fill: "none" }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
+            <Button
+              className={"button-class text-[13px]"}
+              type={ButtonEnums.type.secondary}
+              size={ButtonEnums.size.medium}
+              onClick={onClose}
               style={{ fill: "none" }}
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-square-x"
             >
-              <g transform="scale(0.8, 0.8) translate(3, 3)">
-                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                <path d="m15 9-6 6" />
-                <path d="m9 9 6 6" />
-              </g>
-            </svg>
-            {t("Close")}
-          </Button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ fill: "none" }}
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-square-x"
+              >
+                <g transform="scale(0.8, 0.8) translate(3, 3)">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                  <path d="m15 9-6 6" />
+                  <path d="m9 9 6 6" />
+                </g>
+              </svg>
+              {t("Close")}
+            </Button>
+          </div>
         </div>
       </HeaderWorklist>
       <div
-        className={`relative flex w-full md:flex-row flex-col flex-nowrap items-stretch ${
+        className={`relative  flex w-full md:flex-row flex-col flex-nowrap items-stretch ${
           collapsed ? "collapsed" : ""
         }`}
       >
         {/* {left panel } */}
-        <div className="bg-black flex flex-col transition-all duration-300 ease-in-out md:h-screen">
+        <div className="bg-black  flex flex-col transition-all duration-300 ease-in-out md:h-screen">
           <div className="w-full px-2 pb-2 text-white">
             {" "}
             {/* Test show image: <img src={Constants.USER_MNG_URL + reportData.radiologist.sign} ></img> */}
@@ -1677,7 +1546,7 @@ const ReportComponent = () => {
                     {/* <div onClick={onClearError} style={{ cursor: 'pointer' }}><svg xmlns="http://www.w3.org/2000/svg" style={{ fill: 'none' }} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-square-x"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg></div> */}
                   </div>
                   <div className="rounded-b border border-t-0 border-red-400 bg-red-100 px-4 py-3 text-red-700">
-                    <ul className="list-disc">
+                    <ul className="list-disc ml-3">
                       {!Util.isEmpty(state.error.fatal) && (
                         <li>{state.error.fatal}</li>
                       )}
@@ -1770,14 +1639,11 @@ const ReportComponent = () => {
                             isDisabled={Util.isObjectEmpty(reportTemplateList)}
                           />
                         </div>
-                        <div className="md:ml-1 ">
+                        <div className="md:ml-1">
                           <Button
                             className={"button-class"}
                             type={ButtonEnums.type.primary}
                             size={ButtonEnums.size.medium}
-                            // startIcon={
-
-                            // }
                             onClick={isShowReportTemplate}
                             disabled={!Util.isEmpty(state.error.fatal)}
                           >
@@ -1805,7 +1671,7 @@ const ReportComponent = () => {
                         <Modal
                           isOpen={isDialogOpen}
                           contentLabel="Create Report Template"
-                          className="bg-primary-dark modal"
+                          className="bg-slate-500 modal"
                           overlayClassName="overlay"
                         >
                           <h2 className="text-primary-light">
@@ -1922,12 +1788,9 @@ const ReportComponent = () => {
                     {isLayoutReady &&
                       !Util.isFinalReport(reportData.report.status) &&
                       typeof window !== "undefined" && (
-                        <CKEditor
-                          editor={ClassicEditor}
-                          config={editorConfig}
+                        <CustomEditor
                           data={reportData.report.scan_protocol}
                           onChange={onChangeScanProtocol}
-                          // className="h-30 w-full px-2"
                           disabled={Util.isEditorDisabled(
                             state.error.fatal,
                             user?.permissions
@@ -1988,9 +1851,7 @@ const ReportComponent = () => {
                       {/* Show report input form */}
                       <div ref={editorRef}>
                         {isLayoutReady && typeof window !== "undefined" && (
-                          <CKEditor
-                            editor={ClassicEditor}
-                            config={editorConfig}
+                          <CustomEditor
                             data={reportData.report.findings}
                             onChange={onChangeFindings}
                             disabled={Util.isEditorDisabled(
@@ -2040,10 +1901,8 @@ const ReportComponent = () => {
                   >
                     <div className="editor-container__editor">
                       <div ref={editorRef}>
-                        {isLayoutReady && typeof window !== "undefined" && (
-                          <CKEditor
-                            editor={ClassicEditor}
-                            config={editorConfig}
+                        {isLayoutReady && (
+                          <CustomEditor
                             data={reportData.report.conclusion}
                             onChange={onChangeConclusion}
                             disabled={Util.isEditorDisabled(

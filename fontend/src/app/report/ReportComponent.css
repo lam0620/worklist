@@ -28,7 +28,9 @@
     top: 0;
     z-index: 20;
   }
-  
+  .text-color{
+    color: #d0d0d0;
+  }
   /* Base styles */
   
   .body-left {
@@ -178,4 +180,21 @@
   }
 .text-primary-light{
   font-size: 14px;
+}
+/* use for report element */
+.primary-bg {
+  background-color: #fe615a;
+  --tw-bg-opacity: 1;
+  height: 30px;
+}
+
+.secondary-bg {
+  background-color: #052b53;
+  height: 30px;
+}
+
+.disabled-bg {
+  background-color: #e0e0e0; 
+  color: #b0b0b0;
+  cursor: default;
 }

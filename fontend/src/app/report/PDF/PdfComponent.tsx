@@ -171,7 +171,7 @@ const PDFReportComponent = forwardRef<HTMLDivElement, PDFReportComponentProps>(
                 </p>
                 <p className="font-semibold">Bác sĩ</p>
                 <div className="flex justify-center">
-                  {/* <img src={sign} alt="Sign" width="150" /> */}
+                  <img src={sign} alt="Sign" width="150" />
                 </div>
                 <p className="font-semibold">
                   {reportData.radiologist.title}.

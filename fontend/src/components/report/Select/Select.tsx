@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
+import { useState, useEffect } from "react";
 import ReactSelect, {
   components,
   OptionProps,
@@ -87,6 +88,13 @@ const Select: React.FC<SelectProps> = ({
       }
     });
   }
+  const [menuPortalTarget, setMenuPortalTarget] = useState<HTMLElement | null>(
+    null
+  );
+
+  useEffect(() => {
+    setMenuPortalTarget(document.body);
+  }, []);
 
   return (
     <ReactSelect
@@ -105,17 +113,17 @@ const Select: React.FC<SelectProps> = ({
       placeholder={placeholder}
       options={options}
       blurInputOnSelect={true}
-      // menuPortalTarget={document.body}
+      menuPortalTarget={menuPortalTarget}
       styles={{
         control: (base) => ({
           ...base,
           height: 30,
           minHeight: 30,
-          backgroundColor: "black", // Màu nền đen
-          color: "#4eadcc", // Chữ trắng
-          fontSize: "12px", // Cỡ chữ
-          borderColor: "#364395", // Màu viền xanh đậm
-          borderWidth: "1px", // Độ dày viền
+          backgroundColor: "black",
+          color: "#4eadcc",
+          fontSize: "12px",
+          borderColor: "#364395",
+          borderWidth: "1px",
         }),
         valueContainer: (base) => ({
           ...base,
@@ -123,16 +131,16 @@ const Select: React.FC<SelectProps> = ({
           minHeight: 30,
           display: "flex",
           justifyContent: "center",
-          alignItems: "center", // Căn giữa giá trị
-          color: "#4eadcc", // Chữ trắng
-          fontSize: "12px", // Cỡ chữ
+          alignItems: "center",
+          color: "#4eadcc",
+          fontSize: "12px",
         }),
         input: (base) => ({
           ...base,
           height: 30,
           minHeight: 30,
-          color: "#4eadcc", // Chữ trắng
-          fontSize: "12px", // Cỡ chữ
+          color: "#4eadcc",
+          fontSize: "12px",
         }),
         indicatorsContainer: (base) => ({
           ...base,
@@ -140,19 +148,19 @@ const Select: React.FC<SelectProps> = ({
         }),
         menu: (base) => ({
           ...base,
-          backgroundColor: "black", // Màu nền đen cho menu
-          color: "#4eadcc", // Chữ trắng cho menu
-          fontSize: "12px", // Cỡ chữ
-          borderColor: "darkblue", // Màu viền xanh đậm
-          borderWidth: "1px", // Độ dày viền
+          backgroundColor: "black",
+          color: "#4eadcc",
+          fontSize: "12px",
+          borderColor: "darkblue",
+          borderWidth: "1px",
         }),
         menuList: (base) => ({
           ...base,
-          backgroundColor: "black", // Màu nền đen cho danh sách menu
-          color: "#4eadcc", // Chữ trắng cho danh sách menu
-          fontSize: "12px", // Cỡ chữ
-          borderColor: "darkblue", // Màu viền xanh đậm
-          borderWidth: "1px", // Độ dày viền
+          backgroundColor: "black",
+          color: "#4eadcc",
+          fontSize: "12px",
+          borderColor: "darkblue",
+          borderWidth: "1px",
         }),
         option: (base, state) => ({
           ...base,
@@ -160,14 +168,14 @@ const Select: React.FC<SelectProps> = ({
             ? "#09336c"
             : state.isFocused
             ? "lightpurple"
-            : "black", // Màu nền khi hover và khi được chọn
-          color: "#4eadcc", // Chữ trắng cho tùy chọn
-          fontSize: "12px", // Cỡ chữ
+            : "black",
+          color: "#4eadcc",
+          fontSize: "12px",
         }),
         singleValue: (base) => ({
           ...base,
-          color: "#4eadcc", // Chữ trắng cho giá trị đơn
-          fontSize: "12px", // Cỡ chữ
+          color: "#4eadcc",
+          fontSize: "12px",
           marginBottom: "9px",
         }),
         menuPortal: (base) => ({
