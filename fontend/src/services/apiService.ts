@@ -244,6 +244,12 @@ export const fetchWorklist = async (params: { [key: string]: any } = {}) => {
     .join('&');
   return axios.get(`${API_BASE_URL}/worklists?${queryString}`);
 };
+export const fetchWorklist_new = async (params: { [key: string]: any } = {}) => {
+  const queryString = Object.keys(params)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+    .join('&');
+  return axios.get(`${API_BASE_URL}/worklists-new?${queryString}`);
+};
 
 export const fetchRelatedStudies = async (id :string) => { //test API
   return axios.get(`${API_BASE_URL}/orders?patient_pid=${id}`);

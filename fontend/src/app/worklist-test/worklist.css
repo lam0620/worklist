@@ -1,0 +1,139 @@
+.backgroundcolor {
+    background-color: #27272b;
+}
+
+.backgroundcolor-box {
+    background-color: #323237;
+}
+
+.backgroundcolor-header {
+    background-color: #18181a;
+}
+
+.bg-top {
+    background-color: #011c29;
+}
+
+.button {
+    color: #fe615a;
+    background-color: #27272b;
+    border-radius: 30px;
+    border: 2px solid #235484;
+}
+
+.inbox {
+    background-color: #323237;
+    color: #d0d0d0;
+}
+
+.inboxlist {
+    background-color: #27272b;
+    color: #d0d0d0;
+}
+
+.bordervalue {
+    border-style: solid;
+    border-color: #2d2d31;
+    border-bottom-width: 1px;
+}
+
+.border-b {
+    border-bottom-width: 3px;
+}
+
+.shared-border {
+    padding: 0.5rem;
+    border: 3px solid #343f87;
+}
+
+.borderfind {
+    width: 60%;
+}
+
+.borderfindquick {
+    width: 50%;
+}
+
+.custom-checkbox {
+    width: 1rem; /* Adjust width */
+    height: 1rem; /* Adjust height */
+    margin-right: 0.5rem; /* Adjust margin-right */
+    margin-bottom: 1rem; /* Adjust margin-bottom */
+}
+
+.hover-purple:hover {
+    background-color: rgba(41, 27, 104, 255);
+}
+.purple-selectedrow{
+    background-color: rgba(41, 27, 104, 255);
+}
+.border-color-col {
+    border-color: #001b28;
+}
+
+.body-left {
+    transition: all 0.3s ease-in-out;
+}
+
+.max-height-desktop {
+    max-height: calc(100vh - 400px);
+}
+
+@media (max-width: 500px) {
+    .max-height-desktop {
+        max-height: calc(100vh - 350px);
+    }
+}
+
+.border-inputfield-main {
+    --tw-border-opacity: 1;
+    border-color: rgb(58 63 153 / var(--tw-border-opacity));
+}
+.scrollbar {
+    scrollbar-color: #0f2125 transparent;
+  }
+
+.text-small{
+    font-size: 10px;
+}
+.svg-disabled { 
+    pointer-events: none; 
+    opacity: 0.2; 
+}
+.logo-cal {
+    color-scheme: dark;
+}
+  
+.btn-red-square {
+    background-color: #fe615a; 
+    border:none; 
+    border-radius: 0.25em;
+    padding: 1px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    width: 106px;
+    height: 32px;
+}
+.btn-clear{
+    height: 27px;
+}
+
+.btn-disable {
+    background-color: #595656;
+    color: rgb(172 168 168);
+}
+.scroll-container {
+    overflow-x: auto;
+  }
+  
+  .header-row, .data-row {
+    display: flex;
+    min-width: 1600px; /* Điều chỉnh kích thước này phù hợp với số cột của bạn */
+  }
+  
+  .inbox div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

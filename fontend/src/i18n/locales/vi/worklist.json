@@ -53,5 +53,6 @@
     "Report Date": "Ngày tạo",
     "PN": "BN",
     "Study list" : "Danh sách ca chụp",
-    "Download" : "Tải ảnh"
+    "Download" : "Tải ảnh",
+    "Includes studies without orders": "Bao gồm ca chụp chưa có chỉ định"
 }

@@ -48,12 +48,12 @@ const ReportComponent = () => {
   const [isLayoutReady, setIsLayoutReady] = useState(false);
   const [study_iuid, setStudyIuid] = useState<string | null>(null);
   const [proc_id, setProcId] = useState<string | null>(null);
-  const [accession_no, setAcn] = useState<string | null>(null);
+  const [accession_no, setAccessionNo] = useState("<None>");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
-      setAcn(searchParams.get("acn"));
+      setAccessionNo(searchParams.get("acn") || "<None>");
       setStudyIuid(searchParams.get("StudyInstanceUIDs"));
       setProcId(searchParams.get("procid"));
     }
