@@ -49,7 +49,6 @@ const ReportComponent = () => {
   const [study_iuid, setStudyIuid] = useState<string | null>(null);
   const [proc_id, setProcId] = useState<string | null>(null);
   const [accession_no, setAccessionNo] = useState("<None>");
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
@@ -197,6 +196,9 @@ const ReportComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
+        if (user?.is_superuser) {
+          setInfo(t("You login with administrator privileges"));
+        }
         // Get Order
         await getReport(proc_id);
         // Get list of radiologists

@@ -48,14 +48,14 @@ const Worklist = () => {
   const [workList, setWorkList] = useState<WorkList[]>([]);
 
   //to show quantity of record (... số ca)
-  const [numRecord, setNumRecord] = useState(Number); 
+  const [numRecord, setNumRecord] = useState(Number);
 
   // true if switch to Advanced search and for show advanced search boxes
-  const [isAdvancedSearch, setAdvancedSearch] = useState(false); 
+  const [isAdvancedSearch, setAdvancedSearch] = useState(false);
 
-  // true when click Today, Yesterday,...button 
-  const [isDateButton, setDateButton] = useState(false); 
-  const [isFirstTime, setFirstTime] = useState(true); 
+  // true when click Today, Yesterday,...button
+  const [isDateButton, setDateButton] = useState(false);
+  const [isFirstTime, setFirstTime] = useState(true);
 
   const [searchParams, setSearchParams] = useState({
     pid: "",
@@ -66,7 +66,7 @@ const Worklist = () => {
     searchQuery: "",
     selectedStatuses: [] as string[],
     selectedDevices: [] as string[],
-    selectedUnOrderStudies: "0"
+    selectedUnOrderStudies: "0",
   });
 
   const [collapsed, setCollapsed] = useState(false);
@@ -85,23 +85,23 @@ const Worklist = () => {
 
   /**
    * When clicking page number
-   * @param page 
+   * @param page
    */
   const handlePageChange = (page: number, isAdv = false) => {
     // setDateButton(true); // search for doing advanced search
     setCurrentPage(page);
-    if (isAdv) {
-      handleAdvancedSearch();
-    } else {
-      const params = {
-        page: page,
-        search: searchParams.searchQuery,
-        modality_type: searchParams.selectedDevices.join(","),
-        status: searchParams.selectedStatuses.join(","),
-        is_include_no_order: searchParams.selectedUnOrderStudies
-      } 
-      handleQuickSearch(params);
-    }
+    // if (isAdv) {
+    //   handleAdvancedSearch();
+    // } else {
+    //   const params = {
+    //     page: page,
+    //     search: searchParams.searchQuery,
+    //     modality_type: searchParams.selectedDevices.join(","),
+    //     status: searchParams.selectedStatuses.join(","),
+    //     is_include_no_order: searchParams.selectedUnOrderStudies,
+    //   };
+    //   handleQuickSearch(params);
+    // }
   };
 
   useEffect(() => {
@@ -109,7 +109,6 @@ const Worklist = () => {
     if (user !== undefined) {
       //check here to get exactly user (beacause user can be undefined -> router.push("/login"))
       if (user) {
-
       } else {
         router.push("/login");
       }
@@ -117,7 +116,7 @@ const Worklist = () => {
   }, [user]);
 
   /**
-   * Quick search 
+   * Quick search
    */
   // useEffect(() => {
   //   if (user && !isAdvancedSearch && !isDateButton) {
@@ -135,20 +134,32 @@ const Worklist = () => {
    * Today, Yesterday,... change page number. based on searchParams.xxx changed
    */
   useEffect(() => {
-    // Advanced search
-    if (user && (isAdvancedSearch || isDateButton || isFirstTime)) {
+    if (!user) return;
+
+    if (isFirstTime) {
       handleAdvancedSearch();
+      setFirstTime(false);
+    } else if (isAdvancedSearch) {
+      handleAdvancedSearch();
+    } else {
+      const params = {
+        page: currentPage,
+        search: searchParams.searchQuery,
+        modality_type: searchParams.selectedDevices.join(","),
+        status: searchParams.selectedStatuses.join(","),
+        is_include_no_order: searchParams.selectedUnOrderStudies,
+        created_at_after: searchParams.fromDate,
+        created_at_before: searchParams.toDate,
+      };
+      handleQuickSearch(params);
     }
   }, [
+    searchParams,
     currentPage,
-    searchParams.pid,
-    searchParams.fullName,
-    searchParams.acn,
-    searchParams.fromDate,
-    searchParams.toDate,
-    searchParams.selectedDevices,
-    searchParams.selectedStatuses,
-    searchParams.selectedUnOrderStudies
+    isAdvancedSearch,
+    isDateButton,
+    user,
+    isFirstTime,
   ]);
 
   const getWorkLists = async (params: any, onReFresh: any) => {
@@ -181,17 +192,17 @@ const Worklist = () => {
    * Do Quick search
    * Called from useEffect()
    */
-  const handleQuickSearch = async (params: any) => {     
+  const handleQuickSearch = async (params: any) => {
     getWorkLists(params, true).then((r) => r);
-  }
+  };
 
   /**
    * Do Advanced search
    * Called from useEffect()
    */
   const handleAdvancedSearch = async () => {
-    //for advance search
     const searchParamsObj = {
+      page: currentPage,
       modality_type: searchParams.selectedDevices.join(","),
       status: searchParams.selectedStatuses.join(","),
       patient_name: searchParams.fullName,
@@ -199,7 +210,7 @@ const Worklist = () => {
       patient_pid: searchParams.pid,
       created_at_after: searchParams.fromDate,
       created_at_before: searchParams.toDate,
-      is_include_no_order: searchParams.selectedUnOrderStudies
+      is_include_no_order: searchParams.selectedUnOrderStudies,
     };
 
     if (isFirstTime) {
@@ -211,15 +222,19 @@ const Worklist = () => {
     setDateButton(false); // Reset to false (init time)
     setFirstTime(false);
 
-    // Filter out empty values
+    // Chuyển đổi tất cả giá trị sang string và loại bỏ các giá trị rỗng/null
     const filteredParams = Object.fromEntries(
-      Object.entries(searchParamsObj).filter(([key, value]) => value)
+      Object.entries(searchParamsObj)
+        .filter(
+          ([key, value]) =>
+            value !== undefined && value !== null && value !== ""
+        )
+        .map(([key, value]) => [key, String(value)]) // Chuyển tất cả giá trị thành string
     );
 
     const search = new URLSearchParams(filteredParams);
-    const params = Object.fromEntries(search.entries());
 
-    getWorkLists(params, false)
+    getWorkLists(Object.fromEntries(search.entries()), false);
   };
 
   const toggleSidebar = () => {
@@ -229,6 +244,7 @@ const Worklist = () => {
   const toggleAdvancedSearch = (isAdv: boolean) => {
     if (isAdv) {
       setSelectedButtonDay("All");
+      setSearchParams((prev) => ({ ...prev, searchQuery: "" }));
     }
     setAdvancedSearch(isAdv);
   };
@@ -242,24 +258,15 @@ const Worklist = () => {
   };
 
   const debouncedSearch = useCallback(
-    debounce((query: string, isAdv: boolean) => {
-      if (!isAdv) {
-        setSearchParams((prev) => ({ ...prev, searchQuery: query }));
-        const params = {
-          page:1,
-          search: query,
-          modality_type: searchParams.selectedDevices.join(","),
-          status: searchParams.selectedStatuses.join(","),
-          is_include_no_order: searchParams.selectedUnOrderStudies
-        } 
-        handleQuickSearch(params);
-      } else {
-
-      }
+    debounce((query: string) => {
+      setSearchParams((prev) => ({
+        ...prev,
+        searchQuery: query,
+      }));
     }, 1000),
     []
   );
-  
+
   const debouncedInput = useCallback(
     debounce((key: string, val: string) => {
       setSearchParams((prev) => ({ ...prev, [key]: val }));
@@ -267,92 +274,75 @@ const Worklist = () => {
     []
   );
 
-  const handleQuickSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(event.target.value, false);
+  const handleQuickSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const query = event.target.value;
+    debouncedSearch(query);
+    setCurrentPage(1);
   };
+
   // const handleAdvancedSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   debouncedSearch(event.target.value, false);
   // };
 
   const handleCheckboxChange = (
-    //left panel: choose "all" -> disable others checkbox and vice versa
     event: React.ChangeEvent<HTMLInputElement>,
     filterKey: "selectedStatuses" | "selectedDevices"
   ) => {
     const { value, checked } = event.target;
-    setSearchParams((prev) => ({
-      ...prev,
-      [filterKey]:
-        value === ""
-          ? checked
-            ? [""]
-            : [""]
-          : checked
-          ? prev[filterKey].filter((item) => item !== "").concat(value)
-          : prev[filterKey].filter((item) => item !== value),
-    }));
 
-    let selectedThings = value === ""
-                                    ? checked
-                                      ? [""]
-                                      : [""]
-                                    : checked
-                                    ? searchParams[filterKey].filter((item) => item !== "").concat(value)
-                                    : searchParams[filterKey].filter((item) => item !== value);
+    setSearchParams((prev) => {
+      const updatedList = checked
+        ? [...prev[filterKey], value] // Thêm giá trị mới
+        : prev[filterKey].filter((item) => item !== value); // Loại bỏ giá trị
 
-    let selectedDevices = [] as any;
-    let selectedStatuses = [] as any;
-    
-    if (filterKey == "selectedStatuses") {
-      selectedStatuses = selectedThings;
-      selectedDevices = searchParams.selectedDevices
-    }
-    if (filterKey == "selectedDevices") {
-      selectedDevices = selectedThings;
-      selectedStatuses = searchParams.selectedStatuses
-    }
+      // Nếu chọn "All", bỏ các lựa chọn khác
+      if (value === "") return { ...prev, [filterKey]: checked ? [""] : [] };
 
-    if (isAdvancedSearch || isDateButton) {
-      handleAdvancedSearch();
-    } else {
-      const params = {
-        page: 1,
-        search: searchParams.searchQuery,
-        modality_type: selectedDevices.join(","),
-        status: selectedStatuses.join(","),
-        is_include_no_order: searchParams.selectedUnOrderStudies
-      }       
-      handleQuickSearch(params);
-    }
+      // Bỏ "All" khi chọn checkbox khác
+      return {
+        ...prev,
+        [filterKey]: updatedList.filter((item) => item !== ""),
+      };
+    });
   };
 
-    /**
+  /**
    * When click Modalities check boxes (on left)
-   * @param event 
+   * @param event
    */
   const handleCheckboxModality = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     // Reset selected page number
-    setCurrentPage(1)    
+    setCurrentPage(1);
     handleCheckboxChange(event, "selectedDevices");
   };
 
   /**
    * When click Status check boxes (on left)
-   * @param event 
+   * @param event
    */
   const handleCheckboxStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
     // Reset selected page number
-    setCurrentPage(1)
+    setCurrentPage(1);
     handleCheckboxChange(event, "selectedStatuses");
   };
 
-  const handleCheckboxUnOrder = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
+  const handleCheckboxUnOrder = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { checked } = event.target;
+
     // Reset selected page number
-    setCurrentPage(1)
-    setSearchParams((prev) => ({ ...prev, selectedUnOrderStudies: checked? "1": "0"}));
+    setCurrentPage(1);
+
+    // Update searchParams
+    setSearchParams((prev) => ({
+      ...prev,
+      selectedUnOrderStudies: checked ? "1" : "0",
+    }));
   };
 
   const formatDateToISOString = (date: any) => {
@@ -369,19 +359,18 @@ const Worklist = () => {
       handleAdvancedSearch();
     } else {
       const params = {
-        page:1,
+        page: 1,
         search: searchParams.searchQuery,
         modality_type: searchParams.selectedDevices.join(","),
         status: searchParams.selectedStatuses.join(","),
 
         created_at_after: searchParams.fromDate,
         created_at_before: searchParams.toDate,
-        is_include_no_order: searchParams.selectedUnOrderStudies
-      } 
-      handleQuickSearch(params);      
+        is_include_no_order: searchParams.selectedUnOrderStudies,
+      };
+      handleQuickSearch(params);
     }
-  } 
-
+  };
 
   const handleFilterToday = () => {
     const today = new Date();
@@ -398,9 +387,12 @@ const Worklist = () => {
 
     setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("Today");
-
+    setCurrentPage(1);
     // Return value is for first time search only
-    return {fromDate: formatDateToISOString(today), toDate: formatDateToISOString(endOfDay)};
+    return {
+      fromDate: formatDateToISOString(today),
+      toDate: formatDateToISOString(endOfDay),
+    };
   };
 
   const handleFilterYesterday = () => {
@@ -414,7 +406,7 @@ const Worklist = () => {
       fromDate: formatDateToISOString(yesterday),
       toDate: formatDateToISOString(endOfYesterday),
     }));
-
+    setCurrentPage(1);
     setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("Yesterday");
   };
@@ -429,6 +421,7 @@ const Worklist = () => {
       fromDate: formatDateToISOString(sevenDaysAgo),
       toDate: formatDateToISOString(today),
     }));
+    setCurrentPage(1);
 
     setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("7 days");
@@ -449,26 +442,31 @@ const Worklist = () => {
     //debouncedInput('pid, event.target.value);
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, pid: value }));
+    setCurrentPage(1);
   };
 
   const handlesearchFullName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, fullName: value }));
+    setCurrentPage(1);
   };
 
   const handlesearchAcn = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, acn: value }));
+    setCurrentPage(1);
   };
 
   const handlesearchFromDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, fromDate: `${value} 00:00` }));
+    setCurrentPage(1);
   };
 
   const handlesearchToDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, toDate: `${value} 23:59` }));
+    setCurrentPage(1);
   };
 
   const handleClearSearchParams = () => {
@@ -674,16 +672,16 @@ const Worklist = () => {
               )}
               {!collapsed && (
                 <div>
-                  <div className="flex justify-between items-center backgroundcolor-box ml-2">
-                      <input
-                        type="checkbox"
-                        className="custom-checkbox cursor-pointer"
-                        value="1"
-                        checked={searchParams.selectedUnOrderStudies == "1"}
-                        onChange={handleCheckboxUnOrder}
-                      />
-                      {t("Includes studies without orders")}
-                    </div>
+                  <div className="flex justify-between items-center backgroundcolor ml-2">
+                    <input
+                      type="checkbox"
+                      className="custom-checkbox cursor-pointer"
+                      value="1"
+                      checked={searchParams.selectedUnOrderStudies == "1"}
+                      onChange={handleCheckboxUnOrder}
+                    />
+                    {t("Includes studies without orders")}
+                  </div>
                 </div>
               )}
             </div>
@@ -746,13 +744,13 @@ const Worklist = () => {
               <div className="w-full md:w-auto flex flex-wrap">
                 <div className="w-1/2 md:w-auto p-1">
                   <button
-                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple `}
+                    className={`button-ref px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple`}
                     onClick={handleRefresh}
                   >
                     {t("Refresh")}
                   </button>
-                </div>     
-              {/* </div>           
+                </div>
+                {/* </div>           
               <div className="w-full md:w-auto flex flex-wrap"> */}
                 <div className="w-1/2 md:w-auto p-1">
                   <button
