@@ -97,99 +97,11 @@ class WorklistView(WorklistBaseView):
             if not is_per and not user.is_superuser:
                 return self.cus_response_403(per_code.VIEW_ORDER)
 
-        # SC, IP, CM, IM
-        status=request.query_params.get('status')
-        list_accession_no = [] # for query in pacs.study
-        queryset = None
-
-        # If status is passed in query_params, search in the Procedure
         
-        if status:
-            list_status = status.split(',')
-            # Search in procedure first
-            queryset = Procedure.objects.filter(status__in=list_status)
-
-            if not queryset.exists():
-                return self.cus_response_empty_data()
-        
-            # Get order id from procedure
-            order_ids = [proc.order.id for proc in queryset]
-
-            procedure_prefetch = Prefetch(
-                'procedure_set',
-                queryset=Procedure.objects.select_related('procedure_type'),
-                to_attr='procedure_list'
-            )
-            # Search based on filter and order_ids (call filter() have to be before prefetch_related)
-            queryset = self.filter_queryset(Order.objects.filter(pk__in=order_ids).prefetch_related(procedure_prefetch))            
-            
-         
-        else:    
-            procedure_prefetch = Prefetch(
-                'procedure_set',
-                queryset=Procedure.objects.select_related('procedure_type'),
-                to_attr='procedure_list'
-            )
-            queryset = self.filter_queryset(Order.objects.prefetch_related(procedure_prefetch))
-
-        logger.info("Total rows worklist are: %s", len(queryset))
-
-        if not queryset.exists():
+        df_merged = self._get_worklists(request)
+        if len(df_merged) == 0:
             return self.cus_response_empty_data()
-
-        data= {}
-        # Init a Empty dataframe
-        df_study = pd.DataFrame({'accession_no':[],
-                                 'study_iuid':[],
-                                 'study_time':[],
-                                 'num_series':[],
-                                 'num_instances':[]}) 
-        
-        # test dataframe
-        # df_study = pd.DataFrame({'accession_no':['202411102','202411101'],
-        #                         'study_time':['10/11/2024 13:59','10/11/2024 13:58']})
-
-        # Get study data from pacs database
-        try:
-            list_accession_no = [order.accession_no for order in queryset]
-                
-            logger.info('Query pacs.study by accession_no: %s', list_accession_no)
-
-            # Get pacsdb.study by accession_no
-            with connections["pacs_db"].cursor() as cursor:
-                # 1 study has many study_query_attrs, so add distinct
-                sql = """select distinct s.accession_no, s.study_iuid, s.created_time as study_created_time, sqa.num_series, sqa.num_instances,study_desc 
-                            from study s 
-                            left join study_query_attrs sqa on s.pk =sqa.study_fk 
-                            where s.accession_no in %s and sqa.mods_in_study is not null
-                        """
-                
-                cursor.execute(sql,[tuple(list_accession_no)])
-                results = cursor.fetchall()
-                logger.info("Total rows of pacs.study are:  %s", len(results))
-
-                # Convert Django's fetchall() result into a Pandas DataFrame
-                column_names = [desc[0] for desc in cursor.description]
-                df_study = pd.DataFrame(results, columns = column_names)
-
-        except Exception as e:
-            # No raise exception here
-            logger.warning(e, exc_info=True)
-
-        # Convert queryset to json, merge df_study to df_merged
-        df_merged = self._merge_df(queryset, df_study)
-        #logger.debug('Number of rows after merging df_study: %s', len(df_merged))
-
-        # Search status = SC or IM in df. Do this because the status in procedure table is not latest data
-        # if status and (status == 'SC' or status == 'IM'):
-        #     df_merged = df_merged[df_merged['proc_status'] == status]
-        
-        if status:
-            list_status = status.split(',')
-            
-            # Filter status in list
-            df_merged = df_merged[df_merged['proc_status'].isin(list_status)]
-
+                    
         # Convert to json to response
         orders_data = df_merged.to_dict(orient = 'records')    
   

@@ -110,7 +110,8 @@ const WorklistList = ({
   };
 
   const handleViewerButton = () => {
-    const viewerLink = `${API_BASE_URL}/viewer?StudyInstanceUIDs=${patientInf.study_iuid}`;
+    // &hangingProtocolId=@ohif/mnGrid: view layout 2x2. Should be for MR, CT
+    const viewerLink = `${API_BASE_URL}/viewer?StudyInstanceUIDs=${patientInf.study_iuid}&hangingProtocolId=%40ohif%2FmnGrid`;
     if (!viewerWindow || viewerWindow.closed) {
       //handle no open new tab if this viewer screen exist (error)
       viewerWindow = window.open(viewerLink, "viewerWindow");
