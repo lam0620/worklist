@@ -52,9 +52,9 @@ class OrderFilter(filters.FilterSet):
     # /orders?created_at_after=2024-10-20 00:00&created_at_before=2024-10-21 23:59
     created_at = filters.DateTimeFromToRangeFilter()
     # Search like '%xxxx'
-    patient_name = filters.CharFilter(field_name='patient__fullname', lookup_expr='endswith')
-    patient_pid = filters.CharFilter(field_name='patient__pid')
-    # accession_no = filters.CharFilter(field_name='accession_no')
+    patient_name = filters.CharFilter(field_name='patient__fullname', lookup_expr='icontains')
+    patient_pid = filters.CharFilter(field_name='patient__pid', lookup_expr='icontains')
+    accession_no = filters.CharFilter(field_name='accession_no', lookup_expr='icontains')
 
     modality_type = ListFilterField(field_name='modality_type')
 
