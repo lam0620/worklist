@@ -33,9 +33,7 @@ const AppLayout = ({ children, name }: AppLayoutProps) => {
     return <LoadingSpinner />;
   }
 
-  const DicomUrl = process.env.NEXT_PUBLIC_DICOM_VIEWER_URL
-    ? process.env.NEXT_PUBLIC_DICOM_VIEWER_URL + "/worklist"
-    : "http://localhost:3000/worklist";
+  const DicomUrl = "/worklist";
 
   return (
     <div className="min-h-screen flex flex-col">
