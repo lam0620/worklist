@@ -66,6 +66,11 @@ const Worklist = () => {
     selectedDevices: [] as string[],
     selectedUnOrderStudies: "0",
   });
+  const [tempSearchParams, setTempSearchParams] = useState({
+    pid: "",
+    fullName: "",
+    acn: "",
+  });
 
   const [collapsed, setCollapsed] = useState(false);
   const [selectedProcID, setSelectedProcID] = useState(""); // get proc_id for fetch report information
@@ -255,16 +260,6 @@ const Worklist = () => {
     };
   };
 
-  const debouncedSearch = useCallback(
-    debounce((query: string) => {
-      setSearchParams((prev) => ({
-        ...prev,
-        searchQuery: query,
-      }));
-    }, 1000),
-    []
-  );
-
   const debouncedInput = useCallback(
     debounce((key: string, val: string) => {
       setSearchParams((prev) => ({ ...prev, [key]: val }));
@@ -276,7 +271,7 @@ const Worklist = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const query = event.target.value;
-    debouncedSearch(query);
+    debouncedInput("searchQuery", query);
     setCurrentPage(1);
   };
 
@@ -437,21 +432,23 @@ const Worklist = () => {
   };
 
   const handlesearchPid = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //debouncedInput('pid, event.target.value);
     const { value } = event.target;
-    setSearchParams((prev) => ({ ...prev, pid: value }));
+    setTempSearchParams((prev) => ({ ...prev, pid: value }));
+    debouncedInput("pid", value);
     setCurrentPage(1);
   };
 
   const handlesearchFullName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setSearchParams((prev) => ({ ...prev, fullName: value }));
+    setTempSearchParams((prev) => ({ ...prev, fullName: value }));
+    debouncedInput("fullName", value);
     setCurrentPage(1);
   };
 
   const handlesearchAcn = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setSearchParams((prev) => ({ ...prev, acn: value }));
+    setTempSearchParams((prev) => ({ ...prev, acn: value }));
+    debouncedInput("acn", value);
     setCurrentPage(1);
   };
 
@@ -851,7 +848,7 @@ const Worklist = () => {
                   <input
                     type="text"
                     className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
-                    value={searchParams.pid}
+                    value={tempSearchParams.pid}
                     onChange={handlesearchPid}
                   />
                 </div>
@@ -862,7 +859,7 @@ const Worklist = () => {
                   <input
                     type="text"
                     className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
-                    value={searchParams.fullName}
+                    value={tempSearchParams.fullName}
                     onChange={handlesearchFullName}
                   />
                 </div>
@@ -873,7 +870,7 @@ const Worklist = () => {
                   <input
                     type="text"
                     className="py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-3/4 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
-                    value={searchParams.acn}
+                    value={tempSearchParams.acn}
                     onChange={handlesearchAcn}
                   />
                 </div>
