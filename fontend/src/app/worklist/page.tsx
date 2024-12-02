@@ -670,10 +670,10 @@ const Worklist = () => {
               )}
               {!collapsed && (
                 <div>
-                  <div className="flex justify-between items-center backgroundcolor ml-2">
+                  <div className="flex justify-between items-center inbox pl-2">
                     <input
                       type="checkbox"
-                      className="custom-checkbox cursor-pointer"
+                      className="custom-checkbox-order cursor-pointer"
                       value="1"
                       checked={searchParams.selectedUnOrderStudies == "1"}
                       onChange={handleCheckboxUnOrder}

@@ -66,6 +66,12 @@
     margin-right: 0.5rem; /* Adjust margin-right */
     margin-bottom: 1rem; /* Adjust margin-bottom */
 }
+.custom-checkbox-order {
+    width: 2rem; /* Adjust width */
+    height: 1rem; /* Adjust height */
+    margin-right: 0.5rem; /* Adjust margin-right */
+    margin-bottom: 1rem; /* Adjust margin-bottom */
+}
 
 .hover-purple:hover {
     background-color: rgba(41, 27, 104, 255);

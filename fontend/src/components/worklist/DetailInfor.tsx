@@ -276,72 +276,81 @@ const DetailInfor = ({
                 <div className="px-1 font-semibold text-blue-300 text-base backgroundcolor-box p-2">
                   {t("Report Information")}
                 </div>
-
-                <div className="flex w-full flex-col text-right inboxlist text-sm">
-                  <div className="mt-1 flex flex-row justify-between p-1">
-                    <div className="mr-4 flex flex-col items-center whitespace-nowrap">
-                      <span className="w-full text-left font-semibold">
-                        {t("Status")}
-                      </span>
+                {report?.report.status ? (
+                  <div>
+                    <div className="flex w-full flex-col text-right inboxlist text-sm">
+                      <div className="mt-1 flex flex-row justify-between p-1">
+                        <div className="mr-4 flex flex-col items-center whitespace-nowrap">
+                          <span className="w-full text-left font-semibold">
+                            {t("Status")}
+                          </span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span
+                            className={
+                              report?.report.status === "D"
+                                ? "text-red-500"
+                                : "text-white"
+                            }
+                          >
+                            {t(getReportStatusName(report?.report.status))}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mt-1 flex flex-row justify-between p-1">
+                        <div className="mr-4 flex flex-col items-center whitespace-nowrap">
+                          <span className="w-full text-right font-semibold">
+                            {t("Radiologist")}
+                          </span>
+                        </div>
+                        <div className="flex flex-col">
+                          {report?.radiologist.fullname}
+                        </div>
+                      </div>
+                      <div className="mt-1 flex flex-row justify-between p-1">
+                        <div className="mr-4 flex flex-col items-center whitespace-nowrap">
+                          <span className="w-full text-right font-semibold">
+                            {t("Report Date")}
+                          </span>
+                        </div>
+                        <div className="flex flex-col">
+                          {report?.created_time}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex flex-col">
-                      <span
-                        className={
-                          report?.report.status === "D"
-                            ? "text-red-500"
-                            : "text-white"
-                        }
-                      >
-                        {t(getReportStatusName(report?.report.status))}
-                      </span>
+                    <div className="px-1 pt-1 text-blue-300 font-semibold text-base">
+                      {t("Scan Protocol")}
                     </div>
+                    <p
+                      className="inboxlist p-1"
+                      dangerouslySetInnerHTML={{
+                        __html: report?.report.scan_protocol || "",
+                      }}
+                    ></p>
+                    <div className="px-1 pt-1 text-blue-300 font-semibold text-base">
+                      {t("Findings")}
+                    </div>
+                    <p
+                      className="inboxlist p-1"
+                      dangerouslySetInnerHTML={{
+                        __html: report?.report.findings || "",
+                      }}
+                    ></p>
+                    <div className="px-1 pt-1 text-blue-300 font-semibold text-base">
+                      {t("Conclusion")}
+                    </div>
+                    <p
+                      className="inboxlist p-1"
+                      dangerouslySetInnerHTML={{
+                        __html: report?.report.conclusion || "",
+                      }}
+                    ></p>
                   </div>
-                  <div className="mt-1 flex flex-row justify-between p-1">
-                    <div className="mr-4 flex flex-col items-center whitespace-nowrap">
-                      <span className="w-full text-right font-semibold">
-                        {t("Radiologist")}
-                      </span>
-                    </div>
-                    <div className="flex flex-col">
-                      {report?.radiologist.fullname}
-                    </div>
-                  </div>
-                  <div className="mt-1 flex flex-row justify-between p-1">
-                    <div className="mr-4 flex flex-col items-center whitespace-nowrap">
-                      <span className="w-full text-right font-semibold">
-                        {t("Report Date")}
-                      </span>
-                    </div>
-                    <div className="flex flex-col">{report?.created_time}</div>
-                  </div>
-                </div>
-                <div className="px-1 pt-1 text-blue-300 font-semibold text-base">
-                  {t("Scan Protocol")}
-                </div>
-                <p
-                  className="inboxlist p-1"
-                  dangerouslySetInnerHTML={{
-                    __html: report?.report.scan_protocol || "",
-                  }}
-                ></p>
-                <div className="px-1 pt-1 text-blue-300 font-semibold text-base">
-                  {t("Findings")}
-                </div>
-                <p
-                  className="inboxlist p-1"
-                  dangerouslySetInnerHTML={{
-                    __html: report?.report.findings || "",
-                  }}
-                ></p>
-                <div className="px-1 pt-1 text-blue-300 font-semibold text-base">
-                  {t("Conclusion")}
-                </div>
-                <p
-                  className="inboxlist p-1"
-                  dangerouslySetInnerHTML={{
-                    __html: report?.report.conclusion || "",
-                  }}
-                ></p>
+                ) : (
+                  <p className="px-1 font-semibold text-base p-2 inboxlist justify-center flex">
+                    {t("No image reading results yet !")}
+                  </p>
+                )}
               </div>
             )
           ) : (
