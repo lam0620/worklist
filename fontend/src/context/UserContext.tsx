@@ -9,7 +9,7 @@ import {
 } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { InfoProfileUser, refreshAccessToken } from "@/services/apiService";
+import { fetchInfo, refreshAccessToken } from "@/services/apiService";
 import { MyInfoProps } from "@/app/types/UserDetail";
 
 interface UserContextType {
@@ -27,7 +27,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await InfoProfileUser();
+      const response = await fetchInfo();
       setUser(response?.data?.data);
       setIsUserLoaded(true);
     } catch (error) {

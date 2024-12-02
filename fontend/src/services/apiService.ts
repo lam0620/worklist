@@ -112,10 +112,6 @@ export const UpdateProfile = async (data: { [key: string]: any }) => {
   return axios.put(`${API_BASE_URL}/me`, data);
 }
 
-export const InfoProfileUser = async () => {
-  return axios.get(`${API_BASE_URL}/me`);
-}
-
 export const refreshAccessToken = async (data: { [key: string]: any }) => {
   return axios.post(`${API_BASE_URL}/auth/refresh-token`, data);
 }
