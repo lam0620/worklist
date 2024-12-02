@@ -62,57 +62,57 @@ class OrderFilter(filters.FilterSet):
         model = Order
         fields = ['accession_no','patient_name','modality_type','patient_pid','created_at']
 
+# """
+# Worklist class
+# """
+# class WorklistView(WorklistBaseView):
+#     queryset = Order.objects.all()
+#     # Call overwrite here to skip authenticate or don't call request.user
+#     # uncomment if no need to check permission 
+#     # authentication_classes = ()
+    
+#     # for search box (?search=xxx). which you want to search. 
+#     search_fields = ['accession_no', 'patient__fullname', 'patient__pid']
+
+#     # for query string (?type=xxx)
+#     # View attributes renamed: filter_fields => filterset_fields
+#     # https://django-filter.readthedocs.io/en/stable/guide/migration.html
+#     #filterset_fields = ['accession_no', 'patient__fullname', 'patient__pid','created_at']
+#     filterset_class = OrderFilter
+
+
+#     """
+#     Get list of worklist
+#     """
+#     @swagger_auto_schema(
+#         operation_summary='Get worklists',
+#         operation_description='Get worklists',
+#         tags=[swagger_tags.WORKLIST],
+#     )
+#     def get(self, request, *args, **kwargs):
+#         # Get and check version to secure or not
+#         if request.META.get('HTTP_X_API_VERSION') != "X":  
+#             user = request.user
+#             is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
+#             if not is_per and not user.is_superuser:
+#                 return self.cus_response_403(per_code.VIEW_ORDER)
+
+        
+#         df_merged = self._get_worklists(request)
+#         if len(df_merged) == 0:
+#             return self.cus_response_empty_data()
+                    
+#         # Convert to json to response
+#         orders_data = df_merged.to_dict(orient = 'records')    
+  
+#         page = self.paginate_queryset(orders_data)
+#         return self.get_paginated_response(page)
+    
+
 """
 Worklist class
 """
 class WorklistView(WorklistBaseView):
-    queryset = Order.objects.all()
-    # Call overwrite here to skip authenticate or don't call request.user
-    # uncomment if no need to check permission 
-    # authentication_classes = ()
-    
-    # for search box (?search=xxx). which you want to search. 
-    search_fields = ['accession_no', 'patient__fullname', 'patient__pid']
-
-    # for query string (?type=xxx)
-    # View attributes renamed: filter_fields => filterset_fields
-    # https://django-filter.readthedocs.io/en/stable/guide/migration.html
-    #filterset_fields = ['accession_no', 'patient__fullname', 'patient__pid','created_at']
-    filterset_class = OrderFilter
-
-
-    """
-    Get list of worklist
-    """
-    @swagger_auto_schema(
-        operation_summary='Get worklists',
-        operation_description='Get worklists',
-        tags=[swagger_tags.WORKLIST],
-    )
-    def get(self, request, *args, **kwargs):
-        # Get and check version to secure or not
-        if request.META.get('HTTP_X_API_VERSION') != "X":  
-            user = request.user
-            is_per = CheckPermission(per_code.VIEW_ORDER, user.id).check()
-            if not is_per and not user.is_superuser:
-                return self.cus_response_403(per_code.VIEW_ORDER)
-
-        
-        df_merged = self._get_worklists(request)
-        if len(df_merged) == 0:
-            return self.cus_response_empty_data()
-                    
-        # Convert to json to response
-        orders_data = df_merged.to_dict(orient = 'records')    
-  
-        page = self.paginate_queryset(orders_data)
-        return self.get_paginated_response(page)
-    
-
-"""
-Worklist class
-"""
-class NewWorklistView(WorklistBaseView):
     queryset = Order.objects.all()
     # Call overwrite here to skip authenticate or don't call request.user
     # uncomment if no need to check permission 
