@@ -54,5 +54,6 @@
     "PN": "BN",
     "Study list" : "Danh sách ca chụp",
     "Download" : "Tải ảnh",
-    "Includes studies without orders": "Bao gồm ca chụp chưa có chỉ định"
+    "Includes studies without orders": "Bao gồm ca chụp chưa có chỉ định",
+    "No image reading results yet !" : "Chưa có kết quả đọc ảnh !"
 }
