@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { fetchRelatedStudies } from "@/services/apiService";
 import { OrderDetailProps } from "@/app/types/OrderDetail";
 import { toast } from "react-toastify";
-import "../../app/worklist-tmp/worklist.css";
+import "../../app/worklist/worklist.css";
 import * as Util from "@/utils/utils";
 import LoadingSpinner from "@/components/LoadingSpinner";
 interface DetailInforProps {
