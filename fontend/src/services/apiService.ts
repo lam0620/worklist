@@ -10,7 +10,7 @@ export const Login = async (data: { [key: string]: string }) => {
 }
 
 //info
-export const fetchInfo = async () => {
+export const fetchMe = async () => {
   return axios.get(`${API_BASE_URL}/me`);
 }
 
