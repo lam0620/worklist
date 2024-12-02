@@ -244,12 +244,12 @@ export const fetchWorklist = async (params: { [key: string]: any } = {}) => {
     .join('&');
   return axios.get(`${API_BASE_URL}/worklists?${queryString}`);
 };
-export const fetchWorklist_new = async (params: { [key: string]: any } = {}) => {
-  const queryString = Object.keys(params)
-    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
-    .join('&');
-  return axios.get(`${API_BASE_URL}/worklists-new?${queryString}`);
-};
+// export const fetchWorklist_new = async (params: { [key: string]: any } = {}) => {
+//   const queryString = Object.keys(params)
+//     .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+//     .join('&');
+//   return axios.get(`${API_BASE_URL}/worklists-new?${queryString}`);
+// };
 
 export const fetchRelatedStudies = async (id :string) => { //test API
   return axios.get(`${API_BASE_URL}/orders?patient_pid=${id}`);
@@ -260,72 +260,41 @@ export const fetchReportByProcId = async (id: string) => {
   return axios.get(`${API_BASE_URL}/reports/procedures/${id}`);
 }
 
-
-
-
-//from here for reportcomponent
-import Utils from "../utils/utils"
-const DCM_API_ENDPOINT = process.env.DCM_API_ENDPOINT;
-const INTEG_API_ENDPOINT = process.env.NEXT_PUBLIC_API_BASE_URL_REPORT;
-
-let IS_AUTH = "true";
-try { IS_AUTH = Utils.IS_AUTH; } catch(e) {}
-
-// For Dev
-if (IS_AUTH !== "true") {
-  // 'X': No auth need
-  axios.defaults.headers.common["x-api-version"] = `X`;
-}
-export const fetchOrder = async (accession_no :any) => {
-  return axios.get(`${INTEG_API_ENDPOINT}/orders?accession_no=${accession_no}`)
-}
+//for report-worklist
 
 export const fetchRadiologists = async () => {
-  return axios.get(`${INTEG_API_ENDPOINT}/doctors?type=R`)
-}
-export const fetchDoctorByUserId = async (userId : any) => {
-return axios.get(`${INTEG_API_ENDPOINT}/doctors?user_id=${userId}`)
+  return axios.get(`${API_BASE_URL}/doctors?type=R`)
 }
 
-export const fetchReportByStudy = async (studyUid :any) => {
-  return axios.get(`${INTEG_API_ENDPOINT}/reports?study_iuid=${studyUid}`)
-}
+// export const fetchReportByStudy = async (studyUid :any) => {
+//   return axios.get(`${API_BASE_URL}/reports?study_iuid=${studyUid}`)
+// }
 
 export const createReport = async (data: { [key: string]: any }) => {
-  return axios.post(`${INTEG_API_ENDPOINT}/reports`, data, { headers: { 'x-api-version': 'v2' } });
+  return axios.post(`${API_BASE_URL}/reports`, data, { headers: { 'x-api-version': 'v2' } });
 }
 
 export const updateReport = async (id: string, data: { [key: string]: any }) => {
-  return axios.put(`${INTEG_API_ENDPOINT}/reports/${id}`, data, { headers: { 'x-api-version': 'v2' } });
+  return axios.put(`${API_BASE_URL}/reports/${id}`, data, { headers: { 'x-api-version': 'v2' } });
 }
 export const discardReport = async (id: string) => {
-  return axios.delete(`${INTEG_API_ENDPOINT}/reports/${id}`);
+  return axios.delete(`${API_BASE_URL}/reports/${id}`);
 }
 
 export const fetchReportTemplates = async (modality :any) => {
-  return axios.get(`${INTEG_API_ENDPOINT}/report-templates?modality=${modality}`)
+  return axios.get(`${API_BASE_URL}/report-templates?modality=${modality}`)
 }
 export const createReportTemplate = async (data: { [key: string]: any }) => {
-  return axios.post(`${INTEG_API_ENDPOINT}/report-templates`, data);
+  return axios.post(`${API_BASE_URL}/report-templates`, data);
 }
-export const updateReportTemplate = async (id: string, data: { [key: string]: any }) => {
-  return axios.put(`${INTEG_API_ENDPOINT}/report-templates/${id}`, data);
-}
+// export const updateReportTemplate = async (id: string, data: { [key: string]: any }) => {
+//   return axios.put(`${API_BASE_URL}/report-templates/${id}`, data);
+// }
 
-
-// UserContext use
-export const getUserProfile = async () => {
-  return axios.get(`${INTEG_API_ENDPOINT}/me`);
-}
-
-// dcm4chee api
-export const fetchDicomMetadata = async (study_iuid : any) => {
-  return axios.get(`${DCM_API_ENDPOINT}/rs/studies/${study_iuid}/metadata`)
-}
 //get scan
 export const fetchScanProtocols = async (modality :any)=>{
-  return axios.get(`${INTEG_API_ENDPOINT}/scan-protocols?modality=${modality}`)
+  return axios.get(`${API_BASE_URL}/scan-protocols?modality=${modality}`)
 }
 export const fetchReportWorklist = (id: any) => {
-  return axios.get(`${INTEG_API_ENDPOINT}/worklists/procedures/${id}`);
+  return axios.get(`${API_BASE_URL}/worklists/procedures/${id}`);
 }

@@ -12,7 +12,7 @@ import Button from "@/components/report/Button/Button";
 import * as ButtonEnums from "@/components/report/Button/ButtonEnums";
 import Select from "@/components/report/Select/Select";
 import Dialog from "@/components/report/Dialog/Dialog";
-import "../../app/worklist/worklist.css";
+import "../worklist-tmp/worklist.css";
 import { useUser } from "@/context/UserContext";
 import { PERMISSIONS } from "@/utils/constant";
 import HeaderWorklist from "@/components/HeaderWorklist";

@@ -6,14 +6,11 @@ import { fetchWorklist } from "@/services/apiService";
 import { useUser } from "@/context/UserContext";
 import { WorkList } from "@/app/types/WorkList";
 import { toast } from "react-toastify";
-import logo from "../../../public/images/custom_logo.png";
-import Image from "next/image";
 import "./worklist.css";
 import WorklistList from "@/components/worklist/WorklistList";
 import DetailInfor from "@/components/worklist/DetailInfor";
 import UserAvatar from "../../components/Avatar";
 import withLoading from "@/components/withLoading";
-import HeaderWorklist from "@/components/HeaderWorklist";
 
 const Worklist = () => {
   const router = useRouter();
@@ -22,19 +19,16 @@ const Worklist = () => {
   const [t, setT] = useState(() => (key: string) => key);
 
   useEffect(() => {
-    // Load translation asynchronously
     const loadTranslation = async () => {
       const { t } = await useTranslation("worklist");
       setT(() => t);
     };
     loadTranslation();
-    // Redirect user if user is logged in
     if (user) {
-      router.push("/worklist");
+      // router.push("/worklist");
     }
-    // Check if running on client-side
-    const isClient = typeof window !== "undefined";
-    if (isClient) {
+    //to hidden or apprear left panel based on pc or moblie
+    if (typeof window !== "undefined") {
       const handleResize = () => {
         if (window.innerWidth < 768) {
           setCollapsed(true);
@@ -48,36 +42,64 @@ const Worklist = () => {
         window.removeEventListener("resize", handleResize);
       };
     }
-  });
+  }, []);
   const [workList, setWorkList] = useState<WorkList[]>([]);
-  const [numRecord, setNumRecord] = useState(Number); //to show quantity of record (... số ca)
+
+  //to show quantity of record (... số ca)
+  const [numRecord, setNumRecord] = useState(Number);
+
+  // true if switch to Advanced search and for show advanced search boxes
   const [isAdvancedSearch, setAdvancedSearch] = useState(false);
+
+  // true when click Today, Yesterday,...button
+  const [isDateButton, setDateButton] = useState(false);
+  const [isFirstTime, setFirstTime] = useState(true);
+
   const [searchParams, setSearchParams] = useState({
     pid: "",
     fullName: "",
     acn: "",
     fromDate: "",
     toDate: "",
+    searchQuery: "",
     selectedStatuses: [] as string[],
     selectedDevices: [] as string[],
-    searchQuery: "",
+    selectedUnOrderStudies: "0",
   });
+
   const [collapsed, setCollapsed] = useState(false);
   const [selectedProcID, setSelectedProcID] = useState(""); // get proc_id for fetch report information
   const [reportInf, setReportInf] = useState<any>(); // to get data for print pdf
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [selectedButtonDay, setSelectedButtonDay] = useState<string>("All");
+  const [selectedButtonDay, setSelectedButtonDay] = useState<string>("Today");
   const [collapsedDetail, setCollapseDetail] = useState(false); //flexible width of the right panel when open or close detail panel
-  const [loadFirst, setLoadFirst] = useState(false);
+  // const [loadFirst, setLoadFirst] = useState(false);
   const [loading, setLoading] = useState(false); //icon loading
 
   const CollapseDetail = () => {
     setCollapseDetail(!collapsedDetail);
   };
 
-  const handlePageChange = (page: number) => {
+  /**
+   * When clicking page number
+   * @param page
+   */
+  const handlePageChange = (page: number, isAdv = false) => {
+    // setDateButton(true); // search for doing advanced search
     setCurrentPage(page);
+    // if (isAdv) {
+    //   handleAdvancedSearch();
+    // } else {
+    //   const params = {
+    //     page: page,
+    //     search: searchParams.searchQuery,
+    //     modality_type: searchParams.selectedDevices.join(","),
+    //     status: searchParams.selectedStatuses.join(","),
+    //     is_include_no_order: searchParams.selectedUnOrderStudies,
+    //   };
+    //   handleQuickSearch(params);
+    // }
   };
 
   useEffect(() => {
@@ -85,49 +107,63 @@ const Worklist = () => {
     if (user !== undefined) {
       //check here to get exactly user (beacause user can be undefined -> router.push("/login"))
       if (user) {
-        handleFilterToday();
-        setLoadFirst(true);
       } else {
         router.push("/login");
       }
     }
   }, [user]);
 
-  useEffect(() => {
-    if (user && loadFirst) {
-      fetchWorkList(currentPage, searchParams.searchQuery, true).then((r) => r);
-    }
-  }, [
-    searchParams.searchQuery,
-    currentPage,
-    searchParams.selectedDevices,
-    searchParams.selectedStatuses,
-  ]);
+  /**
+   * Quick search
+   */
+  // useEffect(() => {
+  //   if (user && !isAdvancedSearch && !isDateButton) {
+  //     handleQuickSearch();
+  //   }
+  // }, [
+  //   currentPage,
+  //   searchParams.searchQuery,
+  //   searchParams.selectedDevices,
+  //   searchParams.selectedStatuses,
+  // ]);
 
+  /**
+   * Advanced search and
+   * Today, Yesterday,... change page number. based on searchParams.xxx changed
+   */
   useEffect(() => {
-    //advance search
-    if (user && loadFirst) {
-      handleSearch();
-    }
-  }, [
-    searchParams.pid,
-    searchParams.fullName,
-    searchParams.acn,
-    searchParams.fromDate,
-    searchParams.toDate,
-    searchParams.selectedDevices,
-    searchParams.selectedStatuses,
-  ]);
+    if (!user) return;
 
-  const fetchWorkList = async (page: number, query: string, onReFresh: any) => {
-    setLoading(true);
-    try {
-      const response = await fetchWorklist({
-        page,
-        search: query,
+    if (isFirstTime) {
+      handleAdvancedSearch();
+      setFirstTime(false);
+    } else if (isAdvancedSearch) {
+      handleAdvancedSearch();
+    } else {
+      const params = {
+        page: currentPage,
+        search: searchParams.searchQuery,
         modality_type: searchParams.selectedDevices.join(","),
         status: searchParams.selectedStatuses.join(","),
-      });
+        is_include_no_order: searchParams.selectedUnOrderStudies,
+        created_at_after: searchParams.fromDate,
+        created_at_before: searchParams.toDate,
+      };
+      handleQuickSearch(params);
+    }
+  }, [
+    searchParams,
+    currentPage,
+    isAdvancedSearch,
+    isDateButton,
+    user,
+    isFirstTime,
+  ]);
+
+  const getWorkLists = async (params: any, onReFresh: any) => {
+    setLoading(true);
+    try {
+      const response = await fetchWorklist(params);
 
       if (response) {
         setWorkList(response.data.data);
@@ -145,14 +181,26 @@ const Worklist = () => {
     } finally {
       setLoading(false);
     }
-    if (onReFresh) {
-      setSelectedButtonDay("All");
-    }
+    // if (onReFresh) {
+    //   setSelectedButtonDay("All");
+    // }
   };
 
-  const handleSearch = async () => {
-    //for advance search
+  /**
+   * Do Quick search
+   * Called from useEffect()
+   */
+  const handleQuickSearch = async (params: any) => {
+    getWorkLists(params, true).then((r) => r);
+  };
+
+  /**
+   * Do Advanced search
+   * Called from useEffect()
+   */
+  const handleAdvancedSearch = async () => {
     const searchParamsObj = {
+      page: currentPage,
       modality_type: searchParams.selectedDevices.join(","),
       status: searchParams.selectedStatuses.join(","),
       patient_name: searchParams.fullName,
@@ -160,44 +208,43 @@ const Worklist = () => {
       patient_pid: searchParams.pid,
       created_at_after: searchParams.fromDate,
       created_at_before: searchParams.toDate,
+      is_include_no_order: searchParams.selectedUnOrderStudies,
     };
 
-    // Filter out empty values
+    if (isFirstTime) {
+      const todayParams = handleFilterToday();
+      searchParamsObj.created_at_after = todayParams.fromDate;
+      searchParamsObj.created_at_before = todayParams.toDate;
+    }
+
+    setDateButton(false); // Reset to false (init time)
+    setFirstTime(false);
+
+    // Chuyển đổi tất cả giá trị sang string và loại bỏ các giá trị rỗng/null
     const filteredParams = Object.fromEntries(
-      Object.entries(searchParamsObj).filter(([key, value]) => value)
+      Object.entries(searchParamsObj)
+        .filter(
+          ([key, value]) =>
+            value !== undefined && value !== null && value !== ""
+        )
+        .map(([key, value]) => [key, String(value)]) // Chuyển tất cả giá trị thành string
     );
 
     const search = new URLSearchParams(filteredParams);
-    const params = Object.fromEntries(search.entries());
-    setLoading(true);
-    try {
-      const response = await fetchWorklist(params);
-      if (response.status === 200 && response.data?.result?.status === "OK") {
-        setWorkList(response?.data.data);
-        setNumRecord(response?.data?.count);
-        setTotalPages(
-          Math.ceil(response.data?.count / response?.data?.page_size)
-        );
-      } else {
-        setWorkList([]);
-        setNumRecord(0);
-      }
-    } catch (error) {
-      console.error("Error fetching orders list:", error);
-    } finally {
-      setLoading(false);
-    }
+
+    getWorkLists(Object.fromEntries(search.entries()), false);
   };
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
 
-  const toggleAdvancedSearch = () => {
-    if (isAdvancedSearch) {
+  const toggleAdvancedSearch = (isAdv: boolean) => {
+    if (isAdv) {
       setSelectedButtonDay("All");
+      setSearchParams((prev) => ({ ...prev, searchQuery: "" }));
     }
-    setAdvancedSearch(!isAdvancedSearch);
+    setAdvancedSearch(isAdv);
   };
 
   const debounce = (func: Function, wait: number) => {
@@ -210,41 +257,90 @@ const Worklist = () => {
 
   const debouncedSearch = useCallback(
     debounce((query: string) => {
-      setSearchParams((prev) => ({ ...prev, searchQuery: query }));
+      setSearchParams((prev) => ({
+        ...prev,
+        searchQuery: query,
+      }));
     }, 1000),
     []
   );
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(event.target.value);
+
+  const debouncedInput = useCallback(
+    debounce((key: string, val: string) => {
+      setSearchParams((prev) => ({ ...prev, [key]: val }));
+    }, 1000),
+    []
+  );
+
+  const handleQuickSearchChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const query = event.target.value;
+    debouncedSearch(query);
+    setCurrentPage(1);
   };
 
+  // const handleAdvancedSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   debouncedSearch(event.target.value, false);
+  // };
+
   const handleCheckboxChange = (
-    //left panel: choose "all" -> disable others checkbox and vice versa
     event: React.ChangeEvent<HTMLInputElement>,
     filterKey: "selectedStatuses" | "selectedDevices"
   ) => {
     const { value, checked } = event.target;
-    setSearchParams((prev) => ({
-      ...prev,
-      [filterKey]:
-        value === ""
-          ? checked
-            ? [""]
-            : [""]
-          : checked
-          ? prev[filterKey].filter((item) => item !== "").concat(value)
-          : prev[filterKey].filter((item) => item !== value),
-    }));
+
+    setSearchParams((prev) => {
+      const updatedList = checked
+        ? [...prev[filterKey], value] // Thêm giá trị mới
+        : prev[filterKey].filter((item) => item !== value); // Loại bỏ giá trị
+
+      // Nếu chọn "All", bỏ các lựa chọn khác
+      if (value === "") return { ...prev, [filterKey]: checked ? [""] : [] };
+
+      // Bỏ "All" khi chọn checkbox khác
+      return {
+        ...prev,
+        [filterKey]: updatedList.filter((item) => item !== ""),
+      };
+    });
   };
 
+  /**
+   * When click Modalities check boxes (on left)
+   * @param event
+   */
   const handleCheckboxModality = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    // Reset selected page number
+    setCurrentPage(1);
     handleCheckboxChange(event, "selectedDevices");
   };
 
+  /**
+   * When click Status check boxes (on left)
+   * @param event
+   */
   const handleCheckboxStatus = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Reset selected page number
+    setCurrentPage(1);
     handleCheckboxChange(event, "selectedStatuses");
+  };
+
+  const handleCheckboxUnOrder = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { checked } = event.target;
+
+    // Reset selected page number
+    setCurrentPage(1);
+
+    // Update searchParams
+    setSearchParams((prev) => ({
+      ...prev,
+      selectedUnOrderStudies: checked ? "1" : "0",
+    }));
   };
 
   const formatDateToISOString = (date: any) => {
@@ -254,6 +350,24 @@ const Worklist = () => {
       .toISOString()
       .slice(0, -1);
     return localISOTime;
+  };
+
+  const handleRefresh = () => {
+    if (isAdvancedSearch) {
+      handleAdvancedSearch();
+    } else {
+      const params = {
+        page: 1,
+        search: searchParams.searchQuery,
+        modality_type: searchParams.selectedDevices.join(","),
+        status: searchParams.selectedStatuses.join(","),
+
+        created_at_after: searchParams.fromDate,
+        created_at_before: searchParams.toDate,
+        is_include_no_order: searchParams.selectedUnOrderStudies,
+      };
+      handleQuickSearch(params);
+    }
   };
 
   const handleFilterToday = () => {
@@ -268,7 +382,15 @@ const Worklist = () => {
       fromDate: formatDateToISOString(today),
       toDate: formatDateToISOString(endOfDay),
     }));
+
+    setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("Today");
+    setCurrentPage(1);
+    // Return value is for first time search only
+    return {
+      fromDate: formatDateToISOString(today),
+      toDate: formatDateToISOString(endOfDay),
+    };
   };
 
   const handleFilterYesterday = () => {
@@ -282,6 +404,8 @@ const Worklist = () => {
       fromDate: formatDateToISOString(yesterday),
       toDate: formatDateToISOString(endOfYesterday),
     }));
+    setCurrentPage(1);
+    setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("Yesterday");
   };
   const handleFilterLast7Days = () => {
@@ -295,6 +419,9 @@ const Worklist = () => {
       fromDate: formatDateToISOString(sevenDaysAgo),
       toDate: formatDateToISOString(today),
     }));
+    setCurrentPage(1);
+
+    setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("7 days");
   };
 
@@ -304,32 +431,40 @@ const Worklist = () => {
       fromDate: "",
       toDate: "",
     }));
+
+    setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("All");
   };
 
   const handlesearchPid = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //debouncedInput('pid, event.target.value);
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, pid: value }));
+    setCurrentPage(1);
   };
 
   const handlesearchFullName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, fullName: value }));
+    setCurrentPage(1);
   };
 
   const handlesearchAcn = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, acn: value }));
+    setCurrentPage(1);
   };
 
   const handlesearchFromDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, fromDate: `${value} 00:00` }));
+    setCurrentPage(1);
   };
 
   const handlesearchToDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchParams((prev) => ({ ...prev, toDate: `${value} 23:59` }));
+    setCurrentPage(1);
   };
 
   const handleClearSearchParams = () => {
@@ -358,8 +493,14 @@ const Worklist = () => {
   return (
     <div className="flex flex-col h-screen text-sm md:text-base">
       <title>Worklist</title>
-      <HeaderWorklist>
-        <div className="flex flex-row mt-2">
+      <header className="w-full flex justify-between items-center bg-top text-white p-1">
+        <div className="justify-start flex">
+          {/* <Image src={logo} className="w-8 h-8 mx-1 my-1 mr-4" alt="logo" /> */}
+          <img
+            src="../assets/custom_logo.png"
+            className="w-8 h-8 mx-1 my-1 mr-4"
+            alt="logo"
+          />
           <p className="flex items-center justify-center ml-7">
             {t("Worklist |")}
           </p>
@@ -370,7 +511,19 @@ const Worklist = () => {
             {"Studylist"}
           </a>
         </div>
-      </HeaderWorklist>
+
+        <div className="mr-2">
+          <div className="z-50 text-black">
+            {user && (
+              <UserAvatar
+                firstName={user.first_name}
+                lastName={user.last_name}
+                avatarColor={user.avatar_color}
+              />
+            )}
+          </div>
+        </div>
+      </header>
       <div className="md:flex md:flex-1 md:h-screen backgroundcolor overflow-y-hidden">
         {/* left panel  */}
         {!collapsed && (
@@ -515,6 +668,20 @@ const Worklist = () => {
                   </ul>
                 </div>
               )}
+              {!collapsed && (
+                <div>
+                  <div className="flex justify-between items-center backgroundcolor ml-2">
+                    <input
+                      type="checkbox"
+                      className="custom-checkbox cursor-pointer"
+                      value="1"
+                      checked={searchParams.selectedUnOrderStudies == "1"}
+                      onChange={handleCheckboxUnOrder}
+                    />
+                    {t("Includes studies without orders")}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -562,17 +729,27 @@ const Worklist = () => {
                 <input
                   type="text"
                   placeholder={t("Quick search ...")}
-                  onChange={handleSearchChange}
+                  onChange={handleQuickSearchChange}
                   className="transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-3/5 py-2 px-3 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
                 />
                 <button
-                  onClick={toggleAdvancedSearch}
+                  onClick={() => toggleAdvancedSearch(true)}
                   className="text-red-400 underline ml-1 md:ml-2 text-sm whitespace-nowrap"
                 >
                   {t("Advanced search")}
                 </button>
               </div>
               <div className="w-full md:w-auto flex flex-wrap">
+                <div className="w-1/2 md:w-auto p-1">
+                  <button
+                    className={`button-ref px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple`}
+                    onClick={handleRefresh}
+                  >
+                    {t("Refresh")}
+                  </button>
+                </div>
+                {/* </div>           
+              <div className="w-full md:w-auto flex flex-wrap"> */}
                 <div className="w-1/2 md:w-auto p-1">
                   <button
                     className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
@@ -689,7 +866,7 @@ const Worklist = () => {
                   <input
                     type="date"
                     className="logo-cal h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
-                    value={searchParams.fromDate.split(" ")[0]}
+                    value={searchParams.fromDate.split("T")[0]}
                     onChange={handlesearchFromDate}
                   />
                 </div>
@@ -700,7 +877,7 @@ const Worklist = () => {
                   <input
                     type="date"
                     className="logo-cal h-7 py-1 px-1 mt-2 transition duration-300 appearance-none border border-inputfield-main focus:border-inputfield-focus focus:outline-none disabled:border-inputfield-disabled rounded w-2/4 md:w-11/12 md:h-8 text-sm text-white placeholder-inputfield-placeholder leading-tight bg-black"
-                    value={searchParams.toDate.split(" ")[0]}
+                    value={searchParams.toDate.split("T")[0]}
                     onChange={handlesearchToDate}
                   />
                 </div>
@@ -710,7 +887,7 @@ const Worklist = () => {
                     className="btn-red-square btn-clear"
                     onClick={handleClearSearchParams}
                   >
-                    <svg
+                    {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"
@@ -726,14 +903,14 @@ const Worklist = () => {
                         <path d="m12 9 6 6" />
                         <path d="m18 9-6 6" />
                       </g>
-                    </svg>
+                    </svg> */}
                     <div className="text-[12px] px-1">{t("Clear")}</div>
                   </button>
                 </div>
                 <div className="flex justify-center md:flex-col md:flex-grow px-2">
                   <button
-                    onClick={toggleAdvancedSearch}
-                    className="text-red-400 underline mt-4 text-xs md:text-base"
+                    onClick={() => toggleAdvancedSearch(false)}
+                    className="text-red-400 underline mt-4 text-sm whitespace-nowrap"
                   >
                     {t("Back Quick Search")}
                   </button>
@@ -743,7 +920,7 @@ const Worklist = () => {
           )}
           <WorklistList
             worklist={workList}
-            onRefresh={fetchWorkList}
+            onRefresh={getWorkLists}
             onSelectProcID={handleProcIDSelect}
             t={t}
             currentPage={currentPage}

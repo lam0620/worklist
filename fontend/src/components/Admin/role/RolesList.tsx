@@ -4,7 +4,7 @@ import { Checkbox } from "@radix-ui/themes";
 import { RoleDetailProps } from "@/app/types/RoleDetail";
 import { useTranslation } from "../../../i18n/client";
 import { useState, useEffect } from "react";
-import "../../../app/worklist/worklist.css";
+import "../../../app/worklist-tmp/worklist.css";
 
 interface RolesListProps {
   roles: RoleDetailProps[];

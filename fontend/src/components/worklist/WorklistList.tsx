@@ -39,7 +39,6 @@ const WorklistList = ({
   isAdvancedSearch,
 }: WorklistProps) => {
   const { user } = useUser();
-  const [selectedItem, setSelectedItem] = useState("");
   const [selectedRow, setSelectedRow] = useState("");
   const [reportCheck, setReportCheck] = useState(false); // to check the row has report?
   const [viewerCheck, setViewerCheck] = useState(false); // to check the row has image?
@@ -98,15 +97,12 @@ const WorklistList = ({
   const router = useRouter();
 
   const handleReportButton = () => {
-    // const reportLink = `${API_BASE_URL}/report?StudyInstanceUIDs=${patientInf.study_iuid}&acn=${patientInf.acn}`;
-    // if (!reportWindow || reportWindow.closed) {
-    //   //handle no open new tab if this report screen exist (error)
-    //   reportWindow = window.open(reportLink, "reportWindow");
-    // } else {
-    //   reportWindow.focus();
-    // }
     const reportLink = `/report?StudyInstanceUIDs=${patientInf.study_iuid}&procid=${patientInf.procid}`;
-    window.open(reportLink, "_blank");
+    if (!reportWindow || reportWindow.closed) {
+      reportWindow = window.open(reportLink, "reportWindow");
+    } else {
+      reportWindow.focus();
+    }
   };
 
   const handleViewerButton = () => {
@@ -139,10 +135,6 @@ const WorklistList = ({
     document.body.appendChild(fileLink);
     fileLink.click();
     document.body.removeChild(fileLink);
-  };
-
-  const handleRefreshButton = () => {
-    onRefresh(1, "", false);
   };
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
