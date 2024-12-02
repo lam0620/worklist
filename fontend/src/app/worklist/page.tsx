@@ -614,8 +614,8 @@ const Worklist = () => {
                   <div className="flex justify-between items-center backgroundcolor-box">
                     <span className="p-2">{t("Status")}</span>
                   </div>
-                  <ul className="p-2 backgroundcolor">
-                    <li>
+                  <ul className="backgroundcolor">
+                    <li className="py-1 px-2">
                       <input
                         type="checkbox"
                         className="custom-checkbox cursor-pointer"
@@ -625,7 +625,7 @@ const Worklist = () => {
                       />
                       {t("All")}
                     </li>
-                    <li>
+                    <li className=" px-2">
                       <input
                         type="checkbox"
                         className="custom-checkbox cursor-pointer"
@@ -635,7 +635,7 @@ const Worklist = () => {
                       />
                       {t("Scheduled")}
                     </li>
-                    <li>
+                    <li className="py-1 px-2">
                       <input
                         type="checkbox"
                         className="custom-checkbox cursor-pointer"
@@ -645,7 +645,7 @@ const Worklist = () => {
                       />
                       {t("Unreported")}
                     </li>
-                    <li>
+                    <li className="px-2">
                       <input
                         type="checkbox"
                         className="custom-checkbox cursor-pointer"
@@ -655,7 +655,7 @@ const Worklist = () => {
                       />
                       {t("Reporting")}
                     </li>
-                    <li>
+                    <li className="py-1 px-2">
                       <input
                         type="checkbox"
                         className="custom-checkbox cursor-pointer"
@@ -665,23 +665,41 @@ const Worklist = () => {
                       />
                       {t("Reported")}
                     </li>
+                    <li>
+                      <div className="p-2 mt-4 inbox">
+                        <input
+                          type="checkbox"
+                          className=" custom-checkbox cursor-pointer"
+                          value="1"
+                          checked={searchParams.selectedUnOrderStudies == "1"}
+                          onChange={handleCheckboxUnOrder}
+                        />
+
+                        {t("Includes studies without orders")}
+                      </div>
+                    </li>
                   </ul>
                 </div>
               )}
-              {!collapsed && (
+              {/* {!collapsed && (
                 <div>
                   <div className="flex justify-between items-center inbox pl-2">
                     <input
                       type="checkbox"
-                      className="custom-checkbox-order cursor-pointer"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                      }}
+                      className="cursor-pointer"
                       value="1"
                       checked={searchParams.selectedUnOrderStudies == "1"}
                       onChange={handleCheckboxUnOrder}
                     />
+
                     {t("Includes studies without orders")}
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         )}
