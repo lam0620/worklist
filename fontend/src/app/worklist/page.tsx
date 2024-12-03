@@ -475,6 +475,12 @@ const Worklist = () => {
       toDate: "",
       searchQuery: "",
     }));
+    setTempSearchParams((prev) => ({
+      ...prev,
+      pid: "",
+      fullName: "",
+      acn: "",
+    }));
   };
 
   const handleProcIDSelect = (ProcID: string) => {
