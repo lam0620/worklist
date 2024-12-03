@@ -392,7 +392,7 @@ const Worklist = () => {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
     const threeDaysAgo = new Date(today);
-    threeDaysAgo.setDate(today.getDate() - 3);
+    threeDaysAgo.setDate(today.getDate() - 2);
     threeDaysAgo.setHours(0, 0, 0, 0);
     setSearchParams((prev) => ({
       ...prev,
@@ -408,7 +408,7 @@ const Worklist = () => {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
     const sevenDaysAgo = new Date(today);
-    sevenDaysAgo.setDate(today.getDate() - 7);
+    sevenDaysAgo.setDate(today.getDate() - 6);
     sevenDaysAgo.setHours(0, 0, 0, 0);
     setSearchParams((prev) => ({
       ...prev,
@@ -424,7 +424,7 @@ const Worklist = () => {
     const month = new Date();
     month.setHours(23, 59, 59, 999);
     const monthAgo = new Date(month);
-    monthAgo.setDate(month.getDate() - 30);
+    monthAgo.setDate(month.getDate() - 29);
     monthAgo.setHours(0, 0, 0, 0);
     setSearchParams((prev) => ({
       ...prev,
@@ -837,68 +837,76 @@ const Worklist = () => {
                   {t("Advanced search")}
                 </button>
               </div>
-              <div className="w-full md:w-auto flex flex-wrap">
-                {/* </div>           
-              <div className="w-full md:w-auto flex flex-wrap"> */}
-                <div className="w-1/2 md:w-auto p-1">
-                  <button
-                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
-                      selectedButtonDay === "Today" ? "purple-selectedrow" : ""
-                    }`}
-                    onClick={handleFilterToday}
-                  >
-                    {t("Today")}
-                  </button>
+              <div className="w-full md:w-auto flex md:flex-row flex-col flex-wrap whitespace-nowrap">
+                <div className="flex md:flex-row">
+                  <div className="w-1/2 md:w-auto p-1 md:py-1">
+                    <button
+                      className={`button px-1 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
+                        selectedButtonDay === "Today"
+                          ? "purple-selectedrow"
+                          : ""
+                      }`}
+                      onClick={handleFilterToday}
+                    >
+                      {t("Today")}
+                    </button>
+                  </div>
+                  <div className="w-1/2 md:w-auto p-1 md:py-1">
+                    <button
+                      className={`button px-1 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
+                        selectedButtonDay === "3 days"
+                          ? "purple-selectedrow"
+                          : ""
+                      }`}
+                      onClick={handleFilter3days}
+                    >
+                      {t("3 days")}
+                    </button>
+                  </div>
+                  <div className="w-1/2 md:w-auto p-1 md:py-1">
+                    <button
+                      className={`button px-1 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
+                        selectedButtonDay === "7 days"
+                          ? "purple-selectedrow"
+                          : ""
+                      }`}
+                      onClick={handleFilter7days}
+                    >
+                      {t("7 days")}
+                    </button>
+                  </div>
                 </div>
-                <div className="w-1/2 md:w-auto p-1">
-                  <button
-                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
-                      selectedButtonDay === "3 days" ? "purple-selectedrow" : ""
-                    }`}
-                    onClick={handleFilter3days}
-                  >
-                    {t("3 days")}
-                  </button>
-                </div>
-                <div className="w-1/2 md:w-auto p-1">
-                  <button
-                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
-                      selectedButtonDay === "7 days" ? "purple-selectedrow" : ""
-                    }`}
-                    onClick={handleFilter7days}
-                  >
-                    {t("7 days")}
-                  </button>
-                </div>
-                <div className="w-1/2 md:w-auto p-1">
-                  <button
-                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
-                      selectedButtonDay === "1 month"
-                        ? "purple-selectedrow"
-                        : ""
-                    }`}
-                    onClick={handleFilter1month}
-                  >
-                    {t("1 month")}
-                  </button>
-                </div>
-                <div className="w-1/2 md:w-auto p-1">
-                  <button
-                    className={`button px-2 py-1 rounded w-full md:w-auto text-sm hover-purple ${
-                      selectedButtonDay === "All" ? "purple-selectedrow" : ""
-                    }`}
-                    onClick={handleFilterAll}
-                  >
-                    {t("All")}
-                  </button>
-                </div>
-                <div className="w-1/2 md:w-auto p-1">
-                  <button
-                    className={`button-ref px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple`}
-                    onClick={handleRefresh}
-                  >
-                    {t("Refresh")}
-                  </button>
+                <div className="flex md:flex-row">
+                  <div className="w-1/2 md:w-auto p-1 md:py-1">
+                    <button
+                      className={`button px-1 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
+                        selectedButtonDay === "1 month"
+                          ? "purple-selectedrow"
+                          : ""
+                      }`}
+                      onClick={handleFilter1month}
+                    >
+                      {t("1 month")}
+                    </button>
+                  </div>
+                  <div className="w-1/2 md:w-auto p-1 md:py-1">
+                    <button
+                      className={`button px-1 py-1 rounded w-full md:w-auto text-sm hover-purple ${
+                        selectedButtonDay === "All" ? "purple-selectedrow" : ""
+                      }`}
+                      onClick={handleFilterAll}
+                    >
+                      {t("All")}
+                    </button>
+                  </div>
+                  <div className="w-1/2 md:w-auto p-1 md:pl-2">
+                    <button
+                      className={`button-ref px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple`}
+                      onClick={handleRefresh}
+                    >
+                      {t("Refresh")}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
