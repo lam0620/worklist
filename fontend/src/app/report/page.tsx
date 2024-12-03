@@ -179,6 +179,7 @@ const ReportComponent = () => {
 
   //set error if report template name is empty at dialog
   const [errorMessage, setErrorMessage] = useState("");
+  const [isFormattingDone, setIsFormattingDone] = useState(false); //khi nhập dữ liệu findings và conclusion xong, nút saveReportTemplate vẫn chưa nhận đc data ngay lập tức nên dẫn đến sai
 
   const hasAddReportPermission =
     user?.permissions?.includes(PERMISSIONS.ADD_REPORT) || user?.is_superuser;
@@ -885,14 +886,21 @@ const ReportComponent = () => {
     setSelectedPrintTemplate(value);
   };
 
-  const isShowReportTemplate = () => {
-    let isError = validate(false);
+  const isShowReportTemplate = async () => {
+    await handleOnBeforeGetContent();
+    setIsFormattingDone(true);
+  };
+  useEffect(() => {
+    if (!isFormattingDone) return;
+
+    const isError = validate(false);
     if (!isError) {
       setIsDialogOpen(true);
       setErrorMessage("");
       setReportTemplateName("");
     }
-  };
+    setIsFormattingDone(false);
+  }, [isFormattingDone]);
 
   const isCloseReportTemplate = () => {
     setIsDialogOpen(false);
