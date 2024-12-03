@@ -388,22 +388,23 @@ const Worklist = () => {
     };
   };
 
-  const handleFilterYesterday = () => {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    yesterday.setHours(0, 0, 0, 0);
-    const endOfYesterday = new Date(yesterday);
-    endOfYesterday.setHours(23, 59, 59, 999);
+  const handleFilter3days = () => {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    const threeDaysAgo = new Date(today);
+    threeDaysAgo.setDate(today.getDate() - 3);
+    threeDaysAgo.setHours(0, 0, 0, 0);
     setSearchParams((prev) => ({
       ...prev,
-      fromDate: formatDateToISOString(yesterday),
-      toDate: formatDateToISOString(endOfYesterday),
+      fromDate: formatDateToISOString(threeDaysAgo),
+      toDate: formatDateToISOString(today),
     }));
     setCurrentPage(1);
+
     setDateButton(true); // set true to search as advanced
-    setSelectedButtonDay("Yesterday");
+    setSelectedButtonDay("3 days");
   };
-  const handleFilterLast7Days = () => {
+  const handleFilter7days = () => {
     const today = new Date();
     today.setHours(23, 59, 59, 999);
     const sevenDaysAgo = new Date(today);
@@ -418,6 +419,22 @@ const Worklist = () => {
 
     setDateButton(true); // set true to search as advanced
     setSelectedButtonDay("7 days");
+  };
+  const handleFilter1month = () => {
+    const month = new Date();
+    month.setHours(23, 59, 59, 999);
+    const monthAgo = new Date(month);
+    monthAgo.setDate(month.getDate() - 30);
+    monthAgo.setHours(0, 0, 0, 0);
+    setSearchParams((prev) => ({
+      ...prev,
+      fromDate: formatDateToISOString(monthAgo),
+      toDate: formatDateToISOString(month),
+    }));
+    setCurrentPage(1);
+
+    setDateButton(true); // set true to search as advanced
+    setSelectedButtonDay("1 month");
   };
 
   const handleFilterAll = () => {
@@ -568,7 +585,7 @@ const Worklist = () => {
                       )}
                     </button>
                   </div>
-                  <ul className="p-2 backgroundcolor">
+                  <ul className="p-2 backgroundcolor grid grid-cols-2 gap-[0.3rem]">
                     <li>
                       <input
                         type="checkbox"
@@ -583,11 +600,11 @@ const Worklist = () => {
                       <input
                         type="checkbox"
                         className="custom-checkbox cursor-pointer"
-                        value="MR"
-                        checked={searchParams.selectedDevices.includes("MR")}
+                        value="CR"
+                        checked={searchParams.selectedDevices.includes("CR")}
                         onChange={handleCheckboxModality}
                       />
-                      MR
+                      CR
                     </li>
                     <li>
                       <input
@@ -603,11 +620,71 @@ const Worklist = () => {
                       <input
                         type="checkbox"
                         className="custom-checkbox cursor-pointer"
-                        value="X-Ray"
-                        checked={searchParams.selectedDevices.includes("X-Ray")}
+                        value="DX"
+                        checked={searchParams.selectedDevices.includes("DX")}
                         onChange={handleCheckboxModality}
                       />
-                      X-Ray
+                      DX
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox cursor-pointer"
+                        value="ES"
+                        checked={searchParams.selectedDevices.includes("ES")}
+                        onChange={handleCheckboxModality}
+                      />
+                      ES
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox cursor-pointer"
+                        value="MR"
+                        checked={searchParams.selectedDevices.includes("MR")}
+                        onChange={handleCheckboxModality}
+                      />
+                      MR
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox cursor-pointer"
+                        value="MG"
+                        checked={searchParams.selectedDevices.includes("MG")}
+                        onChange={handleCheckboxModality}
+                      />
+                      MG
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox cursor-pointer"
+                        value="PT"
+                        checked={searchParams.selectedDevices.includes("PT")}
+                        onChange={handleCheckboxModality}
+                      />
+                      PT
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox cursor-pointer"
+                        value="US"
+                        checked={searchParams.selectedDevices.includes("US")}
+                        onChange={handleCheckboxModality}
+                      />
+                      US
+                    </li>
+                    <li>
+                      <input
+                        type="checkbox"
+                        className="custom-checkbox cursor-pointer"
+                        value="XA"
+                        checked={searchParams.selectedDevices.includes("XA")}
+                        onChange={handleCheckboxModality}
+                      />
+                      XA
                     </li>
                   </ul>
                 </div>
@@ -761,14 +838,6 @@ const Worklist = () => {
                 </button>
               </div>
               <div className="w-full md:w-auto flex flex-wrap">
-                <div className="w-1/2 md:w-auto p-1">
-                  <button
-                    className={`button-ref px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple`}
-                    onClick={handleRefresh}
-                  >
-                    {t("Refresh")}
-                  </button>
-                </div>
                 {/* </div>           
               <div className="w-full md:w-auto flex flex-wrap"> */}
                 <div className="w-1/2 md:w-auto p-1">
@@ -784,13 +853,11 @@ const Worklist = () => {
                 <div className="w-1/2 md:w-auto p-1">
                   <button
                     className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
-                      selectedButtonDay === "Yesterday"
-                        ? "purple-selectedrow"
-                        : ""
+                      selectedButtonDay === "3 days" ? "purple-selectedrow" : ""
                     }`}
-                    onClick={handleFilterYesterday}
+                    onClick={handleFilter3days}
                   >
-                    {t("Yesterday")}
+                    {t("3 days")}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
@@ -798,9 +865,21 @@ const Worklist = () => {
                     className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
                       selectedButtonDay === "7 days" ? "purple-selectedrow" : ""
                     }`}
-                    onClick={handleFilterLast7Days}
+                    onClick={handleFilter7days}
                   >
                     {t("7 days")}
+                  </button>
+                </div>
+                <div className="w-1/2 md:w-auto p-1">
+                  <button
+                    className={`button px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple ${
+                      selectedButtonDay === "1 month"
+                        ? "purple-selectedrow"
+                        : ""
+                    }`}
+                    onClick={handleFilter1month}
+                  >
+                    {t("1 month")}
                   </button>
                 </div>
                 <div className="w-1/2 md:w-auto p-1">
@@ -811,6 +890,14 @@ const Worklist = () => {
                     onClick={handleFilterAll}
                   >
                     {t("All")}
+                  </button>
+                </div>
+                <div className="w-1/2 md:w-auto p-1">
+                  <button
+                    className={`button-ref px-2 py-1 rounded mb-1 md:mb-0 md:mr-1 w-full md:w-auto text-sm hover-purple`}
+                    onClick={handleRefresh}
+                  >
+                    {t("Refresh")}
                   </button>
                 </div>
               </div>

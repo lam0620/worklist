@@ -1879,7 +1879,7 @@ const ReportComponent = () => {
                 )}
               </div>
 
-              <div className="mb-2 flex flex-col px-2 pt-2 h-screen md:h-full">
+              <div className="mb-2 flex flex-col px-2 pt-2 h-full">
                 <div className="flex flex-row justify-between">
                   <div
                     className="w-full text-blue-300"

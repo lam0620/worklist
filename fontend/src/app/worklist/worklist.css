@@ -17,13 +17,13 @@
 .button {
     color: #fe615a;
     background-color: #27272b;
-    border-radius: 30px;
+    border-radius: 10px;
     border: 2px solid #235484;
 }
 .button-ref{
     color: #d0d0d0;
     background-color: #fe615a;
-    border-radius: 30px;
+    border-radius: 10px;
     border: 2px solid #1a973a;
 }
 

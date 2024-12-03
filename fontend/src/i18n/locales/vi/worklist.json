@@ -11,7 +11,7 @@
     "Quick search ...": "Tìm kiếm nhanh ...",
     "Today": "Hôm nay",
     "Yesterday": "Hôm qua",
-    "7 days": "1 tuần qua",
+    "7 days": "1 tuần",
     "PID":"Mã BN",
     "Patient Name": "Tên BN",
     "Accession No": "Mã phiếu",
@@ -55,5 +55,7 @@
     "Study list" : "Danh sách ca chụp",
     "Download" : "Tải ảnh",
     "Includes studies without orders": "Bao gồm ca chụp chưa có chỉ định",
-    "No image reading results yet !" : "Chưa có kết quả đọc ảnh !"
+    "No image reading results yet !" : "Chưa có kết quả đọc ảnh !",
+    "3 days" : "3 ngày",
+    "1 month" : "1 tháng"
 }
