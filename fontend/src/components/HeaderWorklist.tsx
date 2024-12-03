@@ -9,9 +9,9 @@ interface AppLayoutProps {
 const HeaderWorklist = ({ children }: AppLayoutProps) => {
   const { user } = useUser();
   return (
-    <div className="relative  items-center">
-      <header className="w-full h-[75px] md:h-[48px] flex justify-between items-center p-1 bg-top text-white">
-        <div className="justify-start flex">
+    <div className="relative">
+      <header className="fixed top-0 left-0 w-full h-[75px] md:h-[48px] flex justify-between items-center p-1 bg-top text-white z-50 shadow-md">
+        <div className="flex items-center">
           <img src={logo.src} className="w-8 h-8 mx-1 my-1 mr-4" alt="logo" />
           <main>{children}</main>
         </div>
@@ -27,6 +27,7 @@ const HeaderWorklist = ({ children }: AppLayoutProps) => {
           </div>
         </div>
       </header>
+      <div className="pt-[75px] md:pt-[48px]">{children}</div>
     </div>
   );
 };

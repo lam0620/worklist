@@ -1219,12 +1219,12 @@ const ReportComponent = () => {
         </div>
       </HeaderWorklist>
       <div
-        className={`relative  flex w-full md:flex-row flex-col flex-nowrap items-stretch ${
+        className={`relative flex w-full md:flex-row flex-col flex-nowrap items-stretch ${
           collapsed ? "collapsed" : ""
         }`}
       >
         {/* {left panel } */}
-        <div className="bg-black  flex flex-col transition-all duration-300 ease-in-out md:h-screen">
+        <div className="bg-black flex flex-col transition-all duration-300 ease-in-out md:h-screen">
           <div className="w-full px-2 pb-2 text-white">
             {" "}
             {/* Test show image: <img src={Constants.USER_MNG_URL + reportData.radiologist.sign} ></img> */}
@@ -1555,7 +1555,7 @@ const ReportComponent = () => {
                     <div>{t("Error")}</div>
                     {/* <div onClick={onClearError} style={{ cursor: 'pointer' }}><svg xmlns="http://www.w3.org/2000/svg" style={{ fill: 'none' }} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-square-x"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg></div> */}
                   </div>
-                  <div className="rounded-b border border-t-0 border-red-400 bg-red-100 px-4 py-3 text-red-700">
+                  <div className="rounded-b border border-t-0 border-red-400 bg-black px-4 py-3 text-red-700">
                     <ul className="list-disc ml-3">
                       {!Util.isEmpty(state.error.fatal) && (
                         <li>{state.error.fatal}</li>
