@@ -969,7 +969,7 @@ const ReportComponent = () => {
               <ReactToPrint
                 trigger={() => (
                   <Button
-                    className={"button-class mr-2"}
+                    className={"button-class mr-1 md:mr-2"}
                     type={ButtonEnums.type.primary}
                     size={ButtonEnums.size.medium}
                     disabled={!reportData.accession_no}
@@ -1015,7 +1015,7 @@ const ReportComponent = () => {
                   {/* Edit final report permission */}
                   {hasEditReportPermission && (
                     <Button
-                      className={"button-class mr-2"}
+                      className={"button-class mr-1 md:mr-2"}
                       type={ButtonEnums.type.primary}
                       size={ButtonEnums.size.medium}
                       onClick={onEditReport}
@@ -1046,7 +1046,7 @@ const ReportComponent = () => {
                   {/* Delete final report permission */}
                   {hasDeleteReportPermission && (
                     <Button
-                      className={"button-class mr-2"}
+                      className={"button-class mr-1 md:mr-2"}
                       type={ButtonEnums.type.primary}
                       size={ButtonEnums.size.medium}
                       onClick={onDiscardReport}
@@ -1085,7 +1085,7 @@ const ReportComponent = () => {
               !Util.isPrintEnabled(reportData.report.status) && (
                 <>
                   <Button
-                    className={"button-class mr-2"}
+                    className={"button-class mr-1 md:mr-2"}
                     type={ButtonEnums.type.primary}
                     size={ButtonEnums.size.medium}
                     onClick={onApprove}
@@ -1122,7 +1122,7 @@ const ReportComponent = () => {
                   {reportData.report.status_origin != "F" &&
                     reportData.report.status_origin != "C" && (
                       <Button
-                        className={"button-class mr-2"}
+                        className={"button-class mr-1 md:mr-2"}
                         type={ButtonEnums.type.primary}
                         size={ButtonEnums.size.medium}
                         onClick={onSaveReport}
@@ -1158,7 +1158,7 @@ const ReportComponent = () => {
                   {reportData.report.status_origin !=
                     reportData.report.status && (
                     <Button
-                      className={"button-class mr-2"}
+                      className={"button-class mr-1 md:mr-2"}
                       type={ButtonEnums.type.primary}
                       size={ButtonEnums.size.medium}
                       onClick={onUndoEditReport}
@@ -1188,7 +1188,7 @@ const ReportComponent = () => {
               )}
 
             <Button
-              className={"button-class text-[13px]"}
+              className={"button-class text-[13px] "}
               type={ButtonEnums.type.secondary}
               size={ButtonEnums.size.medium}
               onClick={onClose}
@@ -1219,7 +1219,7 @@ const ReportComponent = () => {
         </div>
       </HeaderWorklist>
       <div
-        className={`relative flex w-full md:flex-row flex-col flex-nowrap items-stretch ${
+        className={`relative bg-black flex w-full md:flex-row flex-col flex-nowrap items-stretch ${
           collapsed ? "collapsed" : ""
         }`}
       >
@@ -1546,7 +1546,7 @@ const ReportComponent = () => {
         )}
 
         {/* Right panel - Findigs/Conclusion*/}
-        <div className=" bg-black flex md:h-screen flex-1 flex-col">
+        <div className=" bg-black flex flex-1 flex-col">
           <div className="flex w-full flex-row">
             <div className="flex w-full flex-col text-left">
               {!Util.isReportErrorEmpty(state.error) && (
@@ -1879,7 +1879,7 @@ const ReportComponent = () => {
                 )}
               </div>
 
-              <div className="mb-2 flex flex-col px-2 pt-2 h-full">
+              <div className="mb-2 flex flex-col px-2 pt-2">
                 <div className="flex flex-row justify-between">
                   <div
                     className="w-full text-blue-300"
@@ -1889,7 +1889,7 @@ const ReportComponent = () => {
                   </div>
                 </div>
                 {Util.isFinalReport(reportData.report.status) && (
-                  <div className="mt-2 flex flex-col">
+                  <div className="mt-2 flex h-screen flex-col ">
                     <Typography
                       variant="subtitle"
                       className="text-primary-light pl-0 text-left font-semibold"

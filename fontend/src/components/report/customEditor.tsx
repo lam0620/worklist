@@ -20,7 +20,6 @@ import {
   SourceEditing,
   Clipboard,
 } from "ckeditor5";
-// import "ckeditor5/ckeditor5.css";
 
 interface CustomEditorProps {
   editor?: typeof ClassicEditor;
@@ -87,18 +86,20 @@ const CustomEditor: React.FC<CustomEditorProps> = ({
 
   const finalConfig = {
     ...defaultConfig,
-    // ...config,
+    ...config,
   };
 
   return (
-    <CKEditor
-      editor={editor}
-      config={finalConfig}
-      data={data}
-      onChange={onChange}
-      onReady={onReady}
-      disabled={disabled}
-    />
+    <div>
+      <CKEditor
+        editor={editor}
+        config={finalConfig}
+        data={data}
+        onChange={onChange}
+        onReady={onReady}
+        disabled={disabled}
+      />
+    </div>
   );
 };
 
