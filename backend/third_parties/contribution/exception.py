@@ -1,7 +1,7 @@
 from config import settings
 from rest_framework import status
 from rest_framework.exceptions import (
-    APIException, AuthenticationFailed, ValidationError, NotFound
+    APIException, AuthenticationFailed, ValidationError, NotFound, NotAuthenticated
 )
 from rest_framework.views import exception_handler
 from library.constant.error_codes import INVALID_PAGE, UUID_NOT_VALID
@@ -169,6 +169,10 @@ def handler_custom_api_exception(exc, context):
 
 def handler_exception_authentication(exc, context):
     response = exception_handler(exc, context)
+
+    if isinstance(exc, (AuthenticationFailed, NotAuthenticated)):
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+
     try:
         if exc.detail.get('status'):
             response.status_code = int(exc.detail.get('status'))
